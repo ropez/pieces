@@ -10,6 +10,7 @@ public:
     String();
     String(const std::string& other);
     String(const char* data);
+    String(const char* data, unsigned int length);
 };
 
 extern const String EMPTY_STRING;

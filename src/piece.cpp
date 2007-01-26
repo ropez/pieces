@@ -169,48 +169,47 @@ std::istream& operator>>(std::istream& is, Piece& p)
 
     while (true)
     {
-        // Read colon
+        // Read colon, or closing parenthesis
         is >> c;
+        if (c != ':')
+            break;
 
         int keyWidth = 0;
         is >> keyWidth;
-        if (keyWidth == 0)
-            break;
 
         // Read colon
         is >> c;
+        if (c != ':')
+            break;
 
         // TODO: We can't keep this! It's too ugly, and not exception safe.
-        char* buf = new char[keyWidth+1];
+        char* buf = new char[keyWidth];
         is.read(buf, keyWidth);
-        buf[keyWidth] = '\0';
-        String key(buf);
+        String key(buf, keyWidth);
         delete buf;
         buf = 0;
 
         // Read colon
         is >> c;
+        if (c != ':')
+            break;
 
         int valueWidth = 0;
         is >> valueWidth;
-        if (valueWidth == 0)
-            break;
 
         // Read colon
         is >> c;
+        if (c != ':')
+            break;
 
-        buf = new char[valueWidth+1];
+        buf = new char[valueWidth];
         is.read(buf, valueWidth);
-        buf[valueWidth] = '\0';
-        String value(buf);
+        String value(buf, valueWidth);
         delete buf;
         buf = 0;
 
         p.setProperty(key, value);
     }
-
-    // Read ')'
-    is >> c;
     return is;
 }
 

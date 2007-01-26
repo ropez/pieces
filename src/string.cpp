@@ -20,4 +20,10 @@ String::String(const char* data)
 {
 }
 
+
+String::String(const char* data, unsigned int length)
+: std::string(data, length)
+{
+}
+
 const String EMPTY_STRING = "";
