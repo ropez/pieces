@@ -226,7 +226,7 @@ int main()
 {
     Piece t;
 
-    t.setProperty("Robin", "11");
+    t.setProperty("Robin", "");
     t.setProperty("angle", 2e23);
     t.setProperty("Documentation", "supercool stuff");
 
