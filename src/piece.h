@@ -3,11 +3,8 @@
 #define PIECE_H
 
 #include "String"
+#include "PropertyTable"
 
-#include <map>
-
-
-class PropertyTable : public std::map<String, String> {};
 
 class Piece
 {
