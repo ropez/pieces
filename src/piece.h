@@ -1,13 +1,7 @@
-#include <string>
+#include "String"
+
 #include <map>
 
-class String : public std::string
-{
-public:
-    String() : std::string() {}
-    String(const std::string& other) : std::string(other) {}
-    String(const char* data) : std::string(data) {}
-};
 
 class PropertyTable : public std::map<String, String> {};
 
