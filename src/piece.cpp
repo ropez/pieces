@@ -151,8 +151,8 @@ std::ostream& operator<<(std::ostream& os, const Piece& p)
         const String& key = it->first;
         const String& value = it->second;
 
-        os << key.size() << ':' << key;
-        os << value.size() << ':' << value;
+        os << ':' << key.size() << ':' << key;
+        os << ':' << value.size() << ':' << value;
     }
 
     os << ")";
@@ -169,22 +169,42 @@ std::istream& operator>>(std::istream& is, Piece& p)
 
     while (true)
     {
+        // Read colon
+        is >> c;
+
         int keyWidth = 0;
         is >> keyWidth;
         if (keyWidth == 0)
             break;
 
-        // TODO: Skip whitespace doesn't work!
-        String key;
-        is >> c >> std::setw(keyWidth) >> std::skipws >> key;
+        // Read colon
+        is >> c;
+
+        // TODO: We can't keep this! It's too ugly, and not exception safe.
+        char* buf = new char[keyWidth+1];
+        is.read(buf, keyWidth);
+        buf[keyWidth] = '\0';
+        String key(buf);
+        delete buf;
+        buf = 0;
+
+        // Read colon
+        is >> c;
 
         int valueWidth = 0;
         is >> valueWidth;
         if (valueWidth == 0)
             break;
 
-        String value;
-        is >> c >> std::setw(valueWidth) >> std::skipws >> value;
+        // Read colon
+        is >> c;
+
+        buf = new char[valueWidth+1];
+        is.read(buf, valueWidth);
+        buf[valueWidth] = '\0';
+        String value(buf);
+        delete buf;
+        buf = 0;
 
         p.setProperty(key, value);
     }
@@ -201,7 +221,7 @@ int main()
 
     t.setProperty("Robin", "11");
     t.setProperty("angle", 2e23);
-    t.setProperty(":Documentation:", ":supercool:");
+    t.setProperty("Documentation", "supercool stuff");
 
 //     std::cout << t.getPropertyAsInt("Robin", 12) << std::endl;
     std::cout << t.getProperty("angle") << std::endl;
