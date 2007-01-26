@@ -179,6 +179,8 @@ int main()
     std::cout << t << std::endl;
     std::stringstream ss;
     ss << t;
-    std::cout << Piece(ss.str()) << std::endl;
+    Piece p;
+    ss >> p;
+    std::cout << p << std::endl;
 }
 
