@@ -12,4 +12,6 @@ public:
     String(const char* data);
 };
 
+extern const String EMPTY_STRING;
+
 #endif // STRING_H

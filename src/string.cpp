@@ -19,3 +19,5 @@ String::String(const char* data)
 : std::string(data)
 {
 }
+
+const String EMPTY_STRING = "";

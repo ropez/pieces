@@ -2,18 +2,24 @@
 
 #include <iostream>
 #include <sstream>
+#include <iomanip>
 
 
 Piece::Piece()
 : m_properties()
 {
-    std::cout << "Constructing a piece." << std::endl;
+}
+
+
+Piece::Piece(const String& str)
+: m_properties()
+{
+    *this = fromString(str);
 }
 
 
 Piece::~Piece()
 {
-    std::cout << "Destructing a piece." << std::endl;
 }
 
 
@@ -100,14 +106,76 @@ double Piece::getPropertyAsDouble(const String& property, double defval) const
 }
 
 
+String Piece::toString() const
+{
+    std::stringstream ss;
+
+    ss << "(";
+
+    for (PropertyTable::const_iterator it = m_properties.begin();
+         it != m_properties.end(); ++it)
+    {
+        const String& key = it->first;
+        const String& value = it->second;
+
+        ss << key.size() << ':' << key;
+        ss << value.size() << ':' << value;
+    }
+
+    ss << ")";
+    return ss.str();
+}
+
+Piece Piece::fromString(const String& str)
+{
+    std::stringstream ss(str);
+
+    // Read '('
+    char c;
+    ss >> c;
+
+    Piece p;
+    while (true)
+    {
+        int keyWidth = 0;
+        ss >> keyWidth;
+        if (keyWidth == 0)
+            break;
+
+        // TODO: Skip whitespace doesn't work!
+        String key;
+        ss >> c >> std::setw(keyWidth) >> std::skipws >> key;
+
+        int valueWidth = 0;
+        ss >> valueWidth;
+        if (valueWidth == 0)
+            break;
+
+        String value;
+        ss >> c >> std::setw(valueWidth) >> std::skipws >> value;
+
+        p.setProperty(key, value);
+    }
+
+    // Read ')'
+    ss >> c;
+
+    return p;
+}
+
+
 int main()
 {
     Piece t;
 
     t.setProperty("Robin", "11");
     t.setProperty("angle", 2e23);
+    t.setProperty("Documentation", "supercool:");
 
 //     std::cout << t.getPropertyAsInt("Robin", 12) << std::endl;
     std::cout << t.getProperty("angle") << std::endl;
+
+    std::cout << t.toString() << std::endl;
+    std::cout << Piece::fromString(t.toString()).toString() << std::endl;
 }
 
