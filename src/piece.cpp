@@ -160,9 +160,24 @@ std::ostream& operator<<(std::ostream& os, const Piece& p)
 }
 
 
+std::istream& operator>>(std::istream& is, String& s)
+{
+    s.resize(is.width());
+
+    for (String::iterator it = s.begin(); it != s.end(); ++it)
+    {
+        is >> *it;
+    }
+
+    return is;
+}
+
 
 std::istream& operator>>(std::istream& is, Piece& p)
 {
+    // Make sure we read whitespace
+    is >> std::noskipws;
+
     // Read '('
     char c;
     is >> c;
@@ -182,12 +197,8 @@ std::istream& operator>>(std::istream& is, Piece& p)
         if (c != ':')
             break;
 
-        // TODO: We can't keep this! It's too ugly, and not exception safe.
-        char* buf = new char[keyWidth];
-        is.read(buf, keyWidth);
-        String key(buf, keyWidth);
-        delete buf;
-        buf = 0;
+        String key;
+        is >> std::setw(keyWidth) >> key;
 
         // Read colon
         is >> c;
@@ -202,11 +213,8 @@ std::istream& operator>>(std::istream& is, Piece& p)
         if (c != ':')
             break;
 
-        buf = new char[valueWidth];
-        is.read(buf, valueWidth);
-        String value(buf, valueWidth);
-        delete buf;
-        buf = 0;
+        String value;
+        is >> std::setw(valueWidth) >> value;
 
         p.setProperty(key, value);
     }
