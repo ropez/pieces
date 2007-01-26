@@ -14,7 +14,6 @@ class Piece
 public:
 
     Piece();
-    Piece(const String& str);
     virtual ~Piece();
 
     void setProperty(const String& property, const String& value);

@@ -11,14 +11,6 @@ Piece::Piece()
 }
 
 
-Piece::Piece(const String& str)
-: m_properties()
-{
-    std::stringstream ss(str);
-    ss >> *this;
-}
-
-
 Piece::~Piece()
 {
 }
