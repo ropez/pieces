@@ -29,11 +29,14 @@ public:
 
     double getPropertyAsDouble(const String& property, double defval = 0.0) const;
 
-    String toString() const;
-    static Piece fromString(const String& str);
+    PropertyTable::const_iterator begin() const;
+    PropertyTable::const_iterator end() const;
 
 private:
     PropertyTable m_properties;
 };
+
+std::ostream& operator<<(std::ostream& os, const Piece& p);
+std::istream& operator>>(std::istream& is, Piece& p);
 
 #endif // PIECE_H

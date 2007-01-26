@@ -14,7 +14,8 @@ Piece::Piece()
 Piece::Piece(const String& str)
 : m_properties()
 {
-    *this = fromString(str);
+    std::stringstream ss(str);
+    ss >> *this;
 }
 
 
@@ -106,61 +107,69 @@ double Piece::getPropertyAsDouble(const String& property, double defval) const
 }
 
 
-String Piece::toString() const
+PropertyTable::const_iterator Piece::begin() const
 {
-    std::stringstream ss;
+    return m_properties.begin();
+}
 
-    ss << "(";
 
-    for (PropertyTable::const_iterator it = m_properties.begin();
-         it != m_properties.end(); ++it)
+PropertyTable::const_iterator Piece::end() const
+{
+    return m_properties.end();
+}
+
+
+std::ostream& operator<<(std::ostream& os, const Piece& p)
+{
+    os << "(";
+
+    for (PropertyTable::const_iterator it = p.begin();
+         it != p.end(); ++it)
     {
         const String& key = it->first;
         const String& value = it->second;
 
-        ss << key.size() << ':' << key;
-        ss << value.size() << ':' << value;
+        os << key.size() << ':' << key;
+        os << value.size() << ':' << value;
     }
 
-    ss << ")";
-    return ss.str();
+    os << ")";
+    return os;
 }
 
-Piece Piece::fromString(const String& str)
-{
-    std::stringstream ss(str);
 
+
+std::istream& operator>>(std::istream& is, Piece& p)
+{
     // Read '('
     char c;
-    ss >> c;
+    is >> c;
 
-    Piece p;
     while (true)
     {
         int keyWidth = 0;
-        ss >> keyWidth;
+        is >> keyWidth;
         if (keyWidth == 0)
             break;
 
         // TODO: Skip whitespace doesn't work!
         String key;
-        ss >> c >> std::setw(keyWidth) >> std::skipws >> key;
+        is >> c >> std::setw(keyWidth) >> std::skipws >> key;
 
         int valueWidth = 0;
-        ss >> valueWidth;
+        is >> valueWidth;
         if (valueWidth == 0)
             break;
 
         String value;
-        ss >> c >> std::setw(valueWidth) >> std::skipws >> value;
+        is >> c >> std::setw(valueWidth) >> std::skipws >> value;
 
         p.setProperty(key, value);
     }
 
     // Read ')'
-    ss >> c;
-
-    return p;
+    is >> c;
+    return is;
 }
 
 
@@ -175,7 +184,9 @@ int main()
 //     std::cout << t.getPropertyAsInt("Robin", 12) << std::endl;
     std::cout << t.getProperty("angle") << std::endl;
 
-    std::cout << t.toString() << std::endl;
-    std::cout << Piece::fromString(t.toString()).toString() << std::endl;
+    std::cout << t << std::endl;
+    std::stringstream ss;
+    ss << t;
+    std::cout << Piece(ss.str()) << std::endl;
 }
 
