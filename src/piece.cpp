@@ -40,6 +40,15 @@ void Piece::setProperty(const String& property, double value)
 }
 
 
+void Piece::setProperty(const String& property, const Piece& value)
+{
+    std::stringstream ss;
+    ss << value;
+
+    setProperty(property, ss.str());
+}
+
+
 String Piece::getProperty(const String& property, const String& defval) const
 {
     // Lookup the value in the map.
@@ -89,6 +98,27 @@ double Piece::getPropertyAsDouble(const String& property, double defval) const
         std::stringstream ss(it->second);
 
         double result = defval;
+        ss >> result;
+        return result;
+    }
+    else
+    {
+        return defval;
+    }
+}
+
+
+Piece Piece::getPropertyAsPiece(const String& property, const Piece& defval) const
+{
+    // Lookup the value in the map.
+    PropertyTable::const_iterator it = m_properties.find(property);
+
+    // See if it was found.
+    if (it != m_properties.end())
+    {
+        std::stringstream ss(it->second);
+
+        Piece result = defval;
         ss >> result;
         return result;
     }
@@ -171,7 +201,7 @@ int main()
 
     t.setProperty("Robin", "11");
     t.setProperty("angle", 2e23);
-    t.setProperty("Documentation", "supercool:");
+    t.setProperty(":Documentation:", ":supercool:");
 
 //     std::cout << t.getPropertyAsInt("Robin", 12) << std::endl;
     std::cout << t.getProperty("angle") << std::endl;
@@ -181,6 +211,8 @@ int main()
     ss << t;
     Piece p;
     ss >> p;
+    p.setProperty("sub-piece", t);
     std::cout << p << std::endl;
+    std::cout << p.getPropertyAsPiece("sub-piece").getProperty("angle") << std::endl;
 }
 

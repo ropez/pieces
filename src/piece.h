@@ -25,8 +25,8 @@ public:
     String getProperty(const String& property, const String& defval = EMPTY_STRING) const;
 
     int getPropertyAsInt(const String& property, int defval = 0) const;
-
     double getPropertyAsDouble(const String& property, double defval = 0.0) const;
+    Piece getPropertyAsPiece(const String& property, const Piece& defval = Piece()) const;
 
     PropertyTable::const_iterator begin() const;
     PropertyTable::const_iterator end() const;
