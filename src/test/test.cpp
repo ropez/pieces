@@ -1,5 +1,5 @@
-#include "Piece"
-#include "List"
+#include "pieces/Piece"
+#include "pieces/List"
 
 #include <iostream>
 #include <sstream>
