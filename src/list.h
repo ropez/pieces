@@ -4,6 +4,9 @@
 #include "String"
 #include "PropertyList"
 
+#include <sstream>
+#include <iomanip>
+
 class List
 {
 public:
@@ -15,6 +18,12 @@ public:
     List& addValue(const String& value);
     String getValue(int index) const;
 
+    template<typename T>
+    List& add(const T& value);
+
+    template<typename T>
+    T get(int index) const;
+
     PropertyList::const_iterator begin() const;
     PropertyList::const_iterator end() const;
 
@@ -24,5 +33,27 @@ private:
 
 std::ostream& operator<<(std::ostream& os, const List& l);
 std::istream& operator>>(std::istream& is, List& l);
+
+
+template<typename T>
+List& List::add(const T& value)
+{
+    std::stringstream ss;
+    ss << value;
+
+    return addValue(ss.str());
+}
+
+template<typename T>
+T List::get(int index) const
+{
+    String value = getValue(index);
+    std::stringstream ss(value);
+
+    T result;
+    ss >> std::noskipws >> std::setw(value.length()) >> result;
+    return result;
+}
+
 
 #endif // LIST_H
