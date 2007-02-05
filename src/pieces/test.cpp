@@ -26,8 +26,8 @@ int main()
     std::cout << "A piece that contains a list and a piece:\n" << p << std::endl;
 
     std::cout << "Extracted data:" << std::endl;
-    std::cout << p.get<Piece>("sub-piece").get<String>("documentation") << std::endl;
-    std::cout << p.get<List>("sub-list").get<String>(3) << std::endl;
+    std::cout << p.get<Piece>("sub-piece").get<PString>("documentation") << std::endl;
+    std::cout << p.get<List>("sub-list").get<PString>(3) << std::endl;
 
     List q;
     q.add(t).add(l);

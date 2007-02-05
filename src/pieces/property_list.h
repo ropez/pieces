@@ -2,12 +2,12 @@
 #ifndef PROPERTY_LIST_H
 #define PROPERTY_LIST_H
 
-#include "String"
+#include "PString"
 
 #include <vector>
 
 
-class PropertyList : public std::vector<String>
+class PropertyList : public std::vector<PString>
 {
 };
 

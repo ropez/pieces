@@ -2,12 +2,12 @@
 #ifndef PROPERTY_TABLE_H
 #define PROPERTY_TABLE_H
 
-#include "String"
+#include "PString"
 
 #include <map>
 
 
-class PropertyTable : public std::map<String, String>
+class PropertyTable : public std::map<PString, PString>
 {
 };
 

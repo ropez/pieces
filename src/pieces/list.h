@@ -1,7 +1,7 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include "String"
+#include "PString"
 #include "PropertyList"
 
 #include <sstream>
@@ -15,8 +15,8 @@ public:
 
     int size() const;
 
-    List& addValue(const String& value);
-    String getValue(int index) const;
+    List& addValue(const PString& value);
+    PString getValue(int index) const;
 
     template<typename T>
     List& add(const T& value);
@@ -47,7 +47,7 @@ List& List::add(const T& value)
 template<typename T>
 T List::get(int index) const
 {
-    String value = getValue(index);
+    PString value = getValue(index);
     std::stringstream ss(value);
 
     T result;

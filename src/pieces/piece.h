@@ -2,7 +2,7 @@
 #ifndef PIECE_H
 #define PIECE_H
 
-#include "String"
+#include "PString"
 #include "PropertyTable"
 
 #include <sstream>
@@ -15,14 +15,14 @@ public:
     Piece();
     ~Piece();
 
-    Piece& setProperty(const String& property, const String& value);
-    String getProperty(const String& property, const String& defval = EMPTY_STRING) const;
+    Piece& setProperty(const PString& property, const PString& value);
+    PString getProperty(const PString& property, const PString& defval = EMPTY_STRING) const;
 
     template<typename T>
-    Piece& set(const String& property, const T& value);
+    Piece& set(const PString& property, const T& value);
 
     template<typename T>
-    T get(const String& property, const T& defval = T()) const;
+    T get(const PString& property, const T& defval = T()) const;
 
     PropertyTable::const_iterator begin() const;
     PropertyTable::const_iterator end() const;
@@ -36,7 +36,7 @@ std::istream& operator>>(std::istream& is, Piece& p);
 
 
 template<typename T>
-Piece& Piece::set(const String& property, const T& value)
+Piece& Piece::set(const PString& property, const T& value)
 {
     std::stringstream ss;
     ss << value;
@@ -46,7 +46,7 @@ Piece& Piece::set(const String& property, const T& value)
 
 
 template<typename T>
-T Piece::get(const String& property, const T& defval) const
+T Piece::get(const PString& property, const T& defval) const
 {
     // Lookup the value in the map.
     PropertyTable::const_iterator it = m_properties.find(property);

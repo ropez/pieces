@@ -22,14 +22,14 @@ int List::size() const
 }
 
 
-List& List::addValue(const String& value)
+List& List::addValue(const PString& value)
 {
     m_data.push_back(value);
     return *this;
 }
 
 
-String List::getValue(int index) const
+PString List::getValue(int index) const
 {
     return m_data[index];
 }
@@ -54,7 +54,7 @@ std::ostream& operator<<(std::ostream& os, const List& l)
     for (PropertyList::const_iterator it = l.begin();
          it != l.end(); ++it)
     {
-        const String& value = *it;
+        const PString& value = *it;
 
         os << ':' << value.size() << ':' << value;
     }
@@ -88,7 +88,7 @@ std::istream& operator>>(std::istream& is, List& l)
         if (c != ':')
             break;
 
-        String value;
+        PString value;
         is >> std::setw(valueWidth) >> value;
 
         l.addValue(value);

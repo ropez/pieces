@@ -16,14 +16,14 @@ Piece::~Piece()
 }
 
 
-Piece& Piece::setProperty(const String& property, const String& value)
+Piece& Piece::setProperty(const PString& property, const PString& value)
 {
     m_properties[property] = value;
     return *this;
 }
 
 
-String Piece::getProperty(const String& property, const String& defval) const
+PString Piece::getProperty(const PString& property, const PString& defval) const
 {
     // Lookup the value in the map.
     PropertyTable::const_iterator it = m_properties.find(property);
@@ -59,8 +59,8 @@ std::ostream& operator<<(std::ostream& os, const Piece& p)
     for (PropertyTable::const_iterator it = p.begin();
          it != p.end(); ++it)
     {
-        const String& key = it->first;
-        const String& value = it->second;
+        const PString& key = it->first;
+        const PString& value = it->second;
 
         os << ':' << key.size() << ':' << key;
         os << ':' << value.size() << ':' << value;
@@ -95,7 +95,7 @@ std::istream& operator>>(std::istream& is, Piece& p)
         if (c != ':')
             break;
 
-        String key;
+        PString key;
         is >> std::setw(keyWidth) >> key;
 
         // Read colon
@@ -111,7 +111,7 @@ std::istream& operator>>(std::istream& is, Piece& p)
         if (c != ':')
             break;
 
-        String value;
+        PString value;
         is >> std::setw(valueWidth) >> value;
 
         p.setProperty(key, value);
