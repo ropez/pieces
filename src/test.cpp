@@ -36,6 +36,7 @@ int main()
     Piece p;
     ss >> p;
     p.set<Piece>("a-sub-piece", t);
+    p.set("a-sub-list", l);
     std::cout << p << std::endl;
     std::cout << p.get<String>("a-sub-piece") << std::endl;
 }
