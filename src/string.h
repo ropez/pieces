@@ -3,6 +3,7 @@
 #define STRING_H
 
 #include <string>
+#include <iostream>
 
 class String : public std::string
 {
@@ -14,5 +15,7 @@ public:
 };
 
 extern const String EMPTY_STRING;
+
+std::istream& operator>>(std::istream& is, String& s);
 
 #endif // STRING_H

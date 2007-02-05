@@ -8,9 +8,9 @@ int main()
 {
     Piece t;
 
-    t.setProperty("robin", "");
-    t.setProperty("angle", 2e23);
-    t.setProperty("documentation", "supercool stuff");
+    t.set("robin", "");
+    t.set("angle", 2e23);
+    t.set("documentation", "supercool stuff");
 
     List l;
     l.append("a");
@@ -27,16 +27,16 @@ int main()
     std::cout << m.at(3) << std::endl;
 
 
-//     std::cout << t.getPropertyAsInt("Robin", 12) << std::endl;
-    std::cout << t.getProperty("angle") << std::endl;
+    std::cout << t.get<int>("Robin") << std::endl;
+    std::cout << t.get<double>("angle") << std::endl;
 
     std::cout << t << std::endl;
     std::stringstream ss;
     ss << t;
     Piece p;
     ss >> p;
-    p.setProperty("a-sub-piece", t);
+    p.set<Piece>("a-sub-piece", t);
     std::cout << p << std::endl;
-    std::cout << p.getPropertyAsPiece("sub-piece").getProperty("angle") << std::endl;
+    std::cout << p.get<String>("a-sub-piece") << std::endl;
 }
 
