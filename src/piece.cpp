@@ -221,25 +221,3 @@ std::istream& operator>>(std::istream& is, Piece& p)
     return is;
 }
 
-
-int main()
-{
-    Piece t;
-
-    t.setProperty("robin", "");
-    t.setProperty("angle", 2e23);
-    t.setProperty("documentation", "supercool stuff");
-
-//     std::cout << t.getPropertyAsInt("Robin", 12) << std::endl;
-    std::cout << t.getProperty("angle") << std::endl;
-
-    std::cout << t << std::endl;
-    std::stringstream ss;
-    ss << t;
-    Piece p;
-    ss >> p;
-    p.setProperty("a-sub-piece", t);
-    std::cout << p << std::endl;
-    std::cout << p.getPropertyAsPiece("sub-piece").getProperty("angle") << std::endl;
-}
-
