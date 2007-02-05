@@ -15,11 +15,11 @@ public:
     Piece();
     virtual ~Piece();
 
-    void setProperty(const String& property, const String& value);
+    Piece& setProperty(const String& property, const String& value);
     String getProperty(const String& property, const String& defval = EMPTY_STRING) const;
 
     template<typename T>
-    void set(const String& property, const T& value);
+    Piece& set(const String& property, const T& value);
 
     template<typename T>
     T get(const String& property, const T& defval = T()) const;
@@ -36,12 +36,12 @@ std::istream& operator>>(std::istream& is, Piece& p);
 
 
 template<typename T>
-void Piece::set(const String& property, const T& value)
+Piece& Piece::set(const String& property, const T& value)
 {
     std::stringstream ss;
     ss << value;
 
-    setProperty(property, ss.str());
+    return setProperty(property, ss.str());
 }
 
 

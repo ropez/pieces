@@ -16,9 +16,10 @@ Piece::~Piece()
 }
 
 
-void Piece::setProperty(const String& property, const String& value)
+Piece& Piece::setProperty(const String& property, const String& value)
 {
     m_properties[property] = value;
+    return *this;
 }
 
 
