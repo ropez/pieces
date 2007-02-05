@@ -226,9 +226,9 @@ int main()
 {
     Piece t;
 
-    t.setProperty("Robin", "");
+    t.setProperty("robin", "");
     t.setProperty("angle", 2e23);
-    t.setProperty("Documentation", "supercool stuff");
+    t.setProperty("documentation", "supercool stuff");
 
 //     std::cout << t.getPropertyAsInt("Robin", 12) << std::endl;
     std::cout << t.getProperty("angle") << std::endl;
@@ -238,7 +238,7 @@ int main()
     ss << t;
     Piece p;
     ss >> p;
-    p.setProperty("sub-piece", t);
+    p.setProperty("a-sub-piece", t);
     std::cout << p << std::endl;
     std::cout << p.getPropertyAsPiece("sub-piece").getProperty("angle") << std::endl;
 }
