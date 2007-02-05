@@ -13,7 +13,7 @@ class Piece
 public:
 
     Piece();
-    virtual ~Piece();
+    ~Piece();
 
     Piece& setProperty(const String& property, const String& value);
     String getProperty(const String& property, const String& defval = EMPTY_STRING) const;

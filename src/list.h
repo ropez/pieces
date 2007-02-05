@@ -8,7 +8,7 @@ class List
 {
 public:
     List();
-    virtual ~List();
+    ~List();
 
     int size() const;
     String at(int pos) const;
