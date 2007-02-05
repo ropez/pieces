@@ -11,10 +11,10 @@ int main()
     t.set("robin", 10).set("angle", 2e23).set("documentation", "supercool stuff");
 
     List l;
-    l.append("a");
-    l.append("b");
-    l.append("c");
-    l.append("joakim simonsson");
+    l.addValue("a");
+    l.addValue("b");
+    l.addValue("c");
+    l.addValue("joakim simonsson");
 
     std::cout << l << std::endl;
     std::stringstream s;
@@ -22,7 +22,7 @@ int main()
     List m;
     s >> m;
     std::cout << m << std::endl;
-    std::cout << m.at(3) << std::endl;
+    std::cout << m.getValue(3) << std::endl;
 
 
     std::cout << t.get<int>("robin") << std::endl;
@@ -37,6 +37,6 @@ int main()
     p.set("a-sub-list", l);
     std::cout << p << std::endl;
     std::cout << p.get<String>("a-sub-piece") << std::endl;
-    std::cout << p.get<List>("a-sub-list").at(3) << std::endl;
+    std::cout << p.get<List>("a-sub-list").getValue(3) << std::endl;
 }
 

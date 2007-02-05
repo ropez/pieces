@@ -22,16 +22,16 @@ int List::size() const
 }
 
 
-String List::at(int pos) const
-{
-    return m_data[pos];
-}
-
-
-List& List::append(const String& value)
+List& List::addValue(const String& value)
 {
     m_data.push_back(value);
     return *this;
+}
+
+
+String List::getValue(int index) const
+{
+    return m_data[index];
 }
 
 
@@ -91,7 +91,7 @@ std::istream& operator>>(std::istream& is, List& l)
         String value;
         is >> std::setw(valueWidth) >> value;
 
-        l.append(value);
+        l.addValue(value);
     }
     return is;
 }

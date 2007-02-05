@@ -11,9 +11,9 @@ public:
     ~List();
 
     int size() const;
-    String at(int pos) const;
 
-    List& append(const String& value);
+    List& addValue(const String& value);
+    String getValue(int index) const;
 
     PropertyList::const_iterator begin() const;
     PropertyList::const_iterator end() const;
