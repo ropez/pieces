@@ -2,12 +2,12 @@
 #ifndef PIECES_BYTE_ARRAY_H
 #define PIECES_BYTE_ARRAY_H
 
+#include "SharedData"
 #include "SharedDataPointer"
 
 namespace Pieces
 {
 
-class ByteArrayData;
 
 class ByteArray
 {
@@ -26,7 +26,25 @@ public:
     const char* data() const;
 
 private:
-    SharedDataPointer<ByteArrayData> d;
+
+    class Data : public SharedData
+    {
+    public:
+        Data();
+
+        Data(const char* data, int size);
+
+        Data(const Data& other);
+
+        Data& operator=(const Data& other);
+
+        ~Data();
+
+        int size;
+        char* data;
+    };
+
+    SharedDataPointer<Data> d;
 };
 
 } // namespace Pieces
