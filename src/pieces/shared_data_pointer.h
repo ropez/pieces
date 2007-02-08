@@ -164,8 +164,8 @@ void SharedDataPointer<T>::detach()
     // Only make a deep copy if data is shared by more than one array
     if (m_ptr->shared())
     {
-        // We probably need a copy
-        T* tmp = new T(*m_ptr);
+        // Create a deep copy by calling the copy constructor
+        T* tmp = new T(*const_cast<const T*>(m_ptr));
 
         deref();
         m_ptr = tmp;
