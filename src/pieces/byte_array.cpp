@@ -20,24 +20,6 @@ ByteArray::ByteArray(const char* data, int size)
 }
 
 
-ByteArray::ByteArray(const ByteArray& other)
-: d(other.d)
-{
-}
-
-
-ByteArray& ByteArray::operator=(const ByteArray& other)
-{
-    d = other.d;
-    return *this;
-}
-
-
-ByteArray::~ByteArray()
-{
-}
-
-
 int ByteArray::size() const
 {
     return d->size;
