@@ -11,50 +11,65 @@ namespace Pieces
 class ByteArrayData : public SharedData
 {
 public:
-    ByteArrayData()
-    : SharedData()
-    , size(0)
-    , data(new char[size])
-    {
-    }
+    ByteArrayData();
 
-    ByteArrayData(const char* data, int size)
-    : SharedData()
-    , size(size)
-    , data(new char[size])
-    {
-        std::copy(data, data + size, this->data);
-    }
+    ByteArrayData(const char* data, int size);
 
-    ByteArrayData(const ByteArrayData& other)
-    : SharedData()
-    , size(other.size)
-    , data(new char[size])
-    {
-        std::copy(other.data, other.data + size, data);
-    }
+    ByteArrayData(const ByteArrayData& other);
 
-    ByteArrayData& operator=(const ByteArrayData& other)
-    {
-        if (this != &other)
-        {
-            delete[] data;
+    ByteArrayData& operator=(const ByteArrayData& other);
 
-            size = other.size;
-            data = new char[size];
-            std::copy(other.data, other.data + size, data);
-        }
-        return *this;
-    }
-
-    ~ByteArrayData()
-    {
-        delete[] data;
-    }
+    ~ByteArrayData();
 
     int size;
     char* data;
 };
+
+
+ByteArrayData::ByteArrayData()
+: SharedData()
+, size(0)
+, data(new char[size])
+{
+}
+
+
+ByteArrayData::ByteArrayData(const char* data, int size)
+: SharedData()
+, size(size)
+, data(new char[size])
+{
+    std::copy(data, data + size, this->data);
+}
+
+
+ByteArrayData::ByteArrayData(const ByteArrayData& other)
+: SharedData()
+, size(other.size)
+, data(new char[size])
+{
+    std::copy(other.data, other.data + size, data);
+}
+
+
+ByteArrayData& ByteArrayData::operator=(const ByteArrayData& other)
+{
+    if (this != &other)
+    {
+        delete[] data;
+
+        size = other.size;
+        data = new char[size];
+        std::copy(other.data, other.data + size, data);
+    }
+    return *this;
+}
+
+
+ByteArrayData::~ByteArrayData()
+{
+    delete[] data;
+}
 
 
 ByteArray::ByteArray()
