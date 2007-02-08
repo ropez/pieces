@@ -1,11 +1,15 @@
 #include "pieces/Piece"
 #include "pieces/List"
+#include "pieces/ByteArray"
 
 #include <iostream>
 #include <sstream>
 
 int main()
 {
+    Pieces::ByteArray ba("Piece of shit", 14);
+    std::cout << ba.data() << std::endl;
+
     Piece t;
     t.set("robin", 10).set("angle", 2e23).set("documentation", "supercool stuff");
 
