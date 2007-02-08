@@ -7,8 +7,20 @@
 
 int main()
 {
-    Pieces::ByteArray ba("Piece of shit", 14);
+    using Pieces::ByteArray;
+
+    const ByteArray ba("Piece of shit", 14);
     std::cout << ba.data() << std::endl;
+
+    ByteArray b2 = ba;
+    ByteArray b3 = ba;
+    const ByteArray b4 = ba;
+
+    b2.data()[0] = 'K';
+    std::cout << ba.data() << std::endl;
+    std::cout << b2.data() << std::endl;
+    std::cout << std::boolalpha << (ba.data() == b3.data()) << std::endl;
+    std::cout << std::boolalpha << (ba.data() == b4.data()) << std::endl;
 
     Piece t;
     t.set("robin", 10).set("angle", 2e23).set("documentation", "supercool stuff");
