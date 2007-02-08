@@ -10,9 +10,7 @@ class SharedData
 public:
 
     /**
-     * Default constructor sets reference count to 1, so
-     * when new data is allocated, the reference counter should
-     * not be increased.
+     * Default constructor sets reference count to 0.
      */
     SharedData();
 

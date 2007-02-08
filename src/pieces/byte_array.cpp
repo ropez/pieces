@@ -11,6 +11,47 @@ namespace Pieces
 class ByteArrayData : public SharedData
 {
 public:
+    ByteArrayData()
+    : SharedData()
+    , size(0)
+    , data(new char[size])
+    {
+    }
+
+    ByteArrayData(const char* data, int size)
+    : SharedData()
+    , size(size)
+    , data(new char[size])
+    {
+        std::copy(data, data + size, this->data);
+    }
+
+    ByteArrayData(const ByteArrayData& other)
+    : SharedData()
+    , size(other.size)
+    , data(new char[size])
+    {
+        std::copy(other.data, other.data + size, data);
+    }
+
+    ByteArrayData& operator=(const ByteArrayData& other)
+    {
+        if (this != &other)
+        {
+            delete[] data;
+
+            size = other.size;
+            data = new char[size];
+            std::copy(other.data, other.data + size, data);
+        }
+        return *this;
+    }
+
+    ~ByteArrayData()
+    {
+        delete[] data;
+    }
+
     int size;
     char* data;
 };
@@ -19,49 +60,30 @@ public:
 ByteArray::ByteArray()
 : d(new ByteArrayData)
 {
-    d->size = 0;
-    d->data = new char[0];
 }
 
 
 ByteArray::ByteArray(const char* data, int size)
-: d(new ByteArrayData)
+: d(new ByteArrayData(data, size))
 {
-    d->size = size;
-    d->data = new char[size];
-    std::copy(data, data + size, d->data);
 }
 
 
 ByteArray::ByteArray(const ByteArray& other)
 : d(other.d)
 {
-    d->ref();
 }
 
 
 ByteArray& ByteArray::operator=(const ByteArray& other)
 {
-    if (this != &other)
-    {
-        if (!d->deref())
-        {
-            delete d;
-        }
-
-        d = other.d;
-        d->ref();
-    }
+    d = other.d;
     return *this;
 }
 
 
 ByteArray::~ByteArray()
 {
-    if (!d->deref())
-    {
-        delete d;
-    }
 }
 
 
@@ -73,7 +95,6 @@ int ByteArray::size() const
 
 char* ByteArray::data()
 {
-    detach();
     return d->data;
 }
 
@@ -81,37 +102,6 @@ char* ByteArray::data()
 const char* ByteArray::data() const
 {
     return d->data;
-}
-
-
-void ByteArray::detach()
-{
-    // NOTE: Testing the reference count isn't thread safe. However, the
-    // operations done inside the body is always safe to do, even if another
-    // thread decreases refcount. Worst case scenario is that we create a copy
-    // when we really don't need one.
-    //
-    // Second scenario: What if the refcount is 1, and we decide not to make a
-    // copy, and the refcount is increased by another thread. This implies that
-    // the other thread makes a copy of *this* array. That's the user's
-    // responsibility.
-
-    // Only make a deep copy if data is shared by more than one array
-    if (d->shared())
-    {
-        // We probably need a copy
-        ByteArrayData* tmp = d;
-        d = new ByteArrayData;
-        d->size = tmp->size;
-        d->data = new char[tmp->size];
-        std::copy(tmp->data, tmp->data + tmp->size, d->data);
-
-        // Decrease ref counter to previously shared data
-        if (!tmp->deref())
-        {
-            delete tmp;
-        }
-    }
 }
 
 } // namespace Pieces

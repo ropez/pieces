@@ -7,7 +7,7 @@ namespace Pieces
 {
 
 SharedData::SharedData()
-: m_count(1)
+: m_count(0)
 {
 }
 
