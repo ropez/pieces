@@ -10,24 +10,86 @@ class SharedDataPointer
 {
 public:
 
+    /**
+     * Creates a null-pointer.
+     */
     SharedDataPointer();
 
+    /**
+     * Creates a shared data pointer that points to \a ptr.
+     *
+     * Increases the reference counter of the object pointed
+     * to by \a ptr unless it is a null-pointer.
+     */
     SharedDataPointer(T* ptr);
 
+    /**
+     * Creates a copy of \a other.
+     *
+     * Increases the reference counter of the object pointed
+     * to by \a other unless it is a null-pointer.
+     */
     SharedDataPointer(const SharedDataPointer<T>& other);
 
+    /**
+     * Destroys the pointer.
+     *
+     * Decreases the reference counter of the object pointed to by
+     * this pointer unless it is a null-pointer, and deletes the object
+     * if the reference count is 0.
+     */
     ~SharedDataPointer();
 
+    /**
+     * Assignment operator that makes this pointer to point to \a ptr.
+     *
+     * Decreases the reference counter of the object pointed to by
+     * this pointer unless it is a null-pointer, and deletes the object
+     * if the reference count is 0.
+     *
+     * Increases the reference counter of the object pointed
+     * to by \a ptr unless it is a null-pointer.
+     */
     SharedDataPointer<T>& operator=(T* ptr);
 
+    /**
+     * Assignment operator that makes this pointer a copy of \a other.
+     *
+     * Decreases the reference counter of the object pointed to by
+     * this pointer unless it is a null-pointer, and deletes the object
+     * if the reference count is 0.
+     *
+     * Increases the reference counter of the object pointed
+     * to by \a other unless it is a null-pointer.
+     */
     SharedDataPointer<T>& operator=(const SharedDataPointer<T>& other);
 
+    /**
+     * Returns a reference to the object pointed to by this pointer.
+     *
+     * Makes a deep copy of the object if it is shared with other pointers.
+     */
     T& operator*();
 
+    /**
+     * Returns a const reference to the object pointed to by this pointer.
+     *
+     * Does not make a deep copy of the object.
+     */
     const T& operator*() const;
 
+    /**
+     * Returns a pointer to the object pointed to by this pointer.
+     *
+     * Makes a deep copy of the object if it is shared with other pointers.
+     */
     T* operator->();
 
+    /**
+     * Returns a const pointer to the object pointed to by this pointer.
+     *
+     * Does not make a deep copy of the object.
+     */
     const T* operator->() const;
 
 private:
@@ -158,10 +220,10 @@ void SharedDataPointer<T>::detach()
     //
     // Second scenario: What if the refcount is 1, and we decide not to make a
     // copy, and the refcount is increased by another thread. This implies that
-    // the other thread makes a copy of *this* array. That's the user's
+    // the other thread makes a copy of *this* pointer. That's the user's
     // responsibility.
 
-    // Only make a deep copy if data is shared by more than one array
+    // Only make a deep copy if object is shared by more than one pointer
     if (m_ptr->shared())
     {
         // Create a deep copy by calling the copy constructor
