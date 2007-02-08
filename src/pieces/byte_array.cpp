@@ -1,19 +1,18 @@
 
 #include "byte_array.h"
-#include "atomic.h"
+#include "shared_data.h"
 
 #include <algorithm>
+
 
 namespace Pieces
 {
 
-class ByteArrayData
+class ByteArrayData : public SharedData
 {
 public:
     int size;
     char* data;
-
-    unsigned int ref_count;
 };
 
 
@@ -22,7 +21,6 @@ ByteArray::ByteArray()
 {
     d->size = 0;
     d->data = new char[0];
-    d->ref_count = 1;
 }
 
 
@@ -32,14 +30,13 @@ ByteArray::ByteArray(const char* data, int size)
     d->size = size;
     d->data = new char[size];
     std::copy(data, data + size, d->data);
-    d->ref_count = 1;
 }
 
 
 ByteArray::ByteArray(const ByteArray& other)
 : d(other.d)
 {
-    atomic_increment(&d->ref_count);
+    d->ref();
 }
 
 
@@ -47,16 +44,24 @@ ByteArray& ByteArray::operator=(const ByteArray& other)
 {
     if (this != &other)
     {
-        if (!atomic_decrement(&d->ref_count))
+        if (!d->deref())
         {
             delete d;
-            d = 0;
         }
 
         d = other.d;
-        atomic_increment(&d->ref_count);
+        d->ref();
     }
     return *this;
+}
+
+
+ByteArray::~ByteArray()
+{
+    if (!d->deref())
+    {
+        delete d;
+    }
 }
 
 
@@ -92,7 +97,7 @@ void ByteArray::detach()
     // responsibility.
 
     // Only make a deep copy if data is shared by more than one array
-    if (d->ref_count > 1)
+    if (d->shared())
     {
         // We probably need a copy
         ByteArrayData* tmp = d;
@@ -100,13 +105,11 @@ void ByteArray::detach()
         d->size = tmp->size;
         d->data = new char[tmp->size];
         std::copy(tmp->data, tmp->data + tmp->size, d->data);
-        d->ref_count = 1;
 
         // Decrease ref counter to previously shared data
-        if (!atomic_decrement(&tmp->ref_count))
+        if (!tmp->deref())
         {
             delete tmp;
-            tmp = 0;
         }
     }
 }

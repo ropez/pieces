@@ -17,6 +17,8 @@ public:
     ByteArray(const ByteArray& other);
     ByteArray& operator=(const ByteArray& other);
 
+    ~ByteArray();
+
     int size() const;
 
     char* data();
