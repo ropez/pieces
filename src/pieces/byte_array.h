@@ -48,6 +48,11 @@ public:
     bool isEmpty() const;
 
     /**
+     * Remove contents.
+     */
+    void clear();
+
+    /**
      * Resize the array to \a size bytes.
      *
      * If \a size is smaller than the original size, the new array will contain
@@ -104,6 +109,16 @@ public:
      * Prepend \a data to this byte-array.
      */
     ByteArray& prepend(const char* data, int size);
+
+    /**
+     * Remove \a n bytes from the end of the byte-array.
+     */
+    void chopFront(int n);
+
+    /**
+     * Remove \a n bytes from the end of the byte-array.
+     */
+    void chopBack(int n);
 
     /**
      * Append \a other to this byte-array.

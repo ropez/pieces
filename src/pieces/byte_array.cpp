@@ -38,6 +38,12 @@ bool ByteArray::isEmpty() const
 }
 
 
+void ByteArray::clear()
+{
+    d = new Data;
+}
+
+
 void ByteArray::resize(int size)
 {
     // Using a const reference to avoid deep copy of the old data
@@ -166,6 +172,48 @@ ByteArray& ByteArray::prepend(const char* data, int size)
     }
 
     return *this;
+}
+
+
+void ByteArray::chopFront(int n)
+{
+    if (n > size())
+    {
+        clear();
+    }
+    else if (n > 0)
+    {
+        // Using a const reference to avoid deep copy of the old data
+        const ByteArray& ref = *this;
+
+        // Temporary
+        ByteArray tmp(size() - n);
+        std::copy(ref.data() + n, ref.data() + ref.size(), tmp.data());
+
+        // Let assignment operator handle the rest
+        d = tmp.d;
+    }
+}
+
+
+void ByteArray::chopBack(int n)
+{
+    if (n > size())
+    {
+        clear();
+    }
+    else if (n > 0)
+    {
+        // Using a const reference to avoid deep copy of the old data
+        const ByteArray& ref = *this;
+
+        // Temporary
+        ByteArray tmp(size() - n);
+        std::copy(ref.data(), ref.data() + ref.size() - n, tmp.data());
+
+        // Let assignment operator handle the rest
+        d = tmp.d;
+    }
 }
 
 
