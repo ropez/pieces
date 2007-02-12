@@ -80,6 +80,31 @@ const char& ByteArray::operator[](int index) const
 }
 
 
+ByteArray ByteArray::middle(int pos, int len) const
+{
+    const int max = size() - pos;
+    const int s = (len < 0 || len > max) ? max : len;
+
+    if (s == 0)
+    {
+        return ByteArray();
+    }
+
+    if (s == size())
+    {
+        return *this;
+    }
+
+    return ByteArray(data() + pos, s);
+}
+
+
+ByteArray& ByteArray::operator+=(const ByteArray& other)
+{
+    return *this = *this + other;
+}
+
+
 ByteArray::Data::Data()
 : SharedData()
 , size(0)

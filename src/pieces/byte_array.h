@@ -77,6 +77,19 @@ public:
      */
     const char& operator[](int index) const;
 
+    /**
+     * Returns a byte-array that contains \a len bytes copied from this
+     * byte-array from position \a pos.
+     *
+     * If \a len is the default value -1, the rest of the array is copied.
+     */
+    ByteArray middle(int pos, int len = -1) const;
+
+    /**
+     * Append \a other to this byte-array.
+     */
+    ByteArray& operator+=(const ByteArray& other);
+
 private:
 
     class Data : public SharedData
