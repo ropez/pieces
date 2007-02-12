@@ -10,11 +10,6 @@ class SharedData
 public:
 
     /**
-     * Default constructor sets reference count to 0.
-     */
-    SharedData();
-
-    /**
      * Returns true if the reference counter is more than one.
      */
     bool shared() const;
@@ -38,6 +33,12 @@ public:
     bool deref();
 
 protected:
+
+    /**
+     * Default constructor sets reference count to 0.
+     */
+    SharedData();
+
     // Disabled stack allocation and delete
     ~SharedData();
 

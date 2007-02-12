@@ -6,12 +6,6 @@
 namespace Pieces
 {
 
-SharedData::SharedData()
-: m_count(0)
-{
-}
-
-
 bool SharedData::shared() const
 {
     return m_count > 1;
@@ -27,6 +21,12 @@ bool SharedData::ref()
 bool SharedData::deref()
 {
     return atomic_decrement(&m_count);
+}
+
+
+SharedData::SharedData()
+: m_count(0)
+{
 }
 
 
