@@ -2,6 +2,7 @@
 #include "pieces/List"
 #include "pieces/ByteArray"
 #include "pieces/DataStream"
+#include "pieces/Vector"
 
 #include <iostream>
 #include <sstream>
@@ -26,12 +27,16 @@ int main()
 
     std::cout << (b2 + b3).data() << std::endl;
 
+    Pieces::Vector<int> vec;
+    vec.append(6);
+    vec.append(7);
+    vec.append(8);
+
     Pieces::DataStream d;
-    d << 6 << 7 << 7.5 << 8;
+    d << vec[0] << vec[1] << vec[2];
     int a, b, c;
-    double dl;
-    d >> a >> b >> dl >> c;
-    std::cout << a << " " << b << " " << c << " " << dl << std::endl;
+    d >> a >> b >> c;
+    std::cout << a << " " << b << " " << c << std::endl;
 
 //     Piece t;
 //     t.set("robin", 10).set("angle", 2e23).set("documentation", "supercool stuff");
