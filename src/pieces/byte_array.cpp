@@ -88,6 +88,11 @@ const char& ByteArray::operator[](int index) const
 
 ByteArray ByteArray::middle(int pos, int len) const
 {
+    if (pos < 0)
+    {
+        pos = 0;
+    }
+
     const int max = size() - pos;
     const int s = (len < 0 || len > max) ? max : len;
 
@@ -102,6 +107,18 @@ ByteArray ByteArray::middle(int pos, int len) const
     }
 
     return ByteArray(data() + pos, s);
+}
+
+
+ByteArray ByteArray::left(int len) const
+{
+    return middle(0, len);
+}
+
+
+ByteArray ByteArray::right(int len) const
+{
+    return middle(size() - len, len);
 }
 
 

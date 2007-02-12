@@ -91,6 +91,22 @@ public:
     ByteArray middle(int pos, int len = -1) const;
 
     /**
+     * Returns a byte-array that contains \a len bytes copied from the start
+     * of this byte-array.
+     *
+     * Same as middle(0, len);
+     */
+    ByteArray left(int len) const;
+
+    /**
+     * Returns a byte-array that contains \a len bytes copied from the end
+     * of this byte-array.
+     *
+     * Same as middle(size() - len, len);
+     */
+    ByteArray right(int len) const;
+
+    /**
      * Append \a other to this byte-array.
      */
     ByteArray& append(const ByteArray& other);
