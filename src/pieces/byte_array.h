@@ -25,6 +25,13 @@ public:
     ByteArray();
 
     /**
+     * Creates a byte-array with room for \a size bytes.
+     *
+     * The data in uninitialized.
+     */
+    explicit ByteArray(int size);
+
+    /**
      * Created a byte-array with \a size bytes, and copies the data pointed to
      * by \a data.
      */
@@ -34,6 +41,16 @@ public:
      * Returns the size of the byte-array.
      */
     int size() const;
+
+    /**
+     * Resize the array to \a size bytes.
+     *
+     * If \a size is smaller than the original size, the new array will contain
+     * the \a size first bytes of the original. If \a size is larger than the
+     * original size, the first original size bytes of the array will constain
+     * the original contents, and the rest is uninitialized.
+     */
+    void resize(int size);
 
     /**
      * Returns a pointer to the internal data.
@@ -63,6 +80,9 @@ private:
 
         // Creates an empty array
         Data();
+
+        // Creates a 'size' element array
+        explicit Data(int size);
 
         // Creates a deep copy of the 'size' first bytes at location 'data'.
         Data(const char* data, int size);

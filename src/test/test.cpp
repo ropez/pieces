@@ -17,6 +17,7 @@ int main()
     const ByteArray b4 = ba;
 
     b2[0] = 'K';
+    b2.resize(5);
     std::cout << ba.data() << std::endl;
     std::cout << b2.data() << std::endl;
     std::cout << std::boolalpha << (ba.data() == b3.data()) << std::endl;

@@ -14,6 +14,12 @@ ByteArray::ByteArray()
 }
 
 
+ByteArray::ByteArray(int size)
+: d(new Data(size))
+{
+}
+
+
 ByteArray::ByteArray(const char* data, int size)
 : d(new Data(data, size))
 {
@@ -23,6 +29,24 @@ ByteArray::ByteArray(const char* data, int size)
 int ByteArray::size() const
 {
     return d->size;
+}
+
+
+void ByteArray::resize(int size)
+{
+    // Using a const reference to avoid deep copy of the old data
+    const ByteArray& ref = *this;
+
+    // Trivial case
+    if (size == ref.size())
+        return;
+
+    // Temporary copy
+    ByteArray tmp(size);
+    std::copy(ref.data(), ref.data() + std::min(tmp.size(), ref.size()), tmp.data());
+
+    // Let assignment operator handle the rest
+    *this = tmp;
 }
 
 
@@ -53,6 +77,14 @@ const char& ByteArray::operator[](int index) const
 ByteArray::Data::Data()
 : SharedData()
 , size(0)
+, data(new char[size])
+{
+}
+
+
+ByteArray::Data::Data(int size)
+: SharedData()
+, size(size)
 , data(new char[size])
 {
 }
