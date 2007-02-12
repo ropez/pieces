@@ -1,6 +1,7 @@
 #include "pieces/Piece"
 #include "pieces/List"
 #include "pieces/ByteArray"
+#include "pieces/DataStream"
 
 #include <iostream>
 #include <sstream>
@@ -24,6 +25,12 @@ int main()
     std::cout << std::boolalpha << (ba.data() == b4.data()) << std::endl;
 
     std::cout << (b2 + b3).data() << std::endl;
+
+    Pieces::DataStream d;
+    d << 6 << 7 << 8;
+    int a, b, c;
+    d >> a >> b >> c;
+    std::cout << a << " " << b << " " << c << std::endl;
 
 //     Piece t;
 //     t.set("robin", 10).set("angle", 2e23).set("documentation", "supercool stuff");
