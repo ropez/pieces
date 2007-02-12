@@ -38,6 +38,18 @@ const char* ByteArray::data() const
 }
 
 
+char& ByteArray::operator[](int index)
+{
+    return d->data[index];
+}
+
+
+const char& ByteArray::operator[](int index) const
+{
+    return d->data[index];
+}
+
+
 ByteArray::Data::Data()
 : SharedData()
 , size(0)
