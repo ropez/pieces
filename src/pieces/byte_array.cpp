@@ -134,6 +134,24 @@ ByteArray::Data::~Data()
 }
 
 
+bool operator==(const ByteArray& op1, const ByteArray& op2)
+{
+    if (op1.data() == op2.data())
+        return true;
+
+    if (op1.size() != op2.size())
+        return false;
+
+    return std::equal(op1.data(), op1.data() + op1.size(), op2.data());
+}
+
+
+bool operator!=(const ByteArray& op1, const ByteArray& op2)
+{
+    return !operator==(op1, op2);
+}
+
+
 ByteArray operator+(const ByteArray& op1, const ByteArray& op2)
 {
     // Trivial case

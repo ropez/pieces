@@ -116,6 +116,18 @@ private:
     SharedDataPointer<Data> d;
 };
 
+/**
+ * Comparison operator, returns true if the size and conents of the two
+ * byte-arrays are equal, otherwise false.
+ */
+bool operator==(const ByteArray& op1, const ByteArray& op2);
+
+/**
+ * Comparison operator, returns false if the size and conents of the two
+ * byte-arrays are equal, otherwise true.
+ */
+bool operator!=(const ByteArray& op1, const ByteArray& op2);
+
 ByteArray operator+(const ByteArray& op1, const ByteArray& op2);
 
 } // namespace Pieces
