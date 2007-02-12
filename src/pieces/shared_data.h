@@ -36,10 +36,17 @@ protected:
 
     /**
      * Default constructor sets reference count to 0.
+     *
+     * Protected so that it only can be instantiated through subclasses.
      */
     SharedData();
 
-    // Disabled stack allocation and delete
+    /**
+     * Protected destructor prevents stack allocation and manually delete.
+     *
+     * To disable these operations, it's recommended to have protected
+     * destructors in all subclasses.
+     */
     ~SharedData();
 
 private:
