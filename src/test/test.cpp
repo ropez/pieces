@@ -27,10 +27,11 @@ int main()
     std::cout << (b2 + b3).data() << std::endl;
 
     Pieces::DataStream d;
-    d << 6 << 7 << 8;
+    d << 6 << 7 << 7.5 << 8;
     int a, b, c;
-    d >> a >> b >> c;
-    std::cout << a << " " << b << " " << c << std::endl;
+    double dl;
+    d >> a >> b >> dl >> c;
+    std::cout << a << " " << b << " " << c << " " << dl << std::endl;
 
 //     Piece t;
 //     t.set("robin", 10).set("angle", 2e23).set("documentation", "supercool stuff");
