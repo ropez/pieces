@@ -23,6 +23,8 @@ int main()
     std::cout << std::boolalpha << (ba.data() == b3.data()) << std::endl;
     std::cout << std::boolalpha << (ba.data() == b4.data()) << std::endl;
 
+    std::cout << (b2 + b3).data() << std::endl;
+
 //     Piece t;
 //     t.set("robin", 10).set("angle", 2e23).set("documentation", "supercool stuff");
 //

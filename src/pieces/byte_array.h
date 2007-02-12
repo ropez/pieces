@@ -43,6 +43,11 @@ public:
     int size() const;
 
     /**
+     * Returns true is size() == 0.
+     */
+    bool isEmpty() const;
+
+    /**
      * Resize the array to \a size bytes.
      *
      * If \a size is smaller than the original size, the new array will contain
@@ -110,6 +115,8 @@ private:
 
     SharedDataPointer<Data> d;
 };
+
+ByteArray operator+(const ByteArray& op1, const ByteArray& op2);
 
 } // namespace Pieces
 

@@ -32,6 +32,12 @@ int ByteArray::size() const
 }
 
 
+bool ByteArray::isEmpty() const
+{
+    return d->size == 0;
+}
+
+
 void ByteArray::resize(int size)
 {
     // Using a const reference to avoid deep copy of the old data
@@ -125,6 +131,27 @@ ByteArray::Data& ByteArray::Data::operator=(const Data& other)
 ByteArray::Data::~Data()
 {
     delete[] data;
+}
+
+
+ByteArray operator+(const ByteArray& op1, const ByteArray& op2)
+{
+    // Trivial case
+    if (op1.isEmpty())
+        return op2;
+
+    // Trivial case
+    if (op2.isEmpty())
+        return op1;
+
+    // Create array to return
+    ByteArray retval(op1.size() + op2.size());
+
+    // Copy contents
+    std::copy(op1.data(), op1.data() + op1.size(), retval.data());
+    std::copy(op2.data(), op2.data() + op2.size(), retval.data() + op1.size());
+
+    return retval;
 }
 
 } // namespace Pieces
