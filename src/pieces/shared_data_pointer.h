@@ -5,6 +5,12 @@
 namespace Pieces
 {
 
+
+/**
+ * Smart pointer that automatically handles implicit sharing.
+ *
+ * T must be a class derived from Pieces::SharedData.
+ */
 template<class T>
 class SharedDataPointer
 {
@@ -63,6 +69,30 @@ public:
      * to by \a other unless it is a null-pointer.
      */
     SharedDataPointer<T>& operator=(const SharedDataPointer<T>& other);
+
+    /**
+     * Returns a pointer to the object pointed to by this pointer.
+     *
+     * Makes a deep copy of the object if it is shared with other pointers.
+     */
+    T* data();
+
+    /**
+     * Returns a const pointer to the object pointed to by this pointer.
+     *
+     * Does not make a deep copy of the object.
+     */
+    const T* data() const;
+
+    /**
+     * Always returns a const pointer to the object pointed to by this pointer.
+     *
+     * Unless data(), if you have a non-const pointer, this forces a const pointer,
+     * and no deep copy.
+     *
+     * Does not make a deep copy of the object.
+     */
+    const T* const_data() const;
 
     /**
      * Returns a reference to the object pointed to by this pointer.
@@ -143,13 +173,14 @@ SharedDataPointer<T>& SharedDataPointer<T>::operator=(T* ptr)
         m_ptr = ptr;
         ref();
     }
+    return *this;
 }
 
 
 template<class T>
 SharedDataPointer<T>& SharedDataPointer<T>::operator=(const SharedDataPointer<T>& other)
 {
-    if (this != &other)
+    if (m_ptr != other.m_ptr)
     {
         deref();
         m_ptr = other.m_ptr;
@@ -160,32 +191,53 @@ SharedDataPointer<T>& SharedDataPointer<T>::operator=(const SharedDataPointer<T>
 
 
 template<class T>
-T& SharedDataPointer<T>::operator*()
+T* SharedDataPointer<T>::data()
 {
     detach();
-    return *m_ptr;
+    return m_ptr;
+}
+
+
+template<class T>
+const T* SharedDataPointer<T>::data() const
+{
+    return m_ptr;
+}
+
+
+template<class T>
+const T* SharedDataPointer<T>::const_data() const
+{
+    return m_ptr;
+}
+
+
+
+template<class T>
+T& SharedDataPointer<T>::operator*()
+{
+    return *data();
 }
 
 
 template<class T>
 const T& SharedDataPointer<T>::operator*() const
 {
-    return *m_ptr;
+    return *data();
 }
 
 
 template<class T>
 T* SharedDataPointer<T>::operator->()
 {
-    detach();
-    return m_ptr;
+    return data();
 }
 
 
 template<class T>
 const T* SharedDataPointer<T>::operator->() const
 {
-    return m_ptr;
+    return data();
 }
 
 
@@ -227,7 +279,7 @@ void SharedDataPointer<T>::detach()
     if (m_ptr->shared())
     {
         // Create a deep copy by calling the copy constructor
-        T* tmp = new T(*const_cast<const T*>(m_ptr));
+        T* tmp = new T(*const_data());
 
         deref();
         m_ptr = tmp;
