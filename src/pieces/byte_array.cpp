@@ -249,20 +249,12 @@ bool operator!=(const ByteArray& op1, const ByteArray& op2)
 
 ByteArray operator+(const ByteArray& op1, const ByteArray& op2)
 {
-    // Trivial case
-    if (op1.isEmpty())
-        return op2;
-
-    // Trivial case
-    if (op2.isEmpty())
-        return op1;
-
     // Create array to return
-    ByteArray retval(op1.size() + op2.size());
+    ByteArray retval;
 
     // Copy contents
-    std::copy(op1.data(), op1.data() + op1.size(), retval.data());
-    std::copy(op2.data(), op2.data() + op2.size(), retval.data() + op1.size());
+    retval.append(op1);
+    retval.append(op2);
 
     return retval;
 }
