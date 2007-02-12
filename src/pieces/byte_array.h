@@ -88,6 +88,26 @@ public:
     /**
      * Append \a other to this byte-array.
      */
+    ByteArray& append(const ByteArray& other);
+
+    /**
+     * Append \a data to this byte-array.
+     */
+    ByteArray& append(const char* data, int size);
+
+    /**
+     * Prepend \a other to this byte-array.
+     */
+    ByteArray& prepend(const ByteArray& other);
+
+    /**
+     * Prepend \a data to this byte-array.
+     */
+    ByteArray& prepend(const char* data, int size);
+
+    /**
+     * Append \a other to this byte-array.
+     */
     ByteArray& operator+=(const ByteArray& other);
 
 private:

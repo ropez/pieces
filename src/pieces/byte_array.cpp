@@ -52,7 +52,7 @@ void ByteArray::resize(int size)
     std::copy(ref.data(), ref.data() + std::min(tmp.size(), ref.size()), tmp.data());
 
     // Let assignment operator handle the rest
-    *this = tmp;
+    d = tmp.d;
 }
 
 
@@ -99,9 +99,79 @@ ByteArray ByteArray::middle(int pos, int len) const
 }
 
 
+ByteArray& ByteArray::append(const ByteArray& other)
+{
+    if (isEmpty())
+    {
+        d = other.d;
+    }
+    else
+    {
+        append(other.data(), other.size());
+    }
+
+    return *this;
+}
+
+
+ByteArray& ByteArray::append(const char* data, int size)
+{
+    if (size > 0)
+    {
+        // Using a const reference to avoid deep copy of the old data
+        const ByteArray& ref = *this;
+
+        // Temporary
+        ByteArray tmp(ref.size() + size);
+        std::copy(ref.data(), ref.data() + ref.size(), tmp.data());
+        std::copy(data, data + size, tmp.data() + ref.size());
+
+        // Let assignment operator handle the rest
+        d = tmp.d;
+    }
+
+    return *this;
+}
+
+
+ByteArray& ByteArray::prepend(const ByteArray& other)
+{
+    if (isEmpty())
+    {
+        d = other.d;
+    }
+    else
+    {
+        prepend(other.data(), other.size());
+    }
+
+    return *this;
+}
+
+
+ByteArray& ByteArray::prepend(const char* data, int size)
+{
+    if (size > 0)
+    {
+        // Using a const reference to avoid deep copy of the old data
+        const ByteArray& ref = *this;
+
+        // Temporary
+        ByteArray tmp(ref.size() + size);
+        std::copy(data, data + size, tmp.data());
+        std::copy(ref.data(), ref.data() + ref.size(), tmp.data() + ref.size());
+
+        // Let assignment operator handle the rest
+        d = tmp.d;
+    }
+
+    return *this;
+}
+
+
 ByteArray& ByteArray::operator+=(const ByteArray& other)
 {
-    return *this = *this + other;
+    return append(other);
 }
 
 
