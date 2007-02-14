@@ -27,10 +27,16 @@ int main()
 
     std::cout << (b2 + b3).data() << std::endl;
 
-    Pieces::Vector<int> vec;
+    using Pieces::Vector;
+    Vector<int> vec;
     vec.append(6);
     vec.append(7);
     vec.append(8);
+
+    for (Vector<int>::iterator it = vec.begin(); it != vec.end(); ++it)
+    {
+        std::cout << "Element: " << *it << std::endl;
+    }
 
     Pieces::DataStream d;
     d << vec[0] << vec[1] << vec[2];

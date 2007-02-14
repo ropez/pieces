@@ -14,7 +14,22 @@ template<typename T>
 class Vector
 {
 public:
+    typedef std::vector<T> stl_vector_t;
+    typedef typename stl_vector_t::value_type value_type;
+    typedef typename stl_vector_t::pointer pointer;
+    typedef typename stl_vector_t::reference reference;
+    typedef typename stl_vector_t::const_reference const_reference;
+    typedef typename stl_vector_t::size_type size_type;
+    typedef typename stl_vector_t::difference_type difference_type;
+    typedef typename stl_vector_t::iterator iterator;
+    typedef typename stl_vector_t::const_iterator const_iterator;
+    typedef typename stl_vector_t::reverse_iterator reverse_iterator;
+    typedef typename stl_vector_t::const_reverse_iterator const_reverse_iterator;
+
     Vector();
+
+    iterator begin();
+    iterator end();
 
     void append(const T& val);
 
@@ -47,6 +62,20 @@ template<typename T>
 Vector<T>::Vector()
 : d(new Data)
 {
+}
+
+
+template<typename T>
+typename Vector<T>::iterator Vector<T>::begin()
+{
+    return d->data.begin();
+}
+
+
+template<typename T>
+typename Vector<T>::iterator Vector<T>::end()
+{
+    return d->data.end();
 }
 
 
