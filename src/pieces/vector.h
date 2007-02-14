@@ -28,7 +28,6 @@ private:
     public:
         Data();
         Data(const Data& other);
-        Data& operator=(const Data& other);
 
         std::vector<T> data;
 
@@ -85,15 +84,6 @@ Vector<T>::Data::Data(const Data& other)
 , data(other.data)
 {
 }
-
-
-// TODO: Find out where the syntax error is:
-// template<typename T>
-// Vector<T>::Data& Vector<T>::Data::operator=(const Vector<T>::Data& other)
-// {
-//     data = other.data;
-//     return *this;
-// }
 
 
 template<typename T>
