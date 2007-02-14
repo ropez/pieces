@@ -28,6 +28,7 @@ private:
     public:
         Data();
         Data(const Data& other);
+        Data& operator=(const Data& other);
 
         std::vector<T> data;
 
@@ -83,6 +84,14 @@ Vector<T>::Data::Data(const Data& other)
 : SharedData()
 , data(other.data)
 {
+}
+
+
+template<typename T>
+typename Vector<T>::Data& Vector<T>::Data::operator=(const Data& other)
+{
+    data = other.data;
+    return *this;
 }
 
 
