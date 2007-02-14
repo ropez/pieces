@@ -30,6 +30,13 @@ public:
 
     iterator begin();
     iterator end();
+    const_iterator begin() const;
+    const_iterator end() const;
+
+    reverse_iterator rbegin();
+    reverse_iterator rend();
+    const_reverse_iterator rbegin() const;
+    const_reverse_iterator rend() const;
 
     void append(const T& val);
 
@@ -76,6 +83,48 @@ template<typename T>
 typename Vector<T>::iterator Vector<T>::end()
 {
     return d->data.end();
+}
+
+
+template<typename T>
+typename Vector<T>::const_iterator Vector<T>::begin() const
+{
+    return d->data.begin();
+}
+
+
+template<typename T>
+typename Vector<T>::const_iterator Vector<T>::end() const
+{
+    return d->data.end();
+}
+
+
+template<typename T>
+typename Vector<T>::reverse_iterator Vector<T>::rbegin()
+{
+    return d->data.rbegin();
+}
+
+
+template<typename T>
+typename Vector<T>::reverse_iterator Vector<T>::rend()
+{
+    return d->data.rend();
+}
+
+
+template<typename T>
+typename Vector<T>::const_reverse_iterator Vector<T>::rbegin() const
+{
+    return d->data.rbegin();
+}
+
+
+template<typename T>
+typename Vector<T>::const_reverse_iterator Vector<T>::rend() const
+{
+    return d->data.rend();
 }
 
 
