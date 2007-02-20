@@ -5,8 +5,25 @@
 #include <iomanip>
 
 
+namespace Pieces
+{
+
+
+Piece::Data::Data()
+{
+}
+
+
+Piece::Data::Data(const Data& other)
+: SharedData()
+, properties(other.properties)
+{
+}
+
+
+
 Piece::Piece()
-: m_properties()
+: d(new Data)
 {
 }
 
@@ -18,7 +35,7 @@ Piece::~Piece()
 
 Piece& Piece::setProperty(const PString& property, const PString& value)
 {
-    m_properties[property] = value;
+    d->properties[property] = value;
     return *this;
 }
 
@@ -26,10 +43,10 @@ Piece& Piece::setProperty(const PString& property, const PString& value)
 PString Piece::getProperty(const PString& property, const PString& defval) const
 {
     // Lookup the value in the map.
-    PropertyTable::const_iterator it = m_properties.find(property);
+    PropertyTable::const_iterator it = d->properties.find(property);
 
     // See if it was found.
-    if (it != m_properties.end())
+    if (it != d->properties.end())
     {
         return it->second;
     }
@@ -42,13 +59,13 @@ PString Piece::getProperty(const PString& property, const PString& defval) const
 
 PropertyTable::const_iterator Piece::begin() const
 {
-    return m_properties.begin();
+    return d->properties.begin();
 }
 
 
 PropertyTable::const_iterator Piece::end() const
 {
-    return m_properties.end();
+    return d->properties.end();
 }
 
 
@@ -119,3 +136,4 @@ std::istream& operator>>(std::istream& is, Piece& p)
     return is;
 }
 
+} // namespace Pieces

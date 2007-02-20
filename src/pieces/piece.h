@@ -2,11 +2,17 @@
 #ifndef PIECE_H
 #define PIECE_H
 
-#include "PString"
 #include "PropertyTable"
+#include "PString"
+#include "SharedData"
+#include "SharedDataPointer"
 
 #include <sstream>
 #include <iomanip>
+
+
+namespace Pieces
+{
 
 class Piece
 {
@@ -28,7 +34,16 @@ public:
     PropertyTable::const_iterator end() const;
 
 private:
-    PropertyTable m_properties;
+    class Data : public SharedData
+    {
+    public:
+        Data();
+        Data(const Data& other);
+
+        PropertyTable properties;
+    };
+
+    SharedDataPointer<Data> d;
 };
 
 std::ostream& operator<<(std::ostream& os, const Piece& p);
@@ -49,10 +64,10 @@ template<typename T>
 T Piece::get(const PString& property, const T& defval) const
 {
     // Lookup the value in the map.
-    PropertyTable::const_iterator it = m_properties.find(property);
+    PropertyTable::const_iterator it = d->properties.find(property);
 
     // See if it was found.
-    if (it != m_properties.end())
+    if (it != d->properties.end())
     {
         std::stringstream ss(it->second);
 
@@ -65,5 +80,7 @@ T Piece::get(const PString& property, const T& defval) const
         return defval;
     }
 }
+
+} // namespace Pieces
 
 #endif // PIECE_H
