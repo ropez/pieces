@@ -57,13 +57,13 @@ PString Piece::getProperty(const PString& property, const PString& defval) const
 }
 
 
-PropertyTable::const_iterator Piece::begin() const
+Piece::PropertyTable::const_iterator Piece::begin() const
 {
     return d->properties.begin();
 }
 
 
-PropertyTable::const_iterator Piece::end() const
+Piece::PropertyTable::const_iterator Piece::end() const
 {
     return d->properties.end();
 }
@@ -73,7 +73,7 @@ std::ostream& operator<<(std::ostream& os, const Piece& p)
 {
     os << "(";
 
-    for (PropertyTable::const_iterator it = p.begin();
+    for (Piece::PropertyTable::const_iterator it = p.begin();
          it != p.end(); ++it)
     {
         const PString& key = it->first;

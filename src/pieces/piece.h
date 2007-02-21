@@ -2,13 +2,13 @@
 #ifndef PIECE_H
 #define PIECE_H
 
-#include "PropertyTable"
 #include "PString"
 #include "SharedData"
 #include "SharedDataPointer"
 
 #include <sstream>
 #include <iomanip>
+#include <map>
 
 
 namespace Pieces
@@ -17,6 +17,7 @@ namespace Pieces
 class Piece
 {
 public:
+    typedef std::map<PString, PString> PropertyTable;
 
     Piece();
     ~Piece();

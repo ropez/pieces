@@ -2,14 +2,17 @@
 #define LIST_H
 
 #include "PString"
-#include "PropertyList"
 
 #include <sstream>
 #include <iomanip>
+#include <vector>
+
 
 class List
 {
 public:
+    typedef std::vector<PString> PropertyList;
+
     List();
     ~List();
 

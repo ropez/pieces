@@ -35,13 +35,13 @@ PString List::getValue(int index) const
 }
 
 
-PropertyList::const_iterator List::begin() const
+List::PropertyList::const_iterator List::begin() const
 {
     return m_data.begin();
 }
 
 
-PropertyList::const_iterator List::end() const
+List::PropertyList::const_iterator List::end() const
 {
     return m_data.end();
 }
@@ -51,7 +51,7 @@ std::ostream& operator<<(std::ostream& os, const List& l)
 {
     os << "[";
 
-    for (PropertyList::const_iterator it = l.begin();
+    for (List::PropertyList::const_iterator it = l.begin();
          it != l.end(); ++it)
     {
         const PString& value = *it;
