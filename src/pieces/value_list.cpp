@@ -55,13 +55,13 @@ ByteArray ValueList::getValue(int index) const
 }
 
 
-ValueList::PropertyList::const_iterator ValueList::begin() const
+ValueList::list_t::const_iterator ValueList::begin() const
 {
     return d->values.begin();
 }
 
 
-ValueList::PropertyList::const_iterator ValueList::end() const
+ValueList::list_t::const_iterator ValueList::end() const
 {
     return d->values.end();
 }
@@ -71,7 +71,7 @@ std::ostream& operator<<(std::ostream& os, const ValueList& l)
 {
     os << "[";
 
-    for (ValueList::PropertyList::const_iterator it = l.begin(); it != l.end(); ++it)
+    for (ValueList::list_t::const_iterator it = l.begin(); it != l.end(); ++it)
     {
         if (it != l.begin())
             os << ' ';
@@ -88,7 +88,7 @@ std::ostream& operator<<(std::ostream& os, const ValueList& l)
 DataStream& operator<<(DataStream& ds, const ValueList& l)
 {
     ds << l.size();
-    for (ValueList::PropertyList::const_iterator it = l.begin(); it != l.end(); ++it)
+    for (ValueList::list_t::const_iterator it = l.begin(); it != l.end(); ++it)
     {
         const ByteArray& value = *it;
         ds << value;

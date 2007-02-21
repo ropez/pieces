@@ -53,7 +53,7 @@ PropertyList& PropertyList::setProperty(int property, const ByteArray& value)
 ByteArray PropertyList::getProperty(int property, const ByteArray& defval) const
 {
     // Lookup the value in the map.
-    PropertyTable::const_iterator it = d->properties.find(property);
+    map_t::const_iterator it = d->properties.find(property);
 
     // See if it was found.
     if (it != d->properties.end())
@@ -67,13 +67,13 @@ ByteArray PropertyList::getProperty(int property, const ByteArray& defval) const
 }
 
 
-PropertyList::PropertyTable::const_iterator PropertyList::begin() const
+PropertyList::map_t::const_iterator PropertyList::begin() const
 {
     return d->properties.begin();
 }
 
 
-PropertyList::PropertyTable::const_iterator PropertyList::end() const
+PropertyList::map_t::const_iterator PropertyList::end() const
 {
     return d->properties.end();
 }
@@ -83,7 +83,7 @@ std::ostream& operator<<(std::ostream& os, const PropertyList& p)
 {
     os << "(";
 
-    for (PropertyList::PropertyTable::const_iterator it = p.begin();
+    for (PropertyList::map_t::const_iterator it = p.begin();
          it != p.end(); ++it)
     {
         if (it != p.begin())
@@ -103,7 +103,7 @@ std::ostream& operator<<(std::ostream& os, const PropertyList& p)
 DataStream& operator<<(DataStream& ds, const PropertyList& p)
 {
     ds << p.size();
-    for (PropertyList::PropertyTable::const_iterator it = p.begin(); it != p.end(); ++it)
+    for (PropertyList::map_t::const_iterator it = p.begin(); it != p.end(); ++it)
     {
         int key = it->first;
         const ByteArray& value = it->second;

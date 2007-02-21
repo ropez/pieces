@@ -15,7 +15,7 @@ namespace Pieces
 class ValueList
 {
 public:
-    typedef std::vector<ByteArray> PropertyList;
+    typedef std::vector<ByteArray> list_t;
 
     ValueList();
     ~ValueList();
@@ -32,8 +32,8 @@ public:
     template<typename T>
     T get(int index) const;
 
-    PropertyList::const_iterator begin() const;
-    PropertyList::const_iterator end() const;
+    list_t::const_iterator begin() const;
+    list_t::const_iterator end() const;
 
 private:
     class Data : public SharedData
@@ -42,7 +42,7 @@ private:
         Data();
         Data(const Data& other);
 
-        PropertyList values;
+        list_t values;
     };
 
     SharedDataPointer<Data> d;

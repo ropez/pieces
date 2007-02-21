@@ -16,7 +16,7 @@ namespace Pieces
 class PropertyList
 {
 public:
-    typedef std::map<int, ByteArray> PropertyTable;
+    typedef std::map<int, ByteArray> map_t;
 
     PropertyList();
     ~PropertyList();
@@ -33,8 +33,8 @@ public:
     template<typename T>
     T get(int property, const T& defval = T()) const;
 
-    PropertyTable::const_iterator begin() const;
-    PropertyTable::const_iterator end() const;
+    map_t::const_iterator begin() const;
+    map_t::const_iterator end() const;
 
 private:
     class Data : public SharedData
@@ -43,7 +43,7 @@ private:
         Data();
         Data(const Data& other);
 
-        PropertyTable properties;
+        map_t properties;
     };
 
     SharedDataPointer<Data> d;
@@ -69,7 +69,7 @@ template<typename T>
 T PropertyList::get(int property, const T& defval) const
 {
     // Lookup the value in the map.
-    PropertyTable::const_iterator it = d->properties.find(property);
+    map_t::const_iterator it = d->properties.find(property);
 
     // See if it was found.
     if (it != d->properties.end())
