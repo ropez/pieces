@@ -221,7 +221,6 @@ bool operator!=(const ByteArray& op1, const ByteArray& op2);
 ByteArray operator+(const ByteArray& op1, const ByteArray& op2);
 
 std::ostream& operator<<(std::ostream& os, const ByteArray& ba);
-std::istream& operator>>(std::istream& is, ByteArray& ba);
 
 } // namespace Pieces
 

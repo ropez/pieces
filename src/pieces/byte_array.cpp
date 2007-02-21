@@ -354,36 +354,10 @@ std::ostream& operator<<(std::ostream& os, const ByteArray& ba)
     ss << std::hex << std::setfill('0');
     for (int i = 0; i < ba.size(); ++i)
     {
-        if (i != 0)
-            ss << '.';
-
         ss << std::setw(2) << static_cast<int>(ba[i]);
     }
 
     return os << ss.str();
-}
-
-
-std::istream& operator>>(std::istream& is, ByteArray& ba)
-{
-    ba.clear();
-
-    std::string str;
-    is >> str;
-
-    std::stringstream ss(str);
-
-    ss >> std::hex;
-    while (!ss.eof())
-    {
-        int d = 0;
-        byte_t c = '\0';
-        ss >> d >> c;
-
-        ba.append(d);
-    }
-
-    return is;
 }
 
 } // namespace Pieces
