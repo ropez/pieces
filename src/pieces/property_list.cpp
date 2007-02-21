@@ -31,14 +31,14 @@ PropertyList::~PropertyList()
 }
 
 
-PropertyList& PropertyList::setProperty(const PString& property, const PString& value)
+PropertyList& PropertyList::setProperty(int property, const ByteArray& value)
 {
     d->properties[property] = value;
     return *this;
 }
 
 
-PString PropertyList::getProperty(const PString& property, const PString& defval) const
+ByteArray PropertyList::getProperty(int property, const ByteArray& defval) const
 {
     // Lookup the value in the map.
     PropertyTable::const_iterator it = d->properties.find(property);
@@ -74,11 +74,10 @@ std::ostream& operator<<(std::ostream& os, const PropertyList& p)
     for (PropertyList::PropertyTable::const_iterator it = p.begin();
          it != p.end(); ++it)
     {
-        const PString& key = it->first;
-        const PString& value = it->second;
+        int key = it->first;
+        const ByteArray& value = it->second;
 
-        os << ':' << key.size() << ':' << key;
-        os << ':' << value.size() << ':' << value;
+        os << ':' << key << ':' << value << ' ';
     }
 
     os << ")";
@@ -102,32 +101,18 @@ std::istream& operator>>(std::istream& is, PropertyList& p)
         if (c != ':')
             break;
 
-        int keyWidth = 0;
-        is >> keyWidth;
+        // Read key
+        int key;
+        is >> key;
 
         // Read colon
         is >> c;
         if (c != ':')
             break;
 
-        PString key;
-        is >> std::setw(keyWidth) >> key;
-
-        // Read colon
-        is >> c;
-        if (c != ':')
-            break;
-
-        int valueWidth = 0;
-        is >> valueWidth;
-
-        // Read colon
-        is >> c;
-        if (c != ':')
-            break;
-
-        PString value;
-        is >> std::setw(valueWidth) >> value;
+        // Read value
+        ByteArray value;
+        is >> value;
 
         p.setProperty(key, value);
     }

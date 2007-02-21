@@ -22,8 +22,14 @@ ByteArray::ByteArray(int size)
 }
 
 
-ByteArray::ByteArray(const char* data, int size)
+ByteArray::ByteArray(const byte_t* data, int size)
 : d(new Data(data, size))
+{
+}
+
+
+ByteArray::ByteArray(const char* data, int size)
+: d(new Data(reinterpret_cast<const byte_t*>(data), size))
 {
 }
 
@@ -64,25 +70,31 @@ void ByteArray::resize(int size)
 }
 
 
-char* ByteArray::data()
+byte_t* ByteArray::data()
 {
     return d->data;
 }
 
 
-const char* ByteArray::data() const
+const byte_t* ByteArray::data() const
 {
     return d->data;
 }
 
 
-char& ByteArray::operator[](int index)
+const byte_t* ByteArray::constData() const
+{
+    return d->data;
+}
+
+
+byte_t& ByteArray::operator[](int index)
 {
     return d->data[index];
 }
 
 
-const char& ByteArray::operator[](int index) const
+const byte_t& ByteArray::operator[](int index) const
 {
     return d->data[index];
 }
@@ -124,7 +136,7 @@ ByteArray ByteArray::right(int len) const
 }
 
 
-ByteArray& ByteArray::append(char byte)
+ByteArray& ByteArray::append(byte_t byte)
 {
     return append(&byte, 1);
 }
@@ -144,7 +156,7 @@ ByteArray& ByteArray::append(const ByteArray& other)
 }
 
 
-ByteArray& ByteArray::append(const char* data, int size)
+ByteArray& ByteArray::append(const byte_t* data, int size)
 {
     if (size > 0)
     {
@@ -163,7 +175,7 @@ ByteArray& ByteArray::append(const char* data, int size)
 }
 
 
-ByteArray& ByteArray::prepend(char byte)
+ByteArray& ByteArray::prepend(byte_t byte)
 {
     return prepend(&byte, 1);
 }
@@ -183,7 +195,7 @@ ByteArray& ByteArray::prepend(const ByteArray& other)
 }
 
 
-ByteArray& ByteArray::prepend(const char* data, int size)
+ByteArray& ByteArray::prepend(const byte_t* data, int size)
 {
     if (size > 0)
     {
@@ -253,7 +265,7 @@ ByteArray& ByteArray::operator+=(const ByteArray& other)
 ByteArray::Data::Data()
 : SharedData()
 , size(0)
-, data(new char[size])
+, data(new byte_t[size])
 {
 }
 
@@ -261,15 +273,15 @@ ByteArray::Data::Data()
 ByteArray::Data::Data(int size)
 : SharedData()
 , size(size)
-, data(new char[size])
+, data(new byte_t[size])
 {
 }
 
 
-ByteArray::Data::Data(const char* data, int size)
+ByteArray::Data::Data(const byte_t* data, int size)
 : SharedData()
 , size(size)
-, data(new char[size])
+, data(new byte_t[size])
 {
     std::copy(data, data + size, this->data);
 }
@@ -278,7 +290,7 @@ ByteArray::Data::Data(const char* data, int size)
 ByteArray::Data::Data(const Data& other)
 : SharedData()
 , size(other.size)
-, data(new char[size])
+, data(new byte_t[size])
 {
     std::copy(other.data, other.data + size, data);
 }
@@ -291,7 +303,7 @@ ByteArray::Data& ByteArray::Data::operator=(const Data& other)
         delete[] data;
 
         size = other.size;
-        data = new char[size];
+        data = new byte_t[size];
         std::copy(other.data, other.data + size, data);
     }
     return *this;
@@ -365,7 +377,7 @@ std::istream& operator>>(std::istream& is, ByteArray& ba)
     while (!ss.eof())
     {
         int d = 0;
-        char c = '\0';
+        byte_t c = '\0';
         ss >> d >> c;
 
         ba.append(d);

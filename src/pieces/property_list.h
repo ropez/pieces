@@ -2,12 +2,11 @@
 #ifndef PIECES_PROPERTY_LIST_H
 #define PIECES_PROPERTY_LIST_H
 
-#include "PString"
+#include "ByteArray"
+#include "DataStream"
 #include "SharedData"
 #include "SharedDataPointer"
 
-#include <sstream>
-#include <iomanip>
 #include <map>
 
 
@@ -17,19 +16,19 @@ namespace Pieces
 class PropertyList
 {
 public:
-    typedef std::map<PString, PString> PropertyTable;
+    typedef std::map<int, ByteArray> PropertyTable;
 
     PropertyList();
     ~PropertyList();
 
-    PropertyList& setProperty(const PString& property, const PString& value);
-    PString getProperty(const PString& property, const PString& defval = EMPTY_STRING) const;
+    PropertyList& setProperty(int property, const ByteArray& value);
+    ByteArray getProperty(int property, const ByteArray& defval = ByteArray()) const;
 
     template<typename T>
-    PropertyList& set(const PString& property, const T& value);
+    PropertyList& set(int property, const T& value);
 
     template<typename T>
-    T get(const PString& property, const T& defval = T()) const;
+    T get(int property, const T& defval = T()) const;
 
     PropertyTable::const_iterator begin() const;
     PropertyTable::const_iterator end() const;
@@ -52,17 +51,16 @@ std::istream& operator>>(std::istream& is, PropertyList& p);
 
 
 template<typename T>
-PropertyList& PropertyList::set(const PString& property, const T& value)
+PropertyList& PropertyList::set(int property, const T& value)
 {
-    std::stringstream ss;
-    ss << value;
-
-    return setProperty(property, ss.str());
+    ByteArray ba;
+    encode(ba, value);
+    return setProperty(property, ba);
 }
 
 
 template<typename T>
-T PropertyList::get(const PString& property, const T& defval) const
+T PropertyList::get(int property, const T& defval) const
 {
     // Lookup the value in the map.
     PropertyTable::const_iterator it = d->properties.find(property);
@@ -70,10 +68,8 @@ T PropertyList::get(const PString& property, const T& defval) const
     // See if it was found.
     if (it != d->properties.end())
     {
-        std::stringstream ss(it->second);
-
-        T result = defval;
-        ss >> std::noskipws >> std::setw(it->second.length()) >> result;
+        T result;
+        decode(it->second, result);
         return result;
     }
     else

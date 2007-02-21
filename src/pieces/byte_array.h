@@ -11,6 +11,8 @@
 namespace Pieces
 {
 
+typedef unsigned char byte_t;
+
 /**
  * Represents a generic array of bytes.
  *
@@ -33,6 +35,12 @@ public:
      * The data in uninitialized.
      */
     explicit ByteArray(int size);
+
+    /**
+     * Created a byte-array with \a size bytes, and copies the data pointed to
+     * by \a data.
+     */
+    ByteArray(const byte_t* data, int size);
 
     /**
      * Created a byte-array with \a size bytes, and copies the data pointed to
@@ -68,22 +76,27 @@ public:
     /**
      * Returns a pointer to the internal data.
      */
-    char* data();
+    byte_t* data();
 
     /**
      * Returns a pointer to the internal data.
      */
-    const char* data() const;
+    const byte_t* data() const;
+
+    /**
+     * Returns a pointer to the internal data.
+     */
+    const byte_t* constData() const;
 
     /**
      * Returns a reference to the byte at position \a index.
      */
-    char& operator[](int index);
+    byte_t& operator[](int index);
 
     /**
      * Returns a const reference to the byte at position \a index.
      */
-    const char& operator[](int index) const;
+    const byte_t& operator[](int index) const;
 
     /**
      * Returns a byte-array that contains \a len bytes copied from this
@@ -112,7 +125,7 @@ public:
     /**
      * Append \a byte to this byte-array.
      */
-    ByteArray& append(char byte);
+    ByteArray& append(byte_t byte);
 
     /**
      * Append \a other to this byte-array.
@@ -122,12 +135,12 @@ public:
     /**
      * Append \a data to this byte-array.
      */
-    ByteArray& append(const char* data, int size);
+    ByteArray& append(const byte_t* data, int size);
 
     /**
      * Prepend \a byte to this byte-array.
      */
-    ByteArray& prepend(char byte);
+    ByteArray& prepend(byte_t byte);
 
     /**
      * Prepend \a other to this byte-array.
@@ -137,7 +150,7 @@ public:
     /**
      * Prepend \a data to this byte-array.
      */
-    ByteArray& prepend(const char* data, int size);
+    ByteArray& prepend(const byte_t* data, int size);
 
     /**
      * Remove \a n bytes from the end of the byte-array.
@@ -167,7 +180,7 @@ private:
         explicit Data(int size);
 
         // Creates a deep copy of the 'size' first bytes at location 'data'.
-        Data(const char* data, int size);
+        Data(const byte_t* data, int size);
 
         // Creates a deep copy (called automatically by SharedDataPointer if needed).
         Data(const Data& other);
@@ -179,7 +192,7 @@ private:
         int size;
 
         // Pointer to allocated data.
-        char* data;
+        byte_t* data;
 
     protected:
 

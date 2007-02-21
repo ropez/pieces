@@ -8,13 +8,15 @@ namespace Pieces
 {
 
 DataStream::DataStream()
-: m_data()
+: m_readPtr(0)
+, m_data()
 {
 }
 
 
 DataStream::DataStream(const ByteArray& data)
-: m_data(data)
+: m_readPtr(0)
+, m_data(data)
 {
 }
 
@@ -25,198 +27,404 @@ ByteArray DataStream::data() const
 }
 
 
-DataStream& DataStream::operator<<(bool i)
+DataStream& DataStream::operator<<(bool v)
 {
-    write(reinterpret_cast<char*>(&i), sizeof(bool));
-
+    ByteArray ba;
+    encode(ba, v);
+    writeBytes(ba);
     return *this;
 }
 
 
-DataStream& DataStream::operator<<(char i)
+DataStream& DataStream::operator<<(char v)
 {
-    write(reinterpret_cast<char*>(&i), sizeof(char));
-
+    ByteArray ba;
+    encode(ba, v);
+    writeBytes(ba);
     return *this;
 }
 
 
-DataStream& DataStream::operator<<(unsigned char i)
+DataStream& DataStream::operator<<(unsigned char v)
 {
-    write(reinterpret_cast<char*>(&i), sizeof(unsigned int));
-
+    ByteArray ba;
+    encode(ba, v);
+    writeBytes(ba);
     return *this;
 }
 
 
-DataStream& DataStream::operator<<(short i)
+DataStream& DataStream::operator<<(short v)
 {
-    write(reinterpret_cast<char*>(&i), sizeof(short));
-
+    ByteArray ba;
+    encode(ba, v);
+    writeBytes(ba);
     return *this;
 }
 
 
-DataStream& DataStream::operator<<(unsigned short i)
+DataStream& DataStream::operator<<(unsigned short v)
 {
-    write(reinterpret_cast<char*>(&i), sizeof(unsigned short));
-
+    ByteArray ba;
+    encode(ba, v);
+    writeBytes(ba);
     return *this;
 }
 
 
-DataStream& DataStream::operator<<(int i)
+DataStream& DataStream::operator<<(int v)
 {
-    write(reinterpret_cast<char*>(&i), sizeof(int));
-
+    ByteArray ba;
+    encode(ba, v);
+    writeBytes(ba);
     return *this;
 }
 
 
-DataStream& DataStream::operator<<(unsigned int i)
+DataStream& DataStream::operator<<(unsigned int v)
 {
-    write(reinterpret_cast<char*>(&i), sizeof(unsigned int));
-
+    ByteArray ba;
+    encode(ba, v);
+    writeBytes(ba);
     return *this;
 }
 
 
-DataStream& DataStream::operator<<(long i)
+DataStream& DataStream::operator<<(long v)
 {
-    write(reinterpret_cast<char*>(&i), sizeof(long));
-
+    ByteArray ba;
+    encode(ba, v);
+    writeBytes(ba);
     return *this;
 }
 
 
-DataStream& DataStream::operator<<(unsigned long i)
+DataStream& DataStream::operator<<(unsigned long v)
 {
-    write(reinterpret_cast<char*>(&i), sizeof(unsigned long));
-
+    ByteArray ba;
+    encode(ba, v);
+    writeBytes(ba);
     return *this;
 }
 
 
-DataStream& DataStream::operator<<(float f)
+DataStream& DataStream::operator<<(float v)
 {
-    write(reinterpret_cast<char*>(&f), sizeof(float));
-
+    ByteArray ba;
+    encode(ba, v);
+    writeBytes(ba);
     return *this;
 }
 
 
-DataStream& DataStream::operator<<(double f)
+DataStream& DataStream::operator<<(double v)
 {
-    write(reinterpret_cast<char*>(&f), sizeof(double));
-
+    ByteArray ba;
+    encode(ba, v);
+    writeBytes(ba);
     return *this;
 }
 
 
-DataStream& DataStream::operator>>(bool& i)
+DataStream& DataStream::operator>>(bool& v)
 {
-    read(reinterpret_cast<char*>(&i), sizeof(bool));
-
+    ByteArray ba = readBytes(sizeof(v));
+    decode(ba, v);
     return *this;
 }
 
 
-DataStream& DataStream::operator>>(char& i)
+DataStream& DataStream::operator>>(char& v)
 {
-    read(reinterpret_cast<char*>(&i), sizeof(char));
-
+    ByteArray ba = readBytes(sizeof(v));
+    decode(ba, v);
     return *this;
 }
 
 
-DataStream& DataStream::operator>>(unsigned char& i)
+DataStream& DataStream::operator>>(unsigned char& v)
 {
-    read(reinterpret_cast<char*>(&i), sizeof(unsigned char));
-
+    ByteArray ba = readBytes(sizeof(v));
+    decode(ba, v);
     return *this;
 }
 
 
-DataStream& DataStream::operator>>(short& i)
+DataStream& DataStream::operator>>(short& v)
 {
-    read(reinterpret_cast<char*>(&i), sizeof(short));
-
+    ByteArray ba = readBytes(sizeof(v));
+    decode(ba, v);
     return *this;
 }
 
 
-DataStream& DataStream::operator>>(unsigned short& i)
+DataStream& DataStream::operator>>(unsigned short& v)
 {
-    read(reinterpret_cast<char*>(&i), sizeof(unsigned short));
-
+    ByteArray ba = readBytes(sizeof(v));
+    decode(ba, v);
     return *this;
 }
 
 
-DataStream& DataStream::operator>>(int& i)
+DataStream& DataStream::operator>>(int& v)
 {
-    read(reinterpret_cast<char*>(&i), sizeof(int));
-
+    ByteArray ba = readBytes(sizeof(v));
+    decode(ba, v);
     return *this;
 }
 
 
-DataStream& DataStream::operator>>(unsigned int& i)
+DataStream& DataStream::operator>>(unsigned int& v)
 {
-    read(reinterpret_cast<char*>(&i), sizeof(unsigned int));
-
+    ByteArray ba = readBytes(sizeof(v));
+    decode(ba, v);
     return *this;
 }
 
 
-DataStream& DataStream::operator>>(long& i)
+DataStream& DataStream::operator>>(long& v)
 {
-    read(reinterpret_cast<char*>(&i), sizeof(long));
-
+    ByteArray ba = readBytes(sizeof(v));
+    decode(ba, v);
     return *this;
 }
 
 
-DataStream& DataStream::operator>>(unsigned long& i)
+DataStream& DataStream::operator>>(unsigned long& v)
 {
-    read(reinterpret_cast<char*>(&i), sizeof(unsigned long));
-
+    ByteArray ba = readBytes(sizeof(v));
+    decode(ba, v);
     return *this;
 }
 
 
-DataStream& DataStream::operator>>(float& f)
+DataStream& DataStream::operator>>(float& v)
 {
-    read(reinterpret_cast<char*>(&f), sizeof(float));
-
+    ByteArray ba = readBytes(sizeof(v));
+    decode(ba, v);
     return *this;
 }
 
 
-DataStream& DataStream::operator>>(double& f)
+DataStream& DataStream::operator>>(double& v)
 {
-    read(reinterpret_cast<char*>(&f), sizeof(double));
-
+    ByteArray ba = readBytes(sizeof(v));
+    decode(ba, v);
     return *this;
 }
 
 
-void DataStream::write(const char* data, int size)
+void DataStream::writeBytes(const ByteArray& ba)
 {
-    m_data.append(data, size);
+    m_data.append(ba);
 }
 
 
-void DataStream::read(char* data, int size)
+ByteArray DataStream::readBytes(int size)
 {
-    // Reference to avoid deep copy
-    const ByteArray& ref = m_data;
+    if (size > m_data.size() - m_readPtr)
+        throw "error";
 
-    // Read data
-    const char* dataPtr = ref.data();
-    std::copy(dataPtr, dataPtr + size, data);
+    ByteArray ba = m_data.middle(m_readPtr, size);
+    m_readPtr += size;
 
-    m_data.chopFront(size);
+    return ba;
+}
+
+
+DataStream& operator<<(DataStream& ds, const ByteArray& ba)
+{
+    ds << ba.size();
+    ds.writeBytes(ba);
+
+    return ds;
+}
+
+
+DataStream& operator>>(DataStream& ds, ByteArray& ba)
+{
+    int size;
+    ds >> size;
+    ba = ds.readBytes(size);
+
+    return ds;
+}
+
+
+void encode(ByteArray& ba, bool v)
+{
+    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+}
+
+
+void encode(ByteArray& ba, char v)
+{
+    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+}
+
+
+void encode(ByteArray& ba, unsigned char v)
+{
+    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+}
+
+
+void encode(ByteArray& ba, short v)
+{
+    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+}
+
+
+void encode(ByteArray& ba, unsigned short v)
+{
+    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+}
+
+
+void encode(ByteArray& ba, int v)
+{
+    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+}
+
+
+void encode(ByteArray& ba, unsigned int v)
+{
+    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+}
+
+
+void encode(ByteArray& ba, long v)
+{
+    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+}
+
+
+void encode(ByteArray& ba, unsigned long v)
+{
+    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+}
+
+
+void encode(ByteArray& ba, float v)
+{
+    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+}
+
+
+void encode(ByteArray& ba, double v)
+{
+    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+}
+
+
+void encode(ByteArray& ba, const ByteArray& v)
+{
+    ba = v;
+}
+
+
+void decode(const ByteArray& ba, bool& v)
+{
+    if (ba.size() != sizeof(v))
+        throw "error";
+
+    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+}
+
+
+void decode(const ByteArray& ba, char& v)
+{
+    if (ba.size() != sizeof(v))
+        throw "error";
+
+    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+}
+
+
+void decode(const ByteArray& ba, unsigned char& v)
+{
+    if (ba.size() != sizeof(v))
+        throw "error";
+
+    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+}
+
+
+void decode(const ByteArray& ba, short& v)
+{
+    if (ba.size() != sizeof(v))
+        throw "error";
+
+    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+}
+
+
+void decode(const ByteArray& ba, unsigned short& v)
+{
+    if (ba.size() != sizeof(v))
+        throw "error";
+
+    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+}
+
+
+void decode(const ByteArray& ba, int& v)
+{
+    if (ba.size() != sizeof(v))
+        throw "error";
+
+    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+}
+
+
+void decode(const ByteArray& ba, unsigned int& v)
+{
+    if (ba.size() != sizeof(v))
+        throw "error";
+
+    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+}
+
+
+void decode(const ByteArray& ba, long& v)
+{
+    if (ba.size() != sizeof(v))
+        throw "error";
+
+    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+}
+
+
+void decode(const ByteArray& ba, unsigned long& v)
+{
+    if (ba.size() != sizeof(v))
+        throw "error";
+
+    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+}
+
+
+void decode(const ByteArray& ba, float& v)
+{
+    if (ba.size() != sizeof(v))
+        throw "error";
+
+    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+}
+
+
+void decode(const ByteArray& ba, double& v)
+{
+    if (ba.size() != sizeof(v))
+        throw "error";
+
+    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+}
+
+
+void decode(const ByteArray& ba, ByteArray& v)
+{
+    v = ba;
 }
 
 } // namespace Pieces

@@ -16,37 +16,71 @@ public:
 
     ByteArray data() const;
 
-    DataStream& operator<<(bool i);
-    DataStream& operator<<(char i);
-    DataStream& operator<<(unsigned char i);
-    DataStream& operator<<(short i);
-    DataStream& operator<<(unsigned short i);
-    DataStream& operator<<(int i);
-    DataStream& operator<<(unsigned int i);
-    DataStream& operator<<(long i);
-    DataStream& operator<<(unsigned long i);
-    DataStream& operator<<(float f);
-    DataStream& operator<<(double f);
+    DataStream& operator<<(bool v);
+    DataStream& operator<<(char v);
+    DataStream& operator<<(unsigned char v);
+    DataStream& operator<<(short v);
+    DataStream& operator<<(unsigned short v);
+    DataStream& operator<<(int v);
+    DataStream& operator<<(unsigned int v);
+    DataStream& operator<<(long v);
+    DataStream& operator<<(unsigned long v);
+    DataStream& operator<<(float v);
+    DataStream& operator<<(double v);
 
-    DataStream& operator>>(bool& i);
-    DataStream& operator>>(char& i);
-    DataStream& operator>>(unsigned char& i);
-    DataStream& operator>>(short& i);
-    DataStream& operator>>(unsigned short& i);
-    DataStream& operator>>(int& i);
-    DataStream& operator>>(unsigned int& i);
-    DataStream& operator>>(long& i);
-    DataStream& operator>>(unsigned long& i);
-    DataStream& operator>>(float& f);
-    DataStream& operator>>(double& f);
+    DataStream& operator>>(bool& v);
+    DataStream& operator>>(char& v);
+    DataStream& operator>>(unsigned char& v);
+    DataStream& operator>>(short& v);
+    DataStream& operator>>(unsigned short& v);
+    DataStream& operator>>(int& v);
+    DataStream& operator>>(unsigned int& v);
+    DataStream& operator>>(long& v);
+    DataStream& operator>>(unsigned long& v);
+    DataStream& operator>>(float& v);
+    DataStream& operator>>(double& v);
+
+    void writeBytes(const ByteArray& ba);
+    ByteArray readBytes(int size);
 
 private:
 
-    void write(const char* data, int size);
-    void read(char* data, int size);
+    void write(const byte_t* data, int size);
+    void read(byte_t* data, int size);
 
+    int m_readPtr;
     ByteArray m_data;
 };
+
+
+DataStream& operator<<(DataStream& ds, const ByteArray& ba);
+DataStream& operator>>(DataStream& ds, ByteArray& data);
+
+void encode(ByteArray& ba, bool v);
+void encode(ByteArray& ba, char v);
+void encode(ByteArray& ba, unsigned char v);
+void encode(ByteArray& ba, short v);
+void encode(ByteArray& ba, unsigned short v);
+void encode(ByteArray& ba, int v);
+void encode(ByteArray& ba, unsigned int v);
+void encode(ByteArray& ba, long v);
+void encode(ByteArray& ba, unsigned long v);
+void encode(ByteArray& ba, float v);
+void encode(ByteArray& ba, double v);
+void encode(ByteArray& ba, const ByteArray& v);
+
+void decode(const ByteArray& ba, bool& v);
+void decode(const ByteArray& ba, char& v);
+void decode(const ByteArray& ba, unsigned char& v);
+void decode(const ByteArray& ba, short& v);
+void decode(const ByteArray& ba, unsigned short& v);
+void decode(const ByteArray& ba, int& v);
+void decode(const ByteArray& ba, unsigned int& v);
+void decode(const ByteArray& ba, long& v);
+void decode(const ByteArray& ba, unsigned long& v);
+void decode(const ByteArray& ba, float& v);
+void decode(const ByteArray& ba, double& v);
+void decode(const ByteArray& ba, ByteArray& v);
 
 } // namespace Pieces
 
