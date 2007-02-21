@@ -5,6 +5,9 @@
 #include "SharedData"
 #include "SharedDataPointer"
 
+#include <iostream>
+
+
 namespace Pieces
 {
 
@@ -107,6 +110,11 @@ public:
     ByteArray right(int len) const;
 
     /**
+     * Append \a byte to this byte-array.
+     */
+    ByteArray& append(char byte);
+
+    /**
      * Append \a other to this byte-array.
      */
     ByteArray& append(const ByteArray& other);
@@ -115,6 +123,11 @@ public:
      * Append \a data to this byte-array.
      */
     ByteArray& append(const char* data, int size);
+
+    /**
+     * Prepend \a byte to this byte-array.
+     */
+    ByteArray& prepend(char byte);
 
     /**
      * Prepend \a other to this byte-array.
@@ -193,6 +206,9 @@ bool operator==(const ByteArray& op1, const ByteArray& op2);
 bool operator!=(const ByteArray& op1, const ByteArray& op2);
 
 ByteArray operator+(const ByteArray& op1, const ByteArray& op2);
+
+std::ostream& operator<<(std::ostream& os, const ByteArray& ba);
+std::istream& operator>>(std::istream& is, ByteArray& ba);
 
 } // namespace Pieces
 

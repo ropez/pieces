@@ -8,7 +8,6 @@
 namespace Pieces
 {
 
-
 PropertyList::Data::Data()
 {
 }
@@ -19,7 +18,6 @@ PropertyList::Data::Data(const Data& other)
 , properties(other.properties)
 {
 }
-
 
 
 PropertyList::PropertyList()

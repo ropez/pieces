@@ -9,10 +9,13 @@
 
 int main()
 {
-//     using Pieces::ByteArray;
-//
-//     const ByteArray ba("Piece of shit", 14);
-//     std::cout << ba.data() << std::endl;
+    using Pieces::ByteArray;
+
+    ByteArray ba("Piece of shit", 14);
+    std::cout << ba << std::endl;
+    std::cin >> ba;
+    std::cout << ba << std::endl;
+    std::cout << ba.data() << std::endl;
 //
 //     ByteArray b2 = ba;
 //     ByteArray b3 = ba;

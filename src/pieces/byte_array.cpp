@@ -2,6 +2,8 @@
 #include "byte_array.h"
 
 #include <algorithm>
+#include <sstream>
+#include <iomanip>
 
 
 namespace Pieces
@@ -122,6 +124,12 @@ ByteArray ByteArray::right(int len) const
 }
 
 
+ByteArray& ByteArray::append(char byte)
+{
+    return append(&byte, 1);
+}
+
+
 ByteArray& ByteArray::append(const ByteArray& other)
 {
     if (isEmpty())
@@ -132,7 +140,6 @@ ByteArray& ByteArray::append(const ByteArray& other)
     {
         append(other.data(), other.size());
     }
-
     return *this;
 }
 
@@ -152,8 +159,13 @@ ByteArray& ByteArray::append(const char* data, int size)
         // Let assignment operator handle the rest
         d = tmp.d;
     }
-
     return *this;
+}
+
+
+ByteArray& ByteArray::prepend(char byte)
+{
+    return prepend(&byte, 1);
 }
 
 
@@ -167,7 +179,6 @@ ByteArray& ByteArray::prepend(const ByteArray& other)
     {
         prepend(other.data(), other.size());
     }
-
     return *this;
 }
 
@@ -187,7 +198,6 @@ ByteArray& ByteArray::prepend(const char* data, int size)
         // Let assignment operator handle the rest
         d = tmp.d;
     }
-
     return *this;
 }
 
@@ -322,6 +332,46 @@ ByteArray operator+(const ByteArray& op1, const ByteArray& op2)
     retval.append(op2);
 
     return retval;
+}
+
+
+std::ostream& operator<<(std::ostream& os, const ByteArray& ba)
+{
+    std::stringstream ss;
+
+    ss << std::hex << std::setfill('0');
+    for (int i = 0; i < ba.size(); ++i)
+    {
+        if (i != 0)
+            ss << '.';
+
+        ss << std::setw(2) << static_cast<int>(ba[i]);
+    }
+
+    return os << ss.str();
+}
+
+
+std::istream& operator>>(std::istream& is, ByteArray& ba)
+{
+    ba.clear();
+
+    std::string str;
+    is >> str;
+
+    std::stringstream ss(str);
+
+    ss >> std::hex;
+    while (!ss.eof())
+    {
+        int d = 0;
+        char c = '\0';
+        ss >> d >> c;
+
+        ba.append(d);
+    }
+
+    return is;
 }
 
 } // namespace Pieces
