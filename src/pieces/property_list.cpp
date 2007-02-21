@@ -31,14 +31,14 @@ PropertyList::~PropertyList()
 }
 
 
-PropertyList& PropertyList::setProperty(const PString& property, const PString& value)
+PropertyList& PropertyList::setProperty(int property, const ByteArray& value)
 {
     d->properties[property] = value;
     return *this;
 }
 
 
-PString PropertyList::getProperty(const PString& property, const PString& defval) const
+ByteArray PropertyList::getProperty(int property, const ByteArray& defval) const
 {
     // Lookup the value in the map.
     PropertyTable::const_iterator it = d->properties.find(property);
@@ -74,64 +74,17 @@ std::ostream& operator<<(std::ostream& os, const PropertyList& p)
     for (PropertyList::PropertyTable::const_iterator it = p.begin();
          it != p.end(); ++it)
     {
-        const PString& key = it->first;
-        const PString& value = it->second;
+        if (it != p.begin())
+            os << ' ';
 
-        os << ':' << key.size() << ':' << key;
-        os << ':' << value.size() << ':' << value;
+        int key = it->first;
+        const ByteArray& value = it->second;
+
+        os << key << ':' << value;
     }
 
     os << ")";
     return os;
-}
-
-
-std::istream& operator>>(std::istream& is, PropertyList& p)
-{
-    // Make sure we read whitespace
-    is >> std::noskipws;
-
-    // Read '('
-    char c;
-    is >> c;
-
-    while (true)
-    {
-        // Read colon, or closing parenthesis
-        is >> c;
-        if (c != ':')
-            break;
-
-        int keyWidth = 0;
-        is >> keyWidth;
-
-        // Read colon
-        is >> c;
-        if (c != ':')
-            break;
-
-        PString key;
-        is >> std::setw(keyWidth) >> key;
-
-        // Read colon
-        is >> c;
-        if (c != ':')
-            break;
-
-        int valueWidth = 0;
-        is >> valueWidth;
-
-        // Read colon
-        is >> c;
-        if (c != ':')
-            break;
-
-        PString value;
-        is >> std::setw(valueWidth) >> value;
-
-        p.setProperty(key, value);
-    }
-    return is;
 }
 
 } // namespace Pieces
