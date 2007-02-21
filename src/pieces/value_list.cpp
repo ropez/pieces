@@ -32,7 +32,10 @@ ValueList::~ValueList()
 
 void ValueList::clear()
 {
-    d->values.clear();
+    if (size() > 0)
+    {
+        d = new Data;
+    }
 }
 
 
