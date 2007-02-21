@@ -72,19 +72,19 @@ int main()
     std::cout << t.get<int>(ROBIN) << std::endl;
     std::cout << t.get<double>(ANGLE) << std::endl;
 
-//     PropertyList p;
-//     p.set(SUB_PIECE, t);
-//     p.set(SUB_LIST, l);
-//
-//     std::cout << "A piece that contains a list and a piece:\n" << p << std::endl;
-//
-//     std::cout << "Extracted data:" << std::endl;
-//     std::cout << p.get<PropertyList>(SUB_PIECE).get<PString>(DOCUMENTATION) << std::endl;
-//     std::cout << p.get<ValueList>(SUB_LIST).get<PString>(3) << std::endl;
-//
-//     ValueList q;
-//     q.add(t).add(l);
-//
-//     std::cout << "Can do the same with a list:\n" << q << std::endl;
+    PropertyList p;
+    p.set(SUB_PIECE, t);
+    p.set(SUB_LIST, l);
+
+    std::cout << "A piece that contains a list and a piece:\n" << p << std::endl;
+
+    std::cout << "Extracted data:" << std::endl;
+    std::cout << p.get<PropertyList>(SUB_PIECE).get<int>(ROBIN) << std::endl;
+    std::cout << p.get<ValueList>(SUB_LIST).get<double>(2) << std::endl;
+
+    ValueList q;
+    q.add(t).add(l);
+
+    std::cout << "Can do the same with a list:\n" << q << std::endl;
 }
 

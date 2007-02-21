@@ -31,6 +31,18 @@ PropertyList::~PropertyList()
 }
 
 
+void PropertyList::clear()
+{
+    d->properties.clear();
+}
+
+
+int PropertyList::size() const
+{
+    return static_cast<int>(d->properties.size());
+}
+
+
 PropertyList& PropertyList::setProperty(int property, const ByteArray& value)
 {
     d->properties[property] = value;
@@ -85,6 +97,52 @@ std::ostream& operator<<(std::ostream& os, const PropertyList& p)
 
     os << ")";
     return os;
+}
+
+
+DataStream& operator<<(DataStream& ds, const PropertyList& p)
+{
+    ds << p.size();
+    for (PropertyList::PropertyTable::const_iterator it = p.begin(); it != p.end(); ++it)
+    {
+        int key = it->first;
+        const ByteArray& value = it->second;
+        ds << key << value;
+    }
+    return ds;
+}
+
+
+DataStream& operator>>(DataStream& ds, PropertyList& p)
+{
+    p.clear();
+
+    int size = 0;
+    ds >> size;
+    while (size--)
+    {
+        int key = 0;
+        ByteArray value;
+        ds >> key >> value;
+        p.setProperty(key, value);
+    }
+    return ds;
+}
+
+
+void encode(ByteArray& ba, const PropertyList& v)
+{
+    ba.clear();
+    DataStream ds;
+    ds << v;
+    ba = ds.data();
+}
+
+
+void decode(const ByteArray& ba, PropertyList& v)
+{
+    DataStream ds(ba);
+    ds >> v;
 }
 
 } // namespace Pieces

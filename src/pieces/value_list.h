@@ -20,6 +20,7 @@ public:
     ValueList();
     ~ValueList();
 
+    void clear();
     int size() const;
 
     ValueList& addValue(const ByteArray& value);
@@ -49,6 +50,9 @@ private:
 
 std::ostream& operator<<(std::ostream& os, const ValueList& l);
 
+DataStream& operator<<(DataStream& ds, const ValueList& l);
+DataStream& operator>>(DataStream& ds, ValueList& l);
+
 
 template<typename T>
 ValueList& ValueList::add(const T& value)
@@ -66,6 +70,9 @@ T ValueList::get(int index) const
     decode(ba, result);
     return result;
 }
+
+void encode(ByteArray& ba, const ValueList& l);
+void decode(const ByteArray& ba, ValueList& l);
 
 } // namespace Pieces
 

@@ -21,6 +21,9 @@ public:
     PropertyList();
     ~PropertyList();
 
+    void clear();
+    int size() const;
+
     PropertyList& setProperty(int property, const ByteArray& value);
     ByteArray getProperty(int property, const ByteArray& defval = ByteArray()) const;
 
@@ -48,6 +51,9 @@ private:
 
 
 std::ostream& operator<<(std::ostream& os, const PropertyList& p);
+
+DataStream& operator<<(DataStream& ds, const PropertyList& p);
+DataStream& operator>>(DataStream& ds, PropertyList& p);
 
 
 template<typename T>
@@ -77,6 +83,9 @@ T PropertyList::get(int property, const T& defval) const
         return defval;
     }
 }
+
+void encode(ByteArray& ba, const PropertyList& v);
+void decode(const ByteArray& ba, PropertyList& v);
 
 } // namespace Pieces
 

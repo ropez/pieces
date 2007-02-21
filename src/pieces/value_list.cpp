@@ -30,6 +30,12 @@ ValueList::~ValueList()
 }
 
 
+void ValueList::clear()
+{
+    d->values.clear();
+}
+
+
 int ValueList::size() const
 {
     return static_cast<int>(d->values.size());
@@ -65,8 +71,7 @@ std::ostream& operator<<(std::ostream& os, const ValueList& l)
 {
     os << "[";
 
-    for (ValueList::PropertyList::const_iterator it = l.begin();
-         it != l.end(); ++it)
+    for (ValueList::PropertyList::const_iterator it = l.begin(); it != l.end(); ++it)
     {
         if (it != l.begin())
             os << ' ';
@@ -77,6 +82,50 @@ std::ostream& operator<<(std::ostream& os, const ValueList& l)
 
     os << "]";
     return os;
+}
+
+
+DataStream& operator<<(DataStream& ds, const ValueList& l)
+{
+    ds << l.size();
+    for (ValueList::PropertyList::const_iterator it = l.begin(); it != l.end(); ++it)
+    {
+        const ByteArray& value = *it;
+        ds << value;
+    }
+    return ds;
+}
+
+
+DataStream& operator>>(DataStream& ds, ValueList& l)
+{
+    l.clear();
+
+    int size = 0;
+    ds >> size;
+    while (size--)
+    {
+        ByteArray value;
+        ds >> value;
+        l.addValue(value);
+    }
+    return ds;
+}
+
+
+void encode(ByteArray& ba, const ValueList& l)
+{
+    ba.clear();
+    DataStream ds;
+    ds << l;
+    ba = ds.data();
+}
+
+
+void decode(const ByteArray& ba, ValueList& l)
+{
+    DataStream ds(ba);
+    ds >> l;
 }
 
 } // namespace Pieces
