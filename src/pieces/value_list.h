@@ -1,13 +1,13 @@
 #ifndef PIECES_VALUE_LIST_H
 #define PIECES_VALUE_LIST_H
 
-#include "PString"
+#include "ByteArray"
+#include "DataStream"
 #include "SharedData"
 #include "SharedDataPointer"
 
-#include <sstream>
-#include <iomanip>
 #include <vector>
+
 
 namespace Pieces
 {
@@ -15,15 +15,15 @@ namespace Pieces
 class ValueList
 {
 public:
-    typedef std::vector<PString> PropertyList;
+    typedef std::vector<ByteArray> PropertyList;
 
     ValueList();
     ~ValueList();
 
     int size() const;
 
-    ValueList& addValue(const PString& value);
-    PString getValue(int index) const;
+    ValueList& addValue(const ByteArray& value);
+    ByteArray getValue(int index) const;
 
     template<typename T>
     ValueList& add(const T& value);
@@ -48,26 +48,22 @@ private:
 };
 
 std::ostream& operator<<(std::ostream& os, const ValueList& l);
-std::istream& operator>>(std::istream& is, ValueList& l);
 
 
 template<typename T>
 ValueList& ValueList::add(const T& value)
 {
-    std::stringstream ss;
-    ss << value;
-
-    return addValue(ss.str());
+    ByteArray ba;
+    encode(ba, value);
+    return addValue(ba);
 }
 
 template<typename T>
 T ValueList::get(int index) const
 {
-    PString value = getValue(index);
-    std::stringstream ss(value);
-
+    ByteArray ba = getValue(index);
     T result;
-    ss >> std::noskipws >> std::setw(value.length()) >> result;
+    decode(ba, result);
     return result;
 }
 

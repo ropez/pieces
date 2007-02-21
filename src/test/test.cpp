@@ -63,7 +63,7 @@ int main()
     t.set(ROBIN, 10).set(ANGLE, 2e23).set(BYTE_ARRAY, ba);
 
     ValueList l;
-    l.add('a').add(10).add(2.34).add("joakim simonsson");
+    l.add('a').add(10).add(2.34);
 
     std::cout << "A piece:\n" << t << std::endl;
     std::cout << "A list:\n" << l << std::endl;

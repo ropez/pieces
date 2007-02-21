@@ -36,14 +36,14 @@ int ValueList::size() const
 }
 
 
-ValueList& ValueList::addValue(const PString& value)
+ValueList& ValueList::addValue(const ByteArray& value)
 {
     d->values.push_back(value);
     return *this;
 }
 
 
-PString ValueList::getValue(int index) const
+ByteArray ValueList::getValue(int index) const
 {
     return d->values[index];
 }
@@ -68,46 +68,15 @@ std::ostream& operator<<(std::ostream& os, const ValueList& l)
     for (ValueList::PropertyList::const_iterator it = l.begin();
          it != l.end(); ++it)
     {
-        const PString& value = *it;
+        if (it != l.begin())
+            os << ' ';
 
-        os << ':' << value.size() << ':' << value;
+        const ByteArray& value = *it;
+        os << value;
     }
 
     os << "]";
     return os;
-}
-
-
-std::istream& operator>>(std::istream& is, ValueList& l)
-{
-    // Make sure we read whitespace
-    is >> std::noskipws;
-
-    // Read '['
-    char c;
-    is >> c;
-
-    while (true)
-    {
-        // Read colon, or closing bracket
-        is >> c;
-        if (c != ':')
-            break;
-
-        int valueWidth = 0;
-        is >> valueWidth;
-
-        // Read colon
-        is >> c;
-        if (c != ':')
-            break;
-
-        PString value;
-        is >> std::setw(valueWidth) >> value;
-
-        l.addValue(value);
-    }
-    return is;
 }
 
 } // namespace Pieces
