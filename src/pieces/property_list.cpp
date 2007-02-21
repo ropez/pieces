@@ -1,4 +1,4 @@
-#include "piece.h"
+#include "PropertyList"
 
 #include <iostream>
 #include <sstream>
@@ -9,12 +9,12 @@ namespace Pieces
 {
 
 
-Piece::Data::Data()
+PropertyList::Data::Data()
 {
 }
 
 
-Piece::Data::Data(const Data& other)
+PropertyList::Data::Data(const Data& other)
 : SharedData()
 , properties(other.properties)
 {
@@ -22,25 +22,25 @@ Piece::Data::Data(const Data& other)
 
 
 
-Piece::Piece()
+PropertyList::PropertyList()
 : d(new Data)
 {
 }
 
 
-Piece::~Piece()
+PropertyList::~PropertyList()
 {
 }
 
 
-Piece& Piece::setProperty(const PString& property, const PString& value)
+PropertyList& PropertyList::setProperty(const PString& property, const PString& value)
 {
     d->properties[property] = value;
     return *this;
 }
 
 
-PString Piece::getProperty(const PString& property, const PString& defval) const
+PString PropertyList::getProperty(const PString& property, const PString& defval) const
 {
     // Lookup the value in the map.
     PropertyTable::const_iterator it = d->properties.find(property);
@@ -57,23 +57,23 @@ PString Piece::getProperty(const PString& property, const PString& defval) const
 }
 
 
-Piece::PropertyTable::const_iterator Piece::begin() const
+PropertyList::PropertyTable::const_iterator PropertyList::begin() const
 {
     return d->properties.begin();
 }
 
 
-Piece::PropertyTable::const_iterator Piece::end() const
+PropertyList::PropertyTable::const_iterator PropertyList::end() const
 {
     return d->properties.end();
 }
 
 
-std::ostream& operator<<(std::ostream& os, const Piece& p)
+std::ostream& operator<<(std::ostream& os, const PropertyList& p)
 {
     os << "(";
 
-    for (Piece::PropertyTable::const_iterator it = p.begin();
+    for (PropertyList::PropertyTable::const_iterator it = p.begin();
          it != p.end(); ++it)
     {
         const PString& key = it->first;
@@ -88,7 +88,7 @@ std::ostream& operator<<(std::ostream& os, const Piece& p)
 }
 
 
-std::istream& operator>>(std::istream& is, Piece& p)
+std::istream& operator>>(std::istream& is, PropertyList& p)
 {
     // Make sure we read whitespace
     is >> std::noskipws;

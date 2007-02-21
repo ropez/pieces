@@ -1,4 +1,4 @@
-#include "pieces/Piece"
+#include "pieces/PropertyList"
 #include "pieces/List"
 #include "pieces/ByteArray"
 #include "pieces/DataStream"
@@ -44,9 +44,9 @@ int main()
 //     d >> a >> b >> c;
 //     std::cout << a << " " << b << " " << c << std::endl;
 
-    using Pieces::Piece;
+    using Pieces::PropertyList;
 
-    Piece t;
+    PropertyList t;
     t.set("robin", 10).set("angle", 2e23).set("documentation", "supercool stuff");
 
     List l;
@@ -59,14 +59,14 @@ int main()
     std::cout << t.get<int>("robin") << std::endl;
     std::cout << t.get<double>("angle") << std::endl;
 
-    Piece p;
+    PropertyList p;
     p.set("sub-piece", t);
     p.set("sub-list", l);
 
     std::cout << "A piece that contains a list and a piece:\n" << p << std::endl;
 
     std::cout << "Extracted data:" << std::endl;
-    std::cout << p.get<Piece>("sub-piece").get<PString>("documentation") << std::endl;
+    std::cout << p.get<PropertyList>("sub-piece").get<PString>("documentation") << std::endl;
     std::cout << p.get<List>("sub-list").get<PString>(3) << std::endl;
 
     List q;

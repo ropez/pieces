@@ -1,6 +1,6 @@
 
-#ifndef PIECE_H
-#define PIECE_H
+#ifndef PIECES_PROPERTY_LIST_H
+#define PIECES_PROPERTY_LIST_H
 
 #include "PString"
 #include "SharedData"
@@ -14,19 +14,19 @@
 namespace Pieces
 {
 
-class Piece
+class PropertyList
 {
 public:
     typedef std::map<PString, PString> PropertyTable;
 
-    Piece();
-    ~Piece();
+    PropertyList();
+    ~PropertyList();
 
-    Piece& setProperty(const PString& property, const PString& value);
+    PropertyList& setProperty(const PString& property, const PString& value);
     PString getProperty(const PString& property, const PString& defval = EMPTY_STRING) const;
 
     template<typename T>
-    Piece& set(const PString& property, const T& value);
+    PropertyList& set(const PString& property, const T& value);
 
     template<typename T>
     T get(const PString& property, const T& defval = T()) const;
@@ -47,12 +47,12 @@ private:
     SharedDataPointer<Data> d;
 };
 
-std::ostream& operator<<(std::ostream& os, const Piece& p);
-std::istream& operator>>(std::istream& is, Piece& p);
+std::ostream& operator<<(std::ostream& os, const PropertyList& p);
+std::istream& operator>>(std::istream& is, PropertyList& p);
 
 
 template<typename T>
-Piece& Piece::set(const PString& property, const T& value)
+PropertyList& PropertyList::set(const PString& property, const T& value)
 {
     std::stringstream ss;
     ss << value;
@@ -62,7 +62,7 @@ Piece& Piece::set(const PString& property, const T& value)
 
 
 template<typename T>
-T Piece::get(const PString& property, const T& defval) const
+T PropertyList::get(const PString& property, const T& defval) const
 {
     // Lookup the value in the map.
     PropertyTable::const_iterator it = d->properties.find(property);
@@ -84,4 +84,4 @@ T Piece::get(const PString& property, const T& defval) const
 
 } // namespace Pieces
 
-#endif // PIECE_H
+#endif // PIECES_PROPERTY_LIST_H
