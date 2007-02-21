@@ -1,5 +1,5 @@
-#ifndef LIST_H
-#define LIST_H
+#ifndef PIECES_VALUE_LIST_H
+#define PIECES_VALUE_LIST_H
 
 #include "PString"
 
@@ -7,22 +7,24 @@
 #include <iomanip>
 #include <vector>
 
+namespace Pieces
+{
 
-class List
+class ValueList
 {
 public:
     typedef std::vector<PString> PropertyList;
 
-    List();
-    ~List();
+    ValueList();
+    ~ValueList();
 
     int size() const;
 
-    List& addValue(const PString& value);
+    ValueList& addValue(const PString& value);
     PString getValue(int index) const;
 
     template<typename T>
-    List& add(const T& value);
+    ValueList& add(const T& value);
 
     template<typename T>
     T get(int index) const;
@@ -34,12 +36,12 @@ private:
     PropertyList m_data;
 };
 
-std::ostream& operator<<(std::ostream& os, const List& l);
-std::istream& operator>>(std::istream& is, List& l);
+std::ostream& operator<<(std::ostream& os, const ValueList& l);
+std::istream& operator>>(std::istream& is, ValueList& l);
 
 
 template<typename T>
-List& List::add(const T& value)
+ValueList& ValueList::add(const T& value)
 {
     std::stringstream ss;
     ss << value;
@@ -48,7 +50,7 @@ List& List::add(const T& value)
 }
 
 template<typename T>
-T List::get(int index) const
+T ValueList::get(int index) const
 {
     PString value = getValue(index);
     std::stringstream ss(value);
@@ -58,5 +60,6 @@ T List::get(int index) const
     return result;
 }
 
+} // namespace Pieces
 
-#endif // LIST_H
+#endif // PIECES_VALUE_LIST_H

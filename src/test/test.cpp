@@ -1,5 +1,5 @@
 #include "pieces/PropertyList"
-#include "pieces/List"
+#include "pieces/ValueList"
 #include "pieces/ByteArray"
 #include "pieces/DataStream"
 #include "pieces/Vector"
@@ -44,12 +44,13 @@ int main()
 //     d >> a >> b >> c;
 //     std::cout << a << " " << b << " " << c << std::endl;
 
+    using Pieces::ValueList;
     using Pieces::PropertyList;
 
     PropertyList t;
     t.set("robin", 10).set("angle", 2e23).set("documentation", "supercool stuff");
 
-    List l;
+    ValueList l;
     l.add('a').add(10).add(2.34).add("joakim simonsson");
 
     std::cout << "A piece:\n" << t << std::endl;
@@ -67,9 +68,9 @@ int main()
 
     std::cout << "Extracted data:" << std::endl;
     std::cout << p.get<PropertyList>("sub-piece").get<PString>("documentation") << std::endl;
-    std::cout << p.get<List>("sub-list").get<PString>(3) << std::endl;
+    std::cout << p.get<ValueList>("sub-list").get<PString>(3) << std::endl;
 
-    List q;
+    ValueList q;
     q.add(t).add(l);
 
     std::cout << "Can do the same with a list:\n" << q << std::endl;

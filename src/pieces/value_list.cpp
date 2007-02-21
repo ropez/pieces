@@ -1,57 +1,59 @@
-#include "list.h"
+#include "ValueList"
 
 #include <iostream>
 #include <sstream>
 #include <iomanip>
 
+namespace Pieces
+{
 
-List::List()
+ValueList::ValueList()
 : m_data()
 {
 }
 
 
-List::~List()
+ValueList::~ValueList()
 {
 }
 
 
-int List::size() const
+int ValueList::size() const
 {
     return static_cast<int>(m_data.size());
 }
 
 
-List& List::addValue(const PString& value)
+ValueList& ValueList::addValue(const PString& value)
 {
     m_data.push_back(value);
     return *this;
 }
 
 
-PString List::getValue(int index) const
+PString ValueList::getValue(int index) const
 {
     return m_data[index];
 }
 
 
-List::PropertyList::const_iterator List::begin() const
+ValueList::PropertyList::const_iterator ValueList::begin() const
 {
     return m_data.begin();
 }
 
 
-List::PropertyList::const_iterator List::end() const
+ValueList::PropertyList::const_iterator ValueList::end() const
 {
     return m_data.end();
 }
 
 
-std::ostream& operator<<(std::ostream& os, const List& l)
+std::ostream& operator<<(std::ostream& os, const ValueList& l)
 {
     os << "[";
 
-    for (List::PropertyList::const_iterator it = l.begin();
+    for (ValueList::PropertyList::const_iterator it = l.begin();
          it != l.end(); ++it)
     {
         const PString& value = *it;
@@ -64,7 +66,7 @@ std::ostream& operator<<(std::ostream& os, const List& l)
 }
 
 
-std::istream& operator>>(std::istream& is, List& l)
+std::istream& operator>>(std::istream& is, ValueList& l)
 {
     // Make sure we read whitespace
     is >> std::noskipws;
@@ -96,3 +98,4 @@ std::istream& operator>>(std::istream& is, List& l)
     return is;
 }
 
+} // namespace Pieces
