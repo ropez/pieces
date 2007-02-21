@@ -24,6 +24,8 @@ public:
     void clear();
     int size() const;
 
+    bool isEmpty() const;
+
     PropertyList& setProperty(int property, const ByteArray& value);
     ByteArray getProperty(int property, const ByteArray& defval = ByteArray()) const;
 

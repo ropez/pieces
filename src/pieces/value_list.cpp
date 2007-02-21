@@ -32,10 +32,16 @@ ValueList::~ValueList()
 
 void ValueList::clear()
 {
-    if (size() > 0)
+    if (!isEmpty())
     {
         d = new Data;
     }
+}
+
+
+bool ValueList::isEmpty() const
+{
+    return d->values.empty();
 }
 
 

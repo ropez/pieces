@@ -33,7 +33,7 @@ PropertyList::~PropertyList()
 
 void PropertyList::clear()
 {
-    if (size() > 0)
+    if (!isEmpty())
     {
         d = new Data;
     }
@@ -43,6 +43,12 @@ void PropertyList::clear()
 int PropertyList::size() const
 {
     return static_cast<int>(d->properties.size());
+}
+
+
+bool PropertyList::isEmpty() const
+{
+    return d->properties.empty();
 }
 
 

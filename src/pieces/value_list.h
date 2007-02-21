@@ -23,6 +23,8 @@ public:
     void clear();
     int size() const;
 
+    bool isEmpty() const;
+
     ValueList& addValue(const ByteArray& value);
     ByteArray getValue(int index) const;
 
