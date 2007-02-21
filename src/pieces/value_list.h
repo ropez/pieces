@@ -2,6 +2,8 @@
 #define PIECES_VALUE_LIST_H
 
 #include "PString"
+#include "SharedData"
+#include "SharedDataPointer"
 
 #include <sstream>
 #include <iomanip>
@@ -33,7 +35,16 @@ public:
     PropertyList::const_iterator end() const;
 
 private:
-    PropertyList m_data;
+    class Data : public SharedData
+    {
+    public:
+        Data();
+        Data(const Data& other);
+
+        PropertyList values;
+    };
+
+    SharedDataPointer<Data> d;
 };
 
 std::ostream& operator<<(std::ostream& os, const ValueList& l);

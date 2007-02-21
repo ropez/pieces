@@ -7,8 +7,20 @@
 namespace Pieces
 {
 
+ValueList::Data::Data()
+{
+}
+
+
+ValueList::Data::Data(const Data& other)
+: SharedData()
+, values(other.values)
+{
+}
+
+
 ValueList::ValueList()
-: m_data()
+: d(new Data)
 {
 }
 
@@ -20,32 +32,32 @@ ValueList::~ValueList()
 
 int ValueList::size() const
 {
-    return static_cast<int>(m_data.size());
+    return static_cast<int>(d->values.size());
 }
 
 
 ValueList& ValueList::addValue(const PString& value)
 {
-    m_data.push_back(value);
+    d->values.push_back(value);
     return *this;
 }
 
 
 PString ValueList::getValue(int index) const
 {
-    return m_data[index];
+    return d->values[index];
 }
 
 
 ValueList::PropertyList::const_iterator ValueList::begin() const
 {
-    return m_data.begin();
+    return d->values.begin();
 }
 
 
 ValueList::PropertyList::const_iterator ValueList::end() const
 {
-    return m_data.end();
+    return d->values.end();
 }
 
 
