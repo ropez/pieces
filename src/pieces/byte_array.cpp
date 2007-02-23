@@ -1,7 +1,7 @@
 
 #include "byte_array.h"
 
-#include <algorithm>
+#include <cstring>
 #include <sstream>
 #include <iomanip>
 
@@ -54,16 +54,13 @@ void ByteArray::clear()
 
 void ByteArray::resize(int size)
 {
-    // Using a const reference to avoid deep copy of the old data
-    const ByteArray& ref = *this;
-
     // Trivial case
-    if (size == ref.size())
+	if (size == this->size())
         return;
 
     // Temporary copy
     ByteArray tmp(size);
-    std::copy(ref.data(), ref.data() + std::min(tmp.size(), ref.size()), tmp.data());
+	memcpy(tmp.data(), constData(), std::min(tmp.size(), this->size()));
 
     // Let assignment operator handle the rest
     d = tmp.d;
@@ -160,13 +157,10 @@ ByteArray& ByteArray::append(const byte_t* data, int size)
 {
     if (size > 0)
     {
-        // Using a const reference to avoid deep copy of the old data
-        const ByteArray& ref = *this;
-
         // Temporary
-        ByteArray tmp(ref.size() + size);
-        std::copy(ref.data(), ref.data() + ref.size(), tmp.data());
-        std::copy(data, data + size, tmp.data() + ref.size());
+        ByteArray tmp(this->size() + size);
+		memcpy(tmp.data(), constData(), this->size());
+		memcpy(tmp.data() + this->size(), data, size);
 
         // Let assignment operator handle the rest
         d = tmp.d;
@@ -199,13 +193,12 @@ ByteArray& ByteArray::prepend(const byte_t* data, int size)
 {
     if (size > 0)
     {
-        // Using a const reference to avoid deep copy of the old data
-        const ByteArray& ref = *this;
-
         // Temporary
-        ByteArray tmp(ref.size() + size);
-        std::copy(data, data + size, tmp.data());
-        std::copy(ref.data(), ref.data() + ref.size(), tmp.data() + ref.size());
+		ByteArray tmp(this->size() + size);
+
+		// Copy contents
+		memcpy(tmp.data(), data, size);
+		memcpy(tmp.data() + this->size(), this->constData(), this->size());
 
         // Let assignment operator handle the rest
         d = tmp.d;
@@ -222,12 +215,9 @@ void ByteArray::chopFront(int n)
     }
     else if (n > 0)
     {
-        // Using a const reference to avoid deep copy of the old data
-        const ByteArray& ref = *this;
-
         // Temporary
         ByteArray tmp(size() - n);
-        std::copy(ref.data() + n, ref.data() + ref.size(), tmp.data());
+		memcpy(tmp.data(), constData() + n, size() - n);
 
         // Let assignment operator handle the rest
         d = tmp.d;
@@ -243,12 +233,9 @@ void ByteArray::chopBack(int n)
     }
     else if (n > 0)
     {
-        // Using a const reference to avoid deep copy of the old data
-        const ByteArray& ref = *this;
-
         // Temporary
         ByteArray tmp(size() - n);
-        std::copy(ref.data(), ref.data() + ref.size() - n, tmp.data());
+		memcpy(tmp.data(), constData(), size() - n);
 
         // Let assignment operator handle the rest
         d = tmp.d;
@@ -283,7 +270,7 @@ ByteArray::Data::Data(const byte_t* data, int size)
 , size(size)
 , data(new byte_t[size])
 {
-    std::copy(data, data + size, this->data);
+	memcpy(this->data, data, size);
 }
 
 
@@ -292,7 +279,7 @@ ByteArray::Data::Data(const Data& other)
 , size(other.size)
 , data(new byte_t[size])
 {
-    std::copy(other.data, other.data + size, data);
+	memcpy(this->data, other.data, other.size);
 }
 
 
@@ -303,8 +290,8 @@ ByteArray::Data& ByteArray::Data::operator=(const Data& other)
         delete[] data;
 
         size = other.size;
-        data = new byte_t[size];
-        std::copy(other.data, other.data + size, data);
+        data = new byte_t[other.size];
+		memcpy(this->data, other.data, other.size);
     }
     return *this;
 }
@@ -324,7 +311,7 @@ bool operator==(const ByteArray& op1, const ByteArray& op2)
     if (op1.size() != op2.size())
         return false;
 
-    return std::equal(op1.data(), op1.data() + op1.size(), op2.data());
+	return (memcmp(op1.data(), op2.data(), op1.size()) == 0);
 }
 
 
