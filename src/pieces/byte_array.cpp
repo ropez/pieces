@@ -22,14 +22,8 @@ ByteArray::ByteArray(int size)
 }
 
 
-ByteArray::ByteArray(const byte_t* data, int size)
+ByteArray::ByteArray(const void* data, int size)
 : d(new Data(data, size))
-{
-}
-
-
-ByteArray::ByteArray(const char* data, int size)
-: d(new Data(reinterpret_cast<const byte_t*>(data), size))
 {
 }
 
@@ -55,12 +49,12 @@ void ByteArray::clear()
 void ByteArray::resize(int size)
 {
     // Trivial case
-	if (size == this->size())
+    if (size == this->size())
         return;
 
     // Temporary copy
     ByteArray tmp(size);
-	memcpy(tmp.data(), constData(), std::min(tmp.size(), this->size()));
+    memcpy(tmp.data(), constData(), std::min(tmp.size(), this->size()));
 
     // Let assignment operator handle the rest
     d = tmp.d;
@@ -153,14 +147,14 @@ ByteArray& ByteArray::append(const ByteArray& other)
 }
 
 
-ByteArray& ByteArray::append(const byte_t* data, int size)
+ByteArray& ByteArray::append(const void* data, int size)
 {
     if (size > 0)
     {
         // Temporary
         ByteArray tmp(this->size() + size);
-		memcpy(tmp.data(), constData(), this->size());
-		memcpy(tmp.data() + this->size(), data, size);
+        memcpy(tmp.data(), constData(), this->size());
+        memcpy(tmp.data() + this->size(), data, size);
 
         // Let assignment operator handle the rest
         d = tmp.d;
@@ -189,16 +183,16 @@ ByteArray& ByteArray::prepend(const ByteArray& other)
 }
 
 
-ByteArray& ByteArray::prepend(const byte_t* data, int size)
+ByteArray& ByteArray::prepend(const void* data, int size)
 {
     if (size > 0)
     {
         // Temporary
-		ByteArray tmp(this->size() + size);
+        ByteArray tmp(this->size() + size);
 
-		// Copy contents
-		memcpy(tmp.data(), data, size);
-		memcpy(tmp.data() + this->size(), this->constData(), this->size());
+        // Copy contents
+        memcpy(tmp.data(), data, size);
+        memcpy(tmp.data() + this->size(), this->constData(), this->size());
 
         // Let assignment operator handle the rest
         d = tmp.d;
@@ -217,7 +211,7 @@ void ByteArray::chopFront(int n)
     {
         // Temporary
         ByteArray tmp(size() - n);
-		memcpy(tmp.data(), constData() + n, size() - n);
+        memcpy(tmp.data(), constData() + n, size() - n);
 
         // Let assignment operator handle the rest
         d = tmp.d;
@@ -235,7 +229,7 @@ void ByteArray::chopBack(int n)
     {
         // Temporary
         ByteArray tmp(size() - n);
-		memcpy(tmp.data(), constData(), size() - n);
+        memcpy(tmp.data(), constData(), size() - n);
 
         // Let assignment operator handle the rest
         d = tmp.d;
@@ -265,12 +259,12 @@ ByteArray::Data::Data(int size)
 }
 
 
-ByteArray::Data::Data(const byte_t* data, int size)
+ByteArray::Data::Data(const void* data, int size)
 : SharedData()
 , size(size)
 , data(new byte_t[size])
 {
-	memcpy(this->data, data, size);
+    memcpy(this->data, data, size);
 }
 
 
@@ -279,7 +273,7 @@ ByteArray::Data::Data(const Data& other)
 , size(other.size)
 , data(new byte_t[size])
 {
-	memcpy(this->data, other.data, other.size);
+    memcpy(this->data, other.data, other.size);
 }
 
 
@@ -291,7 +285,7 @@ ByteArray::Data& ByteArray::Data::operator=(const Data& other)
 
         size = other.size;
         data = new byte_t[other.size];
-		memcpy(this->data, other.data, other.size);
+        memcpy(this->data, other.data, other.size);
     }
     return *this;
 }
@@ -311,7 +305,7 @@ bool operator==(const ByteArray& op1, const ByteArray& op2)
     if (op1.size() != op2.size())
         return false;
 
-	return (memcmp(op1.data(), op2.data(), op1.size()) == 0);
+    return (memcmp(op1.data(), op2.data(), op1.size()) == 0);
 }
 
 

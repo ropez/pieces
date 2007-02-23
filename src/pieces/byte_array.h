@@ -40,13 +40,7 @@ public:
      * Created a byte-array with \a size bytes, and copies the data pointed to
      * by \a data.
      */
-    ByteArray(const byte_t* data, int size);
-
-    /**
-     * Created a byte-array with \a size bytes, and copies the data pointed to
-     * by \a data.
-     */
-    ByteArray(const char* data, int size);
+    ByteArray(const void* data, int size);
 
     /**
      * Returns the size of the byte-array.
@@ -135,7 +129,7 @@ public:
     /**
      * Append \a data to this byte-array.
      */
-    ByteArray& append(const byte_t* data, int size);
+    ByteArray& append(const void* data, int size);
 
     /**
      * Prepend \a byte to this byte-array.
@@ -150,7 +144,7 @@ public:
     /**
      * Prepend \a data to this byte-array.
      */
-    ByteArray& prepend(const byte_t* data, int size);
+    ByteArray& prepend(const void* data, int size);
 
     /**
      * Remove \a n bytes from the end of the byte-array.
@@ -180,7 +174,7 @@ private:
         explicit Data(int size);
 
         // Creates a deep copy of the 'size' first bytes at location 'data'.
-        Data(const byte_t* data, int size);
+        Data(const void* data, int size);
 
         // Creates a deep copy (called automatically by SharedDataPointer if needed).
         Data(const Data& other);

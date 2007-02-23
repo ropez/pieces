@@ -253,67 +253,67 @@ DataStream& operator>>(DataStream& ds, ByteArray& ba)
 
 void encode(ByteArray& ba, bool v)
 {
-    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+    ba = ByteArray(&v, sizeof(v));
 }
 
 
 void encode(ByteArray& ba, char v)
 {
-    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+    ba = ByteArray(&v, sizeof(v));
 }
 
 
 void encode(ByteArray& ba, unsigned char v)
 {
-    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+    ba = ByteArray(&v, sizeof(v));
 }
 
 
 void encode(ByteArray& ba, short v)
 {
-    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+    ba = ByteArray(&v, sizeof(v));
 }
 
 
 void encode(ByteArray& ba, unsigned short v)
 {
-    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+    ba = ByteArray(&v, sizeof(v));
 }
 
 
 void encode(ByteArray& ba, int v)
 {
-    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+    ba = ByteArray(&v, sizeof(v));
 }
 
 
 void encode(ByteArray& ba, unsigned int v)
 {
-    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+    ba = ByteArray(&v, sizeof(v));
 }
 
 
 void encode(ByteArray& ba, long v)
 {
-    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+    ba = ByteArray(&v, sizeof(v));
 }
 
 
 void encode(ByteArray& ba, unsigned long v)
 {
-    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+    ba = ByteArray(&v, sizeof(v));
 }
 
 
 void encode(ByteArray& ba, float v)
 {
-    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+    ba = ByteArray(&v, sizeof(v));
 }
 
 
 void encode(ByteArray& ba, double v)
 {
-    ba = ByteArray(reinterpret_cast<byte_t*>(&v), sizeof(v));
+    ba = ByteArray(&v, sizeof(v));
 }
 
 
