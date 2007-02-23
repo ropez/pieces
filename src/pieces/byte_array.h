@@ -147,7 +147,7 @@ public:
     ByteArray& prepend(const void* data, int size);
 
     /**
-     * Remove \a n bytes from the end of the byte-array.
+     * Remove \a n bytes from the start of the byte-array.
      */
     void chopFront(int n);
 
