@@ -55,7 +55,7 @@ private:
     SharedData(const SharedData&);
     SharedData& operator=(const SharedData&);
 
-    unsigned int m_count;
+    unsigned long m_count;
 };
 
 } // namespace Pieces
