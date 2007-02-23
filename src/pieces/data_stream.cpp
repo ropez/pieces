@@ -1,7 +1,7 @@
 
 #include "data_stream.h"
 
-#include <algorithm>
+#include <cstring>
 
 
 namespace Pieces
@@ -328,7 +328,7 @@ void decode(const ByteArray& ba, bool& v)
     if (ba.size() != sizeof(v))
         throw "error";
 
-    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+    memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -337,7 +337,7 @@ void decode(const ByteArray& ba, char& v)
     if (ba.size() != sizeof(v))
         throw "error";
 
-    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+    memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -346,7 +346,7 @@ void decode(const ByteArray& ba, unsigned char& v)
     if (ba.size() != sizeof(v))
         throw "error";
 
-    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+    memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -355,7 +355,7 @@ void decode(const ByteArray& ba, short& v)
     if (ba.size() != sizeof(v))
         throw "error";
 
-    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+    memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -364,7 +364,7 @@ void decode(const ByteArray& ba, unsigned short& v)
     if (ba.size() != sizeof(v))
         throw "error";
 
-    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+    memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -373,7 +373,7 @@ void decode(const ByteArray& ba, int& v)
     if (ba.size() != sizeof(v))
         throw "error";
 
-    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+    memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -382,7 +382,7 @@ void decode(const ByteArray& ba, unsigned int& v)
     if (ba.size() != sizeof(v))
         throw "error";
 
-    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+    memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -391,7 +391,7 @@ void decode(const ByteArray& ba, long& v)
     if (ba.size() != sizeof(v))
         throw "error";
 
-    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+    memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -400,7 +400,7 @@ void decode(const ByteArray& ba, unsigned long& v)
     if (ba.size() != sizeof(v))
         throw "error";
 
-    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+    memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -409,7 +409,7 @@ void decode(const ByteArray& ba, float& v)
     if (ba.size() != sizeof(v))
         throw "error";
 
-    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+    memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -418,7 +418,7 @@ void decode(const ByteArray& ba, double& v)
     if (ba.size() != sizeof(v))
         throw "error";
 
-    std::copy(ba.data(), ba.data() + sizeof(v), reinterpret_cast<byte_t*>(&v));
+    memcpy(&v, ba.data(), sizeof(v));
 }
 
 
