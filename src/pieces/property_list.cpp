@@ -1,4 +1,4 @@
-#include "PropertyList"
+#include "Pieces/PropertyList"
 
 #include <iostream>
 #include <sstream>

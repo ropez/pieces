@@ -1,5 +1,5 @@
 
-#include "byte_array.h"
+#include "Pieces/ByteArray"
 
 #include <cstring>
 #include <sstream>

@@ -1,8 +1,8 @@
-#include "pieces/PropertyList"
-#include "pieces/ValueList"
-#include "pieces/ByteArray"
-#include "pieces/DataStream"
-#include "pieces/Vector"
+#include "Pieces/PropertyList"
+#include "Pieces/ValueList"
+#include "Pieces/ByteArray"
+#include "Pieces/DataStream"
+#include "Pieces/Vector"
 
 #include <iostream>
 #include <sstream>
