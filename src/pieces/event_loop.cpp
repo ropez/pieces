@@ -26,7 +26,9 @@ void EventLoop::exec()
         // Block while waiting for event
         Event e = m_queue->pop();
 
-        // TODO: Check if this was a quit event
+        // Check if this was a quit event
+        if (e.type() == EVENT_QUIT)
+            break;
 
         processEvent(e);
     }
@@ -35,7 +37,7 @@ void EventLoop::exec()
 
 void EventLoop::quit()
 {
-    // TODO: Push quit event
+    m_queue->push(Event(EVENT_QUIT));
 }
 
 

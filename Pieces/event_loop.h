@@ -10,10 +10,16 @@ namespace Pieces
 
 class EventQueue;
 
+enum EventType
+{
+    EVENT_QUIT
+};
+
 
 class EventLoop
 {
 public:
+
     EventLoop();
     virtual ~EventLoop();
 
