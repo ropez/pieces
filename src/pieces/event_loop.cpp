@@ -1,18 +1,21 @@
 
 #include "Pieces/EventLoop"
+#include "Pieces/EventQueue"
+
 
 namespace Pieces
 {
 
 EventLoop::EventLoop()
-: m_quit(false)
-, m_queue()
+: m_queue(new EventQueue)
 {
 }
 
 
 EventLoop::~EventLoop()
 {
+    quit();
+    delete m_queue;
 }
 
 
@@ -20,17 +23,10 @@ void EventLoop::exec()
 {
     while (true)
     {
-        // TODO: Sleep while waiting for signal
+        // Block while waiting for event
+        Event e = m_queue->pop();
 
-        if (m_quit)
-        {
-            break;
-        }
-
-        // TODO: Critical section
-        Event e = m_queue.front();
-        m_queue.pop();
-        // TODO: End critical section
+        // TODO: Check if this was a quit event
 
         processEvent(e);
     }
@@ -39,18 +35,13 @@ void EventLoop::exec()
 
 void EventLoop::quit()
 {
-    m_quit = true;
-
-    // TODO: Signal wake-up
+    // TODO: Push quit event
 }
 
 
 void EventLoop::postEvent(const Event& e)
 {
-    // TODO: Critical section
-    m_queue.push(e);
-
-    // TODO: Signal wake-up
+    m_queue->push(e);
 }
 
 

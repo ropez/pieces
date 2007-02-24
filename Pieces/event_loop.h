@@ -4,11 +4,12 @@
 
 #include "Event"
 
-#include <queue>
-
 
 namespace Pieces
 {
+
+class EventQueue;
+
 
 class EventLoop
 {
@@ -29,8 +30,7 @@ private:
     EventLoop(const EventLoop&);
     EventLoop& operator=(const EventLoop&);
 
-    bool m_quit;
-    std::queue<Event> m_queue;
+    EventQueue* m_queue;
 };
 
 } // namespace Pieces
