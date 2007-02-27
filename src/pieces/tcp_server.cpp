@@ -27,7 +27,8 @@ void TCPServer::listen()
 
 int TCPServer::getQueueSize() const
 {
-
+    int dummy = 0;
+    return dummy;
 }
 
 void TCPServer::setQueueSize(int size)
@@ -38,7 +39,8 @@ void TCPServer::setQueueSize(int size)
 // Caller must delete this (maybe use auto_ptr?)
 TCPSocket* TCPServer::accept()
 {
-
+    TCPSocket* dummy = 0;
+    return dummy;
 }
 
 

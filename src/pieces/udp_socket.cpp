@@ -13,8 +13,11 @@ UDPSocket::~UDPSocket()
 {
 }
 
-UDPSocket::UDPPacket receive()
+UDPPacket UDPSocket::receive()
 {
+    ByteArray baDummy;
+    UDPPacket dummy(baDummy);
+    return dummy;
 }
 
 void UDPSocket::send(const UDPPacket& packet)

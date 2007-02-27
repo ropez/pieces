@@ -33,6 +33,8 @@ UDPPacket::UDPPacket(const UDPPacket& other)
 
 short UDPPacket::getPort() const
 {
+    short dummy = 0;
+    return dummy;
 }
 
 void UDPPacket::setPort(short port)
@@ -41,6 +43,8 @@ void UDPPacket::setPort(short port)
 
 InetAddress UDPPacket::getAddress() const
 {
+    InetAddress dummy("");
+    return dummy;
 }
 
 void UDPPacket::setAddress(const InetAddress& adr)
@@ -50,6 +54,8 @@ void UDPPacket::setAddress(const InetAddress& adr)
 
 ByteArray UDPPacket::getData() const
 {
+    ByteArray dummy(0);
+    return dummy;
 }
 
 void UDPPacket::setData(const ByteArray& data)

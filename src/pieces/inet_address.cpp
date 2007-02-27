@@ -13,8 +13,10 @@ InetAddress::InetAddress(const std::string& addr)
 {
 }
 
-static InetAddress InetAddress::getHostByName(const std::string& name)
+InetAddress InetAddress::getHostByName(const std::string& name)
 {
+    InetAddress dummy;
+    return dummy;
 }
 
 InetAddress::~InetAddress()
@@ -23,6 +25,8 @@ InetAddress::~InetAddress()
 
 std::string InetAddress::toString() const
 {
+    std::string dummy;
+    return dummy;
 }
 
 } // namespace Pieces
