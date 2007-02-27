@@ -21,7 +21,15 @@ public:
 protected:
     void run()
     {
+#ifdef WIN32
+        // TODO: Use Sleep(ms)
+        for(unsigned int i = 0; i < 10000000; ++i)
+        {
+            i += i;
+        }
+#else
         usleep(m_delay * 1000);
+#endif
         m_eventLoop->postEvent(Event(EVENT_TIMER));
     }
 
