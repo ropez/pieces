@@ -2,6 +2,7 @@
 #ifndef PIECES_UDP_SOCKET_H
 #define PIECES_UDP_SOCKET_H
 
+#include "Pieces/UDPPacket"
 
 namespace Pieces
 {

@@ -3,6 +3,7 @@
 #define PIECES_TCP_SOCKET_H
 
 #include "Pieces/ByteArray"
+#include "Pieces/InetAddress"
 
 namespace Pieces
 {

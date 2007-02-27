@@ -2,6 +2,9 @@
 #ifndef PIECES_UDP_PACKET_H
 #define PIECES_UDP_PACKET_H
 
+#include "Pieces/ByteArray"
+#include "Pieces/InetAddress"
+#include "Pieces/UDPPacket"
 
 namespace Pieces
 {
@@ -17,6 +20,8 @@ public:
     // Copy operations (this class might use implicit sharing)
     UDPPacket(const UDPPacket& other);
     UDPPacket& operator=(const UDPPacket& other);
+
+    ~UDPPacket();
 
     short getPort() const;
     void setPort(short port);
