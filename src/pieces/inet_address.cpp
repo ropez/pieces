@@ -14,7 +14,7 @@ namespace Pieces
 
 InetAddress::InetAddress()
 {
-	inet_aton("0.0.0.0", &m_inet_addr);
+    inet_aton("0.0.0.0", &m_inet_addr);
 }
 
 
@@ -25,11 +25,11 @@ InetAddress::InetAddress()
 
 InetAddress::InetAddress(const std::string& addr)
 {
-	//is IP address valid?
-	if( ( inet_aton(addr.c_str(), &m_inet_addr) ) == -1)
-	{
-		//No.. inform user
-	}
+    //is IP address valid?
+    if( ( inet_aton(addr.c_str(), &m_inet_addr) ) == -1)
+    {
+        //No.. inform user
+    }
 }
 
 
@@ -39,13 +39,13 @@ InetAddress::InetAddress(const std::string& addr)
 
 InetAddress InetAddress::getHostByName(const std::string& name)
 {
-	//Resolve host
-	struct hostent* host = gethostbyname(name.c_str());
+    //Resolve host
+    struct hostent* host = gethostbyname(name.c_str());
 
-	//Create the new InetAddress object with the host IP
-	InetAddress addr(std::string(host->h_addr));
-	
-	return addr;
+    //Create the new InetAddress object with the host IP
+    InetAddress addr(std::string(host->h_addr));
+
+    return addr;
 }
 
 
@@ -55,7 +55,7 @@ InetAddress InetAddress::getHostByName(const std::string& name)
 
 std::string InetAddress::toString() const
 {
-	return inet_ntoa(m_inet_addr);
+    return inet_ntoa(m_inet_addr);
 }
 
 
@@ -65,7 +65,7 @@ std::string InetAddress::toString() const
 
 InetAddress::~InetAddress()
 {
-	
+
 }
 
 }

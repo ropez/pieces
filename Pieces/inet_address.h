@@ -31,7 +31,7 @@ public:
     // or the internal representation might be hidden and the other classes made friend classes.
 
 private:
-	in_addr m_inet_addr;
+    in_addr m_inet_addr;
 
 };
 
