@@ -13,6 +13,16 @@ namespace Pieces
 class Event
 {
 public:
+
+    /**
+     * Predefined event types.
+     *
+     * \note Negative event types are reserved for internal use.
+     */
+    enum Type
+    {
+    };
+
     explicit Event(int type);
     ~Event();
 

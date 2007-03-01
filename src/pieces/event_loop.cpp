@@ -6,6 +6,11 @@
 namespace Pieces
 {
 
+namespace
+{
+const int EVENT_QUIT = -1;
+}
+
 EventLoop::EventLoop()
 : m_queue(new EventQueue)
 {
