@@ -1,4 +1,5 @@
 
+#include "Pieces/EventHandler"
 #include "Pieces/EventLoop"
 
 #include <OpenThreads/Thread>
@@ -31,8 +32,7 @@ private:
 };
 }
 
-
-class MyEventLoop : public Pieces::EventLoop
+class MyEventHandler : public Pieces::EventHandler
 {
 protected:
     void event(const Pieces::Event& e)
@@ -42,7 +42,7 @@ protected:
 };
 
 
-MyEventLoop loop;
+Pieces::EventLoop* loop;
 
 
 class MyThread : public OpenThreads::Thread
@@ -52,22 +52,25 @@ public:
     {
         std::cout << "Running thread" << std::endl;
 
-        loop.exec();
+        loop->exec();
     }
 };
 
 int main()
 {
+    MyEventHandler h;
+    loop = new Pieces::EventLoop(&h);
+
     MyThread t;
     t.start();
 
-    Pieces::Timer t1(&loop, 2000);
+    Pieces::Timer t1(loop, 2000);
     t1.start();
-    Pieces::Timer t2(&loop, 5000);
+    Pieces::Timer t2(loop, 5000);
     t2.start();
 
     t1.join();
     t2.join();
-    loop.quit();
+    loop->quit();
     t.join();
 }

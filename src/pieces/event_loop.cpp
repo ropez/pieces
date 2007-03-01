@@ -1,5 +1,6 @@
 
 #include "Pieces/EventLoop"
+#include "Pieces/EventHandler"
 #include "Pieces/EventQueue"
 
 
@@ -11,8 +12,9 @@ namespace
 const int EVENT_QUIT = -1;
 }
 
-EventLoop::EventLoop()
-: m_queue(new EventQueue)
+EventLoop::EventLoop(EventHandler* handler)
+: m_handler(handler)
+, m_queue(new EventQueue)
 {
 }
 
@@ -35,7 +37,7 @@ void EventLoop::exec()
         if (e.type() == EVENT_QUIT)
             break;
 
-        event(e);
+        m_handler->event(e);
     }
 }
 
