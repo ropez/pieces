@@ -13,29 +13,104 @@
 namespace Pieces
 {
 
+
+/**
+ * \class PropertyList
+ * \brief A collection of key/value pairs.
+ *
+ * A property list contains a collection of key/value pairs where the keys are
+ * integers, and the values are stored as generic binary data using ByteArray.
+ *
+ * The get() and set() functions provide a simple way to convert property
+ * values to and from any type. To use get/set with a custom data type, the
+ * class must have a default and copy constructor, and there must be encode
+ * and decode functions for the data type.
+ *
+ * The Pieces framework provides get/set functions for all basic built-in types
+ * and for all value-based Pieces classes including ValueList and PropertyList
+ * itself.
+ *
+ * \see ValueList, ByteArray, DataStream
+ * \author Robin Pedersen
+ */
 class PropertyList
 {
 public:
-    typedef std::map<int, ByteArray> map_t;
 
+    /**
+     * Constructor that creates an empty property-list.
+     */
     PropertyList();
+
+    /**
+     * Destructor that cleans up all resources.
+     */
     ~PropertyList();
 
+    /**
+     * Remove all properties.
+     */
     void clear();
+
+    /**
+     * Returns the number of properties.
+     */
     int size() const;
 
+    /**
+     * Returns true if size() == 0.
+     */
     bool isEmpty() const;
 
+    /**
+     * Add or update a property.
+     *
+     * Updates the property-list by inserting a property with key \a property,
+     * or replacing the old value with the contents of \a value.
+     */
     PropertyList& setProperty(int property, const ByteArray& value);
+
+    /**
+     * Get a property value.
+     *
+     * This function returns the value of the property with the given \a key.
+     * If no property with the key exits, it returns \a defval.
+     */
     ByteArray getProperty(int property, const ByteArray& defval = ByteArray()) const;
 
+    /**
+     * Add or update a property, converted from T.
+     *
+     * Updates the property-list by inserting a property with key \a property,
+     * or replacing the old value with the contents of \a value, converted to
+     * a ByteArray using the encode() function for T.
+     *
+     * \pre There must be a function called encode that converts a T to a
+     * ByteArrray.
+     */
     template<typename T>
     PropertyList& set(int property, const T& value);
 
+    /**
+     * Get a property value, converted to T.
+     *
+     * This function returns the value of the property with the given \a key,
+     * converted to T using the decode() function for T. If no property with
+     * the key exits, it returns \a defval.
+     *
+     * \pre The type T must have a default and copy contructor and there must
+     * be a function called decode that converts a ByteArray to T.
+     */
     template<typename T>
     T get(int property, const T& defval = T()) const;
 
+    /** \warning This typedef may be removed. */
+    typedef std::map<int, ByteArray> map_t;
+
+    /** \warning This function may be removed. */
     map_t::const_iterator begin() const;
+
+    /** \warning This function may be removed. */
     map_t::const_iterator end() const;
 
 private:
@@ -56,6 +131,9 @@ std::ostream& operator<<(std::ostream& os, const PropertyList& p);
 
 DataStream& operator<<(DataStream& ds, const PropertyList& p);
 DataStream& operator>>(DataStream& ds, PropertyList& p);
+
+void encode(ByteArray& ba, const PropertyList& v);
+void decode(const ByteArray& ba, PropertyList& v);
 
 
 template<typename T>
@@ -85,9 +163,6 @@ T PropertyList::get(int property, const T& defval) const
         return defval;
     }
 }
-
-void encode(ByteArray& ba, const PropertyList& v);
-void decode(const ByteArray& ba, PropertyList& v);
 
 } // namespace Pieces
 
