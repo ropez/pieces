@@ -67,34 +67,24 @@ private:
 
 int main()
 {
-    Pieces::Host h;
-    h.start();
-    
+    using Pieces::Host;
     using Pieces::Timer;
     using Pieces::Event;
+    
+    Pieces::Host h;
     
     Timer* repeating = new Timer(h.eventLoop());
     repeating->setRepeating(true);
     repeating->start(200, Event(222));
     
-    {
-        Timer t1(h.eventLoop());
-        t1.start(999, Event(1));
-        
-        // Sleep to let the first timer trigger
-        OpenThreads::Thread::microSleep(1500000);
+    Timer t1(h.eventLoop());
+    t1.start(999, Event(1));
+    // Restart the timer
+    t1.start(2000, Event(2));
 
-        // This timer is not seen, because it's deleted before it's triggered
-        t1.start(2000, Event(2));
-    }
-    
-    // kill repeating timer
-    delete repeating;
-    repeating = 0;
-    
     // This timer stops the Host
     Timer t2(h.eventLoop());
     t2.start(5000, Event(3));
 
-    h.join();
+    h.exec();
 }
