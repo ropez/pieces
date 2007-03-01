@@ -29,7 +29,7 @@ public:
     void postEvent(const Event& e);
 
 protected:
-    virtual void processEvent(const Event& e);
+    virtual void event(const Event& e) = 0;
 
 private:
     // Disable copy

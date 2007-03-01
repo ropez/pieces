@@ -30,7 +30,7 @@ void EventLoop::exec()
         if (e.type() == EVENT_QUIT)
             break;
 
-        processEvent(e);
+        event(e);
     }
 }
 
@@ -44,12 +44,6 @@ void EventLoop::quit()
 void EventLoop::postEvent(const Event& e)
 {
     m_queue->push(e);
-}
-
-
-void EventLoop::processEvent(const Event&)
-{
-    // Do nothing here
 }
 
 } // namespace Pieces

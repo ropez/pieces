@@ -21,15 +21,7 @@ public:
 protected:
     void run()
     {
-#ifdef WIN32
-        // TODO: Use Sleep(ms)
-        for(unsigned int i = 0; i < 10000000; ++i)
-        {
-            i += i;
-        }
-#else
-        usleep(m_delay * 1000);
-#endif
+        microSleep(m_delay * 1000);
         m_eventLoop->postEvent(Event(EVENT_TIMER));
     }
 
@@ -43,7 +35,7 @@ private:
 class MyEventLoop : public Pieces::EventLoop
 {
 protected:
-    void processEvent(const Pieces::Event& e)
+    void event(const Pieces::Event& e)
     {
         std::cout << "Event " << e.type() << std::endl;
     }
