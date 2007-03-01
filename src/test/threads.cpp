@@ -10,25 +10,56 @@ const int EVENT_TIMER = 1000;
 
 namespace Pieces
 {
-class Timer : public OpenThreads::Thread
+class TimerThread : public OpenThreads::Thread
 {
 public:
-    Timer(EventLoop* eventLoop,  int delay)
+    TimerThread(EventLoop* eventLoop)
     : m_eventLoop(eventLoop)
-    , m_delay(delay)
+    , m_delay(0)
     {
+    }
+
+    /**
+     * In microseconds.
+     */
+    void setDelay(unsigned int delay)
+    {
+        m_delay = delay;
     }
 
 protected:
     void run()
     {
-        microSleep(m_delay * 1000);
+        microSleep(m_delay);
         m_eventLoop->postEvent(Event(EVENT_TIMER));
     }
 
 private:
     EventLoop* m_eventLoop;
-    int m_delay;
+    unsigned int m_delay;
+};
+
+class Timer
+{
+public:
+    Timer(EventLoop* eventLoop)
+    : m_thread(eventLoop)
+    {
+    }
+
+    ~Timer()
+    {
+        m_thread.join();
+    }
+
+    void start(int delay)
+    {
+        m_thread.setDelay(delay);
+        m_thread.start();
+    }
+
+private:
+    TimerThread m_thread;
 };
 
 class Host : public OpenThreads::Thread, public EventHandler
@@ -49,6 +80,12 @@ public:
     EventLoop* eventLoop()
     {
         return m_eventLoop;
+    }
+
+    void exec()
+    {
+        start();
+        join();
     }
 
 protected:
@@ -78,15 +115,15 @@ int main()
     Pieces::Host h;
     h.start();
 
-    Pieces::Timer t1(h.eventLoop(), 2000);
-    t1.start();
-    Pieces::Timer t2(h.eventLoop(), 5000);
-    t2.start();
-
-    t1.join();
-    t2.join();
+    {
+        Pieces::Timer t1(h.eventLoop());
+        t1.start(2000000);
+        OpenThreads::Thread::microSleep(1000000);
+        t1.start(1000000);
+        Pieces::Timer t2(h.eventLoop());
+        t2.start(5000000);
+    } // Join timers
 
     h.eventLoop()->quit();
-
     h.join();
 }
