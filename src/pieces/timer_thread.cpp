@@ -58,6 +58,12 @@ TimerThread::~TimerThread()
 }
 
 
+bool TimerThread::isRepeating() const
+{
+    return d->repeating;
+}
+
+
 void TimerThread::setRepeating(bool on)
 {
     d->repeating = on;
