@@ -14,11 +14,14 @@ namespace Pieces
 typedef unsigned char byte_t;
 
 /**
- * Represents a generic array of bytes.
+ * \class ByteArray
+ * \brief Represents a generic array of bytes.
  *
  * This class preferred to represent binary data instead of the classical pure
  * char pointer. It automatically handles memory allocation and is optimized
  * for passing parameters by value using implicit sharing.
+ *
+ * \author Robin Pedersen
  */
 class ByteArray
 {
@@ -48,7 +51,7 @@ public:
     int size() const;
 
     /**
-     * Returns true is size() == 0.
+     * Returns true if size() == 0.
      */
     bool isEmpty() const;
 
@@ -69,26 +72,80 @@ public:
 
     /**
      * Returns a pointer to the internal data.
+     *
+     * This pointer can be used as argument to functions writing to a buffer.
+     * \code
+     * ByteArray ba(BUFFER_SIZE);
+     * fread(ba.data(), ba.size(), 1, file_pointer);
+     * \endcode
+     *
+     * This is the non-const version. If the byte-array contains internal data
+     * that is shared with another byte-array (implicit sharing), this will
+     * create a deep copy of the internal data before returning a pointer.
+     *
+     * If you have a non-const byte-array, and you won't change the data, you
+     * should use constData() instead. It can give better performance, because
+     * it doesn't require a deep copy.
+     *
+     * \warning You should never store the returned pointer and create a copy
+     * of the byte-array, because you will end up having a pointer to shared
+     * data. The best way to avoid this is to never use this pointer for
+     * anything else than a function parameter.
+     *
+     * \warning This is not '\0'-terminated, so it must not be used as a
+     * string, decode the byte-array to an std::string instead.
      */
     byte_t* data();
 
     /**
      * Returns a pointer to the internal data.
+     *
+     * This is the same as constData(), but is only possible to call on a const
+     * byte-array because it has the same name as the non-const version.
      */
     const byte_t* data() const;
 
     /**
      * Returns a pointer to the internal data.
+     *
+     * This pointer can be used as arguments to functions reading from a
+     * buffer.
+     * \code
+     * ByteArray ba = getData();
+     * fwrite(ba.constData(), ba.size() 1, file_pointer);
+     * \endcode
+     *
+     * This is the const version. It will never create a deep copy of the data.
+     * Since you can not change the data, it doesn't matter that you have a
+     * pointer to shared data.
+     *
+     * If you have a const byte-array, you can use data() instead for
+     * convenience. These functions do the same thing. This function is
+     * provided so that you can avoid using the non-const version of data() if
+     * you have a non-const byte-array.
+     *
+     * \warning You should never store the returned pointer and call a
+     * non-const function on the byte-array, because it may relocate the data,
+     * and the location pointed to by this pointer may become deleted. The best
+     * way to avoid this is to never use this pointer for anything else than a
+     * function parameter.
+     *
+     * \warning This is not '\0'-terminated, so it must not be used as a
+     * string, decode the byte-array to an std::string instead.
      */
     const byte_t* constData() const;
 
     /**
      * Returns a reference to the byte at position \a index.
+     *
+     * This can be used to update individualn bytes in the array.
      */
     byte_t& operator[](int index);
 
     /**
      * Returns a const reference to the byte at position \a index.
+     *
+     * This can be used to read individual bytes from the array.
      */
     const byte_t& operator[](int index) const;
 
@@ -200,11 +257,13 @@ private:
     SharedDataPointer<Data> d;
 };
 
+
 /**
  * Comparison operator, returns true if the size and conents of the two
  * byte-arrays are equal, otherwise false.
  */
 bool operator==(const ByteArray& op1, const ByteArray& op2);
+
 
 /**
  * Comparison operator, returns false if the size and conents of the two
@@ -212,8 +271,20 @@ bool operator==(const ByteArray& op1, const ByteArray& op2);
  */
 bool operator!=(const ByteArray& op1, const ByteArray& op2);
 
+
+/**
+ * Returns the result of concatenating the two byte-arrays.
+ */
 ByteArray operator+(const ByteArray& op1, const ByteArray& op2);
 
+
+/**
+ * Writes a string representing the byte-array to the output stream.
+ *
+ * This function is meant for debug purposes. The output may not be complete,
+ * and it may not contain enough information to regenerate the byte-array.
+ * It's meant only to give a human reader some idea of the contents.
+ */
 std::ostream& operator<<(std::ostream& os, const ByteArray& ba);
 
 } // namespace Pieces
