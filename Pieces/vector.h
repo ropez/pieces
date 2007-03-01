@@ -2,8 +2,8 @@
 #ifndef PIECES_VECTOR_H
 #define PIECES_VECTOR_H
 
-#include "SharedData"
-#include "SharedDataPointer"
+#include "Pieces/SharedData"
+#include "Pieces/SharedDataPointer"
 
 #include <vector>
 

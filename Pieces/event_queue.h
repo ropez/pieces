@@ -2,7 +2,7 @@
 #ifndef PIECES_EVENT_QUEUE_H
 #define PIECES_EVENT_QUEUE_H
 
-#include "Event"
+#include "Pieces/Event"
 
 
 namespace Pieces

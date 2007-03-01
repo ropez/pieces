@@ -1,10 +1,10 @@
 #ifndef PIECES_VALUE_LIST_H
 #define PIECES_VALUE_LIST_H
 
-#include "ByteArray"
-#include "DataStream"
-#include "SharedData"
-#include "SharedDataPointer"
+#include "Pieces/ByteArray"
+#include "Pieces/DataStream"
+#include "Pieces/SharedData"
+#include "Pieces/SharedDataPointer"
 
 #include <vector>
 

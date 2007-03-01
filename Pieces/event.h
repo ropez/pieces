@@ -2,9 +2,9 @@
 #ifndef PIECES_EVENT_H
 #define PIECES_EVENT_H
 
-#include "SharedData"
-#include "SharedDataPointer"
-#include "ByteArray"
+#include "Pieces/SharedData"
+#include "Pieces/SharedDataPointer"
+#include "Pieces/ByteArray"
 
 
 namespace Pieces

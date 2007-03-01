@@ -2,8 +2,8 @@
 #ifndef PIECES_BYTE_ARRAY_H
 #define PIECES_BYTE_ARRAY_H
 
-#include "SharedData"
-#include "SharedDataPointer"
+#include "Pieces/SharedData"
+#include "Pieces/SharedDataPointer"
 
 #include <iostream>
 

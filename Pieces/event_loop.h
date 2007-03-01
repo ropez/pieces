@@ -2,7 +2,7 @@
 #ifndef PIECES_EVENT_LOOP_H
 #define PIECES_EVENT_LOOP_H
 
-#include "Event"
+#include "Pieces/Event"
 
 
 namespace Pieces

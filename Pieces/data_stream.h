@@ -2,7 +2,7 @@
 #ifndef PIECES_DATA_STREAM_H
 #define PIECES_DATA_STREAM_H
 
-#include "ByteArray"
+#include "Pieces/ByteArray"
 
 namespace Pieces
 {
