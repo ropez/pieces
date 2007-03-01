@@ -40,6 +40,15 @@ Timer::~Timer()
 }
 
 
+void Timer::setRepeating(bool on)
+{
+    if (!d->started)
+    {
+        d->thread->setRepeating(on);
+    }
+}
+
+
 void Timer::start(unsigned long int delay, const Event& event)
 {
     stop();
@@ -56,6 +65,7 @@ void Timer::stop()
     if (d->started)
     {
         d->thread->abort();
+        d->started = false;
     }
 }
 

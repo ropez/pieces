@@ -72,6 +72,10 @@ int main()
     using Pieces::Timer;
     using Pieces::Event;
     
+    Timer* repeating = new Timer(h.eventLoop());
+    repeating->setRepeating(true);
+    repeating->start(200, Event(222));
+    
     {
         Timer t1(h.eventLoop());
         t1.start(999, Event(1));
@@ -82,6 +86,10 @@ int main()
         // This timer is not seen, because it's deleted before it's triggered
         t1.start(2000, Event(2));
     }
+    
+    // kill repeating timer
+    delete repeating;
+    repeating = 0;
     
     // This timer stops the Host
     Timer t2(h.eventLoop());

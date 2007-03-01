@@ -27,6 +27,7 @@ public:
     Mutex mutex;
     Condition cond;
     
+    bool repeating;
     unsigned int delay;
     Event event;
 };
@@ -37,6 +38,7 @@ TimerThreadPrivate::TimerThreadPrivate()
 , aborted(false)
 , mutex()
 , cond()
+, repeating(false)
 , delay(0)
 , event()
 {
@@ -53,6 +55,12 @@ TimerThread::TimerThread(EventLoop* eventLoop)
 TimerThread::~TimerThread()
 {
     delete d;
+}
+
+
+void TimerThread::setRepeating(bool on)
+{
+    d->repeating = on;
 }
 
 
@@ -84,12 +92,19 @@ void TimerThread::run()
 {
     ScopedLock<Mutex> lock(d->mutex);
     
-    // Check if it was aborted
-    if (!d->aborted && d->cond.wait(&d->mutex, d->delay))
+    do
     {
+        // Check if it was aborted
+        if (d->aborted)
+            break;
+    
+        if (!d->cond.wait(&d->mutex, d->delay))
+            break;
+    
         // Timed out, post event
         d->eventLoop->postEvent(d->event);
     }
+    while (d->repeating);
 }
 
 } // namespace Pieces

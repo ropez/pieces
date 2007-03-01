@@ -29,6 +29,8 @@ public:
     
     ~TimerThread();
     
+    void setRepeating(bool on);
+    
     unsigned long int getDelay() const;
 
     /**

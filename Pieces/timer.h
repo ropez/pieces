@@ -22,6 +22,8 @@ public:
     
     ~Timer();
     
+    void setRepeating(bool on);
+
     void start(unsigned long int delay, const Event& event);
     
     void stop();
