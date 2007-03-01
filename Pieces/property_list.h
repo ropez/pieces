@@ -30,6 +30,10 @@ namespace Pieces
  * and for all value-based Pieces classes including ValueList and PropertyList
  * itself.
  *
+ * \note About string constant values.
+ * It's legal to use a string constant as property value (e.g. set(KEY, "abc")).
+ * To read this value use std::string (e.g. get<std::string>(KEY)).
+ *
  * \see ValueList, ByteArray, DataStream
  * \author Robin Pedersen
  */

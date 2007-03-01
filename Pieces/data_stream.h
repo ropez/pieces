@@ -49,6 +49,10 @@ namespace Pieces
  * // Also possible to do 'ds >> b >> n >> d' in one line.
  * \endcode
  *
+ * \note About string constants.
+ * It's legal to stream a string constant to the data-stream
+ * (e.g. ds << "Hello"), to read it from an input stream, use std::string.
+ *
  * \author Robin Pedersen
  */
 class DataStream
