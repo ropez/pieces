@@ -139,19 +139,19 @@ DataStream& operator>>(DataStream& ds, PropertyList& p)
 }
 
 
-void encode(ByteArray& ba, const PropertyList& v)
+void encode(ByteArray& ba, const PropertyList& p)
 {
     ba.clear();
     DataStream ds;
-    ds << v;
+    ds << p;
     ba = ds.data();
 }
 
 
-void decode(const ByteArray& ba, PropertyList& v)
+void decode(const ByteArray& ba, PropertyList& p)
 {
     DataStream ds(ba);
-    ds >> v;
+    ds >> p;
 }
 
 } // namespace Pieces

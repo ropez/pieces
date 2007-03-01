@@ -122,11 +122,57 @@ private:
     SharedDataPointer<Data> d;
 };
 
+
+/**
+ * Writes a string representing the value-list to the output stream.
+ *
+ * This function is meant for debug purposes. The output may not be complete,
+ * and it may not contain enough information to regenerate the property-list.
+ * It's meant only to give a human reader some idea of the contents.
+ */
 std::ostream& operator<<(std::ostream& os, const ValueList& l);
 
+
+/**
+ * Write value-list to a data stream.
+ *
+ * Writes a binary representation of the value-list \a l to the data stream
+ * \a ds, and returns \a ds.
+ *
+ * The value-list can be read back using the input stream operator.
+ */
 DataStream& operator<<(DataStream& ds, const ValueList& l);
+
+
+/**
+ * Reads a value-list from a data stream.
+ *
+ * Reads the binary representation of a value-list, and makes the
+ * property-list referenced by \a l equal to the stored list.
+ *
+ * The data stream must contain a value-list stored with the output
+ * operator.
+ */
 DataStream& operator>>(DataStream& ds, ValueList& l);
 
+
+/**
+ * Convert a value-list to a byte-array.
+ *
+ * Stores a binary representation of the value-list \a l in the
+ * byte-array referenced by \a ba.
+ */
+void encode(ByteArray& ba, const ValueList& l);
+
+
+/**
+ * Convert a byte-array to a value-list.
+ *
+ * Creates a value-list by reading the binary representation stored in
+ * \a ba, and makes the value-list referenced by \a l equal to the stored
+ * list.
+ */
+void decode(const ByteArray& ba, ValueList& l);
 
 template<typename T>
 ValueList& ValueList::add(const T& value)
@@ -144,9 +190,6 @@ T ValueList::get(int index) const
     decode(ba, result);
     return result;
 }
-
-void encode(ByteArray& ba, const ValueList& l);
-void decode(const ByteArray& ba, ValueList& l);
 
 } // namespace Pieces
 

@@ -127,13 +127,56 @@ private:
 };
 
 
+/**
+ * Writes a string representing the property-list to the output stream.
+ *
+ * This function is meant for debug purposes. The output may not be complete,
+ * and it may not contain enough information to regenerate the property-list.
+ * It's meant only to give a human reader some idea of the contents.
+ */
 std::ostream& operator<<(std::ostream& os, const PropertyList& p);
 
+
+/**
+ * Write property-list to a data stream.
+ *
+ * Writes a binary representation of the property-list \a p to the data stream
+ * \a ds, and returns \a ds.
+ *
+ * The property-list can be read back using the input stream operator.
+ */
 DataStream& operator<<(DataStream& ds, const PropertyList& p);
+
+
+/**
+ * Reads a property-list from a data stream.
+ *
+ * Reads the binary representation of a property-list, and makes the
+ * property-list referenced by \a p equal to the stored list.
+ *
+ * The data stream must contain a property-list stored with the output
+ * operator.
+ */
 DataStream& operator>>(DataStream& ds, PropertyList& p);
 
-void encode(ByteArray& ba, const PropertyList& v);
-void decode(const ByteArray& ba, PropertyList& v);
+
+/**
+ * Convert a property-list to a byte-array.
+ *
+ * Stores a binary representation of the property list \a p in the
+ * byte-array referenced by \a ba.
+ */
+void encode(ByteArray& ba, const PropertyList& p);
+
+
+/**
+ * Convert a byte-array to a property-list.
+ *
+ * Creates a property-list by reading the binary representation stored in
+ * \a ba, and makes the property-list referenced by \a p equal to the stored
+ * list.
+ */
+void decode(const ByteArray& ba, PropertyList& p);
 
 
 template<typename T>
