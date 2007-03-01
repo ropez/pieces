@@ -3,25 +3,30 @@
 
 #include <OpenThreads/Condition>
 #include <OpenThreads/Mutex>
+#include <OpenThreads/ScopedLock>
 
 #include <queue>
 
 
 namespace Pieces
 {
+using OpenThreads::Condition;
+using OpenThreads::Mutex;
+using OpenThreads::ScopedLock;
+
 
 class EventQueuePrivate
 {
 public:
     std::queue<Event> events;
 
-    OpenThreads::Mutex mutex;
-    OpenThreads::Condition cond;
+    Mutex mutex;
+    Condition cond;
 };
 
 
 EventQueue::EventQueue()
-    : d(new EventQueuePrivate)
+: d(new EventQueuePrivate)
 {
 }
 
@@ -34,23 +39,22 @@ EventQueue::~EventQueue()
 
 void EventQueue::push(const Event& e)
 {
-    d->mutex.lock();
+    ScopedLock<Mutex> lock(d->mutex);
+
     d->events.push(e);
     d->cond.signal();
-    d->mutex.unlock();
 }
 
 
 Event EventQueue::pop()
 {
-    d->mutex.lock();
+    ScopedLock<Mutex> lock(d->mutex);
     while (d->events.empty())
     {
         d->cond.wait(&d->mutex);
     }
     Event e = d->events.front();
     d->events.pop();
-    d->mutex.unlock();
 
     return e;
 }

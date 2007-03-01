@@ -7,7 +7,6 @@
 
 namespace Pieces
 {
-
 class EventQueuePrivate;
 
 
