@@ -3,7 +3,12 @@
 #define PIECES_INET_ADDRESS_H
 
 #include <string>
+
+#ifdef WIN32
+#include <winsock2.h>
+#elif
 #include <netinet/in.h>
+#endif
 
 
 namespace Pieces
@@ -31,6 +36,7 @@ public:
     // or the internal representation might be hidden and the other classes made friend classes.
 
 private:
+    in_addr stringToInAddr(const std::string& name);
     in_addr m_inet_addr;
 
 };
