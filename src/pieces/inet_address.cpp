@@ -14,11 +14,10 @@ namespace Pieces
  * Default constructor
  * Will initiate to 0.0.0.0
  */
-
 InetAddress::InetAddress()
 :m_inet_addr()
 {
-    inet_aton("0.0.0.0", &m_inet_addr);
+    m_inet_addr = stringToInAddr("0.0.0.0");
 }
 
 
