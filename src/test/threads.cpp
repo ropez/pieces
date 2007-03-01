@@ -50,6 +50,11 @@ protected:
         std::cout << "Incoming event:";
         std::cout << " type: " << event.type();
         std::cout << " data: " << event.data() << std::endl;
+        
+        if (event.type() == 3)
+        {
+            eventLoop()->quit();
+        }
     }
 
 private:
@@ -63,22 +68,24 @@ int main()
 {
     Pieces::Host h;
     h.start();
-
+    
+    using Pieces::Timer;
+    using Pieces::Event;
+    
     {
-        using Pieces::Timer;
-        using Pieces::Event;
-
         Timer t1(h.eventLoop());
         t1.start(999, Event(1));
+        
+        // Sleep to let the first timer trigger
         OpenThreads::Thread::microSleep(1500000);
 
+        // This timer is not seen, because it's deleted before it's triggered
         t1.start(2000, Event(2));
-        Timer t2(h.eventLoop());
-        t2.start(5000, Event(3));
-        t2.stop();
-    } // Join timers
+    }
+    
+    // This timer stops the Host
+    Timer t2(h.eventLoop());
+    t2.start(5000, Event(3));
 
-
-    h.eventLoop()->quit();
     h.join();
 }

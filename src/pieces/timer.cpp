@@ -32,11 +32,8 @@ Timer::Timer(EventLoop* eventLoop)
 
 Timer::~Timer()
 {
-    // TODO: Replace this with stop(), it's implemented like this for debugging purposes
-    if (d->started)
-    {
-        d->thread->join();
-    }
+    // If the timer is running, stop it.
+    stop();
     
     delete d->thread;
     delete d;
