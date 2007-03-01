@@ -30,47 +30,63 @@ private:
     EventLoop* m_eventLoop;
     int m_delay;
 };
-}
 
-class MyEventHandler : public Pieces::EventHandler
-{
-protected:
-    void event(const Pieces::Event& e)
-    {
-        std::cout << "Event " << e.type() << std::endl;
-    }
-};
-
-
-Pieces::EventLoop* loop;
-
-
-class MyThread : public OpenThreads::Thread
+class Host : public OpenThreads::Thread, public EventHandler
 {
 public:
-    void run()
+    Host()
+        : Thread()
+        , EventHandler()
+        , m_eventLoop(0)
     {
-        std::cout << "Running thread" << std::endl;
-
-        loop->exec();
+        m_eventLoop = new EventLoop(this);
     }
+
+    ~Host()
+    {
+    }
+
+    EventLoop* eventLoop()
+    {
+        return m_eventLoop;
+    }
+
+protected:
+    virtual void run()
+    {
+        std::cout << "Host thread running" << std::endl;
+        eventLoop()->exec();
+    }
+
+    virtual void event(const Event& event)
+    {
+        // Handle events
+        std::cout << "Incoming event:";
+        std::cout << " type: " << event.type();
+        std::cout << " data: " << event.data() << std::endl;
+    }
+
+private:
+    EventLoop* m_eventLoop;
 };
+
+}
+
 
 int main()
 {
-    MyEventHandler h;
-    loop = new Pieces::EventLoop(&h);
+    Pieces::Host h;
+    h.start();
 
-    MyThread t;
-    t.start();
-
-    Pieces::Timer t1(loop, 2000);
+    Pieces::Timer t1(h.eventLoop(), 2000);
     t1.start();
-    Pieces::Timer t2(loop, 5000);
+    Pieces::Timer t2(h.eventLoop(), 5000);
     t2.start();
 
     t1.join();
     t2.join();
-    loop->quit();
-    t.join();
+
+    h.eventLoop()->quit();
+
+    h.join();
 }
