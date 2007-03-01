@@ -21,9 +21,10 @@ public:
      */
     enum Type
     {
+        NOTHING,
     };
 
-    explicit Event(int type);
+    explicit Event(int type = NOTHING);
     ~Event();
 
     int type() const;
