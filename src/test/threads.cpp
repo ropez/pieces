@@ -24,6 +24,7 @@ public:
 
     ~Host()
     {
+        delete m_eventLoop;
     }
 
     EventLoop* eventLoop()
