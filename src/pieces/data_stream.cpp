@@ -251,6 +251,39 @@ DataStream& operator>>(DataStream& ds, ByteArray& ba)
 }
 
 
+DataStream& operator<<(DataStream& ds, const std::string& str)
+{
+    ds << str.size();
+    ds.writeBytes(ByteArray(str.data(), str.size()));
+
+    return ds;
+}
+
+
+DataStream& operator<<(DataStream& ds, const char* str)
+{
+    int size = strlen(str);
+    ds << size;
+    ds.writeBytes(ByteArray(str, size));
+
+    return ds;
+}
+
+
+DataStream& operator>>(DataStream& ds, std::string& str)
+{
+    str.clear();
+
+    int size;
+    ds >> size;
+    const ByteArray ba = ds.readBytes(size);
+
+    str.assign(reinterpret_cast<const char*>(ba.data()), ba.size());
+
+    return ds;
+}
+
+
 void encode(ByteArray& ba, bool v)
 {
     ba = ByteArray(&v, sizeof(v));

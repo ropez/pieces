@@ -10,10 +10,15 @@
 int main()
 {
     using Pieces::ByteArray;
+    using Pieces::DataStream;
 
-    const ByteArray ba("Piece of shit", 14);
-    std::cout << ba << std::endl;
-    std::cout << ba.data() << std::endl;
+    DataStream ds;
+    ds << "Piece of shit";
+    std::cout << ds.data() << std::endl;
+
+    std::string str;
+    ds >> str;
+    std::cout << str << std::endl;
 
 //
 //     ByteArray b2 = ba;
@@ -60,7 +65,7 @@ int main()
     using Pieces::PropertyList;
 
     PropertyList t;
-    t.set(ROBIN, 10).set(ANGLE, 2e23).set(BYTE_ARRAY, ba);
+    t.set(ROBIN, 10).set(ANGLE, 2e23).set(BYTE_ARRAY, ds.data());
 
     ValueList l;
     l.add('a').add(10).add(2.34);
