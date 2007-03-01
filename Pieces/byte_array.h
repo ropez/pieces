@@ -11,8 +11,6 @@
 namespace Pieces
 {
 
-typedef unsigned char byte_t;
-
 /**
  * \class ByteArray
  * \brief Represents a generic array of bytes.
@@ -26,6 +24,7 @@ typedef unsigned char byte_t;
 class ByteArray
 {
 public:
+    typedef unsigned char byte_t;
 
     /**
      * Creates an empty byte-array.
@@ -92,7 +91,7 @@ public:
      * data. The best way to avoid this is to never use this pointer for
      * anything else than a function parameter.
      *
-     * \warning This is not '\0'-terminated, so it must not be used as a
+     * \warning This is not '\\0'-terminated, so it must not be used as a
      * string, decode the byte-array to an std::string instead.
      */
     byte_t* data();
@@ -112,7 +111,7 @@ public:
      * buffer.
      * \code
      * ByteArray ba = getData();
-     * fwrite(ba.constData(), ba.size() 1, file_pointer);
+     * fwrite(ba.constData(), ba.size(), 1, file_pointer);
      * \endcode
      *
      * This is the const version. It will never create a deep copy of the data.
@@ -126,8 +125,8 @@ public:
      *
      * \warning You should never store the returned pointer and call a
      * non-const function on the byte-array, because it may relocate the data,
-     * and the location pointed to by this pointer may become deleted. The best
-     * way to avoid this is to never use this pointer for anything else than a
+     * and the location pointed to by this pointer may become invalid. The best
+     * way to avoid this is to never use this pointer for anything other than a
      * function parameter.
      *
      * \warning This is not '\0'-terminated, so it must not be used as a
@@ -138,7 +137,7 @@ public:
     /**
      * Returns a reference to the byte at position \a index.
      *
-     * This can be used to update individualn bytes in the array.
+     * This can be used to update individual bytes in the array.
      */
     byte_t& operator[](int index);
 

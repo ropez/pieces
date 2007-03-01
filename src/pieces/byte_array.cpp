@@ -61,31 +61,31 @@ void ByteArray::resize(int size)
 }
 
 
-byte_t* ByteArray::data()
+ByteArray::byte_t* ByteArray::data()
 {
     return d->data;
 }
 
 
-const byte_t* ByteArray::data() const
+const ByteArray::byte_t* ByteArray::data() const
 {
     return d->data;
 }
 
 
-const byte_t* ByteArray::constData() const
+const ByteArray::byte_t* ByteArray::constData() const
 {
     return d->data;
 }
 
 
-byte_t& ByteArray::operator[](int index)
+ByteArray::byte_t& ByteArray::operator[](int index)
 {
     return d->data[index];
 }
 
 
-const byte_t& ByteArray::operator[](int index) const
+const ByteArray::byte_t& ByteArray::operator[](int index) const
 {
     return d->data[index];
 }
