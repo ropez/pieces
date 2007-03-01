@@ -336,6 +336,16 @@ void encode(ByteArray& ba, const ByteArray& v);
 void encode(ByteArray& ba, const std::string& v);
 
 /**
+ * Encode the value \a v into \a ba.
+ *
+ * This encodes the primitive string in the same format as an std::string.
+ * There is no decode function for this type, encode it to an std::string.
+ *
+ * \relates DataStream
+ */
+void encode(ByteArray& ba, const char* str);
+
+/**
  * Decode contents of \a ba into \a v.
  *
  * \relates DataStream

@@ -67,7 +67,7 @@ int main()
 
     PropertyList t;
     t.set(ROBIN, 10).set(ANGLE, 2e23).set(BYTE_ARRAY, ds.data());
-    t.set<std::string>(STRING, "Hello world");
+    t.set(STRING, "Hello world");
 
     ValueList l;
     l.add('a').add(10).add(2.34);

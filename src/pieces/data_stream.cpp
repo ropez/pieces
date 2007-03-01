@@ -358,12 +358,18 @@ void encode(ByteArray& ba, const ByteArray& v)
 
 void encode(ByteArray& ba, const std::string& v)
 {
-    ba.resize(v.size());
+    ba.clear();
 
-    for (int i = 0; i < ba.size(); ++i)
-    {
-        ba[i] = v[i];
-    }
+    ba.append(v.data(), v.size());
+}
+
+
+void encode(ByteArray& ba, const char* str)
+{
+    ba.clear();
+
+    int size = strlen(str);
+    ba.append(str, size);
 }
 
 
