@@ -40,6 +40,12 @@ Timer::~Timer()
 }
 
 
+bool Timer::isRepeating() const
+{
+    return d->thread->isRepeating();
+}
+
+
 void Timer::setRepeating(bool on)
 {
     if (!d->started)
