@@ -58,7 +58,8 @@ int main()
         DOCUMENTATION,
         SUB_PIECE,
         SUB_LIST,
-        BYTE_ARRAY
+        BYTE_ARRAY,
+        STRING
     };
 
     using Pieces::ValueList;
@@ -66,6 +67,7 @@ int main()
 
     PropertyList t;
     t.set(ROBIN, 10).set(ANGLE, 2e23).set(BYTE_ARRAY, ds.data());
+    t.set<std::string>(STRING, "Hello world");
 
     ValueList l;
     l.add('a').add(10).add(2.34);
@@ -76,6 +78,7 @@ int main()
     std::cout << "Reading from the piece:" << std::endl;
     std::cout << t.get<int>(ROBIN) << std::endl;
     std::cout << t.get<double>(ANGLE) << std::endl;
+    std::cout << t.get<std::string>(STRING) << std::endl;
 
     PropertyList p;
     p.set(SUB_PIECE, t);

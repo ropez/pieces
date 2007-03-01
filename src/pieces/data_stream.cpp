@@ -278,7 +278,7 @@ DataStream& operator>>(DataStream& ds, std::string& str)
     ds >> size;
     const ByteArray ba = ds.readBytes(size);
 
-    str.assign(reinterpret_cast<const char*>(ba.data()), ba.size());
+    decode(ba, str);
 
     return ds;
 }
@@ -353,6 +353,17 @@ void encode(ByteArray& ba, double v)
 void encode(ByteArray& ba, const ByteArray& v)
 {
     ba = v;
+}
+
+
+void encode(ByteArray& ba, const std::string& v)
+{
+    ba.resize(v.size());
+
+    for (int i = 0; i < ba.size(); ++i)
+    {
+        ba[i] = v[i];
+    }
 }
 
 
@@ -458,6 +469,17 @@ void decode(const ByteArray& ba, double& v)
 void decode(const ByteArray& ba, ByteArray& v)
 {
     v = ba;
+}
+
+
+void decode(const ByteArray& ba, std::string& v)
+{
+    v.resize(ba.size());
+
+    for (int i = 0; i < ba.size(); ++i)
+    {
+        v[i] = ba[i];
+    }
 }
 
 } // namespace Pieces

@@ -329,6 +329,13 @@ void encode(ByteArray& ba, double v);
 void encode(ByteArray& ba, const ByteArray& v);
 
 /**
+ * Encode the value \a v into \a ba.
+ *
+ * \relates DataStream
+ */
+void encode(ByteArray& ba, const std::string& v);
+
+/**
  * Decode contents of \a ba into \a v.
  *
  * \relates DataStream
@@ -411,6 +418,13 @@ void decode(const ByteArray& ba, double& v);
  * \relates DataStream
  */
 void decode(const ByteArray& ba, ByteArray& v);
+
+/**
+ * Decode contents of \a ba into \a v.
+ *
+ * \relates DataStream
+ */
+void decode(const ByteArray& ba, std::string& v);
 
 } // namespace Pieces
 
