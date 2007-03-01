@@ -1,7 +1,8 @@
 
 #include "Pieces/InetAddress"
 #include <iostream>
-#ifndef WIN32
+
+#if !defined WIN32
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -38,22 +39,22 @@ InetAddress::InetAddress(const std::string& addr)
 
 in_addr InetAddress::stringToInAddr(const std::string &name)
 {
-#ifdef WIN32
+//#ifdef WIN32
     unsigned long ian = inet_addr(name.c_str());
 
     if(ian == INADDR_NONE)
     {
-        std::cout << "Error: " << WSAGetLastError() << std::endl;
+        //std::cout << "Error: " << WSAGetLastError() << std::endl;
     }
 
     in_addr ia;
     memcpy(&ia, &ian, sizeof(unsigned long));
     return ia;
-#elif
-    in_addr ia;
-    inet_aton(name.c_str(), &ia);
-    return ia;
-#endif
+//#elif
+//    in_addr ia;
+//    inet_aton(name.c_str(), &ia);
+//    return ia;
+//#endif
 }
 
 /**
