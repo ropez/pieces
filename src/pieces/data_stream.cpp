@@ -253,7 +253,7 @@ DataStream& operator>>(DataStream& ds, ByteArray& ba)
 
 DataStream& operator<<(DataStream& ds, const std::string& str)
 {
-    ds << str.size();
+    ds << static_cast<unsigned int>(str.size());
     ds.writeBytes(ByteArray(str.data(), str.size()));
 
     return ds;
