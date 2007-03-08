@@ -22,7 +22,7 @@ public:
 
     void exec();
 
-    void connect(const SocketAddress& socket);
+    void connectToHost(const SocketAddress& hostAddress);
 
 protected:
     virtual void event(const Event& event);
