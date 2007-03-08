@@ -1,11 +1,9 @@
-
+#include "Pieces/Debug"
 #include "Pieces/Timer"
 #include "Pieces/EventHandler"
 #include "Pieces/EventLoop"
 
 #include <OpenThreads/Thread>
-
-#include <iostream>
 
 
 namespace Pieces
@@ -41,17 +39,17 @@ public:
 protected:
     virtual void run()
     {
-        std::cout << "Host thread running" << std::endl;
+        debug() << "Host thread running";
         eventLoop()->exec();
     }
 
     virtual void event(const Event& event)
     {
         // Handle events
-        std::cout << "Incoming event:";
-        std::cout << " type: " << event.type();
-        std::cout << " data: " << event.data() << std::endl;
-        
+        debug() << "Incoming event:";
+        debug() << " type: " << event.type();
+        debug() << " data: " << event.data();
+
         if (event.type() == 3)
         {
             eventLoop()->quit();
@@ -70,13 +68,13 @@ int main()
     using Pieces::Host;
     using Pieces::Timer;
     using Pieces::Event;
-    
+
     Pieces::Host h;
-    
+
     Timer* repeating = new Timer(h.eventLoop());
     repeating->setRepeating(true);
     repeating->start(200, Event(222));
-    
+
     Timer t1(h.eventLoop());
     t1.start(999, Event(1));
     // Restart the timer
