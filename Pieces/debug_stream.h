@@ -4,7 +4,7 @@
 
 #include "OpenThreads/Mutex"
 
-#include <ostream>
+#include <sstream>
 
 
 namespace Pieces
@@ -30,8 +30,8 @@ private:
 
     static OpenThreads::Mutex mutex;
 
+    std::auto_ptr<std::stringstream> m_ss;
     std::ostream& m_stream;
-    bool m_close;
 };
 
 
@@ -39,10 +39,47 @@ DebugStream debug();
 DebugStream warning();
 DebugStream error();
 
-template<typename T>
+
+// Alignment manipulator
+class AlignmentManipulator
+{
+public:
+    AlignmentManipulator(int w)
+    : width(w)
+    {
+    }
+
+    int width;
+};
+
+inline AlignmentManipulator align(int width)
+{
+    return AlignmentManipulator(width);
+}
+
+template<typename T> inline
 DebugStream& DebugStream::operator<<(T t)
 {
-    m_stream << t;
+    if (m_ss.get() != 0)
+    {
+        *m_ss << t;
+    }
+    return *this;
+}
+
+
+template<> inline
+DebugStream& DebugStream::operator<< <AlignmentManipulator>(AlignmentManipulator t)
+{
+    if (m_ss.get() != 0)
+    {
+        do
+        {
+            *m_ss << ' ';
+        }
+        while (m_ss->tellp() < t.width);
+    }
+
     return *this;
 }
 

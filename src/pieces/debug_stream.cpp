@@ -12,17 +12,13 @@ namespace Pieces
 
 namespace
 {
-const int SETWIDTH = 10;
 
 DebugStream thread()
 {
     OpenThreads::Thread* thread = OpenThreads::Thread::CurrentThread();
     int threadId = (thread != 0) ? thread->getThreadId() : 0;
 
-    std::stringstream ss;
-    ss << "[T:" << threadId << "]";
-
-    return DebugStream() << std::left << std::setw(7) << ss.str();
+    return DebugStream() << "[T:" << threadId << "]" << align(7);
 }
 
 }
@@ -31,26 +27,25 @@ OpenThreads::Mutex DebugStream::mutex;
 
 
 DebugStream::DebugStream()
-: m_stream(std::cout)
-, m_close(true)
+: m_ss(new std::stringstream)
+, m_stream(std::cout)
 {
     mutex.lock();
 }
 
 
 DebugStream::DebugStream(DebugStream& other)
-: m_stream(other.m_stream)
-, m_close(other.m_close)
+: m_ss(other.m_ss)
+, m_stream(other.m_stream)
 {
-    other.m_close = false;
 }
 
 
 DebugStream::~DebugStream()
 {
-    if (m_close)
+    if (m_ss.get() != 0)
     {
-        std::cout << std::endl;
+        m_stream << m_ss->str() << std::endl;
         mutex.unlock();
     }
 }
@@ -58,19 +53,19 @@ DebugStream::~DebugStream()
 
 DebugStream debug()
 {
-    return thread() << std::left << std::setw(SETWIDTH) << "INFO";
+    return thread() << "INFO" << align(15);
 }
 
 
 DebugStream warning()
 {
-    return thread() << std::left << std::setw(SETWIDTH) << "INFO";
+    return thread() << "INFO" << align(15);
 }
 
 
 DebugStream error()
 {
-    return thread() << std::left << std::setw(SETWIDTH) << "INFO";
+    return thread() << "INFO" << align(15);
 }
 
 } // namespace Pieces
