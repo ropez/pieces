@@ -8,6 +8,7 @@
 namespace Pieces
 {
 class EventLoop;
+class PeerInfo;
 
 
 class Host : public EventHandler
@@ -23,13 +24,23 @@ public:
 
     void quit();
 
+    bool isAcceptingConnections() const;
+    void setAcceptingConnections(bool v);
+
 protected:
     virtual void event(const Event& event);
 
     virtual void userDefinedEvent(const Event& event) = 0;
 
+    virtual void peerConnected(PeerInfo* info);
+
+    virtual void peerDisconnected(PeerInfo* info);
+
 private:
+
     EventLoop* m_eventLoop;
+
+    bool m_accepting;
 };
 
 } // namespace Pieces
