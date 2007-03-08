@@ -58,6 +58,9 @@ public:
      */
     void setRepeating(bool on);
 
+    int getTimerId() const;
+    void setTimerId(int id);
+
     /**
      * The delay is how long it sleeps before it's triggered.
      *

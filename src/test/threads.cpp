@@ -3,6 +3,7 @@
 #include "Pieces/Host"
 #include "Pieces/Peer"
 #include "Pieces/Event"
+#include "Pieces/TimerEvent"
 #include "OpenThreads/Thread"
 
 
@@ -10,9 +11,8 @@ using namespace Pieces;
 
 enum MyEvents
 {
-    QUIT_PEER,
-
-    QUIT_HOST,
+    ID_QUIT_PEER,
+    ID_QUIT_HOST,
 
     KICK_MONSTER,
     FIRE_BAZOOKA,
@@ -23,15 +23,15 @@ enum MyEvents
 class MyPeer : public Peer
 {
 protected:
-    void handle(TimerEvent*)
+    void handle(TimerEvent* event)
     {
         // Handle events
         debug() << "Peer timer-event";
 
-//         if (event->type() == QUIT_PEER)
-//         {
-//             quit();
-//         }
+        if (event->getTimerId() == ID_QUIT_PEER)
+        {
+            quit();
+        }
     }
 
     void handle(GameEvent*)
@@ -44,15 +44,15 @@ protected:
 class MyHost : public Host
 {
 protected:
-    void handle(TimerEvent*)
+    void handle(TimerEvent* event)
     {
         // Handle events
         debug() << "Host timer-event";
 
-//         if (event->type() == QUIT_HOST)
-//         {
-//             quit();
-//         }
+        if (event->getTimerId() == ID_QUIT_HOST)
+        {
+            quit();
+        }
     }
 
 
@@ -85,7 +85,7 @@ private:
 int main()
 {
     MyPeer p;
-    Timer peerTimer(p.eventLoop());
+    Timer peerTimer(ID_QUIT_PEER, p.eventLoop());
     peerTimer.start(10000);
 
     ThreadRunningPeer th(&p);
@@ -105,7 +105,7 @@ int main()
     t1.start(2000);
 
     // This timer stops the Host
-    Timer t2(h.eventLoop());
+    Timer t2(ID_QUIT_HOST, h.eventLoop());
     t2.start(5000);
 
     debug() << "Running host";

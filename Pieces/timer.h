@@ -32,6 +32,11 @@ public:
     Timer(EventLoop* eventLoop);
 
     /**
+     * Create a timer that posts event to the given \a eventLoop.
+     */
+    Timer(int id, EventLoop* eventLoop);
+
+    /**
      * Destructor.
      *
      * Stops the timer if it's running, and frees resources.

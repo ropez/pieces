@@ -12,13 +12,16 @@ class TimerPrivate
 public:
     TimerPrivate();
 
+    int id;
+
     TimerThread* thread;
     bool started;
 };
 
 
 TimerPrivate::TimerPrivate()
-: thread(0)
+: id(0)
+, thread(0)
 , started(false)
 {
 }
@@ -27,6 +30,14 @@ TimerPrivate::TimerPrivate()
 Timer::Timer(EventLoop* eventLoop)
 : d(new TimerPrivate)
 {
+    d->thread = new TimerThread(eventLoop);
+}
+
+
+Timer::Timer(int id, EventLoop* eventLoop)
+: d(new TimerPrivate)
+{
+    d->id = id;
     d->thread = new TimerThread(eventLoop);
 }
 
@@ -60,6 +71,7 @@ void Timer::start(unsigned long int delay, const ByteArray& data)
 {
     stop();
 
+    d->thread->setTimerId(d->id);
     d->thread->setDelay(delay);
     d->thread->setData(data);
     d->thread->start();

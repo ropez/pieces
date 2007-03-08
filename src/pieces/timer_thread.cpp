@@ -28,6 +28,8 @@ public:
     Condition cond;
 
     bool repeating;
+
+    int id;
     unsigned int delay;
 
     ByteArray data;
@@ -40,6 +42,7 @@ TimerThreadPrivate::TimerThreadPrivate()
 , mutex()
 , cond()
 , repeating(false)
+, id(0)
 , delay(0)
 , data()
 {
@@ -68,6 +71,12 @@ bool TimerThread::isRepeating() const
 void TimerThread::setRepeating(bool on)
 {
     d->repeating = on;
+}
+
+
+void TimerThread::setTimerId(int id)
+{
+    d->id = id;
 }
 
 
@@ -109,7 +118,7 @@ void TimerThread::run()
             break;
 
         // Timed out, post event
-        std::auto_ptr<Event> e(new TimerEvent);
+        std::auto_ptr<Event> e(new TimerEvent(d->id));
         e->setData(d->data);
 
         d->eventLoop->postEvent(e.release());

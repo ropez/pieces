@@ -11,12 +11,17 @@ namespace Pieces
 class TimerEvent : public Event
 {
 public:
-    TimerEvent();
+    TimerEvent(int timerId = 0);
+
+    int getTimerId() const;
 
 protected:
     virtual ~TimerEvent();
 
     virtual void trigger(EventHandler* h);
+
+private:
+    int m_timerId;
 };
 
 } // namespace Pieces
