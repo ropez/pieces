@@ -2,6 +2,7 @@
 #include "Pieces/Timer"
 #include "Pieces/Host"
 #include "Pieces/Peer"
+#include "OpenThreads/Thread"
 
 
 using namespace Pieces;
@@ -26,7 +27,7 @@ protected:
     void userDefinedEvent(const Event& event)
     {
         // Handle events
-        debug() << "Incoming event, type: " << event.type();
+        debug() << "Peer incoming event, type: " << event.type();
 
         if (event.type() == QUIT_PEER)
         {
@@ -42,7 +43,7 @@ protected:
     void userDefinedEvent(const Event& event)
     {
         // Handle events
-        debug() << "Incoming event, type: " << event.type();
+        debug() << "Host incoming event, type: " << event.type();
 
         if (event.type() == QUIT_HOST)
         {
@@ -52,8 +53,36 @@ protected:
 };
 
 
+class ThreadRunningPeer : public OpenThreads::Thread
+{
+public:
+    ThreadRunningPeer(Peer* p)
+    : m_peer(p)
+    {
+    }
+
+protected:
+    virtual void run()
+    {
+        m_peer->exec();
+    }
+
+private:
+    Peer* m_peer;
+};
+
+
 int main()
 {
+    MyPeer p;
+    Timer peerTimer(p.eventLoop());
+    peerTimer.start(10000, Event(QUIT_PEER));
+
+    ThreadRunningPeer th(&p);
+
+    debug() << "Running peer";
+    th.start();
+
     MyHost h;
 
     std::auto_ptr<Timer> repeating(new Timer(h.eventLoop()));
@@ -69,14 +98,8 @@ int main()
     Timer t2(h.eventLoop());
     t2.start(5000, Event(QUIT_HOST));
 
+    debug() << "Running host";
     h.exec();
 
-    debug() << "Running host";
-    MyPeer p;
-
-    Timer peerTimer(p.eventLoop());
-    peerTimer.start(1000, Event(QUIT_PEER));
-
-    debug() << "Running peer";
-    p.exec();
+    th.join();
 }
