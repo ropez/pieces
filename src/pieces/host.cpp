@@ -34,16 +34,18 @@ void Host::exec()
 }
 
 
+void Host::quit()
+{
+    debug() << "Host quitting";
+    eventLoop()->quit();
+}
+
+
 void Host::event(const Event& event)
 {
-        // Handle events
-    debug() << "Incoming event:";
-    debug() << " type: " << event.type();
-    debug() << " data: " << event.data();
-
-    if (event.type() == 3)
+    if (event.isUserDefined())
     {
-        eventLoop()->quit();
+        userDefinedEvent(event);
     }
 }
 
