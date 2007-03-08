@@ -33,8 +33,8 @@ void EventLoop::exec()
         // Block while waiting for event
         std::auto_ptr<Event> e = m_queue->pop();
 
-        // Check if this was a quit event
-        if (e->type() == EVENT_QUIT)
+        // Quit when popping a 0 pointer
+        if (e.get() == 0)
             break;
 
         e->trigger(m_handler);
@@ -44,13 +44,16 @@ void EventLoop::exec()
 
 void EventLoop::quit()
 {
-    m_queue->push(new Event(EVENT_QUIT));
+    m_queue->push(0);
 }
 
 
 void EventLoop::postEvent(Event* e)
 {
-    m_queue->push(e);
+    if (e != 0)
+    {
+        m_queue->push(e);
+    }
 }
 
 } // namespace Pieces
