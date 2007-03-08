@@ -38,6 +38,12 @@ int Event::type() const
 }
 
 
+bool Event::isUserDefined() const
+{
+    return d->type >= USER_DEFINED;
+}
+
+
 void Event::setData(const ByteArray& data)
 {
     d->data = data;

@@ -22,12 +22,16 @@ public:
     enum Type
     {
         NOTHING,
+
+        USER_DEFINED = 0x1000
     };
 
     explicit Event(int type = NOTHING);
     ~Event();
 
     int type() const;
+
+    bool isUserDefined() const;
 
     void setData(const ByteArray& data);
     ByteArray data() const;
