@@ -8,6 +8,7 @@
 namespace Pieces
 {
 class EventLoop;
+class SocketAddress;
 
 
 class Peer : public EventHandler
@@ -20,6 +21,8 @@ public:
     EventLoop* eventLoop();
 
     void exec();
+
+    void connect(const SocketAddress& socket);
 
 protected:
     virtual void event(const Event& event);
