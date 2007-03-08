@@ -55,12 +55,8 @@ void Host::setAcceptingConnections(bool v)
 }
 
 
-void Host::handle(Event* event)
+void Host::handle(Event* /*event*/)
 {
-    if (event->isUserDefined())
-    {
-        userDefinedEvent(event);
-    }
 }
 
 

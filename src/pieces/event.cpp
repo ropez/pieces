@@ -6,9 +6,8 @@
 namespace Pieces
 {
 
-Event::Event(int type)
-: m_type(type)
-, m_data()
+Event::Event()
+: m_data()
 {
 }
 
@@ -18,16 +17,10 @@ Event::~Event()
 }
 
 
-int Event::type() const
-{
-    return m_type;
-}
-
-
-bool Event::isUserDefined() const
-{
-    return type() >= USER_DEFINED;
-}
+// int Event::type() const
+// {
+//     return m_type;
+// }
 
 
 void Event::setData(const ByteArray& data)

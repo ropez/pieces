@@ -7,11 +7,6 @@
 namespace Pieces
 {
 
-namespace
-{
-const int EVENT_QUIT = -1;
-}
-
 EventLoop::EventLoop(EventHandler* handler)
 : m_handler(handler)
 , m_queue(new EventQueue)

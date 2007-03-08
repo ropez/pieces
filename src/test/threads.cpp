@@ -10,8 +10,6 @@ using namespace Pieces;
 
 enum MyEvents
 {
-    USER_DEFINED = Event::USER_DEFINED, // Make the automatic counter start here
-
     QUIT_PEER,
 
     QUIT_HOST,
@@ -27,13 +25,13 @@ class MyPeer : public Peer
 protected:
     void userDefinedEvent(Event* event)
     {
-        // Handle events
-        debug() << "Peer incoming event, type: " << event->type();
-
-        if (event->type() == QUIT_PEER)
-        {
-            quit();
-        }
+//         // Handle events
+//         debug() << "Peer incoming event, type: " << event->type();
+//
+//         if (event->type() == QUIT_PEER)
+//         {
+//             quit();
+//         }
     }
 };
 
@@ -50,13 +48,13 @@ protected:
 
     void userDefinedEvent(Event* event)
     {
-        // Handle events
-        debug() << "Host incoming event, type: " << event->type();
-
-        if (event->type() == QUIT_HOST)
-        {
-            quit();
-        }
+//         // Handle events
+//         debug() << "Host incoming event, type: " << event->type();
+//
+//         if (event->type() == QUIT_HOST)
+//         {
+//             quit();
+//         }
     }
 };
 

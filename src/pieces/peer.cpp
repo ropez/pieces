@@ -38,12 +38,8 @@ void Peer::quit()
 }
 
 
-void Peer::event(Event* event)
+void Peer::event(Event* /*event*/)
 {
-    if (event->isUserDefined())
-    {
-        userDefinedEvent(event);
-    }
 }
 
 }

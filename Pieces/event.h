@@ -19,22 +19,7 @@ class Event
 
 public:
 
-    /**
-     * Predefined event types.
-     *
-     * \note Negative event types are reserved for internal use.
-     */
-    enum Type
-    {
-        NOTHING,
-        TIMER_EVENT,
-
-        USER_DEFINED = 0x1000
-    };
-
-    explicit Event(int type = NOTHING);
-
-    int type() const;
+    explicit Event();
 
     bool isUserDefined() const;
 
@@ -51,7 +36,6 @@ private:
     Event(const Event&);
     Event& operator=(const Event&);
 
-    int m_type;
     ByteArray m_data;
 };
 

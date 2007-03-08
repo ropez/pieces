@@ -7,7 +7,7 @@ namespace Pieces
 {
 
 TimerEvent::TimerEvent()
-: Event(TIMER_EVENT)
+: Event()
 {
 }
 
