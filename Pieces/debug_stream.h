@@ -25,6 +25,9 @@ public:
 
 private:
 
+    // Disabled assignment operator
+    DebugStream& operator=(DebugStream&);
+
     static OpenThreads::Mutex mutex;
 
     std::ostream& m_stream;
