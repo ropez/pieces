@@ -4,10 +4,35 @@
 #include "Pieces/Peer"
 
 
+using namespace Pieces;
+
+enum MyEvents
+{
+    USER_DEFINED = Event::USER_DEFINED, // Make the automatic counter start here
+
+    QUIT_PEER
+};
+
+
+class MyPeer : public Peer
+{
+protected:
+    void userDefinedEvent(const Event& event)
+    {
+        // Handle events
+        debug() << "Incoming event:";
+        debug() << " type: " << event.type();
+        debug() << " data: " << event.data();
+
+        if (event.type() == QUIT_PEER)
+        {
+            quit();
+        }
+    }
+};
+
 int main()
 {
-    using namespace Pieces;
-
     Host h;
 
     Timer* repeating = new Timer(h.eventLoop());
@@ -26,10 +51,10 @@ int main()
     h.exec();
 
     debug() << "Running host";
-    Peer p;
+    MyPeer p;
 
     Timer peerTimer(p.eventLoop());
-    peerTimer.start(1000, Event(3));
+    peerTimer.start(1000, Event(QUIT_PEER));
 
     debug() << "Running peer";
     p.exec();

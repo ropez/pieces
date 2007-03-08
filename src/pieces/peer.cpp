@@ -31,16 +31,18 @@ void Peer::exec()
 }
 
 
+void Peer::quit()
+{
+    debug() << "Peer quitting";
+    eventLoop()->quit();
+}
+
+
 void Peer::event(const Event& event)
 {
-        // Handle events
-    debug() << "Incoming event:";
-    debug() << " type: " << event.type();
-    debug() << " data: " << event.data();
-
-    if (event.type() == 3)
+    if (event.isUserDefined())
     {
-        eventLoop()->quit();
+        userDefinedEvent(event);
     }
 }
 
