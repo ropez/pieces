@@ -1,113 +1,14 @@
 #include "Pieces/Debug"
 #include "Pieces/Timer"
-#include "Pieces/EventHandler"
-#include "Pieces/EventLoop"
-
-#include <OpenThreads/Thread>
-
-
-namespace Pieces
-{
-
-class Host : public EventHandler
-{
-public:
-    Host()
-    : EventHandler()
-    , m_eventLoop(0)
-    {
-        m_eventLoop = new EventLoop(this);
-    }
-
-    ~Host()
-    {
-        delete m_eventLoop;
-    }
-
-    EventLoop* eventLoop()
-    {
-        return m_eventLoop;
-    }
-
-    void exec()
-    {
-        debug() << "Host running";
-        eventLoop()->exec();
-    }
-
-protected:
-    virtual void event(const Event& event)
-    {
-        // Handle events
-        debug() << "Incoming event:";
-        debug() << " type: " << event.type();
-        debug() << " data: " << event.data();
-
-        if (event.type() == 3)
-        {
-            eventLoop()->quit();
-        }
-    }
-
-private:
-    EventLoop* m_eventLoop;
-};
-
-
-class Peer : public EventHandler
-{
-public:
-    Peer()
-    : EventHandler()
-    , m_eventLoop(0)
-    {
-        m_eventLoop = new EventLoop(this);
-    }
-
-    ~Peer()
-    {
-        delete m_eventLoop;
-    }
-
-    EventLoop* eventLoop()
-    {
-        return m_eventLoop;
-    }
-
-    void exec()
-    {
-        debug() << "Peer running";
-        eventLoop()->exec();
-    }
-
-protected:
-    virtual void event(const Event& event)
-    {
-        // Handle events
-        debug() << "Incoming event:";
-        debug() << " type: " << event.type();
-        debug() << " data: " << event.data();
-
-        if (event.type() == 3)
-        {
-            eventLoop()->quit();
-        }
-    }
-
-private:
-    EventLoop* m_eventLoop;
-};
-
-}
+#include "Pieces/Host"
+#include "Pieces/Peer"
 
 
 int main()
 {
-    using Pieces::Host;
-    using Pieces::Timer;
-    using Pieces::Event;
+    using namespace Pieces;
 
-    Pieces::Host h;
+    Host h;
 
     Timer* repeating = new Timer(h.eventLoop());
     repeating->setRepeating(true);
@@ -123,4 +24,13 @@ int main()
     t2.start(5000, Event(3));
 
     h.exec();
+
+    debug() << "Running host";
+    Peer p;
+
+    Timer peerTimer(p.eventLoop());
+    peerTimer.start(1000, Event(3));
+
+    debug() << "Running peer";
+    p.exec();
 }
