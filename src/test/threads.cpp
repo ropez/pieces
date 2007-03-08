@@ -9,13 +9,12 @@
 namespace Pieces
 {
 
-class Host : public OpenThreads::Thread, public EventHandler
+class Host : public EventHandler
 {
 public:
     Host()
-        : Thread()
-        , EventHandler()
-        , m_eventLoop(0)
+    : EventHandler()
+    , m_eventLoop(0)
     {
         m_eventLoop = new EventLoop(this);
     }
@@ -32,17 +31,56 @@ public:
 
     void exec()
     {
-        start();
-        join();
-    }
-
-protected:
-    virtual void run()
-    {
-        debug() << "Host thread running";
+        debug() << "Host running";
         eventLoop()->exec();
     }
 
+protected:
+    virtual void event(const Event& event)
+    {
+        // Handle events
+        debug() << "Incoming event:";
+        debug() << " type: " << event.type();
+        debug() << " data: " << event.data();
+
+        if (event.type() == 3)
+        {
+            eventLoop()->quit();
+        }
+    }
+
+private:
+    EventLoop* m_eventLoop;
+};
+
+
+class Peer : public EventHandler
+{
+public:
+    Peer()
+    : EventHandler()
+    , m_eventLoop(0)
+    {
+        m_eventLoop = new EventLoop(this);
+    }
+
+    ~Peer()
+    {
+        delete m_eventLoop;
+    }
+
+    EventLoop* eventLoop()
+    {
+        return m_eventLoop;
+    }
+
+    void exec()
+    {
+        debug() << "Peer running";
+        eventLoop()->exec();
+    }
+
+protected:
     virtual void event(const Event& event)
     {
         // Handle events
