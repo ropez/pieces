@@ -2,6 +2,7 @@
 #include "Pieces/Timer"
 #include "Pieces/Host"
 #include "Pieces/Peer"
+#include "Pieces/Event"
 #include "OpenThreads/Thread"
 
 
@@ -40,6 +41,13 @@ protected:
 class MyHost : public Host
 {
 protected:
+    void handle(TimerEvent* e)
+    {
+        // Handle events
+        debug() << "Host timer event";
+    }
+
+
     void userDefinedEvent(Event* event)
     {
         // Handle events
@@ -76,7 +84,7 @@ int main()
 {
     MyPeer p;
     Timer peerTimer(p.eventLoop());
-    peerTimer.start(10000, new Event(QUIT_PEER));
+    peerTimer.start(10000);
 
     ThreadRunningPeer th(&p);
 
@@ -85,18 +93,18 @@ int main()
 
     MyHost h;
 
-//     std::auto_ptr<Timer> repeating(new Timer(h.eventLoop()));
-//     repeating->setRepeating(true);
-//     repeating->start(200, new Event(FIRE_BAZOOKA));
+    std::auto_ptr<Timer> repeating(new Timer(h.eventLoop()));
+    repeating->setRepeating(true);
+    repeating->start(200);
 
     Timer t1(h.eventLoop());
-    t1.start(999, new Event(KICK_MONSTER));
+    t1.start(999);
     // Restart the timer
-    t1.start(2000, new Event(RUN_AND_HIDE));
+    t1.start(2000);
 
     // This timer stops the Host
     Timer t2(h.eventLoop());
-    t2.start(5000, new Event(QUIT_HOST));
+    t2.start(5000);
 
     debug() << "Running host";
     h.exec();

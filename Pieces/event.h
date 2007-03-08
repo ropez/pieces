@@ -9,9 +9,13 @@
 
 namespace Pieces
 {
+class EventHandler;
+
 
 class Event
 {
+    friend class EventLoop;
+
 public:
 
     /**
@@ -22,6 +26,7 @@ public:
     enum Type
     {
         NOTHING,
+        TIMER_EVENT,
 
         USER_DEFINED = 0x1000
     };
@@ -36,7 +41,9 @@ public:
     ByteArray data() const;
 
 protected:
-    ~Event();
+    virtual ~Event();
+
+    virtual void trigger(EventHandler* h);
 
 private:
     friend class std::auto_ptr<Event>;

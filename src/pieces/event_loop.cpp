@@ -2,7 +2,6 @@
 #include "Pieces/EventLoop"
 #include "Pieces/EventHandler"
 #include "Pieces/EventQueue"
-#include "Pieces/Debug"
 
 
 namespace Pieces
@@ -38,7 +37,7 @@ void EventLoop::exec()
         if (e->type() == EVENT_QUIT)
             break;
 
-        m_handler->event(e.get());
+        e->trigger(m_handler);
     }
 }
 

@@ -55,12 +55,17 @@ void Host::setAcceptingConnections(bool v)
 }
 
 
-void Host::event(Event* event)
+void Host::handle(Event* event)
 {
     if (event->isUserDefined())
     {
         userDefinedEvent(event);
     }
+}
+
+
+void Host::handle(TimerEvent* /*event*/)
+{
 }
 
 

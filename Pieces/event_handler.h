@@ -2,12 +2,11 @@
 #ifndef PIECES_EVENT_HANDLER_H
 #define PIECES_EVENT_HANDLER_H
 
-#include "Pieces/Event"
-
 
 namespace Pieces
 {
-class EventLoop;
+class Event;
+class TimerEvent;
 
 
 /**
@@ -24,7 +23,8 @@ class EventLoop;
  */
 class EventHandler
 {
-    friend class EventLoop;
+    friend class Event;
+    friend class TimerEvent;
 
 public:
 
@@ -40,7 +40,9 @@ protected:
      *
      * Implement in subclasses to handle incoming events.
      */
-    virtual void event(Event* event) = 0;
+    virtual void handle(Event* event);
+
+    virtual void handle(TimerEvent* event);
 };
 
 } // namespace Pieces

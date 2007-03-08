@@ -1,6 +1,6 @@
 
 #include "Pieces/TimerThread"
-#include "Pieces/Event"
+#include "Pieces/TimerEvent"
 #include "Pieces/EventLoop"
 
 #include "OpenThreads/Mutex"
@@ -30,7 +30,7 @@ public:
     bool repeating;
     unsigned int delay;
 
-    std::auto_ptr<Event> event;
+    ByteArray data;
 };
 
 
@@ -41,13 +41,13 @@ TimerThreadPrivate::TimerThreadPrivate()
 , cond()
 , repeating(false)
 , delay(0)
-, event()
+, data()
 {
 }
 
 
 TimerThread::TimerThread(EventLoop* eventLoop)
-    : d(new TimerThreadPrivate)
+: d(new TimerThreadPrivate)
 {
     d->eventLoop = eventLoop;
 }
@@ -77,9 +77,9 @@ void TimerThread::setDelay(unsigned long int ms)
 }
 
 
-void TimerThread::setEvent(Event* event)
+void TimerThread::setData(const ByteArray& data)
 {
-    d->event.reset(event);
+    d->data = data;
 }
 
 
@@ -109,7 +109,10 @@ void TimerThread::run()
             break;
 
         // Timed out, post event
-        d->eventLoop->postEvent(d->event.release());
+        std::auto_ptr<Event> e(new TimerEvent);
+        e->setData(d->data);
+
+        d->eventLoop->postEvent(e.release());
     }
     while (d->repeating);
 }

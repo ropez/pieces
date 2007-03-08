@@ -7,6 +7,7 @@
 
 namespace Pieces
 {
+class TimerEvent;
 class EventLoop;
 class PeerInfo;
 
@@ -28,7 +29,9 @@ public:
     void setAcceptingConnections(bool v);
 
 protected:
-    virtual void event(Event* event);
+    virtual void handle(Event* event);
+
+    virtual void handle(TimerEvent* event);
 
     virtual void userDefinedEvent(Event* event) = 0;
 

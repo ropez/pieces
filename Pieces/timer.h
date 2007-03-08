@@ -5,7 +5,7 @@
 namespace Pieces
 {
 class TimerPrivate;
-class Event;
+class ByteArray;
 class EventLoop;
 
 
@@ -59,14 +59,20 @@ public:
      *
      * If the timer was running before this, it's stopped.
      *
-     * Waits for \a delay milli-seconds, then it posts the \a event on the
-     * event-loop that was set with the constructor.
-     *
-     * Ownership of the event is transfered to the timer.
+     * Waits for \a delay milli-seconds, then it posts a TimerEvent
+     * on the event-loop that was set with the constructor. The \a data
+     * is sent with the event as user data.
      *
      * This function returns immediately.
      */
-    void start(unsigned long int delay, Event* event);
+    void start(unsigned long int delay, const ByteArray& data);
+
+    /**
+     * Start the timer.
+     *
+     * Same as start(delay, ByteArray()).
+     */
+    void start(unsigned long int delay);
 
     /**
      * Stop the timer if it's running.

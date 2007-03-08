@@ -1,6 +1,7 @@
 
 #include "Pieces/Timer"
 #include "Pieces/TimerThread"
+#include "Pieces/ByteArray"
 
 
 namespace Pieces
@@ -55,14 +56,20 @@ void Timer::setRepeating(bool on)
 }
 
 
-void Timer::start(unsigned long int delay, Event* event)
+void Timer::start(unsigned long int delay, const ByteArray& data)
 {
     stop();
 
     d->thread->setDelay(delay);
-    d->thread->setEvent(event);
+    d->thread->setData(data);
     d->thread->start();
     d->started = true;
+}
+
+
+void Timer::start(unsigned long int delay)
+{
+    start(delay, ByteArray());
 }
 
 

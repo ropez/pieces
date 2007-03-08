@@ -1,5 +1,7 @@
 
 #include "Pieces/Event"
+#include "Pieces/EventHandler"
+
 
 namespace Pieces
 {
@@ -53,6 +55,12 @@ void Event::setData(const ByteArray& data)
 ByteArray Event::data() const
 {
     return d->data;
+}
+
+
+void Event::trigger(EventHandler* h)
+{
+    h->handle(this);
 }
 
 } // namespace Pieces

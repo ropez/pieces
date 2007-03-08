@@ -8,7 +8,7 @@
 namespace Pieces
 {
 class TimerThreadPrivate;
-class Event;
+class ByteArray;
 class EventLoop;
 
 
@@ -73,16 +73,14 @@ public:
     void setDelay(unsigned long int ms);
 
     /**
-     * The event that is posted when the timer is triggered.
+     * The data that is added to the event posted when the timer is triggered.
      */
-    Event getEvent() const;
+    ByteArray getData() const;
 
     /**
-     * Set the event to post when the timer is triggered.
-     *
-     * Ownership of the event is transfered to the timer.
+     * Set the data to add to the event posted when the timer is triggered.
      */
-    void setEvent(Event* event);
+    void setData(const ByteArray& data);
 
     /**
      * Stop the timer-thread.
