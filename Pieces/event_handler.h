@@ -7,6 +7,7 @@ namespace Pieces
 {
 class Event;
 class TimerEvent;
+class GameEvent;
 
 
 /**
@@ -25,6 +26,7 @@ class EventHandler
 {
     friend class Event;
     friend class TimerEvent;
+    friend class GameEvent;
 
 public:
 
@@ -43,6 +45,8 @@ protected:
     virtual void handle(Event* event);
 
     virtual void handle(TimerEvent* event);
+
+    virtual void handle(GameEvent* event);
 };
 
 } // namespace Pieces

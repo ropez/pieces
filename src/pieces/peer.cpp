@@ -38,7 +38,7 @@ void Peer::quit()
 }
 
 
-void Peer::event(Event* /*event*/)
+void Peer::handle(Event*)
 {
 }
 

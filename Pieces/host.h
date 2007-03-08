@@ -31,10 +31,6 @@ public:
 protected:
     virtual void handle(Event* event);
 
-    virtual void handle(TimerEvent* event);
-
-    virtual void userDefinedEvent(Event* event) = 0;
-
     virtual void peerConnected(PeerInfo* info);
 
     virtual void peerDisconnected(PeerInfo* info);

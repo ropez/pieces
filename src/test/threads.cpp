@@ -23,15 +23,20 @@ enum MyEvents
 class MyPeer : public Peer
 {
 protected:
-    void userDefinedEvent(Event* event)
+    void handle(TimerEvent*)
     {
-//         // Handle events
-//         debug() << "Peer incoming event, type: " << event->type();
-//
+        // Handle events
+        debug() << "Peer timer-event";
+
 //         if (event->type() == QUIT_PEER)
 //         {
 //             quit();
 //         }
+    }
+
+    void handle(GameEvent*)
+    {
+        debug() << "Peer game-event";
     }
 };
 
@@ -39,22 +44,21 @@ protected:
 class MyHost : public Host
 {
 protected:
-    void handle(TimerEvent* e)
+    void handle(TimerEvent*)
     {
         // Handle events
-        debug() << "Host timer event";
-    }
+        debug() << "Host timer-event";
 
-
-    void userDefinedEvent(Event* event)
-    {
-//         // Handle events
-//         debug() << "Host incoming event, type: " << event->type();
-//
 //         if (event->type() == QUIT_HOST)
 //         {
 //             quit();
 //         }
+    }
+
+
+    void handle(GameEvent*)
+    {
+        debug() << "Peer game-event";
     }
 };
 

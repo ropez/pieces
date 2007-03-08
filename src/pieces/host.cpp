@@ -60,11 +60,6 @@ void Host::handle(Event* /*event*/)
 }
 
 
-void Host::handle(TimerEvent* /*event*/)
-{
-}
-
-
 void Host::peerConnected(PeerInfo* /*info*/)
 {
     // TODO: Anything to do if user haven't implemented this?
