@@ -51,11 +51,12 @@ protected:
     }
 };
 
+
 int main()
 {
     MyHost h;
 
-    Timer* repeating = new Timer(h.eventLoop());
+    std::auto_ptr<Timer> repeating(new Timer(h.eventLoop()));
     repeating->setRepeating(true);
     repeating->start(200, Event(FIRE_BAZOOKA));
 
