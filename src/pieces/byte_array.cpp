@@ -46,7 +46,7 @@ void ByteArray::clear()
 }
 
 
-void ByteArray::resize(int size)
+void ByteArray::resize(size_t size)
 {
     // Trivial case
     if (size == this->size())
@@ -93,13 +93,8 @@ const ByteArray::byte_t& ByteArray::operator[](size_t index) const
 
 ByteArray ByteArray::middle(size_t pos, size_t len) const
 {
-    if (pos < 0)
-    {
-        pos = 0;
-    }
-
     const size_t max = size() - pos;
-    const size_t s = (len < 0 || len > max) ? max : len;
+    const size_t s = (len > max) ? max : len;
 
     if (s == 0)
     {

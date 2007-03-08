@@ -67,7 +67,7 @@ public:
      * original size, the first original size bytes of the array will constain
      * the original contents, and the rest is uninitialized.
      */
-    void resize(int size);
+    void resize(size_t size);
 
     /**
      * Returns a pointer to the internal data.
@@ -154,7 +154,7 @@ public:
      *
      * If \a len is the default value -1, the rest of the array is copied.
      */
-    ByteArray middle(size_t pos, size_t len = -1) const;
+    ByteArray middle(size_t pos, size_t len = INT_MAX) const;
 
     /**
      * Returns a byte-array that contains \a len bytes copied from the start
