@@ -1,6 +1,8 @@
 
 #include "Pieces/DebugStream"
+#include "OpenThreads/Thread"
 
+#include <sstream>
 #include <iostream>
 #include <iomanip>
 
@@ -8,7 +10,23 @@
 namespace Pieces
 {
 
+namespace
+{
 const int SETWIDTH = 10;
+
+DebugStream thread()
+{
+    OpenThreads::Thread* thread = OpenThreads::Thread::CurrentThread();
+    int threadId = (thread != 0) ? thread->getThreadId() : 0;
+
+    std::stringstream ss;
+    ss << "[T:" << threadId << "]";
+
+    return DebugStream() << std::left << std::setw(7) << ss.str();
+}
+
+}
+
 OpenThreads::Mutex DebugStream::mutex;
 
 
@@ -40,19 +58,19 @@ DebugStream::~DebugStream()
 
 DebugStream debug()
 {
-    return DebugStream() << std::left << std::setw(SETWIDTH) << "INFO";
+    return thread() << std::left << std::setw(SETWIDTH) << "INFO";
 }
 
 
 DebugStream warning()
 {
-    return DebugStream() << std::left << std::setw(SETWIDTH) << "INFO";
+    return thread() << std::left << std::setw(SETWIDTH) << "INFO";
 }
 
 
 DebugStream error()
 {
-    return DebugStream() << std::left << std::setw(SETWIDTH) << "INFO";
+    return thread() << std::left << std::setw(SETWIDTH) << "INFO";
 }
 
 } // namespace Pieces
