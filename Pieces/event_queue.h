@@ -14,7 +14,7 @@ class EventQueuePrivate;
  * \class EventQueue
  * \brief Thread-safe event queue.
  *
- * This class provides an event queue where events can be pushed and popped
+ * This class provides an event queue where events (pointers) can be pushed and popped
  * from different threads. The size of the queue is only limited by the amount
  * of available memory.
  *
@@ -47,7 +47,7 @@ public:
      *
      * This will wake up one thread if there are any blocked in pop().
      */
-    void push(const Event& e);
+    void push(Event* e);
 
     /**
      * Pop one event off the queue and return it.
@@ -55,7 +55,7 @@ public:
      * If the queue is empty, this will block until another thread calls
      * push().
      */
-    Event pop();
+    std::auto_ptr<Event> pop();
 
 private:
     // Disable copy

@@ -27,7 +27,6 @@ public:
     };
 
     explicit Event(int type = NOTHING);
-    ~Event();
 
     int type() const;
 
@@ -36,7 +35,15 @@ public:
     void setData(const ByteArray& data);
     ByteArray data() const;
 
+protected:
+    ~Event();
+
 private:
+    friend class std::auto_ptr<Event>;
+
+    Event(const Event&);
+    Event& operator=(const Event&);
+
     class Data : public SharedData
     {
     public:

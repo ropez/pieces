@@ -2,6 +2,7 @@
 #include "Pieces/EventLoop"
 #include "Pieces/EventHandler"
 #include "Pieces/EventQueue"
+#include "Pieces/Debug"
 
 
 namespace Pieces
@@ -31,24 +32,24 @@ void EventLoop::exec()
     while (true)
     {
         // Block while waiting for event
-        Event e = m_queue->pop();
+        std::auto_ptr<Event> e = m_queue->pop();
 
         // Check if this was a quit event
-        if (e.type() == EVENT_QUIT)
+        if (e->type() == EVENT_QUIT)
             break;
 
-        m_handler->event(e);
+        m_handler->event(e.get());
     }
 }
 
 
 void EventLoop::quit()
 {
-    m_queue->push(Event(EVENT_QUIT));
+    m_queue->push(new Event(EVENT_QUIT));
 }
 
 
-void EventLoop::postEvent(const Event& e)
+void EventLoop::postEvent(Event* e)
 {
     m_queue->push(e);
 }

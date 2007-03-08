@@ -55,9 +55,9 @@ void Host::setAcceptingConnections(bool v)
 }
 
 
-void Host::event(const Event& event)
+void Host::event(Event* event)
 {
-    if (event.isUserDefined())
+    if (event->isUserDefined())
     {
         userDefinedEvent(event);
     }

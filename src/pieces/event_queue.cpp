@@ -18,7 +18,7 @@ using OpenThreads::ScopedLock;
 class EventQueuePrivate
 {
 public:
-    std::queue<Event> events;
+    std::queue<Event*> events;
 
     Mutex mutex;
     Condition cond;
@@ -33,11 +33,17 @@ EventQueue::EventQueue()
 
 EventQueue::~EventQueue()
 {
+    // Pop remaining events
+    while (!d->events.empty())
+    {
+        std::auto_ptr<Event> e(d->events.front());
+        d->events.pop();
+    }
     delete d;
 }
 
 
-void EventQueue::push(const Event& e)
+void EventQueue::push(Event* e)
 {
     ScopedLock<Mutex> lock(d->mutex);
 
@@ -46,14 +52,14 @@ void EventQueue::push(const Event& e)
 }
 
 
-Event EventQueue::pop()
+std::auto_ptr<Event> EventQueue::pop()
 {
     ScopedLock<Mutex> lock(d->mutex);
     while (d->events.empty())
     {
         d->cond.wait(&d->mutex);
     }
-    Event e = d->events.front();
+    std::auto_ptr<Event> e(d->events.front());
     d->events.pop();
 
     return e;

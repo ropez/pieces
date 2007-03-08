@@ -10,7 +10,7 @@ class TimerPrivate
 {
 public:
     TimerPrivate();
-    
+
     TimerThread* thread;
     bool started;
 };
@@ -34,7 +34,7 @@ Timer::~Timer()
 {
     // If the timer is running, stop it.
     stop();
-    
+
     delete d->thread;
     delete d;
 }
@@ -55,10 +55,10 @@ void Timer::setRepeating(bool on)
 }
 
 
-void Timer::start(unsigned long int delay, const Event& event)
+void Timer::start(unsigned long int delay, Event* event)
 {
     stop();
-    
+
     d->thread->setDelay(delay);
     d->thread->setEvent(event);
     d->thread->start();

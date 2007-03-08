@@ -28,9 +28,9 @@ public:
     void setAcceptingConnections(bool v);
 
 protected:
-    virtual void event(const Event& event);
+    virtual void event(Event* event);
 
-    virtual void userDefinedEvent(const Event& event) = 0;
+    virtual void userDefinedEvent(Event* event) = 0;
 
     virtual void peerConnected(PeerInfo* info);
 

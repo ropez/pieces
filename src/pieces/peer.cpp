@@ -38,9 +38,9 @@ void Peer::quit()
 }
 
 
-void Peer::event(const Event& event)
+void Peer::event(Event* event)
 {
-    if (event.isUserDefined())
+    if (event->isUserDefined())
     {
         userDefinedEvent(event);
     }

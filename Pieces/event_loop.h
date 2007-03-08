@@ -79,7 +79,7 @@ public:
      * \note This function returns immediately.
      * \note This function is thread-safe.
      */
-    void postEvent(const Event& e);
+    void postEvent(Event* e);
 
 private:
     // Disable copy

@@ -24,12 +24,12 @@ enum MyEvents
 class MyPeer : public Peer
 {
 protected:
-    void userDefinedEvent(const Event& event)
+    void userDefinedEvent(Event* event)
     {
         // Handle events
-        debug() << "Peer incoming event, type: " << event.type();
+        debug() << "Peer incoming event, type: " << event->type();
 
-        if (event.type() == QUIT_PEER)
+        if (event->type() == QUIT_PEER)
         {
             quit();
         }
@@ -40,12 +40,12 @@ protected:
 class MyHost : public Host
 {
 protected:
-    void userDefinedEvent(const Event& event)
+    void userDefinedEvent(Event* event)
     {
         // Handle events
-        debug() << "Host incoming event, type: " << event.type();
+        debug() << "Host incoming event, type: " << event->type();
 
-        if (event.type() == QUIT_HOST)
+        if (event->type() == QUIT_HOST)
         {
             quit();
         }
@@ -76,7 +76,7 @@ int main()
 {
     MyPeer p;
     Timer peerTimer(p.eventLoop());
-    peerTimer.start(10000, Event(QUIT_PEER));
+    peerTimer.start(10000, new Event(QUIT_PEER));
 
     ThreadRunningPeer th(&p);
 
@@ -85,18 +85,18 @@ int main()
 
     MyHost h;
 
-    std::auto_ptr<Timer> repeating(new Timer(h.eventLoop()));
-    repeating->setRepeating(true);
-    repeating->start(200, Event(FIRE_BAZOOKA));
+//     std::auto_ptr<Timer> repeating(new Timer(h.eventLoop()));
+//     repeating->setRepeating(true);
+//     repeating->start(200, new Event(FIRE_BAZOOKA));
 
     Timer t1(h.eventLoop());
-    t1.start(999, Event(KICK_MONSTER));
+    t1.start(999, new Event(KICK_MONSTER));
     // Restart the timer
-    t1.start(2000, Event(RUN_AND_HIDE));
+    t1.start(2000, new Event(RUN_AND_HIDE));
 
     // This timer stops the Host
     Timer t2(h.eventLoop());
-    t2.start(5000, Event(QUIT_HOST));
+    t2.start(5000, new Event(QUIT_HOST));
 
     debug() << "Running host";
     h.exec();

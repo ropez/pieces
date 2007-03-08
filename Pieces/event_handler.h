@@ -40,7 +40,7 @@ protected:
      *
      * Implement in subclasses to handle incoming events.
      */
-    virtual void event(const Event& event) = 0;
+    virtual void event(Event* event) = 0;
 };
 
 } // namespace Pieces

@@ -22,14 +22,15 @@ public:
     TimerThreadPrivate();
 
     EventLoop* eventLoop;
-    
+
     bool aborted;
     Mutex mutex;
     Condition cond;
-    
+
     bool repeating;
     unsigned int delay;
-    Event event;
+
+    std::auto_ptr<Event> event;
 };
 
 
@@ -76,9 +77,9 @@ void TimerThread::setDelay(unsigned long int ms)
 }
 
 
-void TimerThread::setEvent(const Event& event)
+void TimerThread::setEvent(Event* event)
 {
-    d->event = event;
+    d->event.reset(event);
 }
 
 
@@ -97,18 +98,18 @@ void TimerThread::abort()
 void TimerThread::run()
 {
     ScopedLock<Mutex> lock(d->mutex);
-    
+
     do
     {
         // Check if it was aborted
         if (d->aborted)
             break;
-    
+
         if (!d->cond.wait(&d->mutex, d->delay))
             break;
-    
+
         // Timed out, post event
-        d->eventLoop->postEvent(d->event);
+        d->eventLoop->postEvent(d->event.release());
     }
     while (d->repeating);
 }

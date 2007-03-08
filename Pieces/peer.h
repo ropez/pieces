@@ -50,12 +50,12 @@ protected:
      * It handles all events in the event queue. Some of them are forwarded to
      * other special purpose event handlers like userDefinedEvent().
      */
-    virtual void event(const Event& event);
+    virtual void event(Event* event);
 
     /**
      * Implement this to handle user defined events.
      */
-    virtual void userDefinedEvent(const Event& event) = 0;
+    virtual void userDefinedEvent(Event* event) = 0;
 
 private:
     EventLoop* m_eventLoop;
