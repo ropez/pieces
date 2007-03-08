@@ -16,19 +16,19 @@ ByteArray::ByteArray()
 }
 
 
-ByteArray::ByteArray(int size)
+ByteArray::ByteArray(size_t size)
 : d(new Data(size))
 {
 }
 
 
-ByteArray::ByteArray(const void* data, int size)
+ByteArray::ByteArray(const void* data, size_t size)
 : d(new Data(data, size))
 {
 }
 
 
-int ByteArray::size() const
+size_t ByteArray::size() const
 {
     return d->size;
 }
@@ -79,27 +79,27 @@ const ByteArray::byte_t* ByteArray::constData() const
 }
 
 
-ByteArray::byte_t& ByteArray::operator[](int index)
+ByteArray::byte_t& ByteArray::operator[](size_t index)
 {
     return d->data[index];
 }
 
 
-const ByteArray::byte_t& ByteArray::operator[](int index) const
+const ByteArray::byte_t& ByteArray::operator[](size_t index) const
 {
     return d->data[index];
 }
 
 
-ByteArray ByteArray::middle(int pos, int len) const
+ByteArray ByteArray::middle(size_t pos, size_t len) const
 {
     if (pos < 0)
     {
         pos = 0;
     }
 
-    const int max = size() - pos;
-    const int s = (len < 0 || len > max) ? max : len;
+    const size_t max = size() - pos;
+    const size_t s = (len < 0 || len > max) ? max : len;
 
     if (s == 0)
     {
@@ -147,7 +147,7 @@ ByteArray& ByteArray::append(const ByteArray& other)
 }
 
 
-ByteArray& ByteArray::append(const void* data, int size)
+ByteArray& ByteArray::append(const void* data, size_t size)
 {
     if (size > 0)
     {
@@ -183,7 +183,7 @@ ByteArray& ByteArray::prepend(const ByteArray& other)
 }
 
 
-ByteArray& ByteArray::prepend(const void* data, int size)
+ByteArray& ByteArray::prepend(const void* data, size_t size)
 {
     if (size > 0)
     {
@@ -201,7 +201,7 @@ ByteArray& ByteArray::prepend(const void* data, int size)
 }
 
 
-void ByteArray::chopFront(int n)
+void ByteArray::chopFront(size_t n)
 {
     if (n > size())
     {
@@ -219,7 +219,7 @@ void ByteArray::chopFront(int n)
 }
 
 
-void ByteArray::chopBack(int n)
+void ByteArray::chopBack(size_t n)
 {
     if (n > size())
     {
@@ -251,7 +251,7 @@ ByteArray::Data::Data()
 }
 
 
-ByteArray::Data::Data(int size)
+ByteArray::Data::Data(size_t size)
 : SharedData()
 , size(size)
 , data(new byte_t[size])
@@ -259,7 +259,7 @@ ByteArray::Data::Data(int size)
 }
 
 
-ByteArray::Data::Data(const void* data, int size)
+ByteArray::Data::Data(const void* data, size_t size)
 : SharedData()
 , size(size)
 , data(new byte_t[size])
@@ -333,7 +333,7 @@ std::ostream& operator<<(std::ostream& os, const ByteArray& ba)
     std::stringstream ss;
 
     ss << std::hex << std::setfill('0');
-    for (int i = 0; i < ba.size(); ++i)
+    for (size_t i = 0; i < ba.size(); ++i)
     {
         ss << std::setw(2) << static_cast<int>(ba[i]);
     }
@@ -342,4 +342,3 @@ std::ostream& operator<<(std::ostream& os, const ByteArray& ba)
 }
 
 } // namespace Pieces
-

@@ -174,12 +174,12 @@ public:
      *
      * Read \a size bytes of data, and return as a byte-array.
      */
-    ByteArray readBytes(int size);
+    ByteArray readBytes(size_t size);
 
 private:
 
     // Current read location
-    int m_readPtr;
+    size_t m_readPtr;
 
     // Internal data
     ByteArray m_data;

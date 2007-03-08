@@ -36,18 +36,18 @@ public:
      *
      * The data in uninitialized.
      */
-    explicit ByteArray(int size);
+    explicit ByteArray(size_t size);
 
     /**
      * Created a byte-array with \a size bytes, and copies the data pointed to
      * by \a data.
      */
-    ByteArray(const void* data, int size);
+    ByteArray(const void* data, size_t size);
 
     /**
      * Returns the size of the byte-array.
      */
-    int size() const;
+    size_t size() const;
 
     /**
      * Returns true if size() == 0.
@@ -139,14 +139,14 @@ public:
      *
      * This can be used to update individual bytes in the array.
      */
-    byte_t& operator[](int index);
+    byte_t& operator[](size_t index);
 
     /**
      * Returns a const reference to the byte at position \a index.
      *
      * This can be used to read individual bytes from the array.
      */
-    const byte_t& operator[](int index) const;
+    const byte_t& operator[](size_t index) const;
 
     /**
      * Returns a byte-array that contains \a len bytes copied from this
@@ -154,7 +154,7 @@ public:
      *
      * If \a len is the default value -1, the rest of the array is copied.
      */
-    ByteArray middle(int pos, int len = -1) const;
+    ByteArray middle(size_t pos, size_t len = -1) const;
 
     /**
      * Returns a byte-array that contains \a len bytes copied from the start
@@ -185,7 +185,7 @@ public:
     /**
      * Append \a data to this byte-array.
      */
-    ByteArray& append(const void* data, int size);
+    ByteArray& append(const void* data, size_t size);
 
     /**
      * Prepend \a byte to this byte-array.
@@ -200,17 +200,17 @@ public:
     /**
      * Prepend \a data to this byte-array.
      */
-    ByteArray& prepend(const void* data, int size);
+    ByteArray& prepend(const void* data, size_t size);
 
     /**
      * Remove \a n bytes from the start of the byte-array.
      */
-    void chopFront(int n);
+    void chopFront(size_t n);
 
     /**
      * Remove \a n bytes from the end of the byte-array.
      */
-    void chopBack(int n);
+    void chopBack(size_t n);
 
     /**
      * Append \a other to this byte-array.
@@ -227,10 +227,10 @@ private:
         Data();
 
         // Creates a 'size' element array
-        explicit Data(int size);
+        explicit Data(size_t size);
 
         // Creates a deep copy of the 'size' first bytes at location 'data'.
-        Data(const void* data, int size);
+        Data(const void* data, size_t size);
 
         // Creates a deep copy (called automatically by SharedDataPointer if needed).
         Data(const Data& other);
@@ -239,7 +239,7 @@ private:
         Data& operator=(const Data& other);
 
         // The number of bytes allocated.
-        int size;
+        size_t size;
 
         // Pointer to allocated data.
         byte_t* data;

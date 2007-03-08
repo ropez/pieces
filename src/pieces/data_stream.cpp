@@ -220,7 +220,7 @@ void DataStream::writeBytes(const ByteArray& ba)
 }
 
 
-ByteArray DataStream::readBytes(int size)
+ByteArray DataStream::readBytes(size_t size)
 {
     if (size > m_data.size() - m_readPtr)
         throw "error";
@@ -234,7 +234,7 @@ ByteArray DataStream::readBytes(int size)
 
 DataStream& operator<<(DataStream& ds, const ByteArray& ba)
 {
-    ds << ba.size();
+    ds << static_cast<unsigned int>(ba.size());
     ds.writeBytes(ba);
 
     return ds;
@@ -262,8 +262,8 @@ DataStream& operator<<(DataStream& ds, const std::string& str)
 
 DataStream& operator<<(DataStream& ds, const char* str)
 {
-    int size = strlen(str);
-    ds << size;
+    size_t size = strlen(str);
+    ds << static_cast<unsigned int>(size);
     ds.writeBytes(ByteArray(str, size));
 
     return ds;
@@ -368,7 +368,7 @@ void encode(ByteArray& ba, const char* str)
 {
     ba.clear();
 
-    int size = strlen(str);
+    size_t size = strlen(str);
     ba.append(str, size);
 }
 
@@ -482,7 +482,7 @@ void decode(const ByteArray& ba, std::string& v)
 {
     v.resize(ba.size());
 
-    for (int i = 0; i < ba.size(); ++i)
+    for (size_t i = 0; i < ba.size(); ++i)
     {
         v[i] = ba[i];
     }
