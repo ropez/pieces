@@ -15,6 +15,7 @@ class EventHandler;
 class Event
 {
     friend class EventLoop;
+    friend class std::auto_ptr<Event>;
 
 public:
 
@@ -46,22 +47,12 @@ protected:
     virtual void trigger(EventHandler* h);
 
 private:
-    friend class std::auto_ptr<Event>;
 
     Event(const Event&);
     Event& operator=(const Event&);
 
-    class Data : public SharedData
-    {
-    public:
-        Data();
-        Data(const Data& other);
-
-        int type;
-        ByteArray data;
-    };
-
-    SharedDataPointer<Data> d;
+    int m_type;
+    ByteArray m_data;
 };
 
 } // namespace Pieces

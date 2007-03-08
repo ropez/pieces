@@ -6,26 +6,10 @@
 namespace Pieces
 {
 
-Event::Data::Data()
-: SharedData()
-, type(0)
-, data()
-{
-}
-
-
-Event::Data::Data(const Data& other)
-: SharedData()
-, type(other.type)
-, data(other.data)
-{
-}
-
-
 Event::Event(int type)
-: d(new Data)
+: m_type(type)
+, m_data()
 {
-    d->type = type;
 }
 
 
@@ -36,25 +20,25 @@ Event::~Event()
 
 int Event::type() const
 {
-    return d->type;
+    return m_type;
 }
 
 
 bool Event::isUserDefined() const
 {
-    return d->type >= USER_DEFINED;
+    return type() >= USER_DEFINED;
 }
 
 
 void Event::setData(const ByteArray& data)
 {
-    d->data = data;
+    m_data = data;
 }
 
 
 ByteArray Event::data() const
 {
-    return d->data;
+    return m_data;
 }
 
 
