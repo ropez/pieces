@@ -21,6 +21,15 @@ public:
     EventLoop* eventLoop();
 
     /**
+     * Post an event to the event-loop.
+     *
+     * This is a shortcut for eventLoop()->postEvent(e).
+     *
+     * \see EventLoop::postEvent()
+     */
+    void postEvent(Event* e);
+
+    /**
      * Enter the peer's main event loop.
      *
      * Call this function after connection to a host. The calling thread will

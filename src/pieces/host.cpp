@@ -28,6 +28,12 @@ EventLoop* Host::eventLoop()
 }
 
 
+void Host::postEvent(Event* e)
+{
+    eventLoop()->postEvent(e);
+}
+
+
 void Host::exec()
 {
     debug() << "Host running";

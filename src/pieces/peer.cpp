@@ -14,14 +14,22 @@ Peer::Peer()
     m_eventLoop = new EventLoop(this);
 }
 
+
 Peer::~Peer()
 {
     delete m_eventLoop;
 }
 
+
 EventLoop* Peer::eventLoop()
 {
     return m_eventLoop;
+}
+
+
+void Peer::postEvent(Event* e)
+{
+    eventLoop()->postEvent(e);
 }
 
 void Peer::exec()

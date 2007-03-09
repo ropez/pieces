@@ -5,7 +5,6 @@
 #include "Pieces/Event"
 #include "Pieces/TimerEvent"
 #include "Pieces/GameEvent"
-#include "Pieces/EventLoop"
 #include "OpenThreads/Thread"
 
 
@@ -56,7 +55,7 @@ protected:
         switch (event->getTimerId())
         {
         case ID_REPEATING:
-            peer->eventLoop()->postEvent(new GameEvent(FIRE_BAZOOKA));
+            peer->postEvent(new GameEvent(FIRE_BAZOOKA));
             break;
         case ID_QUIT_HOST:
             quit();
@@ -65,12 +64,6 @@ protected:
             break;
         }
 
-    }
-
-
-    void handle(GameEvent*)
-    {
-        debug() << "Peer game-event";
     }
 };
 
