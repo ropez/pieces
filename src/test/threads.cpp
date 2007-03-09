@@ -28,11 +28,19 @@ std::auto_ptr<Host> host;
 
 class MyPeer : public Peer
 {
+public:
+    MyPeer()
+    {
+        m_repeating = new Timer(ID_REPEATING, eventLoop());
+        m_repeating->setRepeating(true);
+        m_repeating->start(500);
+    }
+
 protected:
     void handle(TimerEvent* event)
     {
         // Handle events
-        debug() << "Peer timer-event";
+        debug() << "Peer timer-event, id = " << event->getTimerId();
 
         switch (event->getTimerId())
         {
@@ -51,6 +59,9 @@ protected:
     {
         debug() << "Peer game-event, type = " << event->type();
     }
+
+private:
+    Timer* m_repeating;
 };
 
 
@@ -60,7 +71,7 @@ protected:
     void handle(TimerEvent* event)
     {
         // Handle events
-        debug() << "Host timer-event";
+        debug() << "Host timer-event, id = " << event->getTimerId();
 
         switch (event->getTimerId())
         {
@@ -117,10 +128,6 @@ int main()
     // This timer stops the Peer
     Timer tQuitPeer(ID_QUIT_PEER, peer->eventLoop());
     tQuitPeer.start(10000);
-
-    Timer repeating(ID_REPEATING, peer->eventLoop());
-    repeating.setRepeating(true);
-    repeating.start(500);
 
     th.join();
     tp.join();
