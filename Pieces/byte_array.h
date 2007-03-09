@@ -50,6 +50,11 @@ public:
     size_t size() const;
 
     /**
+     * Returns the number of bytes allocated.
+     */
+    size_t allocated() const;
+
+    /**
      * Returns true if size() == 0.
      */
     bool isEmpty() const;
@@ -237,6 +242,10 @@ private:
 
         // Creates a deep copy (called automatically by SharedDataPointer if needed).
         Data& operator=(const Data& other);
+
+        // Calculate number of bytes to allocate and allocate uninitialized space.
+        // Deletes any old data.
+        void allocate(size_t size);
 
         // The number of bytes allocated.
         size_t allocated;

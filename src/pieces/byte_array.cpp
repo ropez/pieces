@@ -34,6 +34,12 @@ size_t ByteArray::size() const
 }
 
 
+size_t ByteArray::allocated() const
+{
+    return d->allocated;
+}
+
+
 bool ByteArray::isEmpty() const
 {
     return d->size == 0;
@@ -52,12 +58,21 @@ void ByteArray::resize(size_t size)
     if (size == this->size())
         return;
 
-    // Temporary copy
-    ByteArray tmp(size);
-    memcpy(tmp.data(), constData(), std::min(tmp.size(), this->size()));
+    // Check if we need to reallocate
+    if (size > allocated())
+    {
+        // Temporary copy
+        ByteArray tmp(size);
+        memcpy(tmp.data(), constData(), std::min(tmp.size(), this->size()));
 
-    // Let assignment operator handle the rest
-    d = tmp.d;
+        // Let assignment operator handle the rest
+        d = tmp.d;
+    }
+    else
+    {
+        // Detach and set new size
+        d->size = size;
+    }
 }
 
 
@@ -146,13 +161,13 @@ ByteArray& ByteArray::append(const void* data, size_t size)
 {
     if (size > 0)
     {
-        // Temporary
-        ByteArray tmp(this->size() + size);
-        memcpy(tmp.data(), constData(), this->size());
-        memcpy(tmp.data() + this->size(), data, size);
+        size_t old_size = this->size();
 
-        // Let assignment operator handle the rest
-        d = tmp.d;
+        // Make room for the append
+        resize(this->size() + size);
+
+        // Copy new data
+        memcpy(this->data() + old_size, data, size);
     }
     return *this;
 }
@@ -242,36 +257,39 @@ ByteArray::Data::Data()
 : SharedData()
 , allocated(0)
 , size(0)
-, data(new byte_t[allocated])
+, data(new byte_t[0])
 {
 }
 
 
 ByteArray::Data::Data(size_t size)
 : SharedData()
-, allocated(size)
+, allocated(0)
 , size(size)
-, data(new byte_t[allocated])
+, data(0)
 {
+    allocate(size);
 }
 
 
 ByteArray::Data::Data(const void* data, size_t size)
 : SharedData()
-, allocated(size)
+, allocated(0)
 , size(size)
-, data(new byte_t[allocated])
+, data(0)
 {
+    allocate(size);
     memcpy(this->data, data, size);
 }
 
 
 ByteArray::Data::Data(const Data& other)
 : SharedData()
-, allocated(other.allocated)
+, allocated(0)
 , size(other.size)
-, data(new byte_t[size])
+, data(0)
 {
+    allocate(size);
     memcpy(this->data, other.data, other.size);
 }
 
@@ -280,11 +298,9 @@ ByteArray::Data& ByteArray::Data::operator=(const Data& other)
 {
     if (this != &other)
     {
-        delete[] data;
-
-        allocated = other.size;
         size = other.size;
-        data = new byte_t[allocated];
+        allocate(size);
+
         memcpy(this->data, other.data, other.size);
     }
     return *this;
@@ -294,6 +310,34 @@ ByteArray::Data& ByteArray::Data::operator=(const Data& other)
 ByteArray::Data::~Data()
 {
     delete[] data;
+}
+
+
+void ByteArray::Data::allocate(size_t size)
+{
+    // Test for super-large size (2 GB)
+    if (size & 0x80000000)
+        throw std::bad_alloc();
+
+    size_t wanted = 1;
+    while (wanted < size)
+    {
+        // NOTE: This can't overflow, and it will terminate. ~RP
+
+        // double the wanted size
+        wanted <<= 1;
+    }
+
+    // Reallocate if the current allocated size is different
+    if (allocated != wanted)
+    {
+        delete[] data;
+        data = 0;
+        allocated = 0;
+
+        data = new byte_t[wanted];
+        allocated = wanted;
+    }
 }
 
 
