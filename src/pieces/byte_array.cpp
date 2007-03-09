@@ -285,11 +285,10 @@ ByteArray::Data::Data(const void* data, size_t size)
 
 ByteArray::Data::Data(const Data& other)
 : SharedData()
-, allocated(0)
+, allocated(other.allocated)
 , size(other.size)
-, data(0)
+, data(new byte_t[allocated])
 {
-    allocate(size);
     memcpy(this->data, other.data, other.size);
 }
 
@@ -298,8 +297,11 @@ ByteArray::Data& ByteArray::Data::operator=(const Data& other)
 {
     if (this != &other)
     {
+        delete[] data;
+
+        allocated = other.allocated;
         size = other.size;
-        allocate(size);
+        data = new byte_t[allocated];
 
         memcpy(this->data, other.data, other.size);
     }
