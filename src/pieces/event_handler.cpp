@@ -9,6 +9,11 @@
 namespace Pieces
 {
 
+EventHandler::EventHandler()
+{
+}
+
+
 EventHandler::~EventHandler()
 {
 }
