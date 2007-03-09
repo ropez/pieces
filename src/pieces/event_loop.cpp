@@ -23,7 +23,7 @@ EventLoop::~EventLoop()
 
 void EventLoop::exec()
 {
-    while (true)
+    for (;;)
     {
         // Block while waiting for event
         std::auto_ptr<Event> e = m_queue->pop();
