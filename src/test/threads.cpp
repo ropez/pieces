@@ -4,6 +4,8 @@
 #include "Pieces/Peer"
 #include "Pieces/Event"
 #include "Pieces/TimerEvent"
+#include "Pieces/GameEvent"
+#include "Pieces/EventLoop"
 #include "OpenThreads/Thread"
 
 
@@ -13,6 +15,7 @@ enum MyEvents
 {
     ID_QUIT_PEER,
     ID_QUIT_HOST,
+    ID_REPEATING,
 
     KICK_MONSTER,
     FIRE_BAZOOKA,
@@ -34,12 +37,13 @@ protected:
         }
     }
 
-    void handle(GameEvent*)
+    void handle(GameEvent* event)
     {
-        debug() << "Peer game-event";
+        debug() << "Peer game-event, type = " << event->type();
     }
 };
 
+MyPeer* peer = 0;
 
 class MyHost : public Host
 {
@@ -49,10 +53,18 @@ protected:
         // Handle events
         debug() << "Host timer-event";
 
-        if (event->getTimerId() == ID_QUIT_HOST)
+        switch (event->getTimerId())
         {
+        case ID_REPEATING:
+            peer->eventLoop()->postEvent(new GameEvent(FIRE_BAZOOKA));
+            break;
+        case ID_QUIT_HOST:
             quit();
+            break;
+        default:
+            break;
         }
+
     }
 
 
@@ -85,6 +97,7 @@ private:
 int main()
 {
     MyPeer p;
+    peer = &p;
     Timer peerTimer(ID_QUIT_PEER, p.eventLoop());
     peerTimer.start(10000);
 
@@ -95,9 +108,9 @@ int main()
 
     MyHost h;
 
-    std::auto_ptr<Timer> repeating(new Timer(h.eventLoop()));
-    repeating->setRepeating(true);
-    repeating->start(200);
+    Timer repeating(ID_REPEATING, h.eventLoop());
+    repeating.setRepeating(true);
+    repeating.start(200);
 
     Timer t1(h.eventLoop());
     t1.start(999);

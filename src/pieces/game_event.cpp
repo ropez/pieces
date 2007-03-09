@@ -6,9 +6,22 @@
 namespace Pieces
 {
 
-GameEvent::GameEvent()
+GameEvent::GameEvent(int type)
 : Event()
+, m_type(type)
 {
+}
+
+
+int GameEvent::type() const
+{
+    return m_type;
+}
+
+
+void GameEvent::setType(int type)
+{
+    m_type = type;
 }
 
 
