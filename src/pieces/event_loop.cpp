@@ -32,6 +32,7 @@ void EventLoop::exec()
         if (e.get() == 0)
             break;
 
+        // Dispatch the event to the correct event-handler function
         e->dispatch(m_handler);
     }
 }
