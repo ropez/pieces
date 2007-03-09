@@ -5,6 +5,7 @@
 #include "Pieces/Event"
 #include "Pieces/TimerEvent"
 #include "Pieces/GameEvent"
+#include "Pieces/InputEvent"
 #include "OpenThreads/Thread"
 
 
@@ -21,6 +22,9 @@ enum MyEvents
     RUN_AND_HIDE
 };
 
+std::auto_ptr<Peer> peer;
+std::auto_ptr<Host> host;
+
 
 class MyPeer : public Peer
 {
@@ -30,9 +34,16 @@ protected:
         // Handle events
         debug() << "Peer timer-event";
 
-        if (event->getTimerId() == ID_QUIT_PEER)
+        switch (event->getTimerId())
         {
+        case ID_REPEATING:
+            host->postEvent(new InputEvent(FIRE_BAZOOKA));
+            break;
+        case ID_QUIT_PEER:
             quit();
+            break;
+        default:
+            break;
         }
     }
 
@@ -42,7 +53,6 @@ protected:
     }
 };
 
-MyPeer* peer = 0;
 
 class MyHost : public Host
 {
@@ -54,9 +64,6 @@ protected:
 
         switch (event->getTimerId())
         {
-        case ID_REPEATING:
-            peer->postEvent(new GameEvent(FIRE_BAZOOKA));
-            break;
         case ID_QUIT_HOST:
             quit();
             break;
@@ -64,57 +71,57 @@ protected:
             break;
         }
     }
+
+    void handle(InputEvent* event)
+    {
+        // Handle events
+        debug() << "Host input-event, type = " << event->type();
+    }
 };
 
 
 class ThreadRunningPeer : public OpenThreads::Thread
 {
-public:
-    ThreadRunningPeer(Peer* p)
-    : m_peer(p)
-    {
-    }
-
 protected:
     virtual void run()
     {
-        m_peer->exec();
+        peer->exec();
     }
+};
 
-private:
-    Peer* m_peer;
+
+class ThreadRunningHost : public OpenThreads::Thread
+{
+protected:
+    virtual void run()
+    {
+        host->exec();
+    }
 };
 
 
 int main()
 {
-    MyPeer p;
-    peer = &p;
-    Timer peerTimer(ID_QUIT_PEER, p.eventLoop());
-    peerTimer.start(10000);
+    host.reset(new MyHost);
+    peer.reset(new MyPeer);
 
-    ThreadRunningPeer th(&p);
-
-    debug() << "Running peer";
+    ThreadRunningHost th;
     th.start();
-
-    MyHost h;
-
-    Timer repeating(ID_REPEATING, h.eventLoop());
-    repeating.setRepeating(true);
-    repeating.start(200);
-
-    Timer t1(h.eventLoop());
-    t1.start(999);
-    // Restart the timer
-    t1.start(2000);
+    ThreadRunningPeer tp;
+    tp.start();
 
     // This timer stops the Host
-    Timer t2(ID_QUIT_HOST, h.eventLoop());
-    t2.start(5000);
+    Timer tQuitHost(ID_QUIT_HOST, host->eventLoop());
+    tQuitHost.start(8000);
 
-    debug() << "Running host";
-    h.exec();
+    // This timer stops the Peer
+    Timer tQuitPeer(ID_QUIT_PEER, peer->eventLoop());
+    tQuitPeer.start(10000);
+
+    Timer repeating(ID_REPEATING, peer->eventLoop());
+    repeating.setRepeating(true);
+    repeating.start(500);
 
     th.join();
+    tp.join();
 }

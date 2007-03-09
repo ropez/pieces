@@ -10,6 +10,10 @@ namespace Pieces
 
 /**
  * \class InputEvent
+ * \brief Game-specific input event.
+ *
+ * This kind of event is created by peers as result of user input, and
+ * propagated to the host by the framework.
  *
  * \author Robin Pedersen
  */
