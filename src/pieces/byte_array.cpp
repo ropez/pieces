@@ -240,24 +240,27 @@ ByteArray& ByteArray::operator+=(const ByteArray& other)
 
 ByteArray::Data::Data()
 : SharedData()
+, allocated(0)
 , size(0)
-, data(new byte_t[size])
+, data(new byte_t[allocated])
 {
 }
 
 
 ByteArray::Data::Data(size_t size)
 : SharedData()
+, allocated(size)
 , size(size)
-, data(new byte_t[size])
+, data(new byte_t[allocated])
 {
 }
 
 
 ByteArray::Data::Data(const void* data, size_t size)
 : SharedData()
+, allocated(size)
 , size(size)
-, data(new byte_t[size])
+, data(new byte_t[allocated])
 {
     memcpy(this->data, data, size);
 }
@@ -265,6 +268,7 @@ ByteArray::Data::Data(const void* data, size_t size)
 
 ByteArray::Data::Data(const Data& other)
 : SharedData()
+, allocated(other.allocated)
 , size(other.size)
 , data(new byte_t[size])
 {
@@ -278,8 +282,9 @@ ByteArray::Data& ByteArray::Data::operator=(const Data& other)
     {
         delete[] data;
 
+        allocated = other.size;
         size = other.size;
-        data = new byte_t[other.size];
+        data = new byte_t[allocated];
         memcpy(this->data, other.data, other.size);
     }
     return *this;

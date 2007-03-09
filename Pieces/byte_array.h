@@ -239,6 +239,9 @@ private:
         Data& operator=(const Data& other);
 
         // The number of bytes allocated.
+        size_t allocated;
+
+        // The current size of the byte-array (might be less than or equal to allocated)
         size_t size;
 
         // Pointer to allocated data.
