@@ -16,7 +16,7 @@ public:
 protected:
     virtual ~GameEvent();
 
-    virtual void trigger(EventHandler* h);
+    virtual void dispatch(EventHandler* h);
 };
 
 } // namespace Pieces

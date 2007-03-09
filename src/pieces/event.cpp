@@ -35,7 +35,7 @@ ByteArray Event::data() const
 }
 
 
-void Event::trigger(EventHandler* h)
+void Event::dispatch(EventHandler* h)
 {
     h->handle(this);
 }

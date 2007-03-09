@@ -32,7 +32,7 @@ void EventLoop::exec()
         if (e.get() == 0)
             break;
 
-        e->trigger(m_handler);
+        e->dispatch(m_handler);
     }
 }
 

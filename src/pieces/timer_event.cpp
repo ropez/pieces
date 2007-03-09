@@ -24,7 +24,7 @@ int TimerEvent::getTimerId() const
 }
 
 
-void TimerEvent::trigger(EventHandler* h)
+void TimerEvent::dispatch(EventHandler* h)
 {
     h->handle(this);
 }

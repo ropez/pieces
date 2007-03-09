@@ -18,7 +18,7 @@ public:
 protected:
     virtual ~TimerEvent();
 
-    virtual void trigger(EventHandler* h);
+    virtual void dispatch(EventHandler* h);
 
 private:
     int m_timerId;

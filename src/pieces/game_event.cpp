@@ -17,7 +17,7 @@ GameEvent::~GameEvent()
 }
 
 
-void GameEvent::trigger(EventHandler* h)
+void GameEvent::dispatch(EventHandler* h)
 {
     h->handle(this);
 }

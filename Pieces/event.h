@@ -29,7 +29,7 @@ public:
 protected:
     virtual ~Event();
 
-    virtual void trigger(EventHandler* h);
+    virtual void dispatch(EventHandler* h);
 
 private:
 
