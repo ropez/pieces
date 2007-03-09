@@ -8,6 +8,7 @@ namespace Pieces
 class Event;
 class TimerEvent;
 class GameEvent;
+class InputEvent;
 
 
 /**
@@ -27,6 +28,7 @@ class EventHandler
     friend class Event;
     friend class TimerEvent;
     friend class GameEvent;
+    friend class InputEvent;
 
 public:
 
@@ -47,6 +49,8 @@ protected:
     virtual void handle(TimerEvent* event);
 
     virtual void handle(GameEvent* event);
+
+    virtual void handle(InputEvent* event);
 };
 
 } // namespace Pieces

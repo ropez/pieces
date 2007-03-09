@@ -63,7 +63,6 @@ protected:
         default:
             break;
         }
-
     }
 };
 

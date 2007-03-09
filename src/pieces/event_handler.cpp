@@ -3,6 +3,7 @@
 #include "Pieces/Event"
 #include "Pieces/TimerEvent"
 #include "Pieces/GameEvent"
+#include "Pieces/InputEvent"
 
 
 namespace Pieces
@@ -27,6 +28,14 @@ void EventHandler::handle(TimerEvent* event)
 
 
 void EventHandler::handle(GameEvent* event)
+{
+    // Fall back to default handler function
+    Event* e = event;
+    handle(e);
+}
+
+
+void EventHandler::handle(InputEvent* event)
 {
     // Fall back to default handler function
     Event* e = event;
