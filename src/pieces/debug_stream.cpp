@@ -10,62 +10,53 @@
 namespace Pieces
 {
 
-namespace
-{
-
-DebugStream thread()
-{
-    OpenThreads::Thread* thread = OpenThreads::Thread::CurrentThread();
-    int threadId = (thread != 0) ? thread->getThreadId() : 0;
-
-    return DebugStream() << "[T:" << threadId << "]" << align(7);
-}
-
-}
-
 OpenThreads::Mutex DebugStream::mutex;
 
 
 DebugStream::DebugStream()
-: m_ss(new std::stringstream)
-, m_stream(std::cout)
-{
-    mutex.lock();
-}
-
-
-DebugStream::DebugStream(DebugStream& other)
-: m_ss(other.m_ss)
-, m_stream(other.m_stream)
+: std::stringstream()
 {
 }
 
 
 DebugStream::~DebugStream()
 {
-    if (m_ss.get() != 0)
-    {
-        m_stream << m_ss->str() << std::endl;
-        mutex.unlock();
-    }
+    mutex.lock();
+    std::cout << str() << std::endl;
+    mutex.unlock();
 }
 
 
-DebugStream debug()
+std::ostream& tid(std::ostream& os)
 {
-    return thread() << "INFO" << align(15);
+    OpenThreads::Thread* thread = OpenThreads::Thread::CurrentThread();
+    int threadId = (thread != 0) ? thread->getThreadId() : 0;
+
+    return os << "[T:" << threadId << "]" << align(7);
 }
 
 
-DebugStream warning()
+std::ostream& debug(std::ostream& os)
 {
-    return thread() << "INFO" << align(15);
+    return os << "DEBUG" << align(10);
 }
 
 
-DebugStream error()
+std::ostream& info(std::ostream& os)
 {
-    return thread() << "INFO" << align(15);
+    return os << "INFO" << align(10);
+}
+
+
+std::ostream& warning(std::ostream& os)
+{
+    return os << "WARNING" << align(10);
+}
+
+
+std::ostream& error(std::ostream& os)
+{
+    return os << "ERROR" << align(10);
 }
 
 } // namespace Pieces

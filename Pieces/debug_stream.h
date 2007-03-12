@@ -10,78 +10,71 @@
 namespace Pieces
 {
 
-class DebugStream
+class DebugStream : public std::stringstream
 {
 public:
 
     DebugStream();
 
-    DebugStream(DebugStream& other);
-
     ~DebugStream();
-
-    template<typename T>
-    DebugStream& operator<<(T t);
 
 private:
 
-    // Disabled assignment operator
+    // Disabled copy operations
+    DebugStream(DebugStream& other);
     DebugStream& operator=(DebugStream&);
 
     static OpenThreads::Mutex mutex;
-
-    std::auto_ptr<std::stringstream> m_ss;
-    std::ostream& m_stream;
 };
 
 
-DebugStream debug();
-DebugStream warning();
-DebugStream error();
-
-
-// Alignment manipulator
-class AlignmentManipulator
+class _Align
 {
 public:
-    AlignmentManipulator(int w)
-    : width(w)
+    _Align(int c)
+    : col(c)
     {
     }
 
-    int width;
+    int col;
 };
 
-inline AlignmentManipulator align(int width)
+
+/**
+ * Manipulator for aligning output.
+ *
+ * Makes output aligned at column \a col.
+ * Outputs at least 1, and at most \a col - the number of characters printed
+ * on the stream space characters.
+ */
+inline
+_Align align(int col)
 {
-    return AlignmentManipulator(width);
+    return _Align(col);
 }
 
-template<typename T> inline
-DebugStream& DebugStream::operator<<(T t)
+inline
+std::ostream& operator<<(std::ostream& os, _Align a)
 {
-    if (m_ss.get() != 0)
+    do
     {
-        *m_ss << t;
+        os << ' ';
     }
-    return *this;
+    while ((os.tellp() > 0) && (os.tellp() < a.col));
+
+    return os;
 }
 
+std::ostream& tid(std::ostream& os);
+std::ostream& debug(std::ostream& os);
+std::ostream& info(std::ostream& os);
+std::ostream& warning(std::ostream& os);
+std::ostream& error(std::ostream& os);
 
-template<> inline
-DebugStream& DebugStream::operator<< <AlignmentManipulator>(AlignmentManipulator t)
-{
-    if (m_ss.get() != 0)
-    {
-        do
-        {
-            *m_ss << ' ';
-        }
-        while (m_ss->tellp() < t.width);
-    }
-
-    return *this;
-}
+#define DEBUG DebugStream() << debug
+#define INFO DebugStream() << info
+#define WARNING DebugStream() << warning
+#define ERROR DebugStream() << error
 
 } // namespace Pieces
 

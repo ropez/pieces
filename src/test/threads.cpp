@@ -40,7 +40,7 @@ protected:
     void handle(TimerEvent* event)
     {
         // Handle events
-        debug() << "Peer timer-event, id = " << event->getTimerId();
+        DEBUG << "Peer timer-event, id = " << event->getTimerId();
 
         switch (event->getTimerId())
         {
@@ -57,7 +57,7 @@ protected:
 
     void handle(GameEvent* event)
     {
-        debug() << "Peer game-event, type = " << event->type();
+        DEBUG << "Peer game-event, type = " << event->type();
     }
 
 private:
@@ -71,7 +71,7 @@ protected:
     void handle(TimerEvent* event)
     {
         // Handle events
-        debug() << "Host timer-event, id = " << event->getTimerId();
+        DEBUG << "Host timer-event, id = " << event->getTimerId();
 
         switch (event->getTimerId())
         {
@@ -86,7 +86,7 @@ protected:
     void handle(InputEvent* event)
     {
         // Handle events
-        debug() << "Host input-event, type = " << event->type();
+        DEBUG << "Host input-event, type = " << event->type();
     }
 };
 

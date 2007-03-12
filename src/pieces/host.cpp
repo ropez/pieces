@@ -36,14 +36,14 @@ void Host::postEvent(Event* e)
 
 void Host::exec()
 {
-    debug() << "Host running";
+    DEBUG << "Host running";
     eventLoop()->exec();
 }
 
 
 void Host::quit()
 {
-    debug() << "Host quitting";
+    DEBUG << "Host quitting";
     eventLoop()->quit();
 }
 

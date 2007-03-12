@@ -14,11 +14,11 @@ int main()
 
     DataStream ds;
     ds << "Piece of shit";
-    debug() << ds.data() << " " << ds.data().allocated();
+    DEBUG << ds.data() << " " << ds.data().allocated();
 
     std::string str;
     ds >> str;
-    debug() << str;
+    DEBUG << str;
 
 
     ByteArray ba = ds.data();
@@ -28,12 +28,12 @@ int main()
 
     b2[0] = 'K';
     b2.resize(5);
-    debug() << ba;
-    debug() << b2;
-    debug() << std::boolalpha << (ba.data() == b3.data());
-    debug() << std::boolalpha << (ba.data() == b4.data());
+    DEBUG << ba;
+    DEBUG << b2;
+    DEBUG << std::boolalpha << (ba.data() == b3.data());
+    DEBUG << std::boolalpha << (ba.data() == b4.data());
 
-    debug() << (b2 + b3);
+    DEBUG << (b2 + b3);
 
     using Pieces::Vector;
     Vector<int> vec;
@@ -43,14 +43,14 @@ int main()
 
     for (Vector<int>::iterator it = vec.begin(); it != vec.end(); ++it)
     {
-        debug() << "Element: " << *it;
+        DEBUG << "Element: " << *it;
     }
 
     Pieces::DataStream d;
     d << vec[0] << vec[1] << vec[2];
     int a, b, c;
     d >> a >> b >> c;
-    debug() << a << " " << b << " " << c;
+    DEBUG << a << " " << b << " " << c;
 
     enum
     {
@@ -73,27 +73,27 @@ int main()
     ValueList l;
     l.add('a').add(10).add(2.34);
 
-    debug() << "A piece:\n" << t;
-    debug() << "A list:\n" << l;
+    DEBUG << "A piece:\n" << t;
+    DEBUG << "A list:\n" << l;
 
-    debug() << "Reading from the piece:";
-    debug() << t.get<int>(ROBIN);
-    debug() << t.get<double>(ANGLE);
-    debug() << t.get<std::string>(STRING);
+    DEBUG << "Reading from the piece:";
+    DEBUG << t.get<int>(ROBIN);
+    DEBUG << t.get<double>(ANGLE);
+    DEBUG << t.get<std::string>(STRING);
 
     PropertyList p;
     p.set(SUB_PIECE, t);
     p.set(SUB_LIST, l);
 
-    debug() << "A piece that contains a list and a piece:\n" << p;
+    DEBUG << "A piece that contains a list and a piece:\n" << p;
 
-    debug() << "Extracted data:";
-    debug() << p.get<PropertyList>(SUB_PIECE).get<int>(ROBIN);
-    debug() << p.get<ValueList>(SUB_LIST).get<double>(2);
+    DEBUG << "Extracted data:";
+    DEBUG << p.get<PropertyList>(SUB_PIECE).get<int>(ROBIN);
+    DEBUG << p.get<ValueList>(SUB_LIST).get<double>(2);
 
     ValueList q;
     q.add(t).add(l);
 
-    debug() << "Can do the same with a list:\n" << q;
+    DEBUG << "Can do the same with a list:\n" << q;
 }
 

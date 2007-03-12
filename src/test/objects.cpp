@@ -93,7 +93,7 @@ int main()
 {
     using namespace Pieces;
 
-    debug() << "Hello";
+    DEBUG << "Hello";
 
     ObjectData d;
 }
