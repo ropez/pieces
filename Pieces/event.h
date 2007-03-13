@@ -6,6 +6,8 @@
 #include "Pieces/SharedDataPointer"
 #include "Pieces/ByteArray"
 
+#include <memory>
+
 
 namespace Pieces
 {
