@@ -7,6 +7,7 @@
 
 namespace Pieces
 {
+class TCPServerPrivate;
 
 class TCPServer
 {
@@ -14,19 +15,21 @@ public:
     TCPServer();
     ~TCPServer();
 
-    void bind(const InetAddress& addr);
-    void listen();
+    void listen(const SocketAddress& addr);
     // or maybe just listen(addr) ????
 
     int getQueueSize() const;
     void setQueueSize(int size);
 
     // Caller must delete this (maybe use auto_ptr?)
-    TCPSocket* accept();
+    std::auto_ptr<TCPSocket> accept();
 
 private:
     // Disable copy operations
+    TCPServer(const TCPServer&);
+    TCPServer& operator=(const TCPServer&);
 
+    TCPServerPrivate* d;
 };
 
 } // namespace Pieces

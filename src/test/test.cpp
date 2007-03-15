@@ -12,10 +12,10 @@
 int main()
 {
     using namespace Pieces;
-    
+    /*
     //make invalid inet address object (0.0.0.0)
     InetAddress* ia = new InetAddress();
-    
+
     //show it
     std::cout << "Inet address is: " << ia->toString() << std::endl;
 
@@ -25,10 +25,10 @@ int main()
     //show it
     std::cout << "Inet address is: " << ia->toString() << std::endl;
 
-    //test get host by name 
+    //test get host by name
     *ia = InetAddress::getHostByName("www.google.com");
 
     //show it
-    std::cout << "Inet address is: " << ia->toString() << std::endl;    
+    std::cout << "Inet address is: " << ia->toString() << std::endl;*/
 }
 

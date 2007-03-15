@@ -36,9 +36,15 @@ public:
     // This class also need to be able to return the address as an integral number,
     // or the internal representation might be hidden and the other classes made friend classes.
 
+
+    unsigned int get() const
+    {
+        return m_inet_addr;
+    }
+
 private:
-    in_addr stringToInAddr(const std::string& name);
-    in_addr m_inet_addr;
+    unsigned long stringToInAddr(const std::string& name);
+    unsigned long m_inet_addr;
 
 };
 

@@ -30,7 +30,7 @@ InetAddress::InetAddress(const std::string& addr)
 {
 }
 
-in_addr InetAddress::stringToInAddr(const std::string &name)
+unsigned long InetAddress::stringToInAddr(const std::string &name)
 {
     unsigned long ian = inet_addr(name.c_str());
 
@@ -39,9 +39,7 @@ in_addr InetAddress::stringToInAddr(const std::string &name)
         //std::cout << "Error: " << WSAGetLastError() << std::endl;
     }
 
-    in_addr ia;
-    memcpy(&ia, &ian, sizeof(unsigned long));
-    return ia;
+    return ian;
 }
 
 /**
@@ -55,7 +53,7 @@ InetAddress InetAddress::getHostByName(const std::string& name)
     // Copy the first IP number in hostent to an in_addr
     in_addr addr;
     memcpy(&addr, h->h_addr_list[0], h->h_length);
-    
+
     // Construct a temporary InetAddress with found IP number
     InetAddress ia(inet_ntoa(addr));
 
@@ -68,7 +66,9 @@ InetAddress InetAddress::getHostByName(const std::string& name)
  */
 std::string InetAddress::toString() const
 {
-    return inet_ntoa(m_inet_addr);
+    struct in_addr a;
+    a.s_addr = m_inet_addr;
+    return inet_ntoa(a);
 }
 
 
