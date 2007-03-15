@@ -23,7 +23,7 @@ namespace
 
 SocketAddress convert(const struct sockaddr_in* sock_addr)
 {
-    return SocketAddress();
+    return SocketAddress(InetAddress(sock_addr->sin_addr.s_addr), sock_addr->sin_port);
 }
 
 }
@@ -59,15 +59,27 @@ bool TCPSocketPrivate::connect(const InetAddress& addr, port_t port)
     // set up address struct used
     sock_peer.sin_family = AF_INET;
     sock_peer.sin_port = htons(port);
-    sock_peer.sin_addr.s_addr = htonl(addr.get());
+    sock_peer.sin_addr.s_addr = htonl(addr.toInt32());
     bzero(&(sock_peer.sin_zero), 8);
 
     // call connect
     int ret = ::connect(fd, reinterpret_cast<sockaddr*>(&sock_peer) , sizeof(sock_peer));
 
     if (ret < 0)
-        return false;
+    {
+        switch (errno)
+        {
+        case ENETUNREACH: // Network unreachable
+        case ECONNREFUSED: // Connection refused
+            // This does not qualify as an "exception"
+            return false;
+        default:
+            // Other "real" error
+            throw IOException("TCPSocket::connect", strerror(errno));
+        }
+    }
 
+    // Connection OK
     peerAddress = convert(&sock_peer);
 
     return true;
@@ -81,7 +93,7 @@ TCPSocket::TCPSocket()
     d->fd = ::socket(AF_INET, SOCK_STREAM, 0);
 
     // Error checking
-    if(d->fd < 0)
+    if (d->fd < 0)
     {
         throw IOException("TCPSocket::TCPSocket", strerror(errno));
     }
@@ -97,18 +109,22 @@ TCPSocket::TCPSocket(TCPSocketPrivate* data)
 
 TCPSocket::~TCPSocket()
 {
+    close();
     delete d;
 }
+
 
 void TCPSocket::close()
 {
     ::close(d->fd);
 }
 
+
 bool TCPSocket::connect(const SocketAddress& addr)
 {
     return d->connect(addr.getInetAddress(), addr.getPort());
 }
+
 
 bool TCPSocket::connect(const InetAddress& addr, port_t port)
 {
@@ -116,9 +132,9 @@ bool TCPSocket::connect(const InetAddress& addr, port_t port)
 }
 
 
-
 ByteArray TCPSocket::read()
 {
+    // TODO: Is there a way to predict the needed buffer size?
     ByteArray ba(0x100000);
 
     ssize_t size = ::read(d->fd, ba.data(), ba.size());
@@ -128,6 +144,7 @@ ByteArray TCPSocket::read()
         throw IOException("TCPSocket::read", strerror(errno));
     }
 
+    // Resize byte-array to actual read size
     ba.resize(size);
     return ba;
 }
@@ -135,10 +152,17 @@ ByteArray TCPSocket::read()
 
 void TCPSocket::write(const ByteArray& data)
 {
-    ::write(d->fd, data.data(), data.size());
+    ssize_t size = ::write(d->fd, data.data(), data.size());
+
+    if (size < 0)
+    {
+        throw IOException("TCPSocket::write", strerror(errno));
+    }
 }
 
 
+
+// TCPServer implementation
 
 class TCPServerPrivate
 {
@@ -185,14 +209,23 @@ void TCPServer::setQueueSize(int size)
 void TCPServer::listen(const SocketAddress& addr)
 {
     // create sockaddr_in struct
-    sockaddr_in remoteAddr;
-    remoteAddr.sin_family = AF_INET;
-    remoteAddr.sin_port = htons(addr.getPort());
-    remoteAddr.sin_addr.s_addr = htonl(addr.getInetAddress().get());
-    bzero(&(remoteAddr.sin_zero), 8);
+    sockaddr_in sock_addr;
+    sock_addr.sin_family = AF_INET;
+    sock_addr.sin_port = htons(addr.getPort());
+    sock_addr.sin_addr.s_addr = htonl(addr.getInetAddress().toInt32());
+    bzero(&(sock_addr.sin_zero), 8);
 
-    ::bind(d->fd, reinterpret_cast<sockaddr*>(&remoteAddr), sizeof(remoteAddr));
-    ::listen(d->fd, d->queueSize);
+    int ret = ::bind(d->fd, reinterpret_cast<sockaddr*>(&sock_addr), sizeof(sock_addr));
+    if (ret < 0)
+    {
+        throw IOException("TCPServer::listen", strerror(errno));
+    }
+
+    ret = ::listen(d->fd, d->queueSize);
+    if (ret < 0)
+    {
+        throw IOException("TCPServer::listen", strerror(errno));
+    }
 }
 
 

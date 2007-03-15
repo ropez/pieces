@@ -14,7 +14,9 @@ class InetAddress
 public:
     // "any" address == 0.0.0.0
     InetAddress();
-    ~InetAddress();
+
+    // Convert from a low-level address
+    InetAddress(unsigned long addr);
 
     // String in the form of "12.23.23.2"
     InetAddress(const std::string& addr);
@@ -32,10 +34,7 @@ public:
     // or the internal representation might be hidden and the other classes made friend classes.
 
 
-    unsigned int get() const
-    {
-        return m_inet_addr;
-    }
+    unsigned long toInt32() const;
 
 private:
     unsigned long stringToInAddr(const std::string& name);

@@ -21,6 +21,12 @@ InetAddress::InetAddress()
 }
 
 
+InetAddress::InetAddress(unsigned long addr)
+: m_inet_addr(addr)
+{
+}
+
+
 /**
  * Create an InetAddress from a string
  * in the format "XXX.XXX.XXX.XXX"
@@ -72,12 +78,9 @@ std::string InetAddress::toString() const
 }
 
 
-/**
- * Destructor
- */
-InetAddress::~InetAddress()
+unsigned long InetAddress::toInt32() const
 {
-
+    return m_inet_addr;
 }
 
 
