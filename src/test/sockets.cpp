@@ -60,6 +60,7 @@ int main()
 
             INFO << "Accepted connection";
 
+            // This is a memory leak!
             (new Session(s.release()))->start();
         }
     }
