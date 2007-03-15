@@ -153,6 +153,52 @@ void TCPSocket::write(const ByteArray& data)
 }
 
 
+unsigned long TCPSocket::getReadTimeout() const
+{
+    struct timeval tv;
+    socklen_t len = sizeof(tv);
+    ::getsockopt(d->fd, SOL_SOCKET, SO_RCVTIMEO, &tv, &len);
+
+    return tv.tv_sec * 1000 + tv.tv_usec / 1000;
+}
+
+
+void TCPSocket::setReadTimeout(unsigned long msec)
+{
+    struct timeval tv;
+    tv.tv_sec = msec / 1000;
+    tv.tv_usec = (msec % 1000) * 1000;
+
+    if (::setsockopt(d->fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0)
+    {
+        WARNING << "setReadTimeout failed: " << strerror(errno);
+    }
+}
+
+
+unsigned long TCPSocket::getWriteTimeout() const
+{
+    struct timeval tv;
+    socklen_t len = sizeof(tv);
+    ::getsockopt(d->fd, SOL_SOCKET, SO_SNDTIMEO, &tv, &len);
+
+    return tv.tv_sec * 1000 + tv.tv_usec / 1000;
+}
+
+
+void TCPSocket::setWriteTimeout(unsigned long msec)
+{
+    struct timeval tv;
+    tv.tv_sec = msec / 1000;
+    tv.tv_usec = (msec % 1000) * 1000;
+
+    if (::setsockopt(d->fd, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv)) < 0)
+    {
+        WARNING << "setReadTimeout failed: " << strerror(errno);
+    }
+}
+
+
 
 // TCPServer implementation
 

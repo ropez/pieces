@@ -63,6 +63,14 @@ public:
      */
     void write(const ByteArray& data);
 
+    unsigned long getReadTimeout() const;
+    void setReadTimeout(unsigned long msec);
+
+
+    unsigned long getWriteTimeout() const;
+    void setWriteTimeout(unsigned long msec);
+
+
 private:
     // Disable copy operations
     TCPSocket(const TCPSocket&);

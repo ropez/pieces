@@ -20,20 +20,31 @@ public:
 protected:
     void run()
     {
-        for (;;)
+        try
         {
-            ByteArray ba = sock->read();
-
-            if (ba.isEmpty())
+            for (;;)
             {
-                INFO << "Disconnected";
-                return;
+                sock->setReadTimeout(5000);
+                INFO << "Timeout: " << sock->getReadTimeout();
+
+                ByteArray ba = sock->read();
+
+                if (ba.isEmpty())
+                {
+                    INFO << "Disconnected";
+                    return;
+                }
+
+                DEBUG << ba.data();
+
+                // Echo
+                sock->write(ba);
             }
-
-            DEBUG << ba.data();
-
-            // Echo
-            sock->write(ba);
+        }
+        catch (const Exception& e)
+        {
+            ERROR << e;
+            sock->close();
         }
     }
 
