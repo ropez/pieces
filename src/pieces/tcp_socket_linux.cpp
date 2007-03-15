@@ -3,6 +3,7 @@
 #include "Pieces/TCPServer"
 #include "Pieces/InetAddress"
 #include "Pieces/IOException"
+#include "Pieces/Debug"
 
 #include <errno.h>
 #include <sys/socket.h>
@@ -63,7 +64,9 @@ bool TCPSocketPrivate::connect(const InetAddress& addr, port_t port)
     bzero(&(sock_peer.sin_zero), 8);
 
     // call connect
+    DEBUG << "Calling ::connect";
     int ret = ::connect(fd, reinterpret_cast<sockaddr*>(&sock_peer) , sizeof(sock_peer));
+    DEBUG << "Returned";
 
     if (ret < 0)
     {
@@ -184,6 +187,14 @@ TCPServerPrivate::TCPServerPrivate()
 TCPServer::TCPServer()
 : d(new TCPServerPrivate)
 {
+    // Create standard tcp socket file descriptor.
+    d->fd = ::socket(AF_INET, SOCK_STREAM, 0);
+
+    // Error checking
+    if (d->fd < 0)
+    {
+        throw IOException("TCPSocket::TCPSocket", strerror(errno));
+    }
 }
 
 
