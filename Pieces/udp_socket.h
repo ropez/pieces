@@ -10,17 +10,44 @@ class SocketAddress;
 class UDPSocketPrivate;
 
 
+/**
+ * \class UDPSocket
+ * \brief OS independant UDP network socket.
+ *
+ * \author Robin Pedersen, Tord Heimdal, Thomas Bakken, Joakim Simonsson, Borge Jacobsen
+ */
 class UDPSocket
 {
 public:
 
+    /**
+     * Default constructor.
+     */
     UDPSocket();
+
+    /**
+     * Destructor (calls close()).
+     */
     ~UDPSocket();
 
+    /**
+     * Close the socket.
+     */
     void close();
+
+    /**
+     * Bind to the given address, to receive packets sent to this address.
+     */
     void bind(const SocketAddress& addr);
 
+    /**
+     * Receive a packet.
+     */
     UDPPacket receive();
+
+    /**
+     * Send a packet.
+     */
     void send(const UDPPacket& packet);
 
 private:

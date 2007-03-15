@@ -8,39 +8,69 @@
 
 namespace Pieces
 {
-
 class TCPSocketPrivate;
 
+
+/**
+ * \class TCPSocket
+ * \brief OS independant TCP network socket.
+ *
+ * \author Robin Pedersen, Tord Heimdal, Thomas Bakken, Joakim Simonsson, Borge Jacobsen
+ */
 class TCPSocket
 {
     friend class TCPServer;
 
 public:
 
-    // Default contructor
+    /**
+     * Default contructor
+     */
     TCPSocket();
 
-    // Destructor
+    /**
+     * Destructor (calls close()).
+     */
     ~TCPSocket();
 
-    // close file descriptor
+    /**
+     * Close the socket.
+     */
     void close();
 
-    // connect to address
+    /**
+     * Connect to the given address.
+     */
     bool connect(const SocketAddress& addr);
+
+    /**
+     * Connect to the given address.
+     */
     bool connect(const InetAddress& addr, port_t port);
 
+    /**
+     * Get the address to the peer connected to the socket.
+     */
     SocketAddress getPeerAddress() const;
 
-    // read from socket
+    /**
+     * Read from socket.
+     */
     ByteArray read();
 
-    // write to socket
+    /**
+     * Write to socket.
+     */
     void write(const ByteArray& data);
 
 private:
+    // Disable copy operations
+    TCPSocket(const TCPSocket&);
+    TCPSocket& operator=(const TCPSocket&);
 
+    // Constructor used by TCPServer::accept()
     TCPSocket(TCPSocketPrivate* data);
+
     TCPSocketPrivate* d;
 };
 
