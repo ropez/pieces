@@ -14,21 +14,21 @@ int main()
     using namespace Pieces;
 
     //make invalid inet address object (0.0.0.0)
-    InetAddress* ia = new InetAddress();
+    InetAddress ia;
 
     //show it
-    std::cout << "Inet address is: " << ia->toString() << std::endl;
+    std::cout << "Inet address is: " << ia.toString() << std::endl;
 
     //test constructor giving ip as string argument
-    ia = new InetAddress("192.168.0.1");
+    ia = InetAddress("192.168.0.1");
 
     //show it
-    std::cout << "Inet address is: " << ia->toString() << std::endl;
+    std::cout << "Inet address is: " << ia.toString() << std::endl;
 
     //test get host by name
-    *ia = InetAddress::getHostByName("www.google.com");
+    ia = InetAddress::getHostByName("www.google.com");
 
     //show it
-    std::cout << "Inet address is: " << ia->toString() << std::endl;
+    std::cout << "Inet address is: " << ia.toString() << std::endl;
 }
 
