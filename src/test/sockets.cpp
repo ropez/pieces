@@ -46,7 +46,7 @@ int main()
 {
     using namespace Pieces;
 
-    // Echo server, accepting one connection at a time
+    // Echo server
     try
     {
         SocketAddress serverAddress;
