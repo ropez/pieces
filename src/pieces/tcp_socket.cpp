@@ -105,7 +105,7 @@ ByteArray TCPSocket::read()
 {
     ByteArray ba(0x100000);
 
-    size_t size = ::read(d->fd, ba.data(), ba.size());
+    ssize_t size = ::read(d->fd, ba.data(), ba.size());
 
     if (size < 0)
     {
