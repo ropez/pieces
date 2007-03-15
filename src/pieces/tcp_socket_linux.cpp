@@ -60,7 +60,7 @@ bool TCPSocketPrivate::connect(const InetAddress& addr, port_t port)
     // set up address struct used
     sock_peer.sin_family = AF_INET;
     sock_peer.sin_port = htons(port);
-    sock_peer.sin_addr.s_addr = htonl(addr.toInt32());
+    sock_peer.sin_addr.s_addr = addr.toInt32();
     bzero(&(sock_peer.sin_zero), 8);
 
     // call connect
