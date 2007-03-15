@@ -6,6 +6,9 @@
 
 namespace Pieces
 {
+class SocketAddress;
+class UDPSocketPrivate;
+
 
 class UDPSocket
 {
@@ -14,9 +17,18 @@ public:
     UDPSocket();
     ~UDPSocket();
 
+    void close();
+    void bind(const SocketAddress& addr);
+
     UDPPacket receive();
     void send(const UDPPacket& packet);
 
+private:
+    // Disable copy operations
+    UDPSocket(const UDPSocket&);
+    UDPSocket& operator=(const UDPSocket&);
+
+    UDPSocketPrivate* d;
 };
 
 } // namespace Pieces
