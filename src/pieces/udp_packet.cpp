@@ -8,16 +8,19 @@ namespace Pieces
 {
 
 UDPPacket::UDPPacket()
+: d(new Data)
 {
 }
 
 
-UDPPacket::UDPPacket(const ByteArray& data)
+UDPPacket::UDPPacket(const ByteArray& data, const SocketAddress& addr)
+: d(new Data(data, addr))
 {
 }
 
 
 UDPPacket::UDPPacket(const ByteArray& data, const InetAddress& addr, port_t port)
+: d(new Data(data, SocketAddress(addr, port)))
 {
 }
 
@@ -29,44 +32,72 @@ UDPPacket::~UDPPacket()
 
 UDPPacket::UDPPacket(const UDPPacket& other)
 {
+    d = other.d;
 }
 
 
 UDPPacket& UDPPacket::operator=(const UDPPacket& other)
 {
+    d = other.d;
+
+    return *this;
 }
 
 
-port_t UDPPacket::getPort() const
+SocketAddress UDPPacket::getAddress() const
 {
-    return 0;
+    return d->address;
 }
 
 
-void UDPPacket::setPort(port_t port)
+void UDPPacket::setAddress(const SocketAddress& addr)
 {
-}
-
-
-InetAddress UDPPacket::getAddress() const
-{
-    return InetAddress();
-}
-
-
-void UDPPacket::setAddress(const InetAddress& adr)
-{
+    d->address = addr;
 }
 
 
 ByteArray UDPPacket::getData() const
 {
-    return ByteArray();
+    return d->data;
 }
 
 
 void UDPPacket::setData(const ByteArray& data)
 {
+    d->data = data;
+}
+
+
+UDPPacket::Data::Data()
+: SharedData()
+, data()
+, address()
+{
+}
+
+
+UDPPacket::Data::Data(const ByteArray& data, const SocketAddress& addr)
+: SharedData()
+, data(data)
+, address(addr)
+{
+}
+
+
+UDPPacket::Data::Data(const Data& other)
+: SharedData()
+, data(other.data)
+, address(other.address)
+{
+}
+
+
+UDPPacket::Data& UDPPacket::Data::operator=(const Data& other)
+{
+    data = other.data;
+    address = other.address;
+
+    return *this;
 }
 
 } // namespace Pieces

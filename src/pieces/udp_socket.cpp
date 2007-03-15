@@ -15,9 +15,7 @@ UDPSocket::~UDPSocket()
 
 UDPPacket UDPSocket::receive()
 {
-    ByteArray baDummy;
-    UDPPacket dummy(baDummy);
-    return dummy;
+    return UDPPacket();
 }
 
 void UDPSocket::send(const UDPPacket& packet)
