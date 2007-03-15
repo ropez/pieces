@@ -37,9 +37,6 @@ public:
     // Default constructor.
     TCPSocketPrivate();
 
-    // connect socket to address
-    bool connect(const InetAddress& addr, port_t port);
-
     int fd;
 
     SocketAddress peerAddress;
@@ -50,42 +47,6 @@ TCPSocketPrivate::TCPSocketPrivate()
 : fd(-1)
 , peerAddress()
 {
-}
-
-
-bool TCPSocketPrivate::connect(const InetAddress& addr, port_t port)
-{
-    struct sockaddr_in sock_peer;
-
-    // set up address struct used
-    sock_peer.sin_family = AF_INET;
-    sock_peer.sin_port = htons(port);
-    sock_peer.sin_addr.s_addr = addr.toInt32();
-    bzero(&(sock_peer.sin_zero), 8);
-
-    // call connect
-    DEBUG << "Calling ::connect";
-    int ret = ::connect(fd, reinterpret_cast<sockaddr*>(&sock_peer) , sizeof(sock_peer));
-    DEBUG << "Returned";
-
-    if (ret < 0)
-    {
-        switch (errno)
-        {
-        case ENETUNREACH: // Network unreachable
-        case ECONNREFUSED: // Connection refused
-            // This does not qualify as an "exception"
-            return false;
-        default:
-            // Other "real" error
-            throw IOException("TCPSocket::connect", strerror(errno));
-        }
-    }
-
-    // Connection OK
-    peerAddress = convert(&sock_peer);
-
-    return true;
 }
 
 
@@ -125,13 +86,41 @@ void TCPSocket::close()
 
 bool TCPSocket::connect(const SocketAddress& addr)
 {
-    return d->connect(addr.getInetAddress(), addr.getPort());
+    return connect(addr.getInetAddress(), addr.getPort());
 }
 
 
 bool TCPSocket::connect(const InetAddress& addr, port_t port)
 {
-    return d->connect(addr, port);
+    struct sockaddr_in sock_peer;
+
+    // set up address struct used
+    sock_peer.sin_family = AF_INET;
+    sock_peer.sin_port = htons(port);
+    sock_peer.sin_addr.s_addr = addr.toInt32();
+    bzero(&(sock_peer.sin_zero), 8);
+
+    // call connect
+    int ret = ::connect(d->fd, reinterpret_cast<sockaddr*>(&sock_peer) , sizeof(sock_peer));
+
+    if (ret < 0)
+    {
+        switch (errno)
+        {
+        case ENETUNREACH: // Network unreachable
+        case ECONNREFUSED: // Connection refused
+            // This does not qualify as an "exception"
+            return false;
+        default:
+            // Other "real" error
+            throw IOException("TCPSocket::connect", strerror(errno));
+        }
+    }
+
+    // Connection OK
+    d->peerAddress = convert(&sock_peer);
+
+    return true;
 }
 
 
