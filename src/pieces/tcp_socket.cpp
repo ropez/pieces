@@ -107,10 +107,9 @@ ByteArray TCPSocket::read()
 
     size_t size = ::read(d->fd, ba.data(), ba.size());
 
-    if (size == 0)
+    if (size < 0)
     {
-        // Disconnected
-        throw IOException();
+        throw IOException("TCPSocket::read", strerror(errno));
     }
 
     ba.resize(size);
