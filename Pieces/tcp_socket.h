@@ -40,7 +40,7 @@ public:
 
 private:
 
-    TCPSocket(TCPSocketPrivate* tmp);
+    TCPSocket(TCPSocketPrivate* data);
     TCPSocketPrivate* d;
 };
 

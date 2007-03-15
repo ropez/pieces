@@ -71,8 +71,8 @@ TCPSocket::TCPSocket()
 
 
 
-TCPSocket::TCPSocket(TCPSocketPrivate* tmp)
-: d(tmp)
+TCPSocket::TCPSocket(TCPSocketPrivate* data)
+: d(data)
 {
 }
 
@@ -181,15 +181,15 @@ void TCPServer::listen(const SocketAddress& addr)
 
 std::auto_ptr<TCPSocket> TCPServer::accept()
 {
-    std::auto_ptr<TCPSocketPrivate> tmp(new TCPSocketPrivate);
+    std::auto_ptr<TCPSocketPrivate> data(new TCPSocketPrivate);
 
-    socklen_t len = sizeof(tmp->sock_peer);
-    tmp->fd = ::accept(d->fd, reinterpret_cast<sockaddr*>(&tmp->sock_peer), &len);
+    socklen_t len = sizeof(data->sock_peer);
+    data->fd = ::accept(d->fd, reinterpret_cast<sockaddr*>(&data->sock_peer), &len);
 
-    if (tmp->fd < 0)
+    if (data->fd < 0)
         throw IOException();
 
-    return std::auto_ptr<TCPSocket>(new TCPSocket(tmp.release()));
+    return std::auto_ptr<TCPSocket>(new TCPSocket(data.release()));
 }
 
 
