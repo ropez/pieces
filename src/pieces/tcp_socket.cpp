@@ -14,6 +14,21 @@ namespace Pieces
 {
 
 
+// This is a namespace without a name. It means that functions within this
+// namespace are available locally in this file, and don't make conflicts with
+// functions in other files that have the same name. It is the C++ equivalent
+// to C functions declared as static
+namespace
+{
+
+SocketAddress convert(const struct sockaddr_in* sock_addr)
+{
+    return SocketAddress();
+}
+
+}
+
+
 class TCPSocketPrivate
 {
 public:
@@ -25,23 +40,22 @@ public:
     bool connect(const InetAddress& addr, port_t port);
 
     int fd;
-//     struct sockaddr_in sock_self;
-    struct sockaddr_in sock_peer;
+
+    SocketAddress peerAddress;
 };
+
 
 TCPSocketPrivate::TCPSocketPrivate()
 : fd(-1)
+, peerAddress()
 {
-//     // Setup address struct used by OS API
-//     m_sock_self.sin_family = AF_INET;
-//     m_sock_self.sin_port = htons(0);
-//     m_sock_self.sin_addr.s_addr = INADDR_ANY;
-//     bzero(&(m_sock_self.sin_zero), 8);
 }
 
 
 bool TCPSocketPrivate::connect(const InetAddress& addr, port_t port)
 {
+    struct sockaddr_in sock_peer;
+
     // set up address struct used
     sock_peer.sin_family = AF_INET;
     sock_peer.sin_port = htons(port);
@@ -53,6 +67,8 @@ bool TCPSocketPrivate::connect(const InetAddress& addr, port_t port)
 
     if (ret < 0)
         return false;
+
+    peerAddress = convert(&sock_peer);
 
     return true;
 }
@@ -184,13 +200,16 @@ std::auto_ptr<TCPSocket> TCPServer::accept()
 {
     std::auto_ptr<TCPSocketPrivate> data(new TCPSocketPrivate);
 
-    socklen_t len = sizeof(data->sock_peer);
-    data->fd = ::accept(d->fd, reinterpret_cast<sockaddr*>(&data->sock_peer), &len);
+    struct sockaddr_in sock_peer;
+    socklen_t len = sizeof(sock_peer);
+    data->fd = ::accept(d->fd, reinterpret_cast<sockaddr*>(&sock_peer), &len);
 
     if (data->fd < 0)
     {
         throw IOException("TCPServer::accept", strerror(errno));
     }
+
+    data->peerAddress = convert(&sock_peer);
 
     return std::auto_ptr<TCPSocket>(new TCPSocket(data.release()));
 }
