@@ -3,6 +3,8 @@
 #include "Pieces/TCPServer"
 #include "Pieces/InetAddress"
 #include "Pieces/IOException"
+
+#include <errno.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -65,7 +67,7 @@ TCPSocket::TCPSocket()
     // Error checking
     if(d->fd < 0)
     {
-        throw IOException();
+        throw IOException("TCPSocket::TCPSocket", strerror(errno));
     }
 }
 
@@ -187,7 +189,9 @@ std::auto_ptr<TCPSocket> TCPServer::accept()
     data->fd = ::accept(d->fd, reinterpret_cast<sockaddr*>(&data->sock_peer), &len);
 
     if (data->fd < 0)
-        throw IOException();
+    {
+        throw IOException("TCPServer::accept", strerror(errno));
+    }
 
     return std::auto_ptr<TCPSocket>(new TCPSocket(data.release()));
 }
