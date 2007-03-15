@@ -12,14 +12,18 @@ class TCPSocket
 {
 public:
 
+    // Default contructor
     TCPSocket();
+    
+    // Destructor
     ~TCPSocket();
 
     // close file descriptor
     void close();
     
     // connect to address
-    bool connect(const InetAddress& addr);
+    bool connect(const SocketAddress& addr);
+    bool connect(const InetAddress& addr, int port);
 
     // read from socket
     ByteArray read();
@@ -28,8 +32,8 @@ public:
     void write(const ByteArray& data);
 
 private:
-    int m_sockFd;
-
+    TCPSocketPrivate* d;
+    
 };
 
 } // namespace Pieces
