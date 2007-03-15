@@ -15,14 +15,20 @@ public:
     TCPSocket();
     ~TCPSocket();
 
+    // close file descriptor
     void close();
+    
+    // connect to address
     bool connect(const InetAddress& addr);
 
+    // read from socket
     ByteArray read();
+    
+    // write to socket
     void write(const ByteArray& data);
 
 private:
-    // Disable copy operations
+    int m_sockFd;
 
 };
 
