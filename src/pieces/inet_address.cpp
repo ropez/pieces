@@ -80,4 +80,10 @@ InetAddress::~InetAddress()
 
 }
 
+
+std::ostream& operator<<(std::ostream& os, const InetAddress& ia)
+{
+    return os << ia.toString();
+}
+
 }

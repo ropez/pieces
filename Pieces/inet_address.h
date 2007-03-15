@@ -3,12 +3,7 @@
 #define PIECES_INET_ADDRESS_H
 
 #include <string>
-
-#if defined WIN32
-#include <winsock2.h>
-#else
-#include <netinet/in.h>
-#endif
+#include <ostream>
 
 
 namespace Pieces
@@ -47,6 +42,8 @@ private:
     unsigned long m_inet_addr;
 
 };
+
+std::ostream& operator<<(std::ostream& os, const InetAddress& ia);
 
 } // namespace Pieces
 
