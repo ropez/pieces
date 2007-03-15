@@ -224,7 +224,7 @@ void DataStream::writeBytes(const ByteArray& ba)
 ByteArray DataStream::readBytes(size_t size)
 {
     if (size > m_data.size() - m_readPtr)
-        throw "error";
+        throw IOException("Read passed end of stream");
 
     ByteArray ba = m_data.middle(m_readPtr, size);
     m_readPtr += size;
