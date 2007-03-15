@@ -45,9 +45,27 @@ InetAddress SocketAddress::getInetAddress() const
 }
 
 
+void SocketAddress::setInetAddress(const InetAddress& addr)
+{
+    m_address = addr;
+}
+
+
 unsigned short SocketAddress::getPort() const
 {
     return m_port;
+}
+
+
+void SocketAddress::setPort(unsigned short port)
+{
+    m_port = port;
+}
+
+
+std::ostream& operator<<(std::ostream& os, const SocketAddress& sa)
+{
+    return os << sa.getInetAddress() << ":" << sa.getPort();
 }
 
 } // namespace Pieces

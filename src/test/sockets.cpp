@@ -1,13 +1,7 @@
-#include "Pieces/PropertyList"
-#include "Pieces/ValueList"
-#include "Pieces/ByteArray"
-#include "Pieces/DataStream"
-#include "Pieces/Vector"
 #include "Pieces/Debug"
 #include "Pieces/InetAddress"
+#include "Pieces/SocketAddress"
 
-#include <iostream>
-#include <sstream>
 
 int main()
 {
@@ -15,20 +9,26 @@ int main()
 
     //make invalid inet address object (0.0.0.0)
     InetAddress ia;
+    SocketAddress sa;
 
     //show it
-    std::cout << "Inet address is: " << ia << std::endl;
+    DEBUG << "Inet address is: " << ia;
+    DEBUG << "Socket address is: " << sa;
 
     //test constructor giving ip as string argument
     ia = InetAddress("192.168.0.1");
+    sa = SocketAddress(ia, 2048);
 
     //show it
-    std::cout << "Inet address is: " << ia << std::endl;
+    DEBUG << "Inet address is: " << ia;
+    DEBUG << "Socket address is: " << sa;
 
     //test get host by name
     ia = InetAddress::getHostByName("www.google.com");
+    sa.setInetAddress(InetAddress::getHostByName("www.google.com"));
 
     //show it
-    std::cout << "Inet address is: " << ia << std::endl;
+    DEBUG << "Inet address is: " << ia;
+    DEBUG << "Socket address is: " << sa;
 }
 
