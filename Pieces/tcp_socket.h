@@ -28,7 +28,7 @@ public:
 
     // connect to address
     bool connect(const SocketAddress& addr);
-    bool connect(const InetAddress& addr, int port);
+    bool connect(const InetAddress& addr, port_t port);
 
     SocketAddress getPeerAddress() const;
 

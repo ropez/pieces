@@ -17,7 +17,7 @@ SocketAddress::~SocketAddress()
 }
 
 
-SocketAddress::SocketAddress(const InetAddress& addr, unsigned short port)
+SocketAddress::SocketAddress(const InetAddress& addr, port_t port)
 : m_address(addr)
 , m_port(port)
 {
@@ -51,13 +51,13 @@ void SocketAddress::setInetAddress(const InetAddress& addr)
 }
 
 
-unsigned short SocketAddress::getPort() const
+port_t SocketAddress::getPort() const
 {
     return m_port;
 }
 
 
-void SocketAddress::setPort(unsigned short port)
+void SocketAddress::setPort(port_t port)
 {
     m_port = port;
 }

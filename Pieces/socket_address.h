@@ -4,6 +4,8 @@
 
 #include "Pieces/InetAddress"
 
+// TODO: Move this
+typedef unsigned short port_t;
 
 namespace Pieces
 {
@@ -15,7 +17,7 @@ public:
     SocketAddress();
     ~SocketAddress();
 
-    SocketAddress(const InetAddress& addr, unsigned short port);
+    SocketAddress(const InetAddress& addr, port_t port);
 
     SocketAddress(const SocketAddress& other);
     SocketAddress& operator=(const SocketAddress& other);
@@ -23,12 +25,12 @@ public:
     InetAddress getInetAddress() const;
     void setInetAddress(const InetAddress& addr);
 
-    unsigned short getPort() const;
-    void setPort(unsigned short port);
+    port_t getPort() const;
+    void setPort(port_t port);
 
 private:
     InetAddress m_address;
-    unsigned short m_port;
+    port_t m_port;
 };
 
 std::ostream& operator<<(std::ostream& os, const SocketAddress& sa);

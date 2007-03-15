@@ -22,7 +22,7 @@ public:
     TCPSocketPrivate();
 
     // connect socket to address
-    bool connect(const InetAddress& addr, int port);
+    bool connect(const InetAddress& addr, port_t port);
 
     int fd;
 //     struct sockaddr_in sock_self;
@@ -40,7 +40,7 @@ TCPSocketPrivate::TCPSocketPrivate()
 }
 
 
-bool TCPSocketPrivate::connect(const InetAddress& addr, int port)
+bool TCPSocketPrivate::connect(const InetAddress& addr, port_t port)
 {
     // set up address struct used
     sock_peer.sin_family = AF_INET;
@@ -94,7 +94,7 @@ bool TCPSocket::connect(const SocketAddress& addr)
     return d->connect(addr.getInetAddress(), addr.getPort());
 }
 
-bool TCPSocket::connect(const InetAddress& addr, int port)
+bool TCPSocket::connect(const InetAddress& addr, port_t port)
 {
     return d->connect(addr, port);
 }

@@ -4,6 +4,7 @@
 
 #include "Pieces/ByteArray"
 #include "Pieces/InetAddress"
+#include "Pieces/SocketAddress"
 #include "Pieces/UDPPacket"
 
 namespace Pieces
@@ -14,7 +15,7 @@ class UDPPacket
 public:
     UDPPacket();
     UDPPacket(const ByteArray& data);
-    UDPPacket(const ByteArray& data, const InetAddress& addr, short port);
+    UDPPacket(const ByteArray& data, const InetAddress& addr, port_t port);
     // etc...
 
     // Copy operations (this class might use implicit sharing)
@@ -23,8 +24,8 @@ public:
 
     ~UDPPacket();
 
-    short getPort() const;
-    void setPort(short port);
+    port_t getPort() const;
+    void setPort(port_t port);
 
     InetAddress getAddress() const;
     void setAddress(const InetAddress& adr);

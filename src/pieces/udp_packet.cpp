@@ -11,41 +11,48 @@ UDPPacket::UDPPacket()
 {
 }
 
+
 UDPPacket::UDPPacket(const ByteArray& data)
 {
 }
 
-UDPPacket::UDPPacket(const ByteArray& data, const InetAddress& addr, short port)
+
+UDPPacket::UDPPacket(const ByteArray& data, const InetAddress& addr, port_t port)
 {
 }
+
 
 UDPPacket::~UDPPacket()
 {
 }
 
 
-// Copy operations (this class might use implicit sharing)
 UDPPacket::UDPPacket(const UDPPacket& other)
 {
 }
 
-//UDPPacket& operator=(const UDPPacket& other);
 
-short UDPPacket::getPort() const
-{
-    short dummy = 0;
-    return dummy;
-}
-
-void UDPPacket::setPort(short port)
+UDPPacket& UDPPacket::operator=(const UDPPacket& other)
 {
 }
+
+
+port_t UDPPacket::getPort() const
+{
+    return 0;
+}
+
+
+void UDPPacket::setPort(port_t port)
+{
+}
+
 
 InetAddress UDPPacket::getAddress() const
 {
-    InetAddress dummy("");
-    return dummy;
+    return InetAddress();
 }
+
 
 void UDPPacket::setAddress(const InetAddress& adr)
 {
@@ -54,9 +61,9 @@ void UDPPacket::setAddress(const InetAddress& adr)
 
 ByteArray UDPPacket::getData() const
 {
-    ByteArray dummy(0);
-    return dummy;
+    return ByteArray();
 }
+
 
 void UDPPacket::setData(const ByteArray& data)
 {
