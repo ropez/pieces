@@ -1,34 +1,71 @@
 #include "Pieces/Debug"
 #include "Pieces/InetAddress"
 #include "Pieces/SocketAddress"
+#include "Pieces/TCPServer"
+#include "Pieces/TCPSocket"
+#include "Pieces/Exception"
+#include "OpenThreads/Thread"
+
+
+using namespace Pieces;
+
+class Session : public OpenThreads::Thread
+{
+public:
+    Session(TCPSocket* socket)
+    : sock(socket)
+    {
+    }
+
+protected:
+    void run()
+    {
+        for (;;)
+        {
+            ByteArray ba = sock->read();
+
+            if (ba.isEmpty())
+            {
+                INFO << "Disconnected";
+                return;
+            }
+
+            DEBUG << ba.data();
+
+            // Echo
+            sock->write(ba);
+        }
+    }
+
+private:
+    std::auto_ptr<TCPSocket> sock;
+};
 
 
 int main()
 {
     using namespace Pieces;
 
-    //make invalid inet address object (0.0.0.0)
-    InetAddress ia;
-    SocketAddress sa;
+    // Echo server, accepting one connection at a time
+    try
+    {
+        SocketAddress serverAddress;
+        serverAddress.setPort(2222);
+        TCPServer server;
+        server.listen(serverAddress);
 
-    //show it
-    DEBUG << "Inet address is: " << ia;
-    DEBUG << "Socket address is: " << sa;
+        for (;;)
+        {
+            std::auto_ptr<TCPSocket> s = server.accept();
 
-    //test constructor giving ip as string argument
-    ia = InetAddress("192.168.0.1");
-    sa = SocketAddress(ia, 2048);
+            INFO << "Accepted connection";
 
-    //show it
-    DEBUG << "Inet address is: " << ia;
-    DEBUG << "Socket address is: " << sa;
-
-    //test get host by name
-    ia = InetAddress::getHostByName("www.google.com");
-    sa.setInetAddress(InetAddress::getHostByName("www.google.com"));
-
-    //show it
-    DEBUG << "Inet address is: " << ia;
-    DEBUG << "Socket address is: " << sa;
+            (new Session(s.release()))->start();
+        }
+    }
+    catch (const Exception& e)
+    {
+        ERROR << e;
+    }
 }
 
