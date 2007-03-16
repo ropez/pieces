@@ -49,6 +49,20 @@ TCPSocket* DataStream::socket() const
 }
 
 
+DataStream& DataStream::operator<<(DataStream& (*foo)(DataStream&))
+{
+    foo(*this);
+    return *this;
+}
+
+
+DataStream& DataStream::operator>>(DataStream& (*foo)(DataStream&))
+{
+    foo(*this);
+    return *this;
+}
+
+
 DataStream& DataStream::operator<<(bool v)
 {
     ByteArray ba;
@@ -541,6 +555,13 @@ void decode(const ByteArray& ba, std::string& v)
     {
         v[i] = ba[i];
     }
+}
+
+
+DataStream& flush(DataStream& ds)
+{
+    ds.flush();
+    return ds;
 }
 
 } // namespace Pieces

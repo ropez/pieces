@@ -36,7 +36,7 @@ protected:
                 ds << ch;
 
                 if (ch == '\n')
-                    ds.flush();
+                    ds << flush;
             }
         }
         catch (const Exception& e)

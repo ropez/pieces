@@ -115,6 +115,20 @@ public:
      */
     TCPSocket* socket() const;
 
+    /**
+     * Manipulator support.
+     *
+     * Calls foo(*this).
+     */
+    DataStream& operator<<(DataStream& (*foo)(DataStream&));
+
+    /**
+     * Manipulator support.
+     *
+     * Calls foo(*this).
+     */
+    DataStream& operator>>(DataStream& (*foo)(DataStream&));
+
     /** Append the value \a v to the data. */
     DataStream& operator<<(bool v);
 
@@ -475,6 +489,21 @@ void decode(const ByteArray& ba, ByteArray& v);
  * \relates DataStream
  */
 void decode(const ByteArray& ba, std::string& v);
+
+/**
+ * Manipulator that flushes the stream.
+ *
+ * Calls ds.flush(), and returns ds.
+ *
+ * Usage:
+ * \code
+ * DataStream ds();
+ * ds << data << flush;
+ * \endcode
+ *
+ * \relates DataStream
+ */
+DataStream& flush(DataStream& ds);
 
 } // namespace Pieces
 
