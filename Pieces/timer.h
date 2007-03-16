@@ -70,14 +70,14 @@ public:
      *
      * This function returns immediately.
      */
-    void start(unsigned long int delay, const ByteArray& data);
+    void start(unsigned long delay, const ByteArray& data);
 
     /**
      * Start the timer.
      *
      * Same as start(delay, ByteArray()).
      */
-    void start(unsigned long int delay);
+    void start(unsigned long delay);
 
     /**
      * Stop the timer if it's running.

@@ -67,7 +67,7 @@ void Timer::setRepeating(bool on)
 }
 
 
-void Timer::start(unsigned long int delay, const ByteArray& data)
+void Timer::start(unsigned long delay, const ByteArray& data)
 {
     stop();
 
@@ -79,7 +79,7 @@ void Timer::start(unsigned long int delay, const ByteArray& data)
 }
 
 
-void Timer::start(unsigned long int delay)
+void Timer::start(unsigned long delay)
 {
     start(delay, ByteArray());
 }
