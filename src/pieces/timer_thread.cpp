@@ -30,7 +30,7 @@ public:
     bool repeating;
 
     int id;
-    unsigned int delay;
+    unsigned long delay;
 
     ByteArray data;
 };
@@ -74,15 +74,33 @@ void TimerThread::setRepeating(bool on)
 }
 
 
+int TimerThread::getTimerId() const
+{
+    return d->id;
+}
+
+
 void TimerThread::setTimerId(int id)
 {
     d->id = id;
 }
 
 
-void TimerThread::setDelay(unsigned long int ms)
+unsigned long TimerThread::getDelay() const
 {
-    d->delay = ms;
+    return d->delay;
+}
+
+
+void TimerThread::setDelay(unsigned long msec)
+{
+    d->delay = msec;
+}
+
+
+ByteArray TimerThread::getData() const
+{
+    return d->data;
 }
 
 

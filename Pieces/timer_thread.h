@@ -66,14 +66,14 @@ public:
      *
      * The delay time is in milli-seconds.
      */
-    unsigned long int getDelay() const;
+    unsigned long getDelay() const;
 
     /**
      * Set the delay time to how long it should sleep before it's triggered.
      *
      * The delay time is in milli-seconds.
      */
-    void setDelay(unsigned long int ms);
+    void setDelay(unsigned long msec);
 
     /**
      * The data that is added to the event posted when the timer is triggered.
