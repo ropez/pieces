@@ -248,14 +248,16 @@ void DataStream::writeBytes(const ByteArray& ba)
 
 ByteArray DataStream::readBytes(size_t size)
 {
-    while (size > m_data.size() - m_readPtr)
+    while (m_readPtr + size > m_data.size())
     {
         if (socket() != 0)
         {
             ByteArray ba = socket()->read();
 
             if (ba.isEmpty())
+            {
                 throw IOException("Disconnected");
+            }
 
             m_data.append(ba);
         }
