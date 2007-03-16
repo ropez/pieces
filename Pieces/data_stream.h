@@ -91,8 +91,10 @@ public:
      * will call the socket's read function until the internal byte-array
      * contains enough data.
      *
-     * Any data written to the stream will be written directly to the socket,
-     * instead of the internal byte-array.
+     * Any data written to the stream will be buffered internally, instead of
+     * witten to the internal byte-array. Must call flush() to write to the
+     * socket. The data-stream discards any written data if it is destroyed
+     * before the data is flushed.
      */
     explicit DataStream(TCPSocket* socket);
 
@@ -196,6 +198,14 @@ public:
      */
     ByteArray readBytes(size_t size);
 
+    /**
+     * Flush all data written to the stream.
+     *
+     * If the stream is connected to a socket, write all data to the socket.
+     * Otherwise, this function does nothing.
+     */
+    void flush();
+
 private:
 
     // Current read location
@@ -206,6 +216,9 @@ private:
 
     // Network socket
     TCPSocket* m_socket;
+
+    // Buffer for sent data used when connected to a socket
+    ByteArray m_buffer;
 };
 
 /**

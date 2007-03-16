@@ -14,6 +14,7 @@ DataStream::DataStream()
 : m_readPtr(0)
 , m_data()
 , m_socket(0)
+, m_buffer()
 {
 }
 
@@ -22,6 +23,7 @@ DataStream::DataStream(const ByteArray& data)
 : m_readPtr(0)
 , m_data(data)
 , m_socket(0)
+, m_buffer()
 {
 }
 
@@ -30,6 +32,7 @@ DataStream::DataStream(TCPSocket* socket)
 : m_readPtr(0)
 , m_data()
 , m_socket(socket)
+, m_buffer()
 {
 }
 
@@ -237,7 +240,7 @@ void DataStream::writeBytes(const ByteArray& ba)
 {
     if (socket() != 0)
     {
-        socket()->write(ba);
+        m_buffer.append(ba);
     }
     else
     {
@@ -271,6 +274,16 @@ ByteArray DataStream::readBytes(size_t size)
     m_readPtr += size;
 
     return ba;
+}
+
+
+void DataStream::flush()
+{
+    if (socket() && !m_buffer.isEmpty())
+    {
+        socket()->write(m_buffer);
+        m_buffer.clear();
+    }
 }
 
 

@@ -34,6 +34,9 @@ protected:
 
                 // Echo
                 ds << ch;
+
+                if (ch == '\n')
+                    ds.flush();
             }
         }
         catch (const Exception& e)
