@@ -1,6 +1,8 @@
 
 #include "Pieces/DataStream"
+#include "Pieces/TCPSocket"
 #include "Pieces/IOException"
+#include "Pieces/Debug"
 
 #include <cstring>
 
@@ -11,6 +13,7 @@ namespace Pieces
 DataStream::DataStream()
 : m_readPtr(0)
 , m_data()
+, m_socket(0)
 {
 }
 
@@ -18,6 +21,15 @@ DataStream::DataStream()
 DataStream::DataStream(const ByteArray& data)
 : m_readPtr(0)
 , m_data(data)
+, m_socket(0)
+{
+}
+
+
+DataStream::DataStream(TCPSocket* socket)
+: m_readPtr(0)
+, m_data()
+, m_socket(socket)
 {
 }
 
@@ -25,6 +37,12 @@ DataStream::DataStream(const ByteArray& data)
 ByteArray DataStream::data() const
 {
     return m_data;
+}
+
+
+TCPSocket* DataStream::socket() const
+{
+    return m_socket;
 }
 
 
@@ -217,14 +235,35 @@ DataStream& DataStream::operator>>(double& v)
 
 void DataStream::writeBytes(const ByteArray& ba)
 {
-    m_data.append(ba);
+    if (socket() != 0)
+    {
+        socket()->write(ba);
+    }
+    else
+    {
+        m_data.append(ba);
+    }
 }
 
 
 ByteArray DataStream::readBytes(size_t size)
 {
-    if (size > m_data.size() - m_readPtr)
-        throw IOException("Read passed end of stream");
+    while (size > m_data.size() - m_readPtr)
+    {
+        if (socket() != 0)
+        {
+            ByteArray ba = socket()->read();
+
+            if (ba.isEmpty())
+                throw IOException("Disconnected");
+
+            m_data.append(ba);
+        }
+        else
+        {
+            throw IOException("Read passed end of stream");
+        }
+    }
 
     ByteArray ba = m_data.middle(m_readPtr, size);
     m_readPtr += size;

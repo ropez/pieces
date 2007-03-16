@@ -4,6 +4,7 @@
 #include "Pieces/TCPServer"
 #include "Pieces/TCPSocket"
 #include "Pieces/Exception"
+#include "Pieces/DataStream"
 #include "OpenThreads/Thread"
 
 
@@ -22,23 +23,17 @@ protected:
     {
         try
         {
+            sock->setReadTimeout(50000);
+            INFO << "Timeout: " << sock->getReadTimeout();
+
+            DataStream ds(sock.get());
             for (;;)
             {
-                sock->setReadTimeout(5000);
-                INFO << "Timeout: " << sock->getReadTimeout();
-
-                ByteArray ba = sock->read();
-
-                if (ba.isEmpty())
-                {
-                    INFO << "Disconnected";
-                    return;
-                }
-
-                DEBUG << ba.data();
+                char ch;
+                ds >> ch;
 
                 // Echo
-                sock->write(ba);
+                ds << ch;
             }
         }
         catch (const Exception& e)

@@ -54,7 +54,7 @@ std::ostream& operator<<(std::ostream& os, const Exception& e)
     std::string where = e.getWhere();
     if (!where.empty())
     {
-        os << "(in " << where << ")";
+        os << " (in " << where << ")";
     }
     os << ": " << e.getMessage();
 

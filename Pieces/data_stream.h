@@ -6,6 +6,7 @@
 
 namespace Pieces
 {
+class TCPSocket;
 
 
 /**
@@ -84,6 +85,18 @@ public:
     explicit DataStream(const ByteArray& data);
 
     /**
+     * Create a data-stream connected to a socket.
+     *
+     * The data-stream will start with an empty buffer. Using a read operation
+     * will call the socket's read function until the internal byte-array
+     * contains enough data.
+     *
+     * Any data written to the stream will be written directly to the socket,
+     * instead of the internal byte-array.
+     */
+    explicit DataStream(TCPSocket* socket);
+
+    /**
      * Returns a copy of the internal byte-array.
      *
      * This array contains everything written using write operations, appended
@@ -92,6 +105,13 @@ public:
      * It doesn't matter if the data was read or not.
      */
     ByteArray data() const;
+
+    /**
+     * Returns a pointer to the network socket if the data-stream has one.
+     *
+     * Returns a null-pointer if the stream isn't using a socket.
+     */
+    TCPSocket* socket() const;
 
     /** Append the value \a v to the data. */
     DataStream& operator<<(bool v);
@@ -183,6 +203,9 @@ private:
 
     // Internal data
     ByteArray m_data;
+
+    // Network socket
+    TCPSocket* m_socket;
 };
 
 /**
