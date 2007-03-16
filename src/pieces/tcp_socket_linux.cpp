@@ -3,6 +3,7 @@
 #include "Pieces/TCPServer"
 #include "Pieces/InetAddress"
 #include "Pieces/IOException"
+#include "Pieces/TimeoutException"
 #include "Pieces/Debug"
 
 #include <errno.h>
@@ -133,7 +134,13 @@ ByteArray TCPSocket::read()
 
     if (size < 0)
     {
-        throw IOException("TCPSocket::read", strerror(errno));
+        switch (errno)
+        {
+        case EAGAIN:
+            throw TimeoutException("TCPSocket::read", strerror(errno));
+        default:
+            throw IOException("TCPSocket::read", strerror(errno));
+        }
     }
 
     // Resize byte-array to actual read size
@@ -148,7 +155,13 @@ void TCPSocket::write(const ByteArray& data)
 
     if (size < 0)
     {
-        throw IOException("TCPSocket::write", strerror(errno));
+        switch (errno)
+        {
+        case EAGAIN:
+            throw TimeoutException("TCPSocket::write", strerror(errno));
+        default:
+            throw IOException("TCPSocket::write", strerror(errno));
+        }
     }
 }
 
