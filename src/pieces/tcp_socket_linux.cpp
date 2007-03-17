@@ -125,10 +125,9 @@ bool TCPSocket::connect(const InetAddress& addr, port_t port)
 }
 
 
-ByteArray TCPSocket::read()
+ByteArray TCPSocket::read(size_t maxSize)
 {
-    // TODO: Is there a way to predict the needed buffer size?
-    ByteArray ba(0x100000);
+    ByteArray ba(maxSize);
 
     ssize_t size = ::read(d->fd, ba.data(), ba.size());
 
@@ -143,9 +142,8 @@ ByteArray TCPSocket::read()
         }
     }
 
-    // Resize byte-array to actual read size
-    ba.resize(size);
-    return ba;
+    // Return a byte-array of the actual read size
+    return ByteArray(ba.constData(), size);
 }
 
 

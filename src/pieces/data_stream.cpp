@@ -269,7 +269,7 @@ ByteArray DataStream::readBytes(size_t size)
     {
         if (socket() != 0)
         {
-            ByteArray ba = socket()->read();
+            ByteArray ba = socket()->read(m_readPtr + size - m_data.size());
 
             if (ba.isEmpty())
             {

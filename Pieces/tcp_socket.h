@@ -56,7 +56,7 @@ public:
     /**
      * Read from socket.
      */
-    ByteArray read();
+    ByteArray read(size_t maxSize);
 
     /**
      * Write to socket.
