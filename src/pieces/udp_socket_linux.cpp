@@ -84,6 +84,12 @@ void UDPSocket::bind(const SocketAddress& addr)
 }
 
 
+void UDPSocket::bind(port_t port)
+{
+    bind(SocketAddress(InetAddress(), port));
+}
+
+
 Datagram UDPSocket::receive(size_t maxSize)
 {
     ByteArray ba(maxSize);

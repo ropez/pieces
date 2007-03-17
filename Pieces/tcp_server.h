@@ -2,11 +2,12 @@
 #ifndef PIECES_TCP_SERVER_H
 #define PIECES_TCP_SERVER_H
 
-#include "Pieces/TCPSocket"
+#include "Pieces/SocketAddress"
 
 
 namespace Pieces
 {
+class TCPSocket;
 class TCPServerPrivate;
 
 class TCPServer
@@ -16,7 +17,15 @@ public:
     ~TCPServer();
 
     void listen(const SocketAddress& addr);
-    // or maybe just listen(addr) ????
+
+    /**
+     * Listen to the given port, to receive connections to this port.
+     *
+     * \overload
+     *
+     * This is the same as listen(SocketAddress(InetAddress(), port)).
+     */
+    void listen(port_t port);
 
     int getQueueSize() const;
     void setQueueSize(int size);

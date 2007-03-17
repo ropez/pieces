@@ -286,6 +286,12 @@ void TCPServer::listen(const SocketAddress& addr)
 }
 
 
+void TCPServer::listen(port_t port)
+{
+    listen(SocketAddress(InetAddress(), port));
+}
+
+
 std::auto_ptr<TCPSocket> TCPServer::accept()
 {
     std::auto_ptr<TCPSocketPrivate> data(new TCPSocketPrivate);

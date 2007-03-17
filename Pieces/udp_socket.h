@@ -2,13 +2,12 @@
 #ifndef PIECES_UDP_SOCKET_H
 #define PIECES_UDP_SOCKET_H
 
-#include <cstdlib>
+#include "Pieces/SocketAddress"
 
 
 namespace Pieces
 {
 class Datagram;
-class SocketAddress;
 class UDPSocketPrivate;
 
 
@@ -38,9 +37,18 @@ public:
     void close();
 
     /**
-     * Bind to the given address, to receive packets sent to this address.
+     * Bind to the given socket address, to receive packets sent to this address.
      */
     void bind(const SocketAddress& addr);
+
+    /**
+     * Bind to the given port, to receive packets sent to this port.
+     *
+     * \overload
+     *
+     * This is the same as bind(SocketAddress(InetAddress(), port)).
+     */
+    void bind(port_t port);
 
     /**
      * Receive a packet.
