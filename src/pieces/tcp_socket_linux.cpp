@@ -15,22 +15,6 @@
 namespace Pieces
 {
 
-
-// This is a namespace without a name. It means that functions within this
-// namespace are available locally in this file, and don't make conflicts with
-// functions in other files that have the same name. It is the C++ equivalent
-// to C functions declared as static
-namespace
-{
-
-SocketAddress convert(const struct sockaddr_in* sock_addr)
-{
-    return SocketAddress(InetAddress(sock_addr->sin_addr.s_addr), ntohs(sock_addr->sin_port));
-}
-
-}
-
-
 class TCPSocketPrivate
 {
 public:
@@ -87,18 +71,12 @@ void TCPSocket::close()
 
 bool TCPSocket::connect(const SocketAddress& addr)
 {
-    return connect(addr.getInetAddress(), addr.getPort());
-}
-
-
-bool TCPSocket::connect(const InetAddress& addr, port_t port)
-{
     struct sockaddr_in sock_peer;
 
     // set up address struct used
     sock_peer.sin_family = AF_INET;
-    sock_peer.sin_port = htons(port);
-    sock_peer.sin_addr.s_addr = addr.toInt32();
+    sock_peer.sin_port = htons(addr.getPort());
+    sock_peer.sin_addr.s_addr = addr.getInetAddress().toInt32();
     bzero(&(sock_peer.sin_zero), 8);
 
     // call connect
@@ -119,9 +97,15 @@ bool TCPSocket::connect(const InetAddress& addr, port_t port)
     }
 
     // Connection OK
-    d->peerAddress = convert(&sock_peer);
+    d->peerAddress = addr;
 
     return true;
+}
+
+
+bool TCPSocket::connect(const InetAddress& addr, port_t port)
+{
+    return connect(SocketAddress(addr, port));
 }
 
 
@@ -311,7 +295,8 @@ std::auto_ptr<TCPSocket> TCPServer::accept()
         throw IOException("TCPServer::accept", strerror(errno));
     }
 
-    data->peerAddress = convert(&sock_peer);
+    data->peerAddress.setInetAddress(InetAddress(sock_peer.sin_addr.s_addr));
+    data->peerAddress.setPort(ntohs(sock_peer.sin_port));
 
     return std::auto_ptr<TCPSocket>(new TCPSocket(data.release()));
 }

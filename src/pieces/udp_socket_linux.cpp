@@ -15,16 +15,6 @@
 namespace Pieces
 {
 
-namespace
-{
-
-SocketAddress convert(const struct sockaddr_in* sock_addr)
-{
-    return SocketAddress(InetAddress(sock_addr->sin_addr.s_addr), ntohs(sock_addr->sin_port));
-}
-
-}
-
 class UDPSocketPrivate
 {
 public:
@@ -103,7 +93,7 @@ Datagram UDPSocket::receive(size_t maxSize)
         throw IOException("TCPSocket::read", strerror(errno));
     }
 
-    SocketAddress addr = convert(&sock_peer);
+    SocketAddress addr(InetAddress(sock_peer.sin_addr.s_addr), ntohs(sock_peer.sin_port));
 
     return Datagram(ByteArray(ba.constData(), size), addr);
 }
