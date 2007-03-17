@@ -1,6 +1,8 @@
 
 #include "Pieces/UDPSocket"
+#include "Pieces/Datagram"
 #include "Pieces/InetAddress"
+#include "Pieces/SocketAddress"
 #include "Pieces/IOException"
 #include "Pieces/Debug"
 
@@ -82,7 +84,7 @@ void UDPSocket::bind(const SocketAddress& addr)
 }
 
 
-UDPPacket UDPSocket::receive(size_t maxSize)
+Datagram UDPSocket::receive(size_t maxSize)
 {
     ByteArray ba(maxSize);
 
@@ -97,11 +99,11 @@ UDPPacket UDPSocket::receive(size_t maxSize)
 
     SocketAddress addr = convert(&sock_peer);
 
-    return UDPPacket(ByteArray(ba.constData(), size), addr);
+    return Datagram(ByteArray(ba.constData(), size), addr);
 }
 
 
-void UDPSocket::send(const UDPPacket& packet)
+void UDPSocket::send(const Datagram& packet)
 {
     ByteArray data = packet.getData();
     SocketAddress addr = packet.getAddress();

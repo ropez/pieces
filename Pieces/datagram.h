@@ -1,6 +1,6 @@
 
-#ifndef PIECES_UDP_PACKET_H
-#define PIECES_UDP_PACKET_H
+#ifndef PIECES_DATAGRAM_H
+#define PIECES_DATAGRAM_H
 
 #include "Pieces/SharedData"
 #include "Pieces/SharedDataPointer"
@@ -11,18 +11,18 @@
 namespace Pieces
 {
 
-class UDPPacket
+class Datagram
 {
 public:
-    UDPPacket();
-    UDPPacket(const ByteArray& data, const SocketAddress& addr);
-    UDPPacket(const ByteArray& data, const InetAddress& addr, port_t port);
+    Datagram();
+    Datagram(const ByteArray& data, const SocketAddress& addr);
+    Datagram(const ByteArray& data, const InetAddress& addr, port_t port);
 
-    // Copy operations (this class might use implicit sharing)
-    UDPPacket(const UDPPacket& other);
-    UDPPacket& operator=(const UDPPacket& other);
+    // Copy operations
+    Datagram(const Datagram& other);
+    Datagram& operator=(const Datagram& other);
 
-    ~UDPPacket();
+    ~Datagram();
 
     SocketAddress getAddress() const;
     void setAddress(const SocketAddress& addr);
@@ -49,4 +49,4 @@ private:
 
 } // namespace Pieces
 
-#endif // PIECES_UDP_PACKET_H
+#endif // PIECES_DATAGRAM_H

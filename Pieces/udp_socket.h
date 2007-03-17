@@ -2,10 +2,12 @@
 #ifndef PIECES_UDP_SOCKET_H
 #define PIECES_UDP_SOCKET_H
 
-#include "Pieces/UDPPacket"
+#include <cstdlib>
+
 
 namespace Pieces
 {
+class Datagram;
 class SocketAddress;
 class UDPSocketPrivate;
 
@@ -43,12 +45,12 @@ public:
     /**
      * Receive a packet.
      */
-    UDPPacket receive(size_t maxSize);
+    Datagram receive(size_t maxSize);
 
     /**
      * Send a packet.
      */
-    void send(const UDPPacket& packet);
+    void send(const Datagram& packet);
 
 private:
     // Disable copy operations
