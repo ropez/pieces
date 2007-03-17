@@ -58,10 +58,8 @@ int main()
     // Echo server
     try
     {
-        SocketAddress serverAddress;
-        serverAddress.setPort(2222);
         TCPServer server;
-        server.listen(serverAddress);
+        server.listen(2222);
 
         for (;;)
         {
@@ -70,7 +68,8 @@ int main()
             INFO << "Accepted connection from " << s->getPeerAddress();
 
             // This is a memory leak!
-            (new Session(s.release()))->start();
+            Session* session = new Session(s.release());
+            session->start();
         }
     }
     catch (const Exception& e)
