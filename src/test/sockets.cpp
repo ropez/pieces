@@ -36,7 +36,10 @@ protected:
                 ds << ch;
 
                 if (ch == '\n')
+                {
+                    // Really echo
                     ds << flush;
+                }
             }
         }
         catch (const Exception& e)
