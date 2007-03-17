@@ -20,7 +20,7 @@ namespace
 
 SocketAddress convert(const struct sockaddr_in* sock_addr)
 {
-    return SocketAddress(InetAddress(sock_addr->sin_addr.s_addr), sock_addr->sin_port);
+    return SocketAddress(InetAddress(sock_addr->sin_addr.s_addr), ntohs(sock_addr->sin_port));
 }
 
 }

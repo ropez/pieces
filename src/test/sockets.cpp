@@ -67,7 +67,7 @@ int main()
         {
             std::auto_ptr<TCPSocket> s = server.accept();
 
-            INFO << "Accepted connection";
+            INFO << "Accepted connection from " << s->getPeerAddress();
 
             // This is a memory leak!
             (new Session(s.release()))->start();
