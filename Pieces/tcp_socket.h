@@ -2,7 +2,7 @@
 #ifndef PIECES_TCP_SOCKET_H
 #define PIECES_TCP_SOCKET_H
 
-#include "Pieces/ByteArray"
+#include "Pieces/StreamTarget"
 #include "Pieces/InetAddress"
 #include "Pieces/SocketAddress"
 
@@ -17,14 +17,16 @@ class TCPSocketPrivate;
  *
  * \author Robin Pedersen, Tord Heimdal, Thomas Bakken, Joakim Simonsson, Borge Jacobsen
  */
-class TCPSocket
+class TCPSocket : public StreamTarget
 {
     friend class TCPServer;
 
 public:
 
     /**
-     * Default contructor
+     * Default contructor.
+     *
+     * Calls open().
      */
     TCPSocket();
 
@@ -34,7 +36,15 @@ public:
     ~TCPSocket();
 
     /**
+     * Opens a new socket.
+     */
+    void open();
+
+    /**
      * Close the socket.
+     *
+     * Before the socket can be used again after it's closed, it must be
+     * manually opened again.
      */
     void close();
 
@@ -59,9 +69,19 @@ public:
     ByteArray read(size_t maxSize);
 
     /**
-     * Write to socket.
+     * Add \a data to send buffer.
      */
     void write(const ByteArray& data);
+
+    /**
+     * Add \a data to send buffer, and flush.
+     */
+    void send(const ByteArray& data);
+
+    /**
+     * Write all buffered data to the socket.
+     */
+    void flush();
 
     unsigned long getReadTimeout() const;
     void setReadTimeout(unsigned long msec);

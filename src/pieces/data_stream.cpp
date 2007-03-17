@@ -1,6 +1,7 @@
 
 #include "Pieces/DataStream"
-#include "Pieces/TCPSocket"
+#include "Pieces/StreamTarget"
+#include "Pieces/DataBuffer"
 #include "Pieces/IOException"
 #include "Pieces/Debug"
 
@@ -11,41 +12,31 @@ namespace Pieces
 {
 
 DataStream::DataStream()
-: m_readPtr(0)
-, m_data()
-, m_socket(0)
-, m_buffer()
+: m_target(0)
 {
 }
 
 
-DataStream::DataStream(const ByteArray& data)
-: m_readPtr(0)
-, m_data(data)
-, m_socket(0)
-, m_buffer()
+DataStream::DataStream(StreamTarget* target)
+: m_target(target)
 {
 }
 
 
-DataStream::DataStream(TCPSocket* socket)
-: m_readPtr(0)
-, m_data()
-, m_socket(socket)
-, m_buffer()
+DataStream::~DataStream()
 {
 }
 
 
-ByteArray DataStream::data() const
+StreamTarget* DataStream::target() const
 {
-    return m_data;
+    return m_target;
 }
 
 
-TCPSocket* DataStream::socket() const
+void DataStream::setTarget(StreamTarget* t)
 {
-    return m_socket;
+    m_target = t;
 }
 
 
@@ -252,52 +243,36 @@ DataStream& DataStream::operator>>(double& v)
 
 void DataStream::writeBytes(const ByteArray& ba)
 {
-    if (socket() != 0)
-    {
-        m_buffer.append(ba);
-    }
-    else
-    {
-        m_data.append(ba);
-    }
+    if (!target())
+        throw IOException("DataStream::writeBytes", "Null target");
+
+    target()->write(ba);
 }
 
 
 ByteArray DataStream::readBytes(size_t size)
 {
-    while (m_readPtr + size > m_data.size())
+    if (!target())
+        throw IOException("DataStream::readBytes", "Null target");
+
+    ByteArray data;
+
+    // Read until there is enough data, or exception
+    while (data.size() < size)
     {
-        if (socket() != 0)
-        {
-            ByteArray ba = socket()->read(m_readPtr + size - m_data.size());
-
-            if (ba.isEmpty())
-            {
-                throw IOException("Disconnected");
-            }
-
-            m_data.append(ba);
-        }
-        else
-        {
-            throw IOException("Read passed end of stream");
-        }
+        data += target()->read(size - data.size());
     }
 
-    ByteArray ba = m_data.middle(m_readPtr, size);
-    m_readPtr += size;
-
-    return ba;
+    return data;
 }
 
 
 void DataStream::flush()
 {
-    if (socket() && !m_buffer.isEmpty())
-    {
-        socket()->write(m_buffer);
-        m_buffer.clear();
-    }
+    if (!target())
+        throw IOException("DataStream::flush", "Null target");
+
+    target()->flush();
 }
 
 

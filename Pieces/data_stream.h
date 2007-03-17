@@ -6,14 +6,14 @@
 
 namespace Pieces
 {
-class TCPSocket;
+class StreamTarget;
 
 
 /**
  * \class DataStream
  * \brief Binary data stream.
  *
- * The DataStream class is used to stream binary data into a byte-array and to
+ * The DataStream class is used to stream binary data into a StreamTarget and to
  * read back from it. It contains input and output stream operators for all
  * basic data-types. It's also possible to read and write raw data represented
  * as byte-arrays.
@@ -21,39 +21,11 @@ class TCPSocket;
  * This can be used as basic building blocks to create overloaded stream
  * operators for custom classes.
  *
- * A write operation always adds to the end of the byte-array, and a read
- * operation starts from the beginning and continues where the previous read
- * operation stopped until the end is reached.
- *
- * A DataStream is typically used as either an input or an output stream, but
- * it's perfectly possible to do both on the same stream. Note however that if
- * you have a loop where you write to and read from the same data stream, it
- * will keep growing forever. The read operations doesn't remove any data from
- * the beginning of the byte-array.
- *
- * An example of how to write data to a data stream:
- * \code
- * DataStream ds;
- * ds << true << 1024 << 3.14159;
- * ByteArray output = ds.data();
- * \endcode
- *
- * An example of how to read the same data:
- * \code
- * DataStream ds(output);
- * bool b;
- * ds >> b;
- * int n;
- * ds >> n;
- * double d;
- * ds >> d;
- * // Also possible to do 'ds >> b >> n >> d' in one line.
- * \endcode
- *
  * \note About string constants.
  * It's legal to stream a string constant to the data-stream
  * (e.g. ds << "Hello"), to read it from an input stream, use std::string.
  *
+ * \see StreamTarget, DataBuffer, TCPSocket, ByteArray
  * \author Robin Pedersen
  */
 class DataStream
@@ -61,59 +33,35 @@ class DataStream
 public:
 
     /**
-     * Create a stream starting with an empty byte-array.
+     * Create a data-stream with a null target.
      *
-     * This is a typical output stream.
-     *
-     * All write operations will append data at the end of the internal
-     * byte-array, which is availible by calling data().
+     * Using it will throw an exception. Must call setTarget() in order to use it.
      */
     DataStream();
 
     /**
-     * Create a stream that starts with the contents of \a data.
+     * Create a data-stream connected to a target.
      *
-     * This is a typical input stream.
+     * Using a read operation will call the target's read() function.
      *
-     * Read operations will start at the beginning of the data, and will
-     * continue where the previous read stopped.
-     *
-     * Write operations will append data to the internal byte-array which is
-     * available by calling data(). The byte-array passed as parameter to this
-     * constructor can't be changed.
+     * If the target's write() function is buffered (TCPSocket). flush() will
+     * flush the target. There is also a flush manipulator.
      */
-    explicit DataStream(const ByteArray& data);
+    explicit DataStream(StreamTarget* target);
 
     /**
-     * Create a data-stream connected to a socket.
+     * Destructor.
      *
-     * The data-stream will start with an empty buffer. Using a read operation
-     * will call the socket's read function until the internal byte-array
-     * contains enough data.
-     *
-     * Any data written to the stream will be buffered internally, instead of
-     * witten to the internal byte-array. Must call flush() to write to the
-     * socket. The data-stream discards any written data if it is destroyed
-     * before the data is flushed.
+     * Deletes the target is it's owned by the data-stream.
      */
-    explicit DataStream(TCPSocket* socket);
+    ~DataStream();
 
     /**
-     * Returns a copy of the internal byte-array.
-     *
-     * This array contains everything written using write operations, appended
-     * to the byte-array passed to the constructor, if any.
-     *
-     * It doesn't matter if the data was read or not.
+     * Returns a pointer to the stream target.
      */
-    ByteArray data() const;
+    StreamTarget* target() const;
 
-    /**
-     * Returns a pointer to the network socket if the data-stream has one.
-     *
-     * Returns a null-pointer if the stream isn't using a socket.
-     */
-    TCPSocket* socket() const;
+    void setTarget(StreamTarget* t);
 
     /**
      * Manipulator support.
@@ -198,7 +146,7 @@ public:
     /**
      * Append raw data.
      *
-     * Write the contents of \a ba unformatted to the end of the data.
+     * Write the contents of \a ba unformatted to the target.
      *
      * \warning This is not the same as adding \a ba using the operator <<.
      * It's not possible to read this byte-array using operator>>.
@@ -215,24 +163,14 @@ public:
     /**
      * Flush all data written to the stream.
      *
-     * If the stream is connected to a socket, write all data to the socket.
-     * Otherwise, this function does nothing.
+     * Calls target()->flush()
      */
     void flush();
 
 private:
 
-    // Current read location
-    size_t m_readPtr;
-
-    // Internal data
-    ByteArray m_data;
-
-    // Network socket
-    TCPSocket* m_socket;
-
-    // Buffer for sent data used when connected to a socket
-    ByteArray m_buffer;
+    // Target
+    StreamTarget* m_target;
 };
 
 /**

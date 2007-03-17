@@ -61,7 +61,7 @@ InetAddress InetAddress::getHostByName(const std::string& name)
     memcpy(&addr, h->h_addr_list[0], h->h_length);
 
     // Construct a temporary InetAddress with found IP number
-    InetAddress ia(inet_ntoa(addr));
+    InetAddress ia(addr.s_addr);
 
     return ia;
 }

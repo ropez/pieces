@@ -1,4 +1,6 @@
 #include "Pieces/ValueList"
+#include "Pieces/DataStream"
+#include "Pieces/BufferStream"
 
 #include <iostream>
 #include <sstream>
@@ -125,7 +127,7 @@ DataStream& operator>>(DataStream& ds, ValueList& l)
 void encode(ByteArray& ba, const ValueList& l)
 {
     ba.clear();
-    DataStream ds;
+    BufferStream ds;
     ds << l;
     ba = ds.data();
 }
@@ -133,7 +135,7 @@ void encode(ByteArray& ba, const ValueList& l)
 
 void decode(const ByteArray& ba, ValueList& l)
 {
-    DataStream ds(ba);
+    BufferStream ds(ba);
     ds >> l;
 }
 

@@ -10,6 +10,7 @@
 #include "Pieces/Datagram"
 #include "Pieces/PropertyList"
 #include "Pieces/Exception"
+#include "Pieces/BufferStream"
 #include "OpenThreads/Thread"
 
 
@@ -47,7 +48,7 @@ protected:
 
             DEBUG << "Incoming datagram from " << dg.getAddress();
 
-            DataStream ds(dg.getData());
+            BufferStream ds(dg.getData());
             PropertyList pl;
             ds >> pl;
 
@@ -121,7 +122,7 @@ protected:
             pl.set(0, 3.14);
             pl.set(1, 2.54);
 
-            DataStream ds;
+            BufferStream ds;
             ds << pl;
 
             Datagram dg;

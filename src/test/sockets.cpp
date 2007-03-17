@@ -46,6 +46,9 @@ protected:
         {
             ERROR << e;
             sock->close();
+
+            // Calling close() twice
+            sock.reset();
         }
     }
 

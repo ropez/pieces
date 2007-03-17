@@ -4,6 +4,7 @@
 #include "Pieces/InetAddress"
 #include "Pieces/IOException"
 #include "Pieces/TimeoutException"
+#include "Pieces/DisconnectedException"
 #include "Pieces/Debug"
 
 #include <errno.h>
@@ -24,12 +25,15 @@ public:
 
     int fd;
 
+    ByteArray sendbuf;
+
     SocketAddress peerAddress;
 };
 
 
 TCPSocketPrivate::TCPSocketPrivate()
 : fd(-1)
+, sendbuf()
 , peerAddress()
 {
 }
@@ -38,14 +42,7 @@ TCPSocketPrivate::TCPSocketPrivate()
 TCPSocket::TCPSocket()
 : d(new TCPSocketPrivate)
 {
-    // Create standard tcp socket file descriptor.
-    d->fd = ::socket(AF_INET, SOCK_STREAM, 0);
-
-    // Error checking
-    if (d->fd < 0)
-    {
-        throw IOException("TCPSocket::TCPSocket", strerror(errno));
-    }
+    open();
 }
 
 
@@ -63,9 +60,35 @@ TCPSocket::~TCPSocket()
 }
 
 
+void TCPSocket::open()
+{
+    // Create standard tcp socket file descriptor.
+    d->fd = ::socket(AF_INET, SOCK_STREAM, 0);
+
+    // Error checking
+    if (d->fd < 0)
+    {
+        throw IOException("TCPSocket::open", strerror(errno));
+    }
+}
+
+
 void TCPSocket::close()
 {
-    ::close(d->fd);
+    if (d->fd != -1)
+    {
+        try
+        {
+            flush();
+        }
+        catch (const Exception& e)
+        {
+            WARNING << e;
+        }
+
+        ::close(d->fd);
+        d->fd = -1;
+    }
 }
 
 
@@ -119,17 +142,34 @@ ByteArray TCPSocket::read(size_t maxSize)
 {
     ByteArray ba(maxSize);
 
+    // Return empty array if size is 0
+    if (maxSize == 0)
+    {
+        return ba;
+    }
+
+    // Read from socket
     ssize_t size = ::read(d->fd, ba.data(), ba.size());
 
+    // Check for errors
     if (size < 0)
     {
         switch (errno)
         {
         case EAGAIN:
+        case ETIMEDOUT:
             throw TimeoutException("TCPSocket::read", strerror(errno));
+        case EPIPE:
+            throw DisconnectedException("TCPSocket::read", strerror(errno));
         default:
             throw IOException("TCPSocket::read", strerror(errno));
         }
+    }
+
+    // If size is 0, means the socket is disconnected
+    if (size == 0)
+    {
+        throw DisconnectedException("TCPSocket::read", "Disconnected");
     }
 
     // Return a byte-array of the actual read size
@@ -139,18 +179,40 @@ ByteArray TCPSocket::read(size_t maxSize)
 
 void TCPSocket::write(const ByteArray& data)
 {
-    ssize_t size = ::write(d->fd, data.data(), data.size());
+    d->sendbuf.append(data);
+}
 
-    if (size < 0)
+
+void TCPSocket::send(const ByteArray& data)
+{
+    write(data);
+    flush();
+}
+
+
+void TCPSocket::flush()
+{
+    size_t sent = 0;
+    while (sent < d->sendbuf.size())
     {
-        switch (errno)
+        ssize_t size = ::write(d->fd, d->sendbuf.data(), d->sendbuf.size());
+
+        if (size < 0)
         {
-        case EAGAIN:
-            throw TimeoutException("TCPSocket::write", strerror(errno));
-        default:
-            throw IOException("TCPSocket::write", strerror(errno));
+            switch (errno)
+            {
+            case EAGAIN:
+            case ETIMEDOUT:
+                throw TimeoutException("TCPSocket::flush", strerror(errno));
+            case EPIPE:
+                throw DisconnectedException("TCPSocket::flush", strerror(errno));
+            default:
+                throw IOException("TCPSocket::flush", strerror(errno));
+            }
         }
+        sent += size;
     }
+    d->sendbuf.clear();
 }
 
 

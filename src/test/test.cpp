@@ -1,18 +1,24 @@
 #include "Pieces/PropertyList"
 #include "Pieces/ValueList"
 #include "Pieces/ByteArray"
-#include "Pieces/DataStream"
+#include "Pieces/BufferStream"
 #include "Pieces/Vector"
+#include "Pieces/File"
 #include "Pieces/Debug"
 
 #include <iostream>
 #include <sstream>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+
 int main()
 {
     using namespace Pieces;
 
-    DataStream ds;
+    BufferStream ds;
     ds << "Piece of shit";
     DEBUG << ds.data() << " " << ds.data().allocated();
 
@@ -46,7 +52,7 @@ int main()
         DEBUG << "Element: " << *it;
     }
 
-    Pieces::DataStream d;
+    Pieces::BufferStream d;
     d << vec[0] << vec[1] << vec[2];
     int a, b, c;
     d >> a >> b >> c;
@@ -95,5 +101,14 @@ int main()
     q.add(t).add(l);
 
     DEBUG << "Can do the same with a list:\n" << q;
+
+    // Write to disk
+    File file("outputfile");
+    if (file.open(File::Write | File::Truncate))
+    {
+        DataStream ds(&file);
+
+        ds << p << flush;
+    }
 }
 

@@ -3,7 +3,6 @@
 #define PIECES_PROPERTY_LIST_H
 
 #include "Pieces/ByteArray"
-#include "Pieces/DataStream"
 #include "Pieces/SharedData"
 #include "Pieces/SharedDataPointer"
 
@@ -12,6 +11,7 @@
 
 namespace Pieces
 {
+class DataStream;
 
 
 /**
