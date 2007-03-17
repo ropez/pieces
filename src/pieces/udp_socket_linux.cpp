@@ -82,9 +82,9 @@ void UDPSocket::bind(const SocketAddress& addr)
 }
 
 
-UDPPacket UDPSocket::receive()
+UDPPacket UDPSocket::receive(size_t maxSize)
 {
-    ByteArray ba(0x100000);
+    ByteArray ba(maxSize);
 
     struct sockaddr_in sock_peer;
     socklen_t len = sizeof(sock_peer);
@@ -97,8 +97,7 @@ UDPPacket UDPSocket::receive()
 
     SocketAddress addr = convert(&sock_peer);
 
-    ba.resize(size);
-    return UDPPacket(ba, addr);
+    return UDPPacket(ByteArray(ba.constData(), size), addr);
 }
 
 

@@ -43,7 +43,7 @@ public:
     /**
      * Receive a packet.
      */
-    UDPPacket receive();
+    UDPPacket receive(size_t maxSize);
 
     /**
      * Send a packet.
