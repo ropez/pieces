@@ -38,25 +38,25 @@ std::ostream& tid(std::ostream& os)
 
 std::ostream& debug(std::ostream& os)
 {
-    return os << "DEBUG" << align(10);
+    return os << tid << "DEBUG" << align(16);
 }
 
 
 std::ostream& info(std::ostream& os)
 {
-    return os << "INFO" << align(10);
+    return os << tid << "INFO" << align(16);
 }
 
 
 std::ostream& warning(std::ostream& os)
 {
-    return os << "WARNING" << align(10);
+    return os << tid << "WARNING" << align(16);
 }
 
 
 std::ostream& error(std::ostream& os)
 {
-    return os << "ERROR" << align(10);
+    return os << tid << "ERROR" << align(16);
 }
 
 } // namespace Pieces

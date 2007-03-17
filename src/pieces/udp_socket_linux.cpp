@@ -41,6 +41,11 @@ UDPSocket::UDPSocket()
     {
         throw IOException("UDPSocket::UDPSocket", strerror(errno));
     }
+
+    // TODO: Remove this, maybe implement some broadcast function
+    // Enabling broadcast
+    int opt = 1;
+    setsockopt(d->fd, SOL_SOCKET, SO_BROADCAST, &opt, sizeof(opt));
 }
 
 
@@ -69,7 +74,7 @@ void UDPSocket::bind(const SocketAddress& addr)
     int ret = ::bind(d->fd, reinterpret_cast<sockaddr*>(&sock_addr), sizeof(sock_addr));
     if (ret < 0)
     {
-        throw IOException("TCPServer::listen", strerror(errno));
+        throw IOException("UDPSocket::bind", strerror(errno));
     }
 }
 
@@ -86,11 +91,12 @@ Datagram UDPSocket::receive(size_t maxSize)
 
     struct sockaddr_in sock_peer;
     socklen_t len = sizeof(sock_peer);
+
     ssize_t size = ::recvfrom(d->fd, ba.data(), ba.size(), 0, reinterpret_cast<sockaddr*>(&sock_peer), &len);
 
     if (size < 0)
     {
-        throw IOException("TCPSocket::read", strerror(errno));
+        throw IOException("UDPSocket::receive", strerror(errno));
     }
 
     SocketAddress addr(InetAddress(sock_peer.sin_addr.s_addr), ntohs(sock_peer.sin_port));
@@ -115,7 +121,7 @@ void UDPSocket::send(const Datagram& packet)
 
     if (size < 0)
     {
-        throw IOException("TCPSocket::write", strerror(errno));
+        throw IOException("UDPSocket::send", strerror(errno));
     }
 }
 

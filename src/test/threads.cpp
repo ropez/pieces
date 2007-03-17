@@ -6,6 +6,10 @@
 #include "Pieces/TimerEvent"
 #include "Pieces/GameEvent"
 #include "Pieces/InputEvent"
+#include "Pieces/UDPSocket"
+#include "Pieces/Datagram"
+#include "Pieces/PropertyList"
+#include "Pieces/Exception"
 #include "OpenThreads/Thread"
 
 
@@ -24,6 +28,38 @@ enum MyEvents
 
 std::auto_ptr<Peer> peer;
 std::auto_ptr<Host> host;
+
+
+class Listener : public OpenThreads::Thread
+{
+protected:
+    void run()
+    {
+        try
+        {
+            std::auto_ptr<UDPSocket> sock(new UDPSocket);
+
+            sock->bind(3333);
+
+            DEBUG << "Waiting for datagram";
+
+            Datagram dg = sock->receive(0x1000);
+
+            DEBUG << "Incoming datagram from " << dg.getAddress();
+
+            DataStream ds(dg.getData());
+            PropertyList pl;
+            ds >> pl;
+
+            DEBUG << "Value 0: " << pl.get<double>(0);
+            DEBUG << "Value 1: " << pl.get<double>(1);
+        }
+        catch (const Exception& e)
+        {
+            ERROR << e;
+        }
+    }
+};
 
 
 class MyPeer : public Peer
@@ -67,11 +103,39 @@ private:
 
 class MyHost : public Host
 {
+public:
+    MyHost()
+    : sock(new UDPSocket)
+    {
+    }
+
 protected:
     void handle(TimerEvent* event)
     {
         // Handle events
         DEBUG << "Host timer-event, id = " << event->getTimerId();
+
+        try
+        {
+            PropertyList pl;
+            pl.set(0, 3.14);
+            pl.set(1, 2.54);
+
+            DataStream ds;
+            ds << pl;
+
+            Datagram dg;
+            dg.setAddress(SocketAddress(InetAddress("<broadcast>"), 3333));
+            dg.setData(ds.data());
+
+            sock->send(dg);
+
+            DEBUG << "Sent datagram to " << dg.getAddress();
+        }
+        catch (const Exception& e)
+        {
+            ERROR << e;
+        }
 
         switch (event->getTimerId())
         {
@@ -88,6 +152,9 @@ protected:
         // Handle events
         DEBUG << "Host input-event, type = " << event->type();
     }
+
+private:
+    std::auto_ptr<UDPSocket> sock;
 };
 
 
@@ -120,6 +187,8 @@ int main()
     th.start();
     ThreadRunningPeer tp;
     tp.start();
+    Listener l;
+    l.start();
 
     // This timer stops the Host
     Timer tQuitHost(ID_QUIT_HOST, host->eventLoop());
@@ -131,4 +200,5 @@ int main()
 
     th.join();
     tp.join();
+    l.join();
 }
