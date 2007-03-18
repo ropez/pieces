@@ -7,64 +7,17 @@
 #include "Pieces/Debug"
 
 #include "Pieces/Object"
-
+#include "Pieces/HostObjectIface"
+#include "Pieces/PeerObjectIface"
 
 #include <map>
 #include <cmath>
 
 namespace Pieces
 {
-class GameDataSender;
-class GameDataReceiver;
 
 // NOTE: Using 32-bit frame number is enough for about 118 weeks, with 60 frames per second. Enough?
 typedef unsigned long framenum_t;
-
-
-/**
- * \class HostObjectIface
- * \brief Host object interface.
- *
- * In addition to being an Object. Objects defined for the host process must
- * implement this interface.
- *
- * \author Robin Pedersen
- */
-class HostObjectIface
-{
-    friend class GameDataSender;
-
-public:
-    virtual ~HostObjectIface() {};
-
-protected:
-    virtual void encode(DataStream& ds) const = 0;
-
-};
-
-
-
-/**
- * \class PeerObjectIface
- * \brief Peer object interface.
- *
- * In addition to being an Object. Objects defined for the peer processes must
- * implement this interface.
- *
- * \author Robin Pedersen
- */
-class PeerObjectIface
-{
-    friend class GameDataReceiver;
-
-public:
-    virtual ~PeerObjectIface() {};
-
-protected:
-    virtual void decode(DataStream& ds) = 0;
-
-};
-
 
 
 /**
