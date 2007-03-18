@@ -7,6 +7,9 @@
 #include "Pieces/Debug"
 
 #include "Pieces/GameObject"
+#include "Pieces/HostGameObject"
+#include "Pieces/PeerGameObject"
+
 #include "Pieces/FrameData"
 #include "Pieces/GameData"
 
@@ -88,6 +91,9 @@ public:
 using namespace Pieces;
 
 
+/**
+ * Test implementation of GameObject
+ */
 class MovingBall : public GameObject
 {
 public:
@@ -153,25 +159,72 @@ private:
 };
 
 
+/**
+ * Test implementation of HostGameObject
+ */
+class HostBumperCar : public HostGameObject
+{
+public:
+    HostBumperCar(objectid_t objectId)
+    : HostGameObject(objectId)
+    , speed(0)
+    {
+    }
+
+    virtual void encode(DataStream& ds) const
+    {
+        ds << speed;
+    }
+
+    double speed;
+    double host_specific_data;
+};
+
+
+/**
+ * Test implementation of PeerGameObject
+ */
+class PeerBumperCar : public PeerGameObject
+{
+public:
+    PeerBumperCar(objectid_t objectId)
+    : PeerGameObject(objectId)
+    , speed(0)
+    {
+    }
+
+    virtual void decode(DataStream& ds)
+    {
+        ds >> speed;
+    }
+
+    double speed;
+};
 
 
 
 int main()
 {
-    objectid_t id = 100;
+    const objectid_t id = 100;
+    const objectid_t bumper = 200;
 
     // Generate data (this is the "host")
     {
         std::auto_ptr<MovingBall> ball(new MovingBall(id));
+        std::auto_ptr<HostBumperCar> car(new HostBumperCar(bumper));
 
         GameDataSender sender;
         sender.objects[id] = ball.get();
+        sender.objects[bumper] = car.get();
 
         for (framenum_t frame = 0; frame < 10; ++frame)
         {
             ball->setPosX(std::sin(frame / 10.0));
             ball->setPosY(std::cos(frame / 10.0));
             ball->setDiam(ball->getDiam() + 1.0);
+
+            car->speed += 0.1;
+            car->speed *= 2.5;
 
             sender.sendFrame();
         }
@@ -180,9 +233,11 @@ int main()
     // Receive data (this is the "peer")
     {
         std::auto_ptr<MovingBall> ball(new MovingBall(id));
+        std::auto_ptr<PeerBumperCar> car(new PeerBumperCar(bumper));
 
         GameDataReceiver receiver;
         receiver.objects[id] = ball.get();
+        receiver.objects[id] = car.get();
 
         for (framenum_t frame = 0; frame < 10; ++frame)
         {
@@ -192,6 +247,8 @@ int main()
                 << align(40) << "posx = " << ball->getPosX()
                 << align(58) << "posy = " << ball->getPosY()
                 << align(76) << "diam = " << ball->getDiam();
+
+            DEBUG << "BumberCar now running at: " << car->speed;
         }
     }
 }
