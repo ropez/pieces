@@ -2,12 +2,24 @@
 #include "Pieces/BufferStream"
 #include "Pieces/Debug"
 
+#include "Pieces/Host"
+#include "Pieces/Peer"
+
+#include "Pieces/TimerEvent"
+#include "Pieces/GameEvent"
+
+#include "Pieces/Timer"
+
 #include "Pieces/GameObject"
 #include "Pieces/HostGameObject"
 #include "Pieces/PeerGameObject"
 
 #include "Pieces/FrameData"
 #include "Pieces/GameData"
+
+#include "OpenThreads/Mutex"
+#include "OpenThreads/ScopedLock"
+#include "OpenThreads/Thread"
 
 #include <map>
 #include <cmath>
@@ -16,6 +28,7 @@ namespace Pieces
 {
 
 // DUMMY simulation of host and peer functionality
+OpenThreads::Mutex mutex;
 GameData gamedata;
 
 class GameDataSender
@@ -32,7 +45,11 @@ public:
     void sendFrame()
     {
         // Frame data
-        FrameData d = gamedata.getFrameData(frameNumber - 1);
+        FrameData d;
+        {
+            OpenThreads::ScopedLock<OpenThreads::Mutex> lock(mutex);
+            d = gamedata.getFrameData(frameNumber - 1);
+        }
 
         for (object_map_t::const_iterator it = objects.begin(); it != objects.end(); ++it)
         {
@@ -47,7 +64,10 @@ public:
         }
 
         // "send"
-        gamedata.setFrameData(frameNumber++, d);
+        {
+            OpenThreads::ScopedLock<OpenThreads::Mutex> lock(mutex);
+            gamedata.setFrameData(frameNumber++, d);
+        }
     }
 
 private:
@@ -63,7 +83,11 @@ public:
     void recvFrame(framenum_t frameNum)
     {
         // Frame data
-        FrameData d = gamedata.getFrameData(frameNum);
+        FrameData d;
+        {
+            OpenThreads::ScopedLock<OpenThreads::Mutex> lock(mutex);
+            d = gamedata.getFrameData(frameNum);
+        }
 
         for (object_map_t::const_iterator it = objects.begin(); it != objects.end(); ++it)
         {
@@ -85,6 +109,28 @@ public:
 // Demonstration
 
 using namespace Pieces;
+
+std::auto_ptr<Host> host;
+
+class ThreadRunningHost : public OpenThreads::Thread
+{
+protected:
+    virtual void run()
+    {
+        host->exec();
+    }
+};
+
+std::auto_ptr<Peer> peer;
+
+class ThreadRunningPeer : public OpenThreads::Thread
+{
+protected:
+    virtual void run()
+    {
+        peer->exec();
+    }
+};
 
 
 /**
@@ -198,54 +244,99 @@ public:
 };
 
 
+const objectid_t idBall = 100;
+const objectid_t idCar = 200;
+
+
+class MyHost : public Host
+{
+public:
+    MyHost()
+    : Host()
+    , frame(0)
+    , sender()
+    , ball(new MovingBall(idBall))
+    , car(new HostBumperCar(idCar))
+    {
+        sender.objects[idBall] = ball.get();
+        sender.objects[idCar] = car.get();
+    }
+
+protected:
+    virtual void handle(TimerEvent*)
+    {
+        ball->setPosX(std::sin(frame / 10.0));
+        ball->setPosY(std::cos(frame / 10.0));
+        ball->setDiam(ball->getDiam() + 1.0);
+
+        car->speed += 0.1;
+        car->speed *= 2.5;
+
+        sender.sendFrame();
+
+        peer->postEvent(new GameEvent());
+        ++frame;
+    }
+
+
+    framenum_t frame;
+    GameDataSender sender;
+    std::auto_ptr<MovingBall> ball;
+    std::auto_ptr<HostBumperCar> car;
+};
+
+
+
+class MyPeer : public Peer
+{
+public:
+    MyPeer()
+    : Peer()
+    , frame(0)
+    , receiver()
+    , ball(new MovingBall(idBall))
+    , car(new PeerBumperCar(idCar))
+    {
+        receiver.objects[idBall] = ball.get();
+        receiver.objects[idCar] = car.get();
+    }
+
+
+protected:
+    void handle(GameEvent*)
+    {
+        receiver.recvFrame(frame++);
+
+        DEBUG << "Moving ball, frame " << frame << ": "
+            << align(40) << "posx = " << ball->getPosX()
+            << align(58) << "posy = " << ball->getPosY()
+            << align(76) << "diam = " << ball->getDiam();
+
+        DEBUG << "BumberCar now running at: " << car->speed;
+    }
+
+    framenum_t frame;
+    GameDataReceiver receiver;
+    std::auto_ptr<MovingBall> ball;
+    std::auto_ptr<PeerBumperCar> car;
+};
+
 
 int main()
 {
-    const objectid_t idBall = 100;
-    const objectid_t idCar = 200;
+    host.reset(new MyHost);
+    peer.reset(new MyPeer);
 
-    // Generate data (this is the "host")
-    {
-        std::auto_ptr<MovingBall> ball(new MovingBall(idBall));
-        std::auto_ptr<HostBumperCar> car(new HostBumperCar(idCar));
+    ThreadRunningHost th;
+    th.start();
+    ThreadRunningPeer tp;
+    tp.start();
 
-        GameDataSender sender;
-        sender.objects[idBall] = ball.get();
-        sender.objects[idCar] = car.get();
+    std::auto_ptr<Timer> repeating(new Timer(0, host->eventLoop()));
+    repeating->setRepeating(true);
+    repeating->start(500);
 
-        for (framenum_t frame = 0; frame < 10; ++frame)
-        {
-            ball->setPosX(std::sin(frame / 10.0));
-            ball->setPosY(std::cos(frame / 10.0));
-            ball->setDiam(ball->getDiam() + 1.0);
-
-            car->speed += 0.1;
-            car->speed *= 2.5;
-
-            sender.sendFrame();
-        }
-    }
-
-    // Receive data (this is the "peer")
-    {
-        std::auto_ptr<MovingBall> ball(new MovingBall(idBall));
-        std::auto_ptr<PeerBumperCar> car(new PeerBumperCar(idCar));
-
-        GameDataReceiver receiver;
-        receiver.objects[idBall] = ball.get();
-        receiver.objects[idCar] = car.get();
-
-        for (framenum_t frame = 0; frame < 10; ++frame)
-        {
-            receiver.recvFrame(frame);
-
-            DEBUG << "Moving ball, frame " << frame << ": "
-                << align(40) << "posx = " << ball->getPosX()
-                << align(58) << "posy = " << ball->getPosY()
-                << align(76) << "diam = " << ball->getDiam();
-
-            DEBUG << "BumberCar now running at: " << car->speed;
-        }
-    }
+    th.join();
+    tp.join();
 }
 
