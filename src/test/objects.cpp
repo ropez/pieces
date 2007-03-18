@@ -32,7 +32,6 @@ public:
     virtual ~GameObject();
 
     objectid_t getObjectId() const;
-    framenum_t getFrameNumber() const;
 
 protected:
 
@@ -46,16 +45,12 @@ private:
     GameObject(const GameObject&);
     GameObject& operator=(const GameObject&);
 
-    void setFrameNumber(framenum_t number);
-
     objectid_t m_objectId;
-    framenum_t m_frameNum;
 };
 
 
 GameObject::GameObject(objectid_t objectId)
 : m_objectId(objectId)
-, m_frameNum(0)
 {
 }
 
@@ -70,17 +65,6 @@ objectid_t GameObject::getObjectId() const
     return m_objectId;
 }
 
-
-framenum_t GameObject::getFrameNumber() const
-{
-    return m_frameNum;
-}
-
-
-void GameObject::setFrameNumber(framenum_t number)
-{
-    m_frameNum = number;
-}
 
 
 
@@ -335,8 +319,6 @@ public:
 
         // NOTE: This might throw an IOException
         obj.decode(s);
-
-        obj.setFrameNumber(frameNum);
     }
 };
 
@@ -421,10 +403,10 @@ int main()
         GameDataSender sender;
         MovingBall ball(100);
 
-        for (int i = 0; i < 10; ++i)
+        for (framenum_t frame = 0; frame < 10; ++frame)
         {
-            ball.setPosX(std::sin(i / 10.0));
-            ball.setPosY(std::cos(i / 10.0));
+            ball.setPosX(std::sin(frame / 10.0));
+            ball.setPosY(std::cos(frame / 10.0));
             ball.setDiam(ball.getDiam() + 1.0);
 
             sender.sendFrame(ball);
@@ -436,10 +418,10 @@ int main()
         GameDataReceiver receiver;
         MovingBall ball(100);
 
-        for (int i = 0; i < 10; ++i)
+        for (framenum_t frame = 0; frame < 10; ++frame)
         {
-            receiver.recvFrame(i, ball);
-            DEBUG << "Moving ball, frame " << ball.getFrameNumber() << ": "
+            receiver.recvFrame(frame, ball);
+            DEBUG << "Moving ball, frame " << frame << ": "
                 << align(40) << "posx = " << ball.getPosX()
                 << align(58) << "posy = " << ball.getPosY()
                 << align(76) << "diam = " << ball.getDiam();
