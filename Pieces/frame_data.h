@@ -3,6 +3,8 @@
 #define PIECES_FRAME_DATA_H
 
 #include "Pieces/global"
+#include "Pieces/SharedData"
+#include "Pieces/SharedDataPointer"
 #include "Pieces/ByteArray"
 
 #include <map>
