@@ -22,12 +22,68 @@ typedef unsigned long objectid_t;
 typedef unsigned long framenum_t;
 
 
-class HostGameObject
+/**
+ * \class Object
+ * \brief Base class for all objects.
+ *
+ * Has an object id.
+ *
+ * The Object class is a common base class for all game objects, whether they
+ * implement the host, peer of both interfaces.
+ *
+ * \author Robin Pedersen
+ */
+class Object
+{
+public:
+    Object(objectid_t objectId);
+    virtual ~Object();
+
+    objectid_t getObjectId() const;
+
+private:
+    // Disable copy operations
+    Object(const Object&);
+    Object& operator=(const Object&);
+
+    // Id stored here
+    objectid_t m_objectId;
+};
+
+
+Object::Object(objectid_t objectId)
+: m_objectId(objectId)
+{
+}
+
+
+Object::~Object()
+{
+}
+
+
+objectid_t Object::getObjectId() const
+{
+    return m_objectId;
+}
+
+
+
+/**
+ * \class HostObjectIface
+ * \brief Host object interface.
+ *
+ * In addition to being an Object. Objects defined for the host process must
+ * implement this interface.
+ *
+ * \author Robin Pedersen
+ */
+class HostObjectIface
 {
     friend class GameDataSender;
 
 public:
-    virtual ~HostGameObject() {};
+    virtual ~HostObjectIface() {};
 
 protected:
     virtual void encode(DataStream& ds) const = 0;
@@ -36,12 +92,21 @@ protected:
 
 
 
-class PeerGameObject
+/**
+ * \class PeerObjectIface
+ * \brief Peer object interface.
+ *
+ * In addition to being an Object. Objects defined for the peer processes must
+ * implement this interface.
+ *
+ * \author Robin Pedersen
+ */
+class PeerObjectIface
 {
     friend class GameDataReceiver;
 
 public:
-    virtual ~PeerGameObject() {};
+    virtual ~PeerObjectIface() {};
 
 protected:
     virtual void decode(DataStream& ds) = 0;
@@ -49,27 +114,36 @@ protected:
 };
 
 
-class GameObject : public HostGameObject, public PeerGameObject
+
+/**
+ * \class GameObject
+ * \brief Abstract base class for objects defined for both host and peer.
+ *
+ * This is a base class provided for convenience.
+ *
+ * This should be used as base class for objects, if the game programmer wants
+ * to use the same object classes in the host and the peers.
+ *
+ * Subclasses must implement both the HostObjectIface and the PeerObjectIface.
+ *
+ * \see HostGameObject, PeerGameObject
+ * \author Robin Pedersen
+ */
+class GameObject : public Object, public HostObjectIface, public PeerObjectIface
 {
 public:
     GameObject(objectid_t objectId);
     virtual ~GameObject();
 
-    objectid_t getObjectId() const;
-
-//     virtual void handle(ObjectEvent* event);
-
 private:
     // Disable copy operations
     GameObject(const GameObject&);
     GameObject& operator=(const GameObject&);
-
-    objectid_t m_objectId;
 };
 
 
 GameObject::GameObject(objectid_t objectId)
-: m_objectId(objectId)
+: Object(objectId)
 {
 }
 
@@ -79,9 +153,83 @@ GameObject::~GameObject()
 }
 
 
-objectid_t GameObject::getObjectId() const
+
+/**
+ * \class HostGameObject
+ * \brief Abstract base class for objects defined for host only.
+ *
+ * This is a base class provided for convenience.
+ *
+ * This should be used as base class for objects, if the game programmer wants
+ * to use specialized object classes only in the host.
+ *
+ * Subclasses must implement the HostObjectIface.
+ *
+ * \see GameObject, PeerGameObject
+ * \author Robin Pedersen
+ */
+class HostGameObject : public Object, public HostObjectIface
 {
-    return m_objectId;
+public:
+    HostGameObject(objectid_t objectId);
+    virtual ~HostGameObject();
+
+private:
+    // Disable copy operations
+    HostGameObject(const HostGameObject&);
+    HostGameObject& operator=(const HostGameObject&);
+};
+
+
+
+HostGameObject::HostGameObject(objectid_t objectId)
+: Object(objectId)
+{
+}
+
+
+HostGameObject::~HostGameObject()
+{
+}
+
+
+
+/**
+ * \class PeerGameObject
+ * \brief Abstract base class for objects defined for peers only.
+ *
+ * This is a base class provided for convenience.
+ *
+ * This should be used as base class for objects, if the game programmer wants
+ * to use specialized object classes only in the peers.
+ *
+ * Subclasses must implement the PeerObjectIface.
+ *
+ * \see GameObject, HostGameObject
+ * \author Robin Pedersen
+ */
+class PeerGameObject : public Object, public PeerObjectIface
+{
+public:
+    PeerGameObject(objectid_t objectId);
+    virtual ~PeerGameObject();
+
+private:
+    // Disable copy operations
+    PeerGameObject(const PeerGameObject&);
+    PeerGameObject& operator=(const PeerGameObject&);
+};
+
+
+
+PeerGameObject::PeerGameObject(objectid_t objectId)
+: Object(objectId)
+{
+}
+
+
+PeerGameObject::~PeerGameObject()
+{
 }
 
 
@@ -301,7 +449,7 @@ GameData gamedata;
 class GameDataSender
 {
 public:
-    typedef std::map<objectid_t, HostGameObject*> object_map_t;
+    typedef std::map<objectid_t, HostObjectIface*> object_map_t;
     object_map_t objects;
 
     GameDataSender()
@@ -317,7 +465,7 @@ public:
         for (object_map_t::const_iterator it = objects.begin(); it != objects.end(); ++it)
         {
             objectid_t id = it->first;
-            HostGameObject* obj = it->second;
+            HostObjectIface* obj = it->second;
 
             // Object data
             BufferStream s;
@@ -337,7 +485,7 @@ private:
 class GameDataReceiver
 {
 public:
-    typedef std::map<objectid_t, PeerGameObject*> object_map_t;
+    typedef std::map<objectid_t, PeerObjectIface*> object_map_t;
     object_map_t objects;
 
     void recvFrame(framenum_t frameNum)
@@ -348,7 +496,7 @@ public:
         for (object_map_t::const_iterator it = objects.begin(); it != objects.end(); ++it)
         {
             objectid_t id = it->first;
-            PeerGameObject* obj = it->second;
+            PeerObjectIface* obj = it->second;
 
             // Object data
             BufferStream s(d.getObjectData(id));
