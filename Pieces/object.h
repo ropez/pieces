@@ -2,13 +2,11 @@
 #ifndef PIECES_OBJECT_H
 #define PIECES_OBJECT_H
 
+#include "Pieces/global"
+
 
 namespace Pieces
 {
-
-// NOTE: We could also use Universally unique identifiers (e.g. 550e8400-e29b-41d4-a716-446655440000). They take 16 bytes, I have the code we need. (Robin)
-typedef unsigned long objectid_t;
-
 
 
 /**
