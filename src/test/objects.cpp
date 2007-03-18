@@ -84,31 +84,259 @@ void GameObject::setFrameNumber(framenum_t number)
 
 
 
+/**
+ * \class FrameData
+ * \brief Contains game data for one single frame.
+ *
+ * Implicitly shared class that contains data for all game objects, for a
+ * sequence of frames.
+ *
+ * \author Robin Pedersen
+ */
+class FrameData
+{
+public:
+    FrameData();
+
+    bool hasObjectData(objectid_t objectId) const;
+    ByteArray getObjectData(objectid_t objectId) const;
+
+    bool removeObjectData(objectid_t objectId);
+    void setObjectData(objectid_t objectId, const ByteArray& data);
+
+private:
+
+    // TODO: Do we need an ObjectData class, or is ByteArray sufficiant? (Robin)
+    typedef std::map<objectid_t, ByteArray> map_t;
+
+    class Data : public SharedData
+    {
+    public:
+        Data();
+
+        Data(const Data& other);
+        Data& operator=(const Data& other);
+
+        map_t objectData;
+    };
+
+    SharedDataPointer<Data> d;
+};
+
+
+FrameData::FrameData()
+: d(new Data)
+{
+}
+
+
+bool FrameData::hasObjectData(objectid_t objectId) const
+{
+    map_t::const_iterator it = d->objectData.find(objectId);
+
+    return (it != d->objectData.end());
+}
+
+
+ByteArray FrameData::getObjectData(objectid_t objectId) const
+{
+    map_t::const_iterator it = d->objectData.find(objectId);
+
+    if (it == d->objectData.end())
+        return ByteArray();
+
+    return it->second;
+}
+
+
+bool FrameData::removeObjectData(objectid_t objectId)
+{
+    map_t::iterator it = d->objectData.find(objectId);
+
+    if (it == d->objectData.end())
+        return false;
+
+    d->objectData.erase(it);
+    return true;
+}
+
+
+void FrameData::setObjectData(objectid_t objectId, const ByteArray& data)
+{
+    d->objectData[objectId] = data;
+}
+
+
+FrameData::Data::Data()
+: SharedData()
+, objectData()
+{
+}
+
+
+FrameData::Data::Data(const Data& other)
+: SharedData()
+, objectData(other.objectData)
+{
+}
+
+
+FrameData::Data& FrameData::Data::operator=(const Data& other)
+{
+    objectData = other.objectData;
+    return *this;
+}
+
+
+/**
+ * \class GameData
+ * \brief Contains all the data for all the game objects in one place.
+ *
+ * Implicitly shared class that contains data for all game objects, for a
+ * sequence of frames.
+ *
+ * \author Robin Pedersen
+ */
+class GameData
+{
+public:
+    GameData();
+
+    bool hasFrameData(framenum_t frameNum) const;
+    FrameData getFrameData(framenum_t frameNum) const;
+
+    bool removeFrameData(framenum_t frameNum);
+    void setFrameData(framenum_t frameNum, const FrameData& data);
+
+private:
+    typedef std::map<framenum_t, FrameData> map_t;
+
+    class Data : public SharedData
+    {
+    public:
+        Data();
+
+        Data(const Data& other);
+        Data& operator=(const Data& other);
+
+        map_t frameData;
+    };
+
+    SharedDataPointer<Data> d;
+};
+
+
+GameData::GameData()
+: d(new Data)
+{
+}
+
+
+bool GameData::hasFrameData(framenum_t frameNum) const
+{
+    map_t::const_iterator it = d->frameData.find(frameNum);
+
+    return (it != d->frameData.end());
+}
+
+
+FrameData GameData::getFrameData(framenum_t frameNum) const
+{
+    map_t::const_iterator it = d->frameData.find(frameNum);
+
+    if (it == d->frameData.end())
+        return FrameData();
+
+    return it->second;
+}
+
+
+bool GameData::removeFrameData(framenum_t frameNum)
+{
+    map_t::iterator it = d->frameData.find(frameNum);
+
+    if (it == d->frameData.end())
+        return false;
+
+    d->frameData.erase(it);
+    return true;
+}
+
+
+void GameData::setFrameData(framenum_t frameNum, const FrameData& data)
+{
+    d->frameData[frameNum] = data;
+}
+
+
+GameData::Data::Data()
+: SharedData()
+, frameData()
+{
+}
+
+
+GameData::Data::Data(const Data& other)
+: SharedData()
+, frameData(other.frameData)
+{
+}
+
+
+GameData::Data& GameData::Data::operator=(const Data& other)
+{
+    frameData = other.frameData;
+    return *this;
+}
+
+
+
+
 // DUMMY simulation of host and peer functionality
-ValueList frames;
+GameData gamedata;
 
 class GameDataSender
 {
 public:
+    GameDataSender()
+    : frameNumber(0)
+    {
+    }
 
     void sendFrame(GameObject& obj)
     {
+        // Object data
         BufferStream s;
         obj.encode(s);
 
-        frames.addValue(s.data());
+        // Frame data
+        FrameData d = gamedata.getFrameData(frameNumber - 1);
+        d.setObjectData(obj.getObjectId(), s.data());
+
+        // "send"
+        gamedata.setFrameData(frameNumber++, d);
     }
+
+private:
+    framenum_t frameNumber;
 };
 
 class GameDataReceiver
 {
 public:
 
-    void recvFrame(int number, GameObject& obj)
+    void recvFrame(framenum_t frameNum, GameObject& obj)
     {
-        BufferStream s(frames.getValue(number));
+        // Frame data
+        FrameData d = gamedata.getFrameData(frameNum);
+
+        // Object data
+        BufferStream s(d.getObjectData(obj.getObjectId()));
+
+        // NOTE: This might throw an IOException
         obj.decode(s);
-        obj.setFrameNumber(number);
+
+        obj.setFrameNumber(frameNum);
     }
 };
 
