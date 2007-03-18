@@ -22,21 +22,40 @@ typedef unsigned long objectid_t;
 typedef unsigned long framenum_t;
 
 
-class GameObject
+class HostGameObject
 {
     friend class GameDataSender;
+
+public:
+    virtual ~HostGameObject() {};
+
+protected:
+    virtual void encode(DataStream& ds) const = 0;
+
+};
+
+
+
+class PeerGameObject
+{
     friend class GameDataReceiver;
 
+public:
+    virtual ~PeerGameObject() {};
+
+protected:
+    virtual void decode(DataStream& ds) = 0;
+
+};
+
+
+class GameObject : public HostGameObject, public PeerGameObject
+{
 public:
     GameObject(objectid_t objectId);
     virtual ~GameObject();
 
     objectid_t getObjectId() const;
-
-protected:
-
-    virtual void encode(DataStream& ds) const = 0;
-    virtual void decode(DataStream& ds) = 0;
 
 //     virtual void handle(ObjectEvent* event);
 
@@ -277,13 +296,14 @@ GameData::Data& GameData::Data::operator=(const Data& other)
 
 
 // DUMMY simulation of host and peer functionality
-typedef std::map<objectid_t, GameObject*> object_map_t;
-object_map_t objects;
 GameData gamedata;
 
 class GameDataSender
 {
 public:
+    typedef std::map<objectid_t, HostGameObject*> object_map_t;
+    object_map_t objects;
+
     GameDataSender()
     : frameNumber(0)
     {
@@ -297,7 +317,7 @@ public:
         for (object_map_t::const_iterator it = objects.begin(); it != objects.end(); ++it)
         {
             objectid_t id = it->first;
-            GameObject* obj = it->second;
+            HostGameObject* obj = it->second;
 
             // Object data
             BufferStream s;
@@ -317,6 +337,8 @@ private:
 class GameDataReceiver
 {
 public:
+    typedef std::map<objectid_t, PeerGameObject*> object_map_t;
+    object_map_t objects;
 
     void recvFrame(framenum_t frameNum)
     {
@@ -326,7 +348,7 @@ public:
         for (object_map_t::const_iterator it = objects.begin(); it != objects.end(); ++it)
         {
             objectid_t id = it->first;
-            GameObject* obj = it->second;
+            PeerGameObject* obj = it->second;
 
             // Object data
             BufferStream s(d.getObjectData(id));
@@ -416,12 +438,13 @@ private:
 int main()
 {
     objectid_t id = 100;
-    objects[id] = new MovingBall(id);
 
     // Generate data (this is the "host")
     {
+        std::auto_ptr<MovingBall> ball(new MovingBall(id));
+
         GameDataSender sender;
-        MovingBall* ball = static_cast<MovingBall*>(objects[id]);
+        sender.objects[id] = ball.get();
 
         for (framenum_t frame = 0; frame < 10; ++frame)
         {
@@ -435,8 +458,10 @@ int main()
 
     // Receive data (this is the "peer")
     {
+        std::auto_ptr<MovingBall> ball(new MovingBall(id));
+
         GameDataReceiver receiver;
-        MovingBall* ball = static_cast<MovingBall*>(objects[id]);
+        receiver.objects[id] = ball.get();
 
         for (framenum_t frame = 0; frame < 10; ++frame)
         {
@@ -448,9 +473,5 @@ int main()
                 << align(76) << "diam = " << ball->getDiam();
         }
     }
-
-    GameObject* obj = objects[id];
-    objects.erase(id);
-    delete obj;
 }
 
