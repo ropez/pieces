@@ -63,7 +63,7 @@ void ByteArray::resize(size_t size)
     {
         // Temporary copy
         ByteArray tmp(size);
-        memcpy(tmp.data(), constData(), std::min(tmp.size(), this->size()));
+        std::memcpy(tmp.data(), constData(), std::min(tmp.size(), this->size()));
 
         // Let assignment operator handle the rest
         d = tmp.d;
@@ -167,7 +167,7 @@ ByteArray& ByteArray::append(const void* data, size_t size)
         resize(this->size() + size);
 
         // Copy new data
-        memcpy(this->data() + old_size, data, size);
+        std::memcpy(this->data() + old_size, data, size);
     }
     return *this;
 }
@@ -201,8 +201,8 @@ ByteArray& ByteArray::prepend(const void* data, size_t size)
         ByteArray tmp(this->size() + size);
 
         // Copy contents
-        memcpy(tmp.data(), data, size);
-        memcpy(tmp.data() + this->size(), this->constData(), this->size());
+        std::memcpy(tmp.data(), data, size);
+        std::memcpy(tmp.data() + this->size(), this->constData(), this->size());
 
         // Let assignment operator handle the rest
         d = tmp.d;
@@ -221,7 +221,7 @@ void ByteArray::chopFront(size_t n)
     {
         // Temporary
         ByteArray tmp(size() - n);
-        memcpy(tmp.data(), constData() + n, size() - n);
+        std::memcpy(tmp.data(), constData() + n, size() - n);
 
         // Let assignment operator handle the rest
         d = tmp.d;
@@ -239,7 +239,7 @@ void ByteArray::chopBack(size_t n)
     {
         // Temporary
         ByteArray tmp(size() - n);
-        memcpy(tmp.data(), constData(), size() - n);
+        std::memcpy(tmp.data(), constData(), size() - n);
 
         // Let assignment operator handle the rest
         d = tmp.d;
@@ -279,7 +279,7 @@ ByteArray::Data::Data(const void* data, size_t size)
 , data(0)
 {
     allocate(size);
-    memcpy(this->data, data, size);
+    std::memcpy(this->data, data, size);
 }
 
 
@@ -289,7 +289,7 @@ ByteArray::Data::Data(const Data& other)
 , size(other.size)
 , data(new byte_t[allocated])
 {
-    memcpy(this->data, other.data, other.size);
+    std::memcpy(this->data, other.data, other.size);
 }
 
 
@@ -303,7 +303,7 @@ ByteArray::Data& ByteArray::Data::operator=(const Data& other)
         size = other.size;
         data = new byte_t[allocated];
 
-        memcpy(this->data, other.data, other.size);
+        std::memcpy(this->data, other.data, other.size);
     }
     return *this;
 }

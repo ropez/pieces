@@ -1,6 +1,7 @@
 
 #include "Pieces/InetAddress"
-#include <iostream>
+
+#include <cstring>
 
 #if !defined WIN32
 #include <arpa/inet.h>
@@ -58,7 +59,7 @@ InetAddress InetAddress::getHostByName(const std::string& name)
 
     // Copy the first IP number in hostent to an in_addr
     in_addr addr;
-    memcpy(&addr, h->h_addr_list[0], h->h_length);
+    std::memcpy(&addr, h->h_addr_list[0], h->h_length);
 
     // Construct a temporary InetAddress with found IP number
     InetAddress ia(addr.s_addr);

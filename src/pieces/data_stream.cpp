@@ -422,7 +422,7 @@ void decode(const ByteArray& ba, bool& v)
     if (ba.size() != sizeof(v))
         throw IOException("Invalid input");
 
-    memcpy(&v, ba.data(), sizeof(v));
+    std::memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -431,7 +431,7 @@ void decode(const ByteArray& ba, char& v)
     if (ba.size() != sizeof(v))
         throw IOException("Invalid input");
 
-    memcpy(&v, ba.data(), sizeof(v));
+    std::memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -440,7 +440,7 @@ void decode(const ByteArray& ba, unsigned char& v)
     if (ba.size() != sizeof(v))
         throw IOException("Invalid input");
 
-    memcpy(&v, ba.data(), sizeof(v));
+    std::memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -449,7 +449,7 @@ void decode(const ByteArray& ba, short& v)
     if (ba.size() != sizeof(v))
         throw IOException("Invalid input");
 
-    memcpy(&v, ba.data(), sizeof(v));
+    std::memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -458,7 +458,7 @@ void decode(const ByteArray& ba, unsigned short& v)
     if (ba.size() != sizeof(v))
         throw IOException("Invalid input");
 
-    memcpy(&v, ba.data(), sizeof(v));
+    std::memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -467,7 +467,7 @@ void decode(const ByteArray& ba, int& v)
     if (ba.size() != sizeof(v))
         throw IOException("Invalid input");
 
-    memcpy(&v, ba.data(), sizeof(v));
+    std::memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -476,7 +476,7 @@ void decode(const ByteArray& ba, unsigned int& v)
     if (ba.size() != sizeof(v))
         throw IOException("Invalid input");
 
-    memcpy(&v, ba.data(), sizeof(v));
+    std::memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -485,7 +485,7 @@ void decode(const ByteArray& ba, long& v)
     if (ba.size() != sizeof(v))
         throw IOException("Invalid input");
 
-    memcpy(&v, ba.data(), sizeof(v));
+    std::memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -494,7 +494,7 @@ void decode(const ByteArray& ba, unsigned long& v)
     if (ba.size() != sizeof(v))
         throw IOException("Invalid input");
 
-    memcpy(&v, ba.data(), sizeof(v));
+    std::memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -503,7 +503,7 @@ void decode(const ByteArray& ba, float& v)
     if (ba.size() != sizeof(v))
         throw IOException("Invalid input");
 
-    memcpy(&v, ba.data(), sizeof(v));
+    std::memcpy(&v, ba.data(), sizeof(v));
 }
 
 
@@ -512,7 +512,7 @@ void decode(const ByteArray& ba, double& v)
     if (ba.size() != sizeof(v))
         throw IOException("Invalid input");
 
-    memcpy(&v, ba.data(), sizeof(v));
+    std::memcpy(&v, ba.data(), sizeof(v));
 }
 
 
