@@ -201,17 +201,17 @@ public:
 
 int main()
 {
-    const objectid_t id = 100;
-    const objectid_t bumper = 200;
+    const objectid_t idBall = 100;
+    const objectid_t idCar = 200;
 
     // Generate data (this is the "host")
     {
-        std::auto_ptr<MovingBall> ball(new MovingBall(id));
-        std::auto_ptr<HostBumperCar> car(new HostBumperCar(bumper));
+        std::auto_ptr<MovingBall> ball(new MovingBall(idBall));
+        std::auto_ptr<HostBumperCar> car(new HostBumperCar(idCar));
 
         GameDataSender sender;
-        sender.objects[id] = ball.get();
-        sender.objects[bumper] = car.get();
+        sender.objects[idBall] = ball.get();
+        sender.objects[idCar] = car.get();
 
         for (framenum_t frame = 0; frame < 10; ++frame)
         {
@@ -228,12 +228,12 @@ int main()
 
     // Receive data (this is the "peer")
     {
-        std::auto_ptr<MovingBall> ball(new MovingBall(id));
-        std::auto_ptr<PeerBumperCar> car(new PeerBumperCar(bumper));
+        std::auto_ptr<MovingBall> ball(new MovingBall(idBall));
+        std::auto_ptr<PeerBumperCar> car(new PeerBumperCar(idCar));
 
         GameDataReceiver receiver;
-        receiver.objects[id] = ball.get();
-        receiver.objects[id] = car.get();
+        receiver.objects[idBall] = ball.get();
+        receiver.objects[idCar] = car.get();
 
         for (framenum_t frame = 0; frame < 10; ++frame)
         {
