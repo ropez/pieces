@@ -277,6 +277,8 @@ GameData::Data& GameData::Data::operator=(const Data& other)
 
 
 // DUMMY simulation of host and peer functionality
+typedef std::map<objectid_t, GameObject*> object_map_t;
+object_map_t objects;
 GameData gamedata;
 
 class GameDataSender
@@ -287,15 +289,22 @@ public:
     {
     }
 
-    void sendFrame(GameObject& obj)
+    void sendFrame()
     {
-        // Object data
-        BufferStream s;
-        obj.encode(s);
-
         // Frame data
         FrameData d = gamedata.getFrameData(frameNumber - 1);
-        d.setObjectData(obj.getObjectId(), s.data());
+
+        for (object_map_t::const_iterator it = objects.begin(); it != objects.end(); ++it)
+        {
+            objectid_t id = it->first;
+            GameObject* obj = it->second;
+
+            // Object data
+            BufferStream s;
+            obj->encode(s);
+
+            d.setObjectData(id, s.data());
+        }
 
         // "send"
         gamedata.setFrameData(frameNumber++, d);
@@ -309,21 +318,29 @@ class GameDataReceiver
 {
 public:
 
-    void recvFrame(framenum_t frameNum, GameObject& obj)
+    void recvFrame(framenum_t frameNum)
     {
         // Frame data
         FrameData d = gamedata.getFrameData(frameNum);
 
-        // Object data
-        BufferStream s(d.getObjectData(obj.getObjectId()));
+        for (object_map_t::const_iterator it = objects.begin(); it != objects.end(); ++it)
+        {
+            objectid_t id = it->first;
+            GameObject* obj = it->second;
 
-        // NOTE: This might throw an IOException
-        obj.decode(s);
+            // Object data
+            BufferStream s(d.getObjectData(id));
+
+            // NOTE: This might throw an IOException
+            obj->decode(s);
+        }
     }
 };
 
 } // namespace Pieces
 
+
+// Demonstration
 
 using namespace Pieces;
 
@@ -398,34 +415,42 @@ private:
 
 int main()
 {
+    objectid_t id = 100;
+    objects[id] = new MovingBall(id);
+
     // Generate data (this is the "host")
     {
         GameDataSender sender;
-        MovingBall ball(100);
+        MovingBall* ball = static_cast<MovingBall*>(objects[id]);
 
         for (framenum_t frame = 0; frame < 10; ++frame)
         {
-            ball.setPosX(std::sin(frame / 10.0));
-            ball.setPosY(std::cos(frame / 10.0));
-            ball.setDiam(ball.getDiam() + 1.0);
+            ball->setPosX(std::sin(frame / 10.0));
+            ball->setPosY(std::cos(frame / 10.0));
+            ball->setDiam(ball->getDiam() + 1.0);
 
-            sender.sendFrame(ball);
+            sender.sendFrame();
         }
     }
 
     // Receive data (this is the "peer")
     {
         GameDataReceiver receiver;
-        MovingBall ball(100);
+        MovingBall* ball = static_cast<MovingBall*>(objects[id]);
 
         for (framenum_t frame = 0; frame < 10; ++frame)
         {
-            receiver.recvFrame(frame, ball);
+            receiver.recvFrame(frame);
+
             DEBUG << "Moving ball, frame " << frame << ": "
-                << align(40) << "posx = " << ball.getPosX()
-                << align(58) << "posy = " << ball.getPosY()
-                << align(76) << "diam = " << ball.getDiam();
+                << align(40) << "posx = " << ball->getPosX()
+                << align(58) << "posy = " << ball->getPosY()
+                << align(76) << "diam = " << ball->getDiam();
         }
     }
+
+    GameObject* obj = objects[id];
+    objects.erase(id);
+    delete obj;
 }
 
