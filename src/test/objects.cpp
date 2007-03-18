@@ -7,6 +7,7 @@
 #include "Pieces/Debug"
 
 #include "Pieces/GameObject"
+#include "Pieces/FrameData"
 
 #include <map>
 #include <cmath>
@@ -14,112 +15,6 @@
 namespace Pieces
 {
 
-// NOTE: Using 32-bit frame number is enough for about 118 weeks, with 60 frames per second. Enough?
-typedef unsigned long framenum_t;
-
-
-/**
- * \class FrameData
- * \brief Contains game data for one single frame.
- *
- * Implicitly shared class that contains data for all game objects, for a
- * sequence of frames.
- *
- * \author Robin Pedersen
- */
-class FrameData
-{
-public:
-    FrameData();
-
-    bool hasObjectData(objectid_t objectId) const;
-    ByteArray getObjectData(objectid_t objectId) const;
-
-    bool removeObjectData(objectid_t objectId);
-    void setObjectData(objectid_t objectId, const ByteArray& data);
-
-private:
-
-    // TODO: Do we need an ObjectData class, or is ByteArray sufficiant? (Robin)
-    typedef std::map<objectid_t, ByteArray> map_t;
-
-    class Data : public SharedData
-    {
-    public:
-        Data();
-
-        Data(const Data& other);
-        Data& operator=(const Data& other);
-
-        map_t objectData;
-    };
-
-    SharedDataPointer<Data> d;
-};
-
-
-FrameData::FrameData()
-: d(new Data)
-{
-}
-
-
-bool FrameData::hasObjectData(objectid_t objectId) const
-{
-    map_t::const_iterator it = d->objectData.find(objectId);
-
-    return (it != d->objectData.end());
-}
-
-
-ByteArray FrameData::getObjectData(objectid_t objectId) const
-{
-    map_t::const_iterator it = d->objectData.find(objectId);
-
-    if (it == d->objectData.end())
-        return ByteArray();
-
-    return it->second;
-}
-
-
-bool FrameData::removeObjectData(objectid_t objectId)
-{
-    map_t::iterator it = d->objectData.find(objectId);
-
-    if (it == d->objectData.end())
-        return false;
-
-    d->objectData.erase(it);
-    return true;
-}
-
-
-void FrameData::setObjectData(objectid_t objectId, const ByteArray& data)
-{
-    d->objectData[objectId] = data;
-}
-
-
-FrameData::Data::Data()
-: SharedData()
-, objectData()
-{
-}
-
-
-FrameData::Data::Data(const Data& other)
-: SharedData()
-, objectData(other.objectData)
-{
-}
-
-
-FrameData::Data& FrameData::Data::operator=(const Data& other)
-{
-    objectData = other.objectData;
-    return *this;
-}
 
 
 /**
