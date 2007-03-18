@@ -1,7 +1,7 @@
 
 #include "Pieces/BufferStream"
 #include "Pieces/DataBuffer"
-
+#include "Pieces/Debug"
 
 namespace Pieces
 {
@@ -16,7 +16,7 @@ BufferStream::BufferStream()
 
 
 BufferStream::BufferStream(const ByteArray& data)
-: DataStream(new DataBuffer(data))
+: DataStream()
 , m_buf(new DataBuffer(data))
 {
     setTarget(m_buf);
