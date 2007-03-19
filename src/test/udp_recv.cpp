@@ -17,29 +17,32 @@ using namespace Pieces;
 int main()
 {
     try{
-    // create socket
-    UDPSocket us;
+        // create socket
 
-    // bind to specified socket address
-    us.bind(5000);
 
-    //recv data
-    DEBUG  << "Here";
-    Datagram dg(us.receive(1000));
+        UDPSocket us;
 
-    DEBUG  << "Here";
+        // bind to specified socket address
+        us.bind(5000);
 
-    ByteArray ba(dg.getData());
-    BufferStream data(ba);
+        //recv data
+        DEBUG  << "Here";
 
-    DEBUG << data.data() << " " << data.data().allocated();
+        Datagram dg(us.receive(1000));
 
-    //close socket
-    us.close();
-    }catch(Pieces::Exception e)
-    {
-        ERROR << e;
-    }
+        DEBUG  << "Here";
+
+        ByteArray ba(dg.getData());
+        BufferStream data(ba);
+
+        DEBUG << data.data() << " " << data.data().allocated();
+
+        //close socket
+        us.close();
+        }catch(Pieces::Exception e)
+        {
+            ERROR << e;
+        }
 }
 
 
