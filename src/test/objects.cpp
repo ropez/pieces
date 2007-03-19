@@ -36,40 +36,21 @@ GameData gamedata;
 class GameDataSender
 {
 public:
-    typedef std::map<objectid_t, HostObjectIface*> object_map_t;
-    object_map_t objects;
-
     GameDataSender()
     : frameNumber(0)
     {
     }
 
-    void sendFrame()
+    FrameData getFrameData(framenum_t frameNum) const
     {
-        // Frame data
-        FrameData d;
-        {
-            OpenThreads::ScopedLock<OpenThreads::Mutex> lock(mutex);
-            d = gamedata.getFrameData(frameNumber - 1);
-        }
+        OpenThreads::ScopedLock<OpenThreads::Mutex> lock(mutex);
+        return gamedata.getFrameData(frameNum);
+    }
 
-        for (object_map_t::const_iterator it = objects.begin(); it != objects.end(); ++it)
-        {
-            objectid_t id = it->first;
-            HostObjectIface* obj = it->second;
-
-            // Object data
-            BufferStream s;
-            obj->encode(s);
-
-            d.setObjectData(id, s.data());
-        }
-
-        // "send"
-        {
-            OpenThreads::ScopedLock<OpenThreads::Mutex> lock(mutex);
-            gamedata.setFrameData(frameNumber++, d);
-        }
+    void sendFrameData(const FrameData& frame)
+    {
+        OpenThreads::ScopedLock<OpenThreads::Mutex> lock(mutex);
+        gamedata.setFrameData(frameNumber++, frame);
     }
 
 private:
@@ -79,36 +60,10 @@ private:
 class GameDataReceiver
 {
 public:
-    typedef std::map<objectid_t, PeerObjectIface*> object_map_t;
-    object_map_t objects;
-
-    void recvFrame(framenum_t frameNum)
+    FrameData getFrameData(framenum_t frameNum)
     {
-        // Frame data
-        FrameData d;
-        {
-            OpenThreads::ScopedLock<OpenThreads::Mutex> lock(mutex);
-            d = gamedata.getFrameData(frameNum);
-        }
-
-        for (object_map_t::const_iterator it = objects.begin(); it != objects.end(); ++it)
-        {
-            objectid_t id = it->first;
-            PeerObjectIface* obj = it->second;
-
-            // Object data
-            BufferStream s(d.getObjectData(id));
-
-            // NOTE: This might throw an IOException
-            try
-            {
-                obj->decode(s);
-            }
-            catch (const IOException& e)
-            {
-                ERROR << e;
-            }
-        }
+        OpenThreads::ScopedLock<OpenThreads::Mutex> lock(mutex);
+        return gamedata.getFrameData(frameNum);
     }
 };
 
@@ -267,8 +222,23 @@ public:
     , ball(new MovingBall(idBall))
     , car(new HostBumperCar(idCar))
     {
-        sender.objects[idBall] = ball.get();
-        sender.objects[idCar] = car.get();
+        objects[idBall] = ball.get();
+        objects[idCar] = car.get();
+    }
+
+    void update(FrameData& frame)
+    {
+        for (object_map_t::const_iterator it = objects.begin(); it != objects.end(); ++it)
+        {
+            objectid_t id = it->first;
+            HostObjectIface* obj = it->second;
+
+                // Object data
+            BufferStream s;
+            obj->encode(s);
+
+            frame.setObjectData(id, s.data());
+        }
     }
 
 protected:
@@ -281,7 +251,9 @@ protected:
         car->speed += 0.1;
         car->speed *= 2.5;
 
-        sender.sendFrame();
+        FrameData frameData = sender.getFrameData(frame);
+        update(frameData);
+        sender.sendFrameData(frameData);
 
         peer->postEvent(new GameEvent());
         ++frame;
@@ -292,6 +264,11 @@ protected:
     GameDataSender sender;
     std::auto_ptr<MovingBall> ball;
     std::auto_ptr<HostBumperCar> car;
+
+private:
+
+    typedef std::map<objectid_t, HostObjectIface*> object_map_t;
+    object_map_t objects;
 };
 
 
@@ -306,15 +283,38 @@ public:
     , ball(new MovingBall(idBall))
     , car(new PeerBumperCar(idCar))
     {
-        receiver.objects[idBall] = ball.get();
-        receiver.objects[idCar] = car.get();
+        objects[idBall] = ball.get();
+        objects[idCar] = car.get();
+    }
+
+
+    void apply(const FrameData& frame)
+    {
+        for (object_map_t::const_iterator it = objects.begin(); it != objects.end(); ++it)
+        {
+            objectid_t id = it->first;
+            PeerObjectIface* obj = it->second;
+
+            // Object data
+            BufferStream s(frame.getObjectData(id));
+
+            try
+            {
+                // Decode object data into stream
+                obj->decode(s);
+            }
+            catch (const IOException& e)
+            {
+                ERROR << e;
+            }
+        }
     }
 
 
 protected:
     void handle(GameEvent*)
     {
-        receiver.recvFrame(frame++);
+        apply(receiver.getFrameData(frame++));
 
         DEBUG << "Moving ball, frame " << frame << ": "
             << align(40) << "posx = " << ball->getPosX()
@@ -328,6 +328,11 @@ protected:
     GameDataReceiver receiver;
     std::auto_ptr<MovingBall> ball;
     std::auto_ptr<PeerBumperCar> car;
+
+private:
+
+    typedef std::map<objectid_t, PeerObjectIface*> object_map_t;
+    object_map_t objects;
 };
 
 
