@@ -11,6 +11,9 @@
 #include "Pieces/PropertyList"
 #include "Pieces/Exception"
 #include "Pieces/BufferStream"
+#include "Pieces/TCPReceiverThread"
+#include "Pieces/TCPSocket"
+#include "Pieces/EventLoop"
 #include "OpenThreads/Thread"
 
 
@@ -198,6 +201,14 @@ int main()
     // This timer stops the Peer
     Timer tQuitPeer(ID_QUIT_PEER, peer->eventLoop());
     tQuitPeer.start(10000);
+
+
+    // Testing tcp receiver thread
+    TCPSocket socket;
+
+    TCPReceiverThread tcpthread(&socket, peer->eventLoop());
+    tcpthread.start();
+    tcpthread.join();
 
     th.join();
     tp.join();

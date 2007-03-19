@@ -18,7 +18,7 @@ namespace Pieces
 
 class TCPSocketPrivate
 {
-public:
+public:// namespace Pieces
 
     // Default constructor.
     TCPSocketPrivate();
