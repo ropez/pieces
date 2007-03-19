@@ -12,6 +12,9 @@ typedef unsigned long objectid_t;
 // NOTE: Using 32-bit frame number is enough for about 118 weeks, with 60 frames per second. Enough?
 typedef unsigned long framenum_t;
 
+// Port number
+typedef unsigned short port_t;
+
 } // namespace Pieces
 
 #endif // PIECES_GLOBAL_H

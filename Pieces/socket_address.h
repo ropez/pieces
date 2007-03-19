@@ -2,10 +2,10 @@
 #ifndef PIECES_SOCKET_ADDRESS_H
 #define PIECES_SOCKET_ADDRESS_H
 
+#include "Pieces/global"
 #include "Pieces/InetAddress"
 
-// TODO: Move this
-typedef unsigned short port_t;
+
 
 namespace Pieces
 {
