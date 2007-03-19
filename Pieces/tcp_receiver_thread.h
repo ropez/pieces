@@ -11,8 +11,8 @@ class EventLoop;
 
 
 /**
- * \class tcp_receiver_thread
- * \brief TODO: write info.
+ * \class TCPReceiverThread
+ * \brief Thread that creates events by reading from a TCP socket.
  *
  *
  *
