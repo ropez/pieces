@@ -68,7 +68,7 @@ void UDPSocket::bind(const SocketAddress& addr)
     sockaddr_in sock_addr;
     sock_addr.sin_family = AF_INET;
     sock_addr.sin_port = htons(addr.getPort());
-    sock_addr.sin_addr.s_addr = htonl(addr.getInetAddress().toInt32());
+    sock_addr.sin_addr.s_addr = addr.getInetAddress().toInt32();
     bzero(&(sock_addr.sin_zero), 8);
 
     int ret = ::bind(d->fd, reinterpret_cast<sockaddr*>(&sock_addr), sizeof(sock_addr));
@@ -114,7 +114,7 @@ void UDPSocket::send(const Datagram& packet)
     sockaddr_in sock_addr;
     sock_addr.sin_family = AF_INET;
     sock_addr.sin_port = htons(addr.getPort());
-    sock_addr.sin_addr.s_addr = htonl(addr.getInetAddress().toInt32());
+    sock_addr.sin_addr.s_addr = addr.getInetAddress().toInt32();
     bzero(&(sock_addr.sin_zero), 8);
 
     ssize_t size = ::sendto(d->fd, data.data(), data.size(), 0, reinterpret_cast<sockaddr*>(&sock_addr), sizeof(sock_addr));
