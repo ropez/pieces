@@ -37,7 +37,7 @@ int main()
         std::string str;
         data >> str;
 
-        DEBUG << data.data() << " " << data.data().allocated();
+        DEBUG << str;
 
         //close socket
         us.close();
