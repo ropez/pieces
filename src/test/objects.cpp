@@ -3,7 +3,6 @@
 #include "Pieces/Debug"
 
 #include "Pieces/IOException"
-#include "Pieces/ReferencePointer"
 
 #include "Pieces/Host"
 #include "Pieces/Peer"
@@ -80,8 +79,7 @@ public:
 class HostObjectDB
 {
 public:
-    typedef ReferencePointer<HostObjectIface> ptr_t;
-    typedef std::map<objectid_t, ptr_t> map_t;
+    typedef std::map<objectid_t, HostObjectIface*> map_t;
 
     HostObjectDB();
     ~HostObjectDB();
@@ -91,10 +89,10 @@ public:
     /**
      * Returns a pointer to the object replaced, or 0 if no object was replaced.
      */
-    ptr_t insert(objectid_t objectId, HostObjectIface* obj);
+    HostObjectIface* insert(objectid_t objectId, HostObjectIface* obj);
 
-    ptr_t remove(objectid_t objectId);
-    ptr_t remove(map_t::iterator it);
+    HostObjectIface* remove(objectid_t objectId);
+    HostObjectIface* remove(map_t::iterator it);
 
     void update(FrameData& frame) const;
 
@@ -131,15 +129,15 @@ void HostObjectDB::clear()
 }
 
 
-HostObjectDB::ptr_t HostObjectDB::insert(objectid_t objectId, HostObjectIface* obj)
+HostObjectIface* HostObjectDB::insert(objectid_t objectId, HostObjectIface* obj)
 {
-    ptr_t o(remove(objectId));
+    HostObjectIface* o = remove(objectId);
     m_objects[objectId] = obj;
     return o;
 }
 
 
-HostObjectDB::ptr_t HostObjectDB::remove(objectid_t objectId)
+HostObjectIface* HostObjectDB::remove(objectid_t objectId)
 {
     map_t::iterator it = m_objects.find(objectId);
 
@@ -147,11 +145,11 @@ HostObjectDB::ptr_t HostObjectDB::remove(objectid_t objectId)
 }
 
 
-HostObjectDB::ptr_t HostObjectDB::remove(map_t::iterator it)
+HostObjectIface* HostObjectDB::remove(map_t::iterator it)
 {
     if (it != end())
     {
-        ptr_t o = it->second;
+        HostObjectIface* o = it->second;
         m_objects.erase(it);
         return o;
     }
@@ -164,11 +162,11 @@ void HostObjectDB::update(FrameData& frame) const
     for (map_t::const_iterator it = begin(); it != end(); ++it)
     {
         objectid_t id = it->first;
-        const ptr_t& obj = it->second;
+        HostObjectIface* obj = it->second;
 
         // Object data
         BufferStream s;
-        obj.get()->encode(s);
+        obj->encode(s);
 
         frame.setObjectData(id, s.data());
     }
@@ -525,8 +523,8 @@ private:
 
     framenum_t frame;
     GameDataSender sender;
-    ReferencePointer<MovingBall> ball;
-    ReferencePointer<HostBumperCar> car;
+    std::auto_ptr<MovingBall> ball;
+    std::auto_ptr<HostBumperCar> car;
 
 
 };

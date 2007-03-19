@@ -22,18 +22,17 @@ int main()
     {
 
         OpenThreads::Thread::Init();
-
-        // create socket
+    // create socket
         UDPSocket us;
 
-        // bind to specified socket address
+    // bind to specified socket address
         InetAddress ia = InetAddress("<broadcast>");
         port_t port = 5000;
         SocketAddress addr(ia, port);
 
         DEBUG << ia;
 
-        //send data
+    //send data
         BufferStream data;
         data << "Dette er en test";
         std::string str;
@@ -49,7 +48,7 @@ int main()
         }
 
 
-        //close socket
+    //close socket
         us.close();
     }
     catch(Pieces::Exception e)
