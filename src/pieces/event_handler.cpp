@@ -3,6 +3,7 @@
 #include "Pieces/Event"
 #include "Pieces/TimerEvent"
 #include "Pieces/GameEvent"
+#include "Pieces/NetworkEvent"
 #include "Pieces/InputEvent"
 
 
@@ -39,6 +40,12 @@ void EventHandler::handle(GameEvent* event)
     handle(e);
 }
 
+void EventHandler::handle(NetworkEvent* event)
+{
+    // Fall back to default handler function
+    Event* e = event;
+    handle(e);
+}
 
 void EventHandler::handle(InputEvent* event)
 {

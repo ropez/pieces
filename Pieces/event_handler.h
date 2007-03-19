@@ -8,6 +8,7 @@ namespace Pieces
 class Event;
 class TimerEvent;
 class GameEvent;
+class NetworkEvent;
 class InputEvent;
 
 
@@ -30,6 +31,7 @@ class EventHandler
     friend class Event;
     friend class TimerEvent;
     friend class GameEvent;
+    friend class NetworkEvent;
     friend class InputEvent;
 
 public:
@@ -75,6 +77,16 @@ protected:
      * implementation forwards the events to the generic event handler.
      */
     virtual void handle(GameEvent* event);
+
+    /**
+     * Specialized event handler for network events.
+     *
+     * \overload
+     *
+     * This can be implemented to handle networks events only. The default
+     * implementation forwards the events to the generic event handler.
+     */
+    virtual void handle(NetworkEvent* event);
 
 
     /**
