@@ -21,11 +21,7 @@ int main()
     UDPSocket us;
 
     // bind to specified socket address
-    InetAddress ia = InetAddress("129.242.13.188");
-    port_t port = 5000;
-    SocketAddress addr(ia, port);
-    DEBUG << addr.getInetAddress().toString();
-    us.bind(addr);
+    us.bind(5000);
 
     //recv data
     Datagram dg(us.receive(1000));
