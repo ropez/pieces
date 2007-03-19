@@ -70,8 +70,8 @@ class MyPeer : public Peer
 {
 public:
     MyPeer()
+        : m_repeating(new Timer(ID_REPEATING, eventLoop()))
     {
-        m_repeating = new Timer(ID_REPEATING, eventLoop());
         m_repeating->setRepeating(true);
         m_repeating->start(500);
     }
@@ -101,7 +101,7 @@ protected:
     }
 
 private:
-    Timer* m_repeating;
+    std::auto_ptr<Timer> m_repeating;
 };
 
 
