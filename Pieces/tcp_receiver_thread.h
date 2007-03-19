@@ -28,16 +28,22 @@ public:
      */
     TCPReceiverThread(TCPSocket* socket, EventLoop* eventLoop);
 
+    ~TCPReceiverThread();
+
+    void abort();
+
 protected:
     virtual void run();
 
 private:
-    TCPSocket* m_socket;
-    EventLoop* m_eventLoop;
-
     // Disable copy
     TCPReceiverThread(const TCPReceiverThread&);
     TCPReceiverThread& operator=(const TCPReceiverThread&);
+
+
+    bool m_aborted;
+    TCPSocket* m_socket;
+    EventLoop* m_eventLoop;
 };
 
 } // namespace Pieces
