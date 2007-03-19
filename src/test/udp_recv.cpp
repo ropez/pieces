@@ -16,10 +16,9 @@ using namespace Pieces;
 
 int main()
 {
-    try{
+    try
+    {
         // create socket
-
-
         UDPSocket us;
 
         // bind to specified socket address
@@ -35,14 +34,18 @@ int main()
         ByteArray ba(dg.getData());
         BufferStream data(ba);
 
+        std::string str;
+        data >> str;
+
         DEBUG << data.data() << " " << data.data().allocated();
 
         //close socket
         us.close();
-        }catch(Pieces::Exception e)
-        {
-            ERROR << e;
-        }
+    }
+    catch(Pieces::Exception e)
+    {
+        ERROR << e;
+    }
 }
 
 
