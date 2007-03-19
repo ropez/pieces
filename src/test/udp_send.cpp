@@ -7,6 +7,7 @@
 #include "Pieces/Debug"
 #include "Pieces/UDPSocket"
 #include "Pieces/Datagram"
+#include "Pieces/Exception"
 
 #include <iostream>
 #include <sstream>
@@ -15,6 +16,7 @@ using namespace Pieces;
 
 int main()
 {
+    try{
     // create socket
     UDPSocket us;
 
@@ -22,12 +24,14 @@ int main()
     InetAddress ia = InetAddress("129.242.219.56");
     port_t port = 5000;
     SocketAddress addr(ia, port);
-    us.bind(addr);
+    us.bind(port);
 
     //send data
     BufferStream data;
     data << "Dette er en test";
-    DEBUG << data.data() << " " << data.data().allocated();
+    std::string str;
+    data >> str;
+    DEBUG << str;
     Datagram dg;
     dg.setAddress(addr);
     dg.setData(data.data());
@@ -35,6 +39,10 @@ int main()
 
     //close socket
     us.close();
+    }catch(Pieces::Exception e)
+    {
+        ERROR << e;
+    }
 }
 
 
