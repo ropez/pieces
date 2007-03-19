@@ -24,7 +24,10 @@ int main()
     us.bind(5000);
 
     //recv data
+    DEBUG  << "Here";
     Datagram dg(us.receive(1000));
+
+    DEBUG  << "Here";
 
     ByteArray ba(dg.getData());
     BufferStream data(ba);
