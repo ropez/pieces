@@ -6,24 +6,109 @@
 namespace Pieces
 {
 
+
+/**
+ * \class ReferencePointer
+ * \brief Smart pointer for handling referenced counted objects.
+ *
+ * A reference pointer acts like a normal pointer, but it increases a reference
+ * counter in the object it's pointing to, and descreases it when it stops
+ * pointing to the object. If the reference counter becomes 0, the object
+ * is deleted.
+ *
+ * The class T that the pointer points to must be a subclass of SharedData.
+ *
+ * \author Robin Pedersen
+ */
 template<class T>
 class ReferencePointer
 {
 public:
+
+    /**
+     * Creates a null (invalid) pointer.
+     */
     ReferencePointer();
+
+    /**
+     * Destructor.
+     */
     ~ReferencePointer();
 
+    /**
+     * Create a reference pointer that points to \a ptr.
+     */
     ReferencePointer(T* ptr);
+
+    /**
+     * Create a reference pointer that points to the same as \a other.
+     */
     ReferencePointer(const ReferencePointer& other);
 
+    /**
+     * Make this reference pointer point to \a ptr.
+     */
     ReferencePointer& operator=(T* ptr);
+
+    /**
+     * Make this reference pointer point to the same as \a other.
+     */
     ReferencePointer& operator=(const ReferencePointer& other);
 
+    /**
+     * Returns a pointer to the object that this reference pointer points to.
+     */
     T* get();
+
+    /**
+     * Returns an immutable pointer to the object that this reference pointer points to.
+     */
     const T* get() const;
 
+    /**
+     * Operator used to access members in the object pointed to.
+     *
+     * This is used just like a normal pointer.
+     */
     T* operator->();
+
+    /**
+     * Operator used to access members in the object pointed to.
+     *
+     * This is used just like a normal pointer.
+     */
     const T* operator->() const;
+
+    /**
+     * Returns a reference to the object pointed to.
+     *
+     * This is used just like a normal pointer.
+     */
+    T& operator*();
+
+    /**
+     * Returns an immutable reference to the object pointed to.
+     *
+     * This is used just like a normal pointer.
+     */
+    const T& operator*() const;
+
+    /**
+     * Returns true if the pointer is not a null pointer.
+     */
+    bool isValid() const;
+
+    /**
+     * Returns true if the pointer is a null pointer.
+     */
+    bool isNull() const;
+
+    /**
+     * Returns true if the pointer is a null pointer.
+     *
+     * \see isNull()
+     */
+    bool operator!() const;
 
 private:
     void ref();
@@ -31,6 +116,78 @@ private:
 
     T* m_ptr;
 };
+
+
+/**
+ * Comparison operator.
+ *
+ * \relates ReferencePointer
+ */
+template<class T>
+bool operator==(const ReferencePointer<T>& rp1, const ReferencePointer<T>& rp2)
+{
+    return rp1.get() == rp2.get();
+}
+
+
+/**
+ * Comparison operator.
+ *
+ * \relates ReferencePointer
+ */
+template<class T>
+bool operator==(const ReferencePointer<T>& rp, T* ptr)
+{
+    return rp.get() == ptr;
+}
+
+
+/**
+ * Comparison operator.
+ *
+ * \relates ReferencePointer
+ */
+template<class T>
+bool operator==(T* ptr, const ReferencePointer<T>& rp)
+{
+    return ptr == rp.get();
+}
+
+
+/**
+ * Comparison operator.
+ *
+ * \relates ReferencePointer
+ */
+template<class T>
+bool operator!=(const ReferencePointer<T>& rp1, const ReferencePointer<T>& rp2)
+{
+    return rp1.get() != rp2.get();
+}
+
+
+/**
+ * Comparison operator.
+ *
+ * \relates ReferencePointer
+ */
+template<class T>
+bool operator!=(const ReferencePointer<T>& rp, T* ptr)
+{
+    return rp.get() != ptr;
+}
+
+
+/**
+ * Comparison operator.
+ *
+ * \relates ReferencePointer
+ */
+template<class T>
+bool operator!=(T* ptr, const ReferencePointer<T>& rp)
+{
+    return ptr != rp.get();
+}
 
 
 
@@ -105,16 +262,6 @@ const T* ReferencePointer<T>::get() const
 
 
 template<class T>
-void ReferencePointer<T>::ref()
-{
-    if (m_ptr)
-    {
-        m_ptr->ref();
-    }
-}
-
-
-template<class T>
 T* ReferencePointer<T>::operator->()
 {
     return m_ptr;
@@ -125,6 +272,51 @@ template<class T>
 const T* ReferencePointer<T>::operator->() const
 {
     return m_ptr;
+}
+
+
+template<class T>
+T& ReferencePointer<T>::operator*()
+{
+    return *m_ptr;
+}
+
+
+template<class T>
+const T& ReferencePointer<T>::operator*() const
+{
+    return *m_ptr;
+}
+
+
+template<class T>
+bool ReferencePointer<T>::isValid() const
+{
+    return m_ptr != 0;
+}
+
+
+template<class T>
+bool ReferencePointer<T>::isNull() const
+{
+    return m_ptr == 0;
+}
+
+
+template<class T>
+bool ReferencePointer<T>::operator!() const
+{
+    return !m_ptr;
+}
+
+
+template<class T>
+void ReferencePointer<T>::ref()
+{
+    if (m_ptr)
+    {
+        m_ptr->ref();
+    }
 }
 
 
