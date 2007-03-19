@@ -18,21 +18,21 @@ using namespace Pieces;
 
 int main()
 {
+    OpenThreads::Thread::Init();
+
     try
     {
-
-        OpenThreads::Thread::Init();
-    // create socket
+        // create socket
         UDPSocket us;
 
-    // bind to specified socket address
-        InetAddress ia = InetAddress("<broadcast>");
+        // bind to specified socket address
+        InetAddress ia("127.0.0.1");
         port_t port = 5000;
         SocketAddress addr(ia, port);
 
         DEBUG << ia;
 
-    //send data
+        //send data
         BufferStream data;
         data << "Dette er en test";
         std::string str;
@@ -45,6 +45,7 @@ int main()
         while(true)
         {
             us.send(dg);
+            OpenThreads::Thread::microSleep(1000000);
         }
 
 
