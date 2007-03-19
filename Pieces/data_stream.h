@@ -61,6 +61,9 @@ public:
      */
     StreamTarget* target() const;
 
+    /**
+     * Replace the stream target with \a t.
+     */
     void setTarget(StreamTarget* t);
 
     /**
