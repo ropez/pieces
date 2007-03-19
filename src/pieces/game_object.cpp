@@ -15,4 +15,14 @@ GameObject::~GameObject()
 {
 }
 
+
+void GameObject::encode(DataStream&) const
+{
+}
+
+
+void GameObject::decode(DataStream&)
+{
+}
+
 } // namespace Pieces

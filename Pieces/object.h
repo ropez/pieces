@@ -3,6 +3,7 @@
 #define PIECES_OBJECT_H
 
 #include "Pieces/global"
+#include "Pieces/SharedData"
 
 
 namespace Pieces
@@ -20,7 +21,7 @@ namespace Pieces
  *
  * \author Robin Pedersen
  */
-class Object
+class Object : public SharedData
 {
 public:
     Object(objectid_t objectId);

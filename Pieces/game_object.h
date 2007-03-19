@@ -2,34 +2,41 @@
 #ifndef PIECES_GAME_OBJECT_H
 #define PIECES_GAME_OBJECT_H
 
+#include "Pieces/global"
 #include "Pieces/Object"
-#include "Pieces/HostObjectIface"
-#include "Pieces/PeerObjectIface"
 
 
 namespace Pieces
 {
+class DataStream;
 
 
 /**
  * \class GameObject
- * \brief Abstract base class for objects defined for both host and peer.
+ * \brief Base class for objects defined for both host and peer.
  *
- * This is a base class provided for convenience.
+ * This is a base class that game programmers can subclass to create game
+ * specific object classes.
  *
- * This should be used as base class for objects, if the game programmer wants
- * to use the same object classes in the host and the peers.
+ * Subclasses can be defined for use in a host, a peer or both.
  *
- * Subclasses must implement both the HostObjectIface and the PeerObjectIface.
+ * If a subclass should be used in a host, the encode() function should be
+ * reimplemented to encode an object onto a data-stream.
  *
- * \see HostGameObject, PeerGameObject
+ * If a subclass should be used in a peer, the decode() function should be
+ * reimplemented to decode an object, reading from a data-stream.
+ *
  * \author Robin Pedersen
  */
-class GameObject : public Object, public HostObjectIface, public PeerObjectIface
+class GameObject : public Object
 {
 public:
     GameObject(objectid_t objectId);
     virtual ~GameObject();
+
+    virtual void encode(DataStream& ds) const;
+
+    virtual void decode(DataStream& ds);
 
 private:
     // Disable copy operations

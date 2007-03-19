@@ -13,8 +13,7 @@
 #include "Pieces/Timer"
 
 #include "Pieces/GameObject"
-#include "Pieces/HostGameObject"
-#include "Pieces/PeerGameObject"
+#include "Pieces/ReferencePointer"
 
 #include "Pieces/FrameData"
 #include "Pieces/GameData"
@@ -71,156 +70,31 @@ public:
 
 
 /**
- * \class HostObjectDB
+ * \class GameObjectDB
  *
  *
  * \author Robin Pedersen
  */
-class HostObjectDB
+class GameObjectDB
 {
 public:
-    typedef std::map<objectid_t, HostObjectIface*> map_t;
+    typedef ReferencePointer<GameObject> ptr_t;
+    typedef std::map<objectid_t, ptr_t> map_t;
 
-    HostObjectDB();
-    ~HostObjectDB();
+    GameObjectDB();
+    ~GameObjectDB();
 
     void clear();
 
     /**
      * Returns a pointer to the object replaced, or 0 if no object was replaced.
      */
-    HostObjectIface* insert(objectid_t objectId, HostObjectIface* obj);
+    ptr_t insert(objectid_t objectId, GameObject* obj);
 
-    HostObjectIface* remove(objectid_t objectId);
-    HostObjectIface* remove(map_t::iterator it);
+    ptr_t remove(objectid_t objectId);
+    ptr_t remove(map_t::iterator it);
 
     void update(FrameData& frame) const;
-
-    map_t::iterator begin();
-    map_t::iterator end();
-
-    map_t::const_iterator begin() const;
-    map_t::const_iterator end() const;
-
-private:
-    // Disable copy operations
-    HostObjectDB(const HostObjectDB&);
-    HostObjectDB& operator=(const HostObjectDB&);
-
-    map_t m_objects;
-};
-
-
-
-HostObjectDB::HostObjectDB()
-    : m_objects()
-{
-}
-
-
-HostObjectDB::~HostObjectDB()
-{
-}
-
-
-void HostObjectDB::clear()
-{
-    m_objects.clear();
-}
-
-
-HostObjectIface* HostObjectDB::insert(objectid_t objectId, HostObjectIface* obj)
-{
-    HostObjectIface* o = remove(objectId);
-    m_objects[objectId] = obj;
-    return o;
-}
-
-
-HostObjectIface* HostObjectDB::remove(objectid_t objectId)
-{
-    map_t::iterator it = m_objects.find(objectId);
-
-    return remove(it);
-}
-
-
-HostObjectIface* HostObjectDB::remove(map_t::iterator it)
-{
-    if (it != end())
-    {
-        HostObjectIface* o = it->second;
-        m_objects.erase(it);
-        return o;
-    }
-    return 0;
-}
-
-
-void HostObjectDB::update(FrameData& frame) const
-{
-    for (map_t::const_iterator it = begin(); it != end(); ++it)
-    {
-        objectid_t id = it->first;
-        HostObjectIface* obj = it->second;
-
-        // Object data
-        BufferStream s;
-        obj->encode(s);
-
-        frame.setObjectData(id, s.data());
-    }
-}
-
-
-HostObjectDB::map_t::iterator HostObjectDB::begin()
-{
-    return m_objects.begin();
-}
-
-
-HostObjectDB::map_t::iterator HostObjectDB::end()
-{
-    return m_objects.end();
-}
-
-
-HostObjectDB::map_t::const_iterator HostObjectDB::begin() const
-{
-    return m_objects.begin();
-}
-
-
-HostObjectDB::map_t::const_iterator HostObjectDB::end() const
-{
-    return m_objects.end();
-}
-
-
-/**
- * \class PeerObjectDB
- *
- *
- * \author Robin Pedersen
- */
-class PeerObjectDB
-{
-public:
-    typedef std::map<objectid_t, PeerObjectIface*> map_t;
-
-    PeerObjectDB();
-    ~PeerObjectDB();
-
-    void clear();
-
-    /**
-     * Returns a pointer to the object replaced, or 0 if no object was replaced.
-     */
-    PeerObjectIface* insert(objectid_t objectId, PeerObjectIface* obj);
-
-    PeerObjectIface* remove(objectid_t objectId);
-    PeerObjectIface* remove(map_t::iterator it);
-
     void apply(const FrameData& frame);
 
     map_t::iterator begin();
@@ -231,40 +105,40 @@ public:
 
 private:
     // Disable copy operations
-    PeerObjectDB(const PeerObjectDB&);
-    PeerObjectDB& operator=(const PeerObjectDB&);
+    GameObjectDB(const GameObjectDB&);
+    GameObjectDB& operator=(const GameObjectDB&);
 
     map_t m_objects;
 };
 
 
 
-PeerObjectDB::PeerObjectDB()
+GameObjectDB::GameObjectDB()
 : m_objects()
 {
 }
 
 
-PeerObjectDB::~PeerObjectDB()
+GameObjectDB::~GameObjectDB()
 {
 }
 
 
-void PeerObjectDB::clear()
+void GameObjectDB::clear()
 {
     m_objects.clear();
 }
 
 
-PeerObjectIface* PeerObjectDB::insert(objectid_t objectId, PeerObjectIface* obj)
+GameObjectDB::ptr_t GameObjectDB::insert(objectid_t objectId, GameObject* obj)
 {
-    PeerObjectIface* o = remove(objectId);
+    ptr_t tmp = remove(objectId);
     m_objects[objectId] = obj;
-    return o;
+    return tmp;
 }
 
 
-PeerObjectIface* PeerObjectDB::remove(objectid_t objectId)
+GameObjectDB::ptr_t GameObjectDB::remove(objectid_t objectId)
 {
     map_t::iterator it = m_objects.find(objectId);
 
@@ -272,24 +146,40 @@ PeerObjectIface* PeerObjectDB::remove(objectid_t objectId)
 }
 
 
-PeerObjectIface* PeerObjectDB::remove(map_t::iterator it)
+GameObjectDB::ptr_t GameObjectDB::remove(map_t::iterator it)
 {
     if (it != end())
     {
-        PeerObjectIface* o = it->second;
+        ptr_t tmp = it->second;
         m_objects.erase(it);
-        return o;
+        return tmp;
     }
     return 0;
 }
 
 
-void PeerObjectDB::apply(const FrameData& frame)
+void GameObjectDB::update(FrameData& frame) const
 {
     for (map_t::const_iterator it = begin(); it != end(); ++it)
     {
         objectid_t id = it->first;
-        PeerObjectIface* obj = it->second;
+        const ptr_t obj = it->second;
+
+        // Object data
+        BufferStream s;
+        obj->encode(s);
+
+        frame.setObjectData(id, s.data());
+    }
+}
+
+
+void GameObjectDB::apply(const FrameData& frame)
+{
+    for (map_t::iterator it = begin(); it != end(); ++it)
+    {
+        objectid_t id = it->first;
+        ptr_t obj = it->second;
 
         // Object data
         BufferStream s(frame.getObjectData(id));
@@ -309,25 +199,25 @@ void PeerObjectDB::apply(const FrameData& frame)
 }
 
 
-PeerObjectDB::map_t::iterator PeerObjectDB::begin()
+GameObjectDB::map_t::iterator GameObjectDB::begin()
 {
     return m_objects.begin();
 }
 
 
-PeerObjectDB::map_t::iterator PeerObjectDB::end()
+GameObjectDB::map_t::iterator GameObjectDB::end()
 {
     return m_objects.end();
 }
 
 
-PeerObjectDB::map_t::const_iterator PeerObjectDB::begin() const
+GameObjectDB::map_t::const_iterator GameObjectDB::begin() const
 {
     return m_objects.begin();
 }
 
 
-PeerObjectDB::map_t::const_iterator PeerObjectDB::end() const
+GameObjectDB::map_t::const_iterator GameObjectDB::end() const
 {
     return m_objects.end();
 }
@@ -431,13 +321,13 @@ private:
 
 
 /**
- * Test implementation of HostGameObject
+ * Test implementation of host-specific GameObject
  */
-class HostBumperCar : public HostGameObject
+class HostBumperCar : public GameObject
 {
 public:
     HostBumperCar(objectid_t objectId)
-    : HostGameObject(objectId)
+    : GameObject(objectId)
     , speed(0)
     {
     }
@@ -453,13 +343,13 @@ public:
 
 
 /**
- * Test implementation of PeerGameObject
+ * Test implementation of peer-specific GameObject
  */
-class PeerBumperCar : public PeerGameObject
+class PeerBumperCar : public GameObject
 {
 public:
     PeerBumperCar(objectid_t objectId)
-    : PeerGameObject(objectId)
+    : GameObject(objectId)
     , speed(0)
     {
     }
@@ -482,7 +372,7 @@ class MyHost : public Host
 public:
     MyHost()
     : Host()
-    , m_db(new HostObjectDB())
+    , m_db(new GameObjectDB())
     , frame(0)
     , sender()
     , ball(new MovingBall(idBall))
@@ -492,7 +382,7 @@ public:
         db()->insert(idCar, car.get());
     }
 
-    HostObjectDB* db() const
+    GameObjectDB* db() const
     {
         return m_db.get();
     }
@@ -519,14 +409,12 @@ protected:
     }
 
 private:
-    std::auto_ptr<HostObjectDB> m_db;
+    std::auto_ptr<GameObjectDB> m_db;
 
     framenum_t frame;
     GameDataSender sender;
-    std::auto_ptr<MovingBall> ball;
-    std::auto_ptr<HostBumperCar> car;
-
-
+    ReferencePointer<MovingBall> ball;
+    ReferencePointer<HostBumperCar> car;
 };
 
 
@@ -536,18 +424,18 @@ class MyPeer : public Peer
 public:
     MyPeer()
     : Peer()
-    , m_db(new PeerObjectDB())
     , frame(0)
     , receiver()
     , ball(new MovingBall(idBall))
     , car(new PeerBumperCar(idCar))
+    , m_db(new GameObjectDB())
     {
         db()->insert(idBall, ball.get());
         db()->insert(idCar, car.get());
     }
 
 
-    PeerObjectDB* db() const
+    GameObjectDB* db() const
     {
         return m_db.get();
     }
@@ -570,13 +458,13 @@ protected:
     }
 
 private:
-    std::auto_ptr<PeerObjectDB> m_db;
 
     framenum_t frame;
     GameDataReceiver receiver;
-    std::auto_ptr<MovingBall> ball;
-    std::auto_ptr<PeerBumperCar> car;
+    ReferencePointer<MovingBall> ball;
+    ReferencePointer<PeerBumperCar> car;
 
+    std::auto_ptr<GameObjectDB> m_db;
 };
 
 
