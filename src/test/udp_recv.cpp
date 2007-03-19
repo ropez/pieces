@@ -1,3 +1,4 @@
+#include "Pieces/Exception"
 #include "Pieces/PropertyList"
 #include "Pieces/ValueList"
 #include "Pieces/ByteArray"
@@ -15,6 +16,7 @@ using namespace Pieces;
 
 int main()
 {
+    try{
     // create socket
     UDPSocket us;
 
@@ -34,6 +36,10 @@ int main()
 
     //close socket
     us.close();
+    }catch(Pieces::Exception e)
+    {
+        ERROR << e;
+    }
 }
 
 
