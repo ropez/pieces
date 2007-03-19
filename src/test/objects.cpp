@@ -2,6 +2,8 @@
 #include "Pieces/BufferStream"
 #include "Pieces/Debug"
 
+#include "Pieces/IOException"
+
 #include "Pieces/Host"
 #include "Pieces/Peer"
 
@@ -98,7 +100,14 @@ public:
             BufferStream s(d.getObjectData(id));
 
             // NOTE: This might throw an IOException
-            obj->decode(s);
+            try
+            {
+                obj->decode(s);
+            }
+            catch (const IOException& e)
+            {
+                ERROR << e;
+            }
         }
     }
 };
