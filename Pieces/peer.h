@@ -12,7 +12,12 @@ class SocketAddress;
 class PeerPrivate;
 
 
-
+/**
+ * \class Peer
+ * \brief Base class for peer application.
+ *
+ * \author Robin Pedersen
+ */
 class Peer : public EventHandler
 {
 public:
