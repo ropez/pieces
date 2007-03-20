@@ -367,8 +367,7 @@ int main()
     repeating->setRepeating(true);
     repeating->start(500);
 
-    TCPListenerThread listener(2222, host->connectionManager());
-    listener.start();
+    host->connectionManager()->listen(2222);
 
     th.join();
     tp.join();

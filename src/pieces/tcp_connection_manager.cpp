@@ -1,6 +1,7 @@
 
 #include "Pieces/TCPConnectionManager"
 #include "Pieces/TCPConnection"
+#include "Pieces/TCPListenerThread"
 #include "Pieces/SocketAddress"
 #include "Pieces/AutoPointer"
 #include "Pieces/Debug"
@@ -19,12 +20,15 @@ public:
     typedef std::map<SocketAddress, TCPConnection*> map_t;
     map_t connections;
 
+    AutoPointer<TCPListenerThread> listener;
+
     EventLoop* eventLoop;
 };
 
 
 TCPConnectionManagerPrivate::TCPConnectionManagerPrivate()
 : connections()
+, listener(0)
 , eventLoop(0)
 {
 }
@@ -40,6 +44,13 @@ TCPConnectionManager::TCPConnectionManager(EventLoop* eventLoop)
 TCPConnectionManager::~TCPConnectionManager()
 {
     delete d;
+}
+
+
+void TCPConnectionManager::listen(port_t port)
+{
+    d->listener = new TCPListenerThread(port, this);
+    d->listener->start();
 }
 
 

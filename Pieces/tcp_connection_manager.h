@@ -32,6 +32,11 @@ public:
     ~TCPConnectionManager();
 
     /**
+     * Start accepting incoming connections on the given port.
+     */
+    void listen(port_t port);
+
+    /**
      * This class takes ownership of the connection.
      */
     void add(TCPConnection* connection);
