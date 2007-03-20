@@ -6,9 +6,10 @@
 namespace Pieces
 {
 
-NetworkEvent::NetworkEvent(int type)
+NetworkEvent::NetworkEvent(int type, const SocketAddress& sender)
 : Event()
 , m_type(type)
+, m_sender(sender)
 {
 }
 
@@ -22,6 +23,12 @@ int NetworkEvent::type() const
 void NetworkEvent::setType(int type)
 {
     m_type = type;
+}
+
+
+SocketAddress NetworkEvent::getSenderAddress() const
+{
+    return m_sender;
 }
 
 

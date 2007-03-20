@@ -92,7 +92,7 @@ void TCPReceiverThread::run()
                     ds >> data;
                 }
 
-                AutoPointer<Event> e(new NetworkEvent(type));
+                AutoPointer<Event> e(new NetworkEvent(type, d->socket->getPeerAddress()));
                 e->setData(data);
                 d->eventLoop->postEvent(e.release());
             }

@@ -269,7 +269,8 @@ protected:
 
             std::string str;
             bf >> str;
-            DEBUG << "Data (as string) " << str;
+            DEBUG << "From: " << event->getSenderAddress();
+            DEBUG << "Data (as string): " << str;
         }
         catch (const IOException& e)
         {
