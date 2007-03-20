@@ -8,7 +8,7 @@ namespace Pieces
 {
 class TCPSocket;
 class EventLoop;
-
+class TCPReceiverThreadPrivate;
 
 /**
  * \class TCPReceiverThread
@@ -40,10 +40,7 @@ private:
     TCPReceiverThread(const TCPReceiverThread&);
     TCPReceiverThread& operator=(const TCPReceiverThread&);
 
-
-    bool m_aborted;
-    TCPSocket* m_socket;
-    EventLoop* m_eventLoop;
+    TCPReceiverThreadPrivate* d;
 };
 
 } // namespace Pieces
