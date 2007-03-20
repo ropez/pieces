@@ -171,8 +171,8 @@ private:
  *
  * \relates AutoPointer
  */
-template<typename T>
-bool operator==(const AutoPointer<T>& rp1, const AutoPointer<T>& rp2)
+template<typename Tl, typename Tr>
+bool operator==(const AutoPointer<Tl>& rp1, const AutoPointer<Tr>& rp2)
 {
     return rp1.get() == rp2.get();
 }
@@ -183,8 +183,8 @@ bool operator==(const AutoPointer<T>& rp1, const AutoPointer<T>& rp2)
  *
  * \relates AutoPointer
  */
-template<typename T>
-bool operator==(const AutoPointer<T>& rp, T* ptr)
+template<typename Tl, typename Tr>
+bool operator==(const AutoPointer<Tl>& rp, Tr* ptr)
 {
     return rp.get() == ptr;
 }
@@ -195,8 +195,8 @@ bool operator==(const AutoPointer<T>& rp, T* ptr)
  *
  * \relates AutoPointer
  */
-template<typename T>
-bool operator==(T* ptr, const AutoPointer<T>& rp)
+template<typename Tl, typename Tr>
+bool operator==(Tl* ptr, const AutoPointer<Tr>& rp)
 {
     return ptr == rp.get();
 }
@@ -207,8 +207,8 @@ bool operator==(T* ptr, const AutoPointer<T>& rp)
  *
  * \relates AutoPointer
  */
-template<typename T>
-bool operator!=(const AutoPointer<T>& rp1, const AutoPointer<T>& rp2)
+template<typename Tl, typename Tr>
+bool operator!=(const AutoPointer<Tl>& rp1, const AutoPointer<Tr>& rp2)
 {
     return rp1.get() != rp2.get();
 }
@@ -219,8 +219,8 @@ bool operator!=(const AutoPointer<T>& rp1, const AutoPointer<T>& rp2)
  *
  * \relates AutoPointer
  */
-template<typename T>
-bool operator!=(const AutoPointer<T>& rp, T* ptr)
+template<typename Tl, typename Tr>
+bool operator!=(const AutoPointer<Tl>& rp, Tr* ptr)
 {
     return rp.get() != ptr;
 }
@@ -231,8 +231,8 @@ bool operator!=(const AutoPointer<T>& rp, T* ptr)
  *
  * \relates AutoPointer
  */
-template<typename T>
-bool operator!=(T* ptr, const AutoPointer<T>& rp)
+template<typename Tl, typename Tr>
+bool operator!=(Tl* ptr, const AutoPointer<Tr>& rp)
 {
     return ptr != rp.get();
 }
