@@ -237,42 +237,21 @@ ReferencePointer<T>& ReferencePointer<T>::operator=(const ReferencePointer& othe
 
 
 template<class T>
-T* ReferencePointer<T>::get()
+T* ReferencePointer<T>::get() const
 {
     return m_ptr;
 }
 
 
 template<class T>
-const T* ReferencePointer<T>::get() const
+T* ReferencePointer<T>::operator->() const
 {
     return m_ptr;
 }
 
 
 template<class T>
-T* ReferencePointer<T>::operator->()
-{
-    return m_ptr;
-}
-
-
-template<class T>
-const T* ReferencePointer<T>::operator->() const
-{
-    return m_ptr;
-}
-
-
-template<class T>
-T& ReferencePointer<T>::operator*()
-{
-    return *m_ptr;
-}
-
-
-template<class T>
-const T& ReferencePointer<T>::operator*() const
+T& ReferencePointer<T>::operator*() const
 {
     return *m_ptr;
 }
