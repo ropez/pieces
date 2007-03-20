@@ -9,6 +9,7 @@
 
 #include "Pieces/TimerEvent"
 #include "Pieces/GameEvent"
+#include "Pieces/NetworkEvent"
 
 #include "Pieces/Timer"
 
@@ -18,6 +19,11 @@
 
 #include "Pieces/FrameData"
 #include "Pieces/GameData"
+
+#include "Pieces/TCPSocket"
+#include "Pieces/TCPServer"
+#include "Pieces/TCPReceiverThread"
+#include "Pieces/TCPListenerThread"
 
 #include "OpenThreads/Mutex"
 #include "OpenThreads/ScopedLock"
@@ -253,6 +259,24 @@ protected:
             quit();
     }
 
+    virtual void handle(NetworkEvent* event)
+    {
+        DEBUG << "Got network event, type " << event->type();
+
+        try
+        {
+            BufferStream bf(event->data());
+
+            std::string str;
+            bf >> str;
+            DEBUG << "Data (as string) " << str;
+        }
+        catch (const IOException& e)
+        {
+            WARNING << e;
+        }
+    }
+
 private:
     AutoPointer<GameObjectDB> m_db;
 
@@ -341,6 +365,9 @@ int main()
     AutoPointer<Timer> repeating(new Timer(0, host->eventLoop()));
     repeating->setRepeating(true);
     repeating->start(500);
+
+    TCPListenerThread listener(2222, host->eventLoop());
+    listener.start();
 
     th.join();
     tp.join();
