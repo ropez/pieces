@@ -4,10 +4,16 @@
 #include "Pieces/TCPSocket"
 #include "Pieces/TCPListenerThread"
 #include "Pieces/SocketAddress"
+
+#include "Pieces/EventLoop"
+#include "Pieces/EventLoopThread"
+#include "Pieces/NetworkEvent"
+
 #include "Pieces/AutoPointer"
 #include "Pieces/Exception"
 #include "Pieces/Debug"
 
+#include "OpenThreads/Thread"
 #include <map>
 
 
@@ -19,19 +25,21 @@ class TCPConnectionManagerPrivate
 public:
     TCPConnectionManagerPrivate();
 
+    EventLoop* eventLoop;
+
     typedef std::map<SocketAddress, TCPConnection*> map_t;
     map_t connections;
 
     AutoPointer<TCPListenerThread> listener;
-
-    EventLoop* eventLoop;
+    AutoPointer<EventLoopThread> eventLoopThread;
 };
 
 
 TCPConnectionManagerPrivate::TCPConnectionManagerPrivate()
-: connections()
+: eventLoop(0)
+, connections()
 , listener(0)
-, eventLoop(0)
+, eventLoopThread(0)
 {
 }
 
@@ -40,6 +48,8 @@ TCPConnectionManager::TCPConnectionManager(EventLoop* eventLoop)
 : d(new TCPConnectionManagerPrivate)
 {
     d->eventLoop = eventLoop;
+    d->eventLoopThread = new EventLoopThread(this);
+    d->eventLoopThread->start();
 }
 
 
@@ -107,8 +117,8 @@ void TCPConnectionManager::add(TCPConnection* connection)
         WARNING << "Refused connection, already connected to that address";
     }
 
-    // TODO: This is probably not the correct place to start receiving events
-    conn->startReceiver(d->eventLoop);
+    // Start receiving network events on the internal event loop
+    conn->startReceiver(d->eventLoopThread->eventLoop());
 
     d->connections[address] = conn.release();
 }
@@ -128,6 +138,19 @@ void TCPConnectionManager::remove(const SocketAddress& address)
         // Connection is automatically deleted at the end of this scope.
         // Can do some final operations here, like sending goodbye message.
     }
+}
+
+
+void TCPConnectionManager::handle(NetworkEvent* event)
+{
+    // TODO: Create differnt kinds of events
+
+    DEBUG << "Got network event, forwarding";
+
+    // Must create a new event, because the one we got here is "used up"
+    AutoPointer<Event> e(new NetworkEvent(event->type(), event->getSenderAddress()));
+    e->setData(event->data());
+    d->eventLoop->postEvent(e.release());
 }
 
 } // namespace Pieces

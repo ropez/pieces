@@ -2,6 +2,7 @@
 #ifndef PIECES_TCP_CONNECTION_MANAGER_H
 #define PIECES_TCP_CONNECTION_MANAGER_H
 
+#include "Pieces/EventHandler"
 #include "Pieces/ConnectionManager"
 
 
@@ -18,7 +19,7 @@ class TCPConnectionManagerPrivate;
  *
  * \author Robin Pedersen
  */
-class TCPConnectionManager : public ConnectionManager
+class TCPConnectionManager : public EventHandler, public ConnectionManager
 {
 public:
 
@@ -60,6 +61,9 @@ public:
      * This class takes ownership of the connection.
      */
     void add(TCPConnection* connection);
+
+protected:
+    virtual void handle(NetworkEvent* event);
 
 private:
     // Disable copy operations
