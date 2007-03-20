@@ -280,6 +280,18 @@ public:
 
         // Test operator
         ReferencePointer<GameObject> go = ball;
+
+        // Test operator
+        if (go == ball)
+        {
+            DEBUG << "go == ball";
+        }
+        if (go == car)
+        {
+            DEBUG << "go == car";
+        }
+        // if (ball == car) -- illegal (distinct pointer types)
+        // if (ball.get() == car.get()) -- also illegal
     }
 
 

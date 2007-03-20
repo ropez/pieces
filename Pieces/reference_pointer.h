@@ -112,8 +112,8 @@ private:
  *
  * \relates ReferencePointer
  */
-template<class T>
-bool operator==(const ReferencePointer<T>& rp1, const ReferencePointer<T>& rp2)
+template<class Tl, class Tr>
+bool operator==(const ReferencePointer<Tl>& rp1, const ReferencePointer<Tr>& rp2)
 {
     return rp1.get() == rp2.get();
 }
@@ -124,8 +124,8 @@ bool operator==(const ReferencePointer<T>& rp1, const ReferencePointer<T>& rp2)
  *
  * \relates ReferencePointer
  */
-template<class T>
-bool operator==(const ReferencePointer<T>& rp, T* ptr)
+template<class Tl, class Tr>
+bool operator==(const ReferencePointer<Tl>& rp, Tr* ptr)
 {
     return rp.get() == ptr;
 }
@@ -136,8 +136,8 @@ bool operator==(const ReferencePointer<T>& rp, T* ptr)
  *
  * \relates ReferencePointer
  */
-template<class T>
-bool operator==(T* ptr, const ReferencePointer<T>& rp)
+template<class Tl, class Tr>
+bool operator==(Tl* ptr, const ReferencePointer<Tr>& rp)
 {
     return ptr == rp.get();
 }
@@ -148,8 +148,8 @@ bool operator==(T* ptr, const ReferencePointer<T>& rp)
  *
  * \relates ReferencePointer
  */
-template<class T>
-bool operator!=(const ReferencePointer<T>& rp1, const ReferencePointer<T>& rp2)
+template<class Tl, class Tr>
+bool operator!=(const ReferencePointer<Tl>& rp1, const ReferencePointer<Tr>& rp2)
 {
     return rp1.get() != rp2.get();
 }
@@ -160,8 +160,8 @@ bool operator!=(const ReferencePointer<T>& rp1, const ReferencePointer<T>& rp2)
  *
  * \relates ReferencePointer
  */
-template<class T>
-bool operator!=(const ReferencePointer<T>& rp, T* ptr)
+template<class Tl, class Tr>
+bool operator!=(const ReferencePointer<Tl>& rp, Tr* ptr)
 {
     return rp.get() != ptr;
 }
@@ -172,8 +172,8 @@ bool operator!=(const ReferencePointer<T>& rp, T* ptr)
  *
  * \relates ReferencePointer
  */
-template<class T>
-bool operator!=(T* ptr, const ReferencePointer<T>& rp)
+template<class Tl, class Tr>
+bool operator!=(Tl* ptr, const ReferencePointer<Tr>& rp)
 {
     return ptr != rp.get();
 }
