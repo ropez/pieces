@@ -344,9 +344,9 @@ void TCPServer::listen(port_t port)
 }
 
 
-std::auto_ptr<TCPSocket> TCPServer::accept()
+AutoPointer<TCPSocket> TCPServer::accept()
 {
-    std::auto_ptr<TCPSocketPrivate> data(new TCPSocketPrivate);
+    AutoPointer<TCPSocketPrivate> data(new TCPSocketPrivate);
 
     struct sockaddr_in sock_peer;
     socklen_t len = sizeof(sock_peer);
@@ -360,7 +360,7 @@ std::auto_ptr<TCPSocket> TCPServer::accept()
     data->peerAddress.setInetAddress(InetAddress(sock_peer.sin_addr.s_addr));
     data->peerAddress.setPort(ntohs(sock_peer.sin_port));
 
-    return std::auto_ptr<TCPSocket>(new TCPSocket(data.release()));
+    return AutoPointer<TCPSocket>(new TCPSocket(data.release()));
 }
 
 

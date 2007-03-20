@@ -30,8 +30,8 @@ enum MyEvents
     RUN_AND_HIDE
 };
 
-std::auto_ptr<Peer> peer;
-std::auto_ptr<Host> host;
+AutoPointer<Peer> peer;
+AutoPointer<Host> host;
 
 
 class Listener : public OpenThreads::Thread
@@ -41,7 +41,7 @@ protected:
     {
         try
         {
-            std::auto_ptr<UDPSocket> sock(new UDPSocket);
+            AutoPointer<UDPSocket> sock(new UDPSocket);
 
             sock->bind(3333);
 
@@ -101,7 +101,7 @@ protected:
     }
 
 private:
-    std::auto_ptr<Timer> m_repeating;
+    AutoPointer<Timer> m_repeating;
 };
 
 
@@ -158,7 +158,7 @@ protected:
     }
 
 private:
-    std::auto_ptr<UDPSocket> sock;
+    AutoPointer<UDPSocket> sock;
 };
 
 
@@ -184,8 +184,8 @@ protected:
 
 int main()
 {
-    host.reset(new MyHost);
-    peer.reset(new MyPeer);
+    host = new MyHost;
+    peer = new MyPeer;
 
     ThreadRunningHost th;
     th.start();

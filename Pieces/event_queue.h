@@ -55,7 +55,7 @@ public:
      * If the queue is empty, this will block until another thread calls
      * push().
      */
-    std::auto_ptr<Event> pop();
+    AutoPointer<Event> pop();
 
 private:
     // Disable copy

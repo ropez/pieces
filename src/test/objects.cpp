@@ -74,7 +74,7 @@ public:
 
 using namespace Pieces;
 
-std::auto_ptr<Host> host;
+AutoPointer<Host> host;
 
 class ThreadRunningHost : public OpenThreads::Thread
 {
@@ -85,7 +85,7 @@ protected:
     }
 };
 
-std::auto_ptr<Peer> peer;
+AutoPointer<Peer> peer;
 
 class ThreadRunningPeer : public OpenThreads::Thread
 {
@@ -227,7 +227,7 @@ public:
         db()->insert(idCar, car.get());
     }
 
-    GameObjectDB* db() const
+    GameObjectDB* db()
     {
         return m_db.get();
     }
@@ -254,7 +254,7 @@ protected:
     }
 
 private:
-    std::auto_ptr<GameObjectDB> m_db;
+    AutoPointer<GameObjectDB> m_db;
 
     framenum_t frame;
     GameDataSender sender;
@@ -312,21 +312,21 @@ private:
     ReferencePointer<MovingBall> ball;
     ReferencePointer<PeerBumperCar> car;
 
-    std::auto_ptr<GameObjectDB> m_db;
+    AutoPointer<GameObjectDB> m_db;
 };
 
 
 int main()
 {
-    host.reset(new MyHost);
-    peer.reset(new MyPeer);
+    host = new MyHost;
+    peer = new MyPeer;
 
     ThreadRunningHost th;
     th.start();
     ThreadRunningPeer tp;
     tp.start();
 
-    std::auto_ptr<Timer> repeating(new Timer(0, host->eventLoop()));
+    AutoPointer<Timer> repeating(new Timer(0, host->eventLoop()));
     repeating->setRepeating(true);
     repeating->start(500);
 

@@ -36,7 +36,7 @@ EventQueue::~EventQueue()
     // Pop remaining events
     while (!d->events.empty())
     {
-        std::auto_ptr<Event> e(d->events.front());
+        AutoPointer<Event> e(d->events.front());
         d->events.pop();
     }
     delete d;
@@ -52,14 +52,14 @@ void EventQueue::push(Event* e)
 }
 
 
-std::auto_ptr<Event> EventQueue::pop()
+AutoPointer<Event> EventQueue::pop()
 {
     ScopedLock<Mutex> lock(d->mutex);
     while (d->events.empty())
     {
         d->cond.wait(&d->mutex);
     }
-    std::auto_ptr<Event> e(d->events.front());
+    AutoPointer<Event> e(d->events.front());
     d->events.pop();
 
     return e;

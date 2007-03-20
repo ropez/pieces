@@ -26,7 +26,7 @@ void EventLoop::exec()
     for (;;)
     {
         // Block while waiting for event
-        std::auto_ptr<Event> e = m_queue->pop();
+        AutoPointer<Event> e = m_queue->pop();
 
         // Quit when popping a 0 pointer
         if (e.get() == 0)

@@ -52,7 +52,7 @@ void TCPReceiverThread::run()
                 ByteArray data;
                 ds >> data;
 
-                std::auto_ptr<Event> e(new NetworkEvent(type));
+                AutoPointer<Event> e(new NetworkEvent(type));
                 e->setData(data);
                 m_eventLoop->postEvent(e.release());
             }

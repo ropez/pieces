@@ -136,7 +136,7 @@ void TimerThread::run()
             break;
 
         // Timed out, post event
-        std::auto_ptr<Event> e(new TimerEvent(d->id));
+        AutoPointer<Event> e(new TimerEvent(d->id));
         e->setData(d->data);
 
         d->eventLoop->postEvent(e.release());

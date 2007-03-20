@@ -48,12 +48,12 @@ protected:
             sock->close();
 
             // Calling close() twice
-            sock.reset();
+            sock = 0;
         }
     }
 
 private:
-    std::auto_ptr<TCPSocket> sock;
+    AutoPointer<TCPSocket> sock;
 };
 
 
@@ -69,7 +69,7 @@ int main()
 
         for (;;)
         {
-            std::auto_ptr<TCPSocket> s = server.accept();
+            AutoPointer<TCPSocket> s = server.accept();
 
             INFO << "Accepted connection from " << s->getPeerAddress();
 

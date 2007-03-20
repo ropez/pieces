@@ -3,6 +3,7 @@
 #define PIECES_TCP_SERVER_H
 
 #include "Pieces/SocketAddress"
+#include "Pieces/AutoPointer"
 
 
 namespace Pieces
@@ -30,8 +31,10 @@ public:
     int getQueueSize() const;
     void setQueueSize(int size);
 
-    // Caller must delete this (maybe use auto_ptr?)
-    std::auto_ptr<TCPSocket> accept();
+    /**
+     * Accept a connection.
+     */
+    AutoPointer<TCPSocket> accept();
 
 private:
     // Disable copy operations

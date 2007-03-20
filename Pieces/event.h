@@ -2,11 +2,8 @@
 #ifndef PIECES_EVENT_H
 #define PIECES_EVENT_H
 
-#include "Pieces/SharedData"
-#include "Pieces/SharedDataPointer"
+#include "Pieces/AutoPointer"
 #include "Pieces/ByteArray"
-
-#include <memory>
 
 
 namespace Pieces
@@ -17,7 +14,7 @@ class EventHandler;
 class Event
 {
     friend class EventLoop;
-    friend class std::auto_ptr<Event>;
+    friend class AutoPointer<Event>;
 
 public:
 
