@@ -143,14 +143,29 @@ void TCPConnectionManager::remove(const SocketAddress& address)
 
 void TCPConnectionManager::handle(NetworkEvent* event)
 {
-    // TODO: Create differnt kinds of events
+    switch (event->type())
+    {
+    case NetworkEvent::DISCONNECTED:
+        {
+            DEBUG << "Disconnected " << event->getSenderAddress();
+            remove(event->getSenderAddress());
 
-    DEBUG << "Got network event, forwarding";
+            // TODO: Notify user application
+        }
+        break;
+    case NetworkEvent::RECEIVED_MESSAGE:
+        {
+            // TODO: Create differnt kinds of events
 
-    // Must create a new event, because the one we got here is "used up"
-    AutoPointer<Event> e(new NetworkEvent(event->type(), event->getSenderAddress()));
-    e->setData(event->data());
-    d->eventLoop->postEvent(e.release());
+            DEBUG << "Got network event, forwarding";
+
+            // Must create a new event, because the one we got here is "used up"
+            AutoPointer<Event> e(new NetworkEvent(event->type(), event->getSenderAddress()));
+            e->setData(event->data());
+            d->eventLoop->postEvent(e.release());
+        }
+        break;
+    }
 }
 
 } // namespace Pieces

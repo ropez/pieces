@@ -42,8 +42,6 @@ TCPListenerThread::TCPListenerThread(port_t port, TCPConnectionManager* manager)
 {
     d->port = port;
     d->manager = manager;
-
-    DEBUG << "CREATED THREAD";
 }
 
 
@@ -71,7 +69,6 @@ void TCPListenerThread::abort()
 
 void TCPListenerThread::run()
 {
-    DEBUG << "RUNNING THREAD " << getThreadId();
     ScopedLock<Mutex> lock(d->mutex);
 
     try

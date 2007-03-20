@@ -22,20 +22,21 @@ class NetworkEvent : public Event
 {
 public:
 
+    enum Type
+    {
+        DISCONNECTED,
+        RECEIVED_MESSAGE
+    };
+
     /**
      * Creates an event of the given type, from the given sender.
      */
-    NetworkEvent(int type, const SocketAddress& sender);
+    NetworkEvent(Type type, const SocketAddress& sender);
 
     /**
      * Returns the event type.
      */
-    int type() const;
-
-    /**
-     * Set or change the event type.
-     */
-    void setType(int type);
+    Type type() const;
 
     /**
      * Returns the address of the process that sent the event.
@@ -48,7 +49,7 @@ protected:
     virtual void dispatch(EventHandler* h);
 
 private:
-    int m_type;
+    Type m_type;
     SocketAddress m_sender;
 };
 
