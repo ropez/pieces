@@ -7,23 +7,38 @@
 namespace Pieces
 {
 
+class PeerPrivate
+{
+public:
+    PeerPrivate();
+
+    AutoPointer<EventLoop> eventLoop;
+};
+
+
+PeerPrivate::PeerPrivate()
+: eventLoop(0)
+{
+}
+
+
 Peer::Peer()
 : EventHandler()
-, m_eventLoop(0)
+, d(new PeerPrivate)
 {
-    m_eventLoop = new EventLoop(this);
+    d->eventLoop = new EventLoop(this);
 }
 
 
 Peer::~Peer()
 {
-    delete m_eventLoop;
+    delete d;
 }
 
 
 EventLoop* Peer::eventLoop()
 {
-    return m_eventLoop;
+    return d->eventLoop.get();
 }
 
 
@@ -31,6 +46,7 @@ void Peer::postEvent(Event* e)
 {
     eventLoop()->postEvent(e);
 }
+
 
 void Peer::exec()
 {

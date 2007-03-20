@@ -11,6 +11,7 @@ class EventLoop;
 class TCPConnectionManager;
 class TimerEvent;
 class PeerInfo;
+class HostPrivate;
 
 /**
  * \class Host
@@ -54,10 +55,11 @@ protected:
 
 private:
 
-    EventLoop* m_eventLoop;
-    TCPConnectionManager* m_connectionManager;
+    // Disable copy operations
+    Host(const Host&);
+    Host& operator=(const Host&);
 
-    bool m_accepting;
+    HostPrivate* d;
 };
 
 } // namespace Pieces

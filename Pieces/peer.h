@@ -9,6 +9,8 @@ namespace Pieces
 {
 class EventLoop;
 class SocketAddress;
+class PeerPrivate;
+
 
 
 class Peer : public EventHandler
@@ -62,7 +64,11 @@ protected:
     virtual void handle(Event* event);
 
 private:
-    EventLoop* m_eventLoop;
+    // Disable copy operations
+    Peer(const Peer&);
+    Peer& operator=(const Peer&);
+
+    PeerPrivate* d;
 };
 
 } // namespace Pieces

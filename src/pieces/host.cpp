@@ -8,33 +8,50 @@
 namespace Pieces
 {
 
+class HostPrivate
+{
+public:
+    HostPrivate();
+
+    AutoPointer<EventLoop> eventLoop;
+    AutoPointer<TCPConnectionManager> connectionManager;
+
+    bool accepting;
+};
+
+
+HostPrivate::HostPrivate()
+: eventLoop(0)
+, connectionManager(0)
+, accepting(false)
+{
+}
+
+
 Host::Host()
 : EventHandler()
-, m_eventLoop(0)
-, m_connectionManager(0)
-, m_accepting(false)
+, d(new HostPrivate)
 {
-    m_eventLoop = new EventLoop(this);
-    m_connectionManager = new TCPConnectionManager(m_eventLoop);
+    d->eventLoop = new EventLoop(this);
+    d->connectionManager = new TCPConnectionManager(d->eventLoop.get());
 }
 
 
 Host::~Host()
 {
-    delete m_eventLoop;
-    delete m_connectionManager;
+    delete d;
 }
 
 
 EventLoop* Host::eventLoop() const
 {
-    return m_eventLoop;
+    return d->eventLoop.get();
 }
 
 
 TCPConnectionManager* Host::connectionManager() const
 {
-    return m_connectionManager;
+    return d->connectionManager.get();
 }
 
 
@@ -60,14 +77,14 @@ void Host::quit()
 
 bool Host::isAcceptingConnections() const
 {
-    return m_accepting;
+    return d->accepting;
 }
 
 
 void Host::setAcceptingConnections(bool v)
 {
     // TODO: Do something with listening socket, or just keep it listening?
-    m_accepting = v;
+    d->accepting = v;
 }
 
 
