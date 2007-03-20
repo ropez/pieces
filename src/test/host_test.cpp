@@ -1,7 +1,7 @@
 
 #include "Pieces/Host"
 
-#include "Pieces/TCPConnectionManager"
+#include "Pieces/ConnectionManager"
 
 #include "Pieces/NetworkEvent"
 #include "Pieces/SocketAddress"

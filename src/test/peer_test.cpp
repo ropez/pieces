@@ -1,7 +1,7 @@
 
 #include "Pieces/Peer"
 
-#include "Pieces/TCPConnectionManager"
+#include "Pieces/ConnectionManager"
 
 #include "Pieces/Timer"
 #include "Pieces/TimerEvent"

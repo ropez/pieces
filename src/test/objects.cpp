@@ -6,7 +6,7 @@
 
 #include "Pieces/Host"
 #include "Pieces/Peer"
-#include "Pieces/TCPConnectionManager"
+#include "Pieces/ConnectionManager"
 
 #include "Pieces/TimerEvent"
 #include "Pieces/GameEvent"
