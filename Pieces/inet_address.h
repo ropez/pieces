@@ -21,6 +21,8 @@ public:
     // String in the form of "12.23.23.2"
     InetAddress(const std::string& addr);
 
+    bool isNull() const;
+
     // Also need DNS functionality the creates InetAddress object, like
     // NOTE: Is this really necassary? Couldn't we let the constructor do this. / Joakim
     static InetAddress getHostByName(const std::string& name);

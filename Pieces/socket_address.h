@@ -22,6 +22,8 @@ public:
     SocketAddress(const SocketAddress& other);
     SocketAddress& operator=(const SocketAddress& other);
 
+    bool isNull() const;
+
     InetAddress getInetAddress() const;
     void setInetAddress(const InetAddress& addr);
 

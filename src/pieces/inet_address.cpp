@@ -37,6 +37,13 @@ InetAddress::InetAddress(const std::string& addr)
 {
 }
 
+
+bool InetAddress::isNull() const
+{
+    return m_inet_addr == 0;
+}
+
+
 unsigned long InetAddress::stringToInAddr(const std::string &name)
 {
     unsigned long ian = inet_addr(name.c_str());

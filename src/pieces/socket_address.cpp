@@ -39,6 +39,13 @@ SocketAddress& SocketAddress::operator=(const SocketAddress& other)
     return *this;
 }
 
+
+bool SocketAddress::isNull() const
+{
+    return m_address.isNull() && m_port == 0;
+}
+
+
 InetAddress SocketAddress::getInetAddress() const
 {
     return m_address;
