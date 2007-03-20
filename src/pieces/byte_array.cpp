@@ -1,5 +1,6 @@
 
 #include "Pieces/ByteArray"
+#include "Pieces/IOException"
 
 #include <cstring>
 #include <sstream>
@@ -319,7 +320,7 @@ void ByteArray::Data::allocate(size_t size)
 {
     // Test for super-large size (2 GB)
     if (size & 0x80000000)
-        throw std::bad_alloc();
+        throw IOException("ByteArray::Data::allocate", "Size too large");
 
     size_t wanted = 1;
     while (wanted < size)
