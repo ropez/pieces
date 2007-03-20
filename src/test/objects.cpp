@@ -277,6 +277,9 @@ public:
     {
         db()->insert(idBall, ball.get());
         db()->insert(idCar, car.get());
+
+        // Test operator
+        ReferencePointer<GameObject> go = ball;
     }
 
 

@@ -24,6 +24,8 @@ template<class T>
 class ReferencePointer
 {
 public:
+    typedef T element_type;
+
 
     /**
      * Creates a null (invalid) pointer.
@@ -109,6 +111,12 @@ public:
      * \see isNull()
      */
     bool operator!() const;
+
+    /**
+     * Automatic conversion to a reference pointer of a related type.
+     */
+    template<typename Tp>
+    operator ReferencePointer<Tp>();
 
 private:
     void ref();
@@ -307,6 +315,13 @@ template<class T>
 bool ReferencePointer<T>::operator!() const
 {
     return !m_ptr;
+}
+
+
+template<class T> template<class Tp>
+ReferencePointer<T>::operator ReferencePointer<Tp>()
+{
+    return ReferencePointer<Tp>(m_ptr);
 }
 
 
