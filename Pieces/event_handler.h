@@ -2,6 +2,8 @@
 #ifndef PIECES_EVENT_HANDLER_H
 #define PIECES_EVENT_HANDLER_H
 
+#include "Pieces/global"
+
 
 namespace Pieces
 {

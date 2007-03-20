@@ -37,6 +37,13 @@ public:
     void listen(port_t port);
 
     /**
+     * Create a new connection to the given address.
+     *
+     * This is typically used to connect a peer to a host.
+     */
+    void connectTo(const SocketAddress& address);
+
+    /**
      * This class takes ownership of the connection.
      */
     void add(TCPConnection* connection);

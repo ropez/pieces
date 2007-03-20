@@ -33,7 +33,7 @@ Host::Host()
 , d(new HostPrivate)
 {
     d->eventLoop = new EventLoop(this);
-    d->connectionManager = new TCPConnectionManager(d->eventLoop.get());
+    d->connectionManager = new TCPConnectionManager(eventLoop());
 }
 
 

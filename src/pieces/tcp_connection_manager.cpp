@@ -1,9 +1,11 @@
 
 #include "Pieces/TCPConnectionManager"
 #include "Pieces/TCPConnection"
+#include "Pieces/TCPSocket"
 #include "Pieces/TCPListenerThread"
 #include "Pieces/SocketAddress"
 #include "Pieces/AutoPointer"
+#include "Pieces/Exception"
 #include "Pieces/Debug"
 
 #include <map>
@@ -51,6 +53,26 @@ void TCPConnectionManager::listen(port_t port)
 {
     d->listener = new TCPListenerThread(port, this);
     d->listener->start();
+}
+
+
+void TCPConnectionManager::connectTo(const SocketAddress& address)
+{
+    // TODO: Fire up a thread to do this in the background, post event when connected
+
+    try
+    {
+        AutoPointer<TCPSocket> sock(new TCPSocket);
+
+        if (sock->connect(address))
+        {
+            add(new TCPConnection(sock.release()));
+        }
+    }
+    catch (const Exception& e)
+    {
+        ERROR << e;
+    }
 }
 
 

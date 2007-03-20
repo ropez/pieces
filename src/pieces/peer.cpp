@@ -2,6 +2,7 @@
 #include "Pieces/Peer"
 #include "Pieces/Debug"
 #include "Pieces/EventLoop"
+#include "Pieces/TCPConnectionManager"
 
 
 namespace Pieces
@@ -13,11 +14,13 @@ public:
     PeerPrivate();
 
     AutoPointer<EventLoop> eventLoop;
+    AutoPointer<TCPConnectionManager> connectionManager;
 };
 
 
 PeerPrivate::PeerPrivate()
 : eventLoop(0)
+, connectionManager(0)
 {
 }
 
@@ -27,6 +30,7 @@ Peer::Peer()
 , d(new PeerPrivate)
 {
     d->eventLoop = new EventLoop(this);
+    d->connectionManager = new TCPConnectionManager(eventLoop());
 }
 
 
@@ -39,6 +43,12 @@ Peer::~Peer()
 EventLoop* Peer::eventLoop()
 {
     return d->eventLoop.get();
+}
+
+
+TCPConnectionManager* Peer::connectionManager() const
+{
+    return d->connectionManager.get();
 }
 
 
