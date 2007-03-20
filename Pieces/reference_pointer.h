@@ -60,40 +60,21 @@ public:
     /**
      * Returns a pointer to the object that this reference pointer points to.
      */
-    T* get();
-
-    /**
-     * Returns an immutable pointer to the object that this reference pointer points to.
-     */
-    const T* get() const;
+    T* get() const;
 
     /**
      * Operator used to access members in the object pointed to.
      *
      * This is used just like a normal pointer.
      */
-    T* operator->();
-
-    /**
-     * Operator used to access members in the object pointed to.
-     *
-     * This is used just like a normal pointer.
-     */
-    const T* operator->() const;
+    T* operator->() const;
 
     /**
      * Returns a reference to the object pointed to.
      *
      * This is used just like a normal pointer.
      */
-    T& operator*();
-
-    /**
-     * Returns an immutable reference to the object pointed to.
-     *
-     * This is used just like a normal pointer.
-     */
-    const T& operator*() const;
+    T& operator*() const;
 
     /**
      * Returns true if the pointer is not a null pointer.

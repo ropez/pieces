@@ -29,7 +29,7 @@ void EventLoop::exec()
         AutoPointer<Event> e = m_queue->pop();
 
         // Quit when popping a 0 pointer
-        if (e.get() == 0)
+        if (e.isNull())
             break;
 
         // Dispatch the event to the correct event-handler function
