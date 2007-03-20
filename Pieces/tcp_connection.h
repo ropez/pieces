@@ -10,6 +10,7 @@ namespace Pieces
 class TCPSocket;
 class SocketAddress;
 class EventLoop;
+class ByteArray;
 class TCPConnectionPrivate;
 
 
@@ -39,6 +40,8 @@ public:
     SocketAddress getPeerAddress() const;
 
     void startReceiver(EventLoop* eventLoop);
+
+    void sendMessage(int messageType, const ByteArray& data);
 
 private:
     // Disable copy operations

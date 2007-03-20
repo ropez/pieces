@@ -10,6 +10,7 @@
 #include "Pieces/SocketAddress"
 #include "Pieces/AutoPointer"
 
+#include "Pieces/BufferStream"
 #include "Pieces/Debug"
 
 #include <cstdlib>
@@ -45,7 +46,11 @@ protected:
         switch (event->getTimerId())
         {
         case ID_REPEATING:
-            // TODO: Send message to host
+            {
+                BufferStream s;
+                s << "Follow the white rabbit";
+                connectionManager()->sendMessage(666, s.data());
+            }
             break;
         case ID_QUIT_PEER:
             quit();
@@ -81,7 +86,7 @@ int main(int argc, char** argv)
 
     // This timer stops the Peer
     Timer tQuitPeer(ID_QUIT_PEER, peer->eventLoop());
-    tQuitPeer.start(10000);
+    tQuitPeer.start(4000);
 
     peer->exec();
 }

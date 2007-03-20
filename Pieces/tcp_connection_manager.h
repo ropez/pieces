@@ -10,6 +10,7 @@ namespace Pieces
 class TCPConnection;
 class SocketAddress;
 class EventLoop;
+class ByteArray;
 class TCPConnectionManagerPrivate;
 
 
@@ -42,6 +43,11 @@ public:
      * This is typically used to connect a peer to a host.
      */
     void connectTo(const SocketAddress& address);
+
+    /**
+     * Send a message on all connections.
+     */
+    void sendMessage(int messageType, const ByteArray& data);
 
     /**
      * This class takes ownership of the connection.

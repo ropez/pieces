@@ -2,6 +2,7 @@
 #include "Pieces/TCPConnection"
 #include "Pieces/TCPSocket"
 #include "Pieces/TCPReceiverThread"
+#include "Pieces/DataStream"
 #include "Pieces/AutoPointer"
 
 
@@ -48,6 +49,13 @@ void TCPConnection::startReceiver(EventLoop* eventLoop)
 {
     d->receiver = new TCPReceiverThread(d->socket.get(), eventLoop);
     d->receiver->start();
+}
+
+
+void TCPConnection::sendMessage(int messageType, const ByteArray& data)
+{
+    DataStream ds(d->socket.get());
+    ds << messageType << data << flush;
 }
 
 } // namespace Pieces

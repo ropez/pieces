@@ -76,6 +76,19 @@ void TCPConnectionManager::connectTo(const SocketAddress& address)
 }
 
 
+void TCPConnectionManager::sendMessage(int messageType, const ByteArray& data)
+{
+    typedef TCPConnectionManagerPrivate::map_t::iterator iterator_t;
+
+    for (iterator_t it = d->connections.begin(); it != d->connections.end(); ++it)
+    {
+        TCPConnection* conn = it->second;
+
+        conn->sendMessage(messageType, data);
+    }
+}
+
+
 void TCPConnectionManager::add(TCPConnection* connection)
 {
     // Make sure we take ownership, in case the connection is refused
@@ -103,7 +116,9 @@ void TCPConnectionManager::add(TCPConnection* connection)
 
 void TCPConnectionManager::remove(const SocketAddress& address)
 {
-    TCPConnectionManagerPrivate::map_t::iterator it = d->connections.find(address);
+    typedef TCPConnectionManagerPrivate::map_t::iterator iterator_t;
+
+    iterator_t it = d->connections.find(address);
 
     if (it != d->connections.end())
     {
