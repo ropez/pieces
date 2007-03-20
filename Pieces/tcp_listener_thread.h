@@ -8,7 +8,7 @@
 
 namespace Pieces
 {
-class EventLoop;
+class TCPConnectionManager;
 class TCPListenerThreadPrivate;
 
 
@@ -16,13 +16,14 @@ class TCPListenerThreadPrivate;
  * \class TCPListenerThread
  * \brief Thread that listens for incoming TCP connections.
  *
+ * Adds incoming connections to a connection manager.
  *
  * \author Robin Pedersen
  */
 class TCPListenerThread : public OpenThreads::Thread
 {
 public:
-    TCPListenerThread(port_t port, EventLoop* eventLoop);
+    TCPListenerThread(port_t port, TCPConnectionManager* manager);
 
     ~TCPListenerThread();
 

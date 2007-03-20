@@ -2,6 +2,7 @@
 #include "Pieces/Host"
 #include "Pieces/Debug"
 #include "Pieces/EventLoop"
+#include "Pieces/TCPConnectionManager"
 
 
 namespace Pieces
@@ -10,21 +11,30 @@ namespace Pieces
 Host::Host()
 : EventHandler()
 , m_eventLoop(0)
+, m_connectionManager(0)
 , m_accepting(false)
 {
     m_eventLoop = new EventLoop(this);
+    m_connectionManager = new TCPConnectionManager(m_eventLoop);
 }
 
 
 Host::~Host()
 {
     delete m_eventLoop;
+    delete m_connectionManager;
 }
 
 
-EventLoop* Host::eventLoop()
+EventLoop* Host::eventLoop() const
 {
     return m_eventLoop;
+}
+
+
+TCPConnectionManager* Host::connectionManager() const
+{
+    return m_connectionManager;
 }
 
 

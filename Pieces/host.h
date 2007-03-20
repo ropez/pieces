@@ -7,10 +7,10 @@
 
 namespace Pieces
 {
-class TimerEvent;
 class EventLoop;
+class TCPConnectionManager;
+class TimerEvent;
 class PeerInfo;
-
 
 /**
  * \class Host
@@ -25,12 +25,14 @@ public:
 
     ~Host();
 
-    EventLoop* eventLoop();
+    EventLoop* eventLoop() const;
+
+    TCPConnectionManager* connectionManager() const;
 
     /**
      * Post an event to the event-loop.
      *
-     * This is a shortcut for eventLoop()->postEvent(e).
+     * This is a shortcut for getEventLoop()->postEvent(e).
      *
      * \see EventLoop::postEvent()
      */
@@ -53,6 +55,7 @@ protected:
 private:
 
     EventLoop* m_eventLoop;
+    TCPConnectionManager* m_connectionManager;
 
     bool m_accepting;
 };

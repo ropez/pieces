@@ -1,10 +1,9 @@
 
 #include "Pieces/TCPListenerThread"
-#include "Pieces/TCPReceiverThread"
+#include "Pieces/TCPConnection"
+#include "Pieces/TCPConnectionManager"
 #include "Pieces/TCPServer"
 #include "Pieces/TCPSocket"
-#include "Pieces/EventLoop"
-#include "Pieces/DataStream"
 #include "Pieces/Exception"
 #include "Pieces/Debug"
 
@@ -26,23 +25,25 @@ public:
     Mutex mutex;
 
     port_t port;
-    EventLoop* eventLoop;
+    TCPConnectionManager* manager;
 };
 
 
 TCPListenerThreadPrivate::TCPListenerThreadPrivate()
 : mutex()
 , port(0)
-, eventLoop(0)
+, manager(0)
 {
 }
 
 
-TCPListenerThread::TCPListenerThread(port_t port, EventLoop* eventLoop)
+TCPListenerThread::TCPListenerThread(port_t port, TCPConnectionManager* manager)
 : d(new TCPListenerThreadPrivate)
 {
     d->port = port;
-    d->eventLoop = eventLoop;
+    d->manager = manager;
+
+    DEBUG << "CREATED THREAD";
 }
 
 
@@ -70,6 +71,7 @@ void TCPListenerThread::abort()
 
 void TCPListenerThread::run()
 {
+    DEBUG << "RUNNING THREAD " << getThreadId();
     ScopedLock<Mutex> lock(d->mutex);
 
     try
@@ -92,9 +94,8 @@ void TCPListenerThread::run()
 
             INFO << "Accepted connection from " << s->getPeerAddress();
 
-            // TODO: This is a memory leak!
-            TCPReceiverThread* session = new TCPReceiverThread(s.release(), d->eventLoop);
-            session->start();
+            // Add connection to manager
+            d->manager->add(new TCPConnection(s.release()));
         }
     }
     catch (const Exception& e)
