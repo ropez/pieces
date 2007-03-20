@@ -12,6 +12,12 @@ class EventLoop;
 class PeerInfo;
 
 
+/**
+ * \class Host
+ * \brief Base class for host application.
+ *
+ * \author Robin Pedersen
+ */
 class Host : public EventHandler
 {
 public:
