@@ -63,6 +63,65 @@ void SocketAddress::setPort(port_t port)
 }
 
 
+int compare(const SocketAddress& op1, const SocketAddress& op2)
+{
+    // Compare addresses
+    int ret = compare(op1.getInetAddress(), op2.getInetAddress());
+    if (ret == 0)
+    {
+        // Compare ports
+        if (op1.getPort() < op2.getPort())
+            ret = -1;
+        if (op1.getPort() > op2.getPort())
+            ret = 1;
+    }
+    return ret;
+}
+
+
+bool operator==(const SocketAddress& op1, const SocketAddress& op2)
+{
+    return compare(op1, op2) == 0;
+}
+
+
+bool operator!=(const SocketAddress& op1, const SocketAddress& op2)
+{
+    return compare(op1, op2) != 0;
+}
+
+
+bool operator<(const SocketAddress& op1, const SocketAddress& op2)
+{
+    return compare(op1, op2) < 0;
+}
+
+
+bool operator>(const SocketAddress& op1, const SocketAddress& op2)
+{
+    return compare(op1, op2) > 0;
+}
+
+
+bool operator<=(const SocketAddress& op1, const SocketAddress& op2)
+{
+    return compare(op1, op2) <= 0;
+}
+
+
+bool operator>=(const SocketAddress& op1, const SocketAddress& op2)
+{
+    return compare(op1, op2) >= 0;
+}
+
+
+bool operator!=(const SocketAddress& op1, const SocketAddress& op2);
+bool operator<(const SocketAddress& op1, const SocketAddress& op2);
+bool operator>(const SocketAddress& op1, const SocketAddress& op2);
+bool operator<=(const SocketAddress& op1, const SocketAddress& op2);
+bool operator>=(const SocketAddress& op1, const SocketAddress& op2);
+
+
 std::ostream& operator<<(std::ostream& os, const SocketAddress& sa)
 {
     return os << sa.getInetAddress() << ":" << sa.getPort();

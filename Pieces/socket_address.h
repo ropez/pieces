@@ -33,6 +33,15 @@ private:
     port_t m_port;
 };
 
+int compare(const SocketAddress& op1, const SocketAddress& op2);
+
+bool operator==(const SocketAddress& op1, const SocketAddress& op2);
+bool operator!=(const SocketAddress& op1, const SocketAddress& op2);
+bool operator<(const SocketAddress& op1, const SocketAddress& op2);
+bool operator>(const SocketAddress& op1, const SocketAddress& op2);
+bool operator<=(const SocketAddress& op1, const SocketAddress& op2);
+bool operator>=(const SocketAddress& op1, const SocketAddress& op2);
+
 std::ostream& operator<<(std::ostream& os, const SocketAddress& sa);
 
 } // namespace Pieces

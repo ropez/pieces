@@ -85,9 +85,60 @@ unsigned long InetAddress::toInt32() const
 }
 
 
+int compare(const InetAddress& op1, const InetAddress& op2)
+{
+    unsigned long n1 = op1.toInt32();
+    unsigned long n2 = op2.toInt32();
+
+    if (n1 < n2)
+        return -1;
+    if (n1 > n2)
+        return 1;
+
+    // Equal
+    return 0;
+}
+
+
+bool operator==(const InetAddress& op1, const InetAddress& op2)
+{
+    return compare(op1, op2) == 0;
+}
+
+
+bool operator!=(const InetAddress& op1, const InetAddress& op2)
+{
+    return compare(op1, op2) != 0;
+}
+
+
+bool operator<(const InetAddress& op1, const InetAddress& op2)
+{
+    return compare(op1, op2) < 0;
+}
+
+
+bool operator>(const InetAddress& op1, const InetAddress& op2)
+{
+    return compare(op1, op2) > 0;
+}
+
+
+bool operator<=(const InetAddress& op1, const InetAddress& op2)
+{
+    return compare(op1, op2) <= 0;
+}
+
+
+bool operator>=(const InetAddress& op1, const InetAddress& op2)
+{
+    return compare(op1, op2) >= 0;
+}
+
+
 std::ostream& operator<<(std::ostream& os, const InetAddress& ia)
 {
     return os << ia.toString();
 }
 
-}
+} // namespace Pieces

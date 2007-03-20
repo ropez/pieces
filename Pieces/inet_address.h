@@ -42,6 +42,15 @@ private:
 
 };
 
+int compare(const InetAddress& op1, const InetAddress& op2);
+
+bool operator==(const InetAddress& op1, const InetAddress& op2);
+bool operator!=(const InetAddress& op1, const InetAddress& op2);
+bool operator<(const InetAddress& op1, const InetAddress& op2);
+bool operator>(const InetAddress& op1, const InetAddress& op2);
+bool operator<=(const InetAddress& op1, const InetAddress& op2);
+bool operator>=(const InetAddress& op1, const InetAddress& op2);
+
 std::ostream& operator<<(std::ostream& os, const InetAddress& ia);
 
 } // namespace Pieces
