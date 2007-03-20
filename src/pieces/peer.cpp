@@ -46,7 +46,7 @@ EventLoop* Peer::eventLoop()
 }
 
 
-TCPConnectionManager* Peer::connectionManager() const
+ConnectionManager* Peer::connectionManager() const
 {
     return d->connectionManager.get();
 }

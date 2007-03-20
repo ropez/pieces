@@ -49,7 +49,7 @@ EventLoop* Host::eventLoop() const
 }
 
 
-TCPConnectionManager* Host::connectionManager() const
+ConnectionManager* Host::connectionManager() const
 {
     return d->connectionManager.get();
 }

@@ -8,7 +8,7 @@
 namespace Pieces
 {
 class EventLoop;
-class TCPConnectionManager;
+class ConnectionManager;
 class SocketAddress;
 class PeerPrivate;
 
@@ -28,7 +28,7 @@ public:
 
     EventLoop* eventLoop();
 
-    TCPConnectionManager* connectionManager() const;
+    ConnectionManager* connectionManager() const;
 
     /**
      * Post an event to the event-loop.

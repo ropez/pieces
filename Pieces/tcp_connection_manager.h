@@ -11,6 +11,38 @@ class TCPConnection;
 class SocketAddress;
 class EventLoop;
 class ByteArray;
+
+
+// TODO: Move this to a different file
+class ConnectionManager
+{
+public:
+    virtual ~ConnectionManager() {};
+
+    /**
+     * Start accepting incoming connections on the given port.
+     */
+    virtual void listen(port_t port) = 0;
+
+    /**
+     * Create a new connection to the given address.
+     *
+     * This is typically used to connect a peer to a host.
+     */
+    virtual void connectTo(const SocketAddress& address) = 0;
+
+    /**
+     * Send a message on all connections.
+     */
+    virtual void sendMessage(int messageType, const ByteArray& data) = 0;
+
+    /**
+     * Close and delete the connection to the given \a address.
+     */
+    virtual void remove(const SocketAddress& address) = 0;
+};
+
+
 class TCPConnectionManagerPrivate;
 
 
@@ -20,41 +52,48 @@ class TCPConnectionManagerPrivate;
  *
  * \author Robin Pedersen
  */
-class TCPConnectionManager
+class TCPConnectionManager : public ConnectionManager
 {
 public:
 
     /**
      * Constructor.
      *
-     * TODO: eventloop should probably be deleted later, and add some function to start receiving data after connected.
+     * TODO: eventloop parameter should probably be removed later, and add some function to start receiving data after connected.
      */
     TCPConnectionManager(EventLoop* eventLoop);
-    ~TCPConnectionManager();
+
+    /**
+     * Close and delete all connections.
+     */
+    virtual ~TCPConnectionManager();
 
     /**
      * Start accepting incoming connections on the given port.
      */
-    void listen(port_t port);
+    virtual void listen(port_t port);
 
     /**
      * Create a new connection to the given address.
      *
      * This is typically used to connect a peer to a host.
      */
-    void connectTo(const SocketAddress& address);
+    virtual void connectTo(const SocketAddress& address);
 
     /**
      * Send a message on all connections.
      */
-    void sendMessage(int messageType, const ByteArray& data);
+    virtual void sendMessage(int messageType, const ByteArray& data);
+
+    /**
+     * Close the connection to the given \a address.
+     */
+    virtual void remove(const SocketAddress& address);
 
     /**
      * This class takes ownership of the connection.
      */
     void add(TCPConnection* connection);
-
-    void remove(const SocketAddress& address);
 
 private:
     // Disable copy operations
