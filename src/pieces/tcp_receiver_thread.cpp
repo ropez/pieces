@@ -6,6 +6,7 @@
 #include "Pieces/EventLoop"
 #include "Pieces/Exception"
 #include "Pieces/TimeoutException"
+#include "Pieces/DisconnectedException"
 
 #include "OpenThreads/Mutex"
 #include "OpenThreads/ScopedLock"
@@ -92,7 +93,7 @@ void TCPReceiverThread::run()
                     ds >> data;
                 }
 
-                AutoPointer<Event> e(new NetworkEvent(type, d->socket->getPeerAddress()));
+                AutoPointer<Event> e(new NetworkEvent(NetworkEvent::RECEIVED_MESSAGE, d->socket->getPeerAddress()));
                 e->setData(data);
                 d->eventLoop->postEvent(e.release());
             }
@@ -101,6 +102,10 @@ void TCPReceiverThread::run()
                 // Ignore, try again
             }
         }
+    }
+    catch (const DisconnectedException&)
+    {
+        d->eventLoop->postEvent(new NetworkEvent(NetworkEvent::DISCONNECTED, d->socket->getPeerAddress()));
     }
     catch (const Exception& e)
     {
