@@ -35,7 +35,7 @@
 namespace Pieces
 {
 
-// DUMMY simulation of host and peer functionality
+// DUMMY simulation of host and peer "UDP" functionality
 OpenThreads::Mutex mutex;
 GameData gamedata;
 
