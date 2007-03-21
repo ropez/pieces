@@ -7,6 +7,8 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#else
+#include <winsock2.h>
 #endif
 
 namespace Pieces
