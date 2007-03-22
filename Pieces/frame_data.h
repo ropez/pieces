@@ -12,6 +12,7 @@
 
 namespace Pieces
 {
+class DataStream;
 
 
 /**
@@ -26,18 +27,25 @@ namespace Pieces
 class FrameData
 {
 public:
+    // TODO: Do we need an ObjectData class, or is ByteArray sufficient? (Robin)
+    typedef std::map<objectid_t, ByteArray> map_t;
+
     FrameData();
+
+    size_t size() const;
+    bool isEmpty() const;
+
+    map_t::const_iterator begin() const;
+    map_t::const_iterator end() const;
 
     bool hasObjectData(objectid_t objectId) const;
     ByteArray getObjectData(objectid_t objectId) const;
 
+    void clear();
     bool removeObjectData(objectid_t objectId);
     void setObjectData(objectid_t objectId, const ByteArray& data);
 
 private:
-
-    // TODO: Do we need an ObjectData class, or is ByteArray sufficient? (Robin)
-    typedef std::map<objectid_t, ByteArray> map_t;
 
     class Data : public SharedData
     {
@@ -52,6 +60,9 @@ private:
 
     SharedDataPointer<Data> d;
 };
+
+DataStream& operator<<(DataStream& ds, const FrameData& frame);
+DataStream& operator>>(DataStream& ds, FrameData& frame);
 
 } // namespace Pieces
 
