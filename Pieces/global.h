@@ -3,6 +3,10 @@
 #define PIECES_GLOBAL_H
 
 
+// Macro to disable copy operations
+#define DISABLE_COPY(c) c(const c&); c& operator=(const c&);
+
+
 namespace Pieces
 {
 
