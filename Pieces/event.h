@@ -13,29 +13,23 @@ class EventHandler;
 
 class Event
 {
-    friend class EventLoop;
     friend class AutoPointer<Event>;
 
 public:
 
-    explicit Event();
+    Event();
 
-    bool isUserDefined() const;
-
-    void setData(const ByteArray& data);
-    ByteArray data() const;
+    virtual AutoPointer<Event> clone() const = 0;
+    virtual void dispatch(EventHandler* h) = 0;
 
 protected:
-    virtual ~Event();
 
-    virtual void dispatch(EventHandler* h);
+    virtual ~Event();
 
 private:
 
     Event(const Event&);
     Event& operator=(const Event&);
-
-    ByteArray m_data;
 };
 
 } // namespace Pieces

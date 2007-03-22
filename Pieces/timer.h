@@ -65,17 +65,9 @@ public:
      * If the timer was running before this, it's stopped.
      *
      * Waits for \a delay milli-seconds, then it posts a TimerEvent
-     * on the event-loop that was set with the constructor. The \a data
-     * is sent with the event as user data.
+     * on the event-loop that was set with the constructor.
      *
      * This function returns immediately.
-     */
-    void start(unsigned long delay, const ByteArray& data);
-
-    /**
-     * Start the timer.
-     *
-     * Same as start(delay, ByteArray()).
      */
     void start(unsigned long delay);
 

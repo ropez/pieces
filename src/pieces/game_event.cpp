@@ -13,6 +13,20 @@ GameEvent::GameEvent(int type)
 }
 
 
+AutoPointer<Event> GameEvent::clone() const
+{
+    AutoPointer<GameEvent> event(new GameEvent(type()));
+
+    return AutoPointer<Event>(event);
+}
+
+
+void GameEvent::dispatch(EventHandler* h)
+{
+    h->handle(this);
+}
+
+
 int GameEvent::type() const
 {
     return m_type;
@@ -27,12 +41,6 @@ void GameEvent::setType(int type)
 
 GameEvent::~GameEvent()
 {
-}
-
-
-void GameEvent::dispatch(EventHandler* h)
-{
-    h->handle(this);
 }
 
 } // namespace Pieces

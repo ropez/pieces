@@ -32,6 +32,9 @@ public:
      */
     explicit GameEvent(int type = 0);
 
+    virtual AutoPointer<Event> clone() const;
+    virtual void dispatch(EventHandler* h);
+
     /**
      * Returns the event type.
      */
@@ -44,8 +47,6 @@ public:
 
 protected:
     virtual ~GameEvent();
-
-    virtual void dispatch(EventHandler* h);
 
 private:
     int m_type;

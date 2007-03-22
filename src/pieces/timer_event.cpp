@@ -18,15 +18,23 @@ TimerEvent::~TimerEvent()
 }
 
 
-int TimerEvent::getTimerId() const
+AutoPointer<Event> TimerEvent::clone() const
 {
-    return m_timerId;
+    AutoPointer<TimerEvent> event(new TimerEvent(getTimerId()));
+
+    return AutoPointer<Event>(event);
 }
 
 
 void TimerEvent::dispatch(EventHandler* h)
 {
     h->handle(this);
+}
+
+
+int TimerEvent::getTimerId() const
+{
+    return m_timerId;
 }
 
 } // namespace Pieces

@@ -76,16 +76,6 @@ public:
     void setDelay(unsigned long msec);
 
     /**
-     * The data that is added to the event posted when the timer is triggered.
-     */
-    ByteArray getData() const;
-
-    /**
-     * Set the data to add to the event posted when the timer is triggered.
-     */
-    void setData(const ByteArray& data);
-
-    /**
      * Stop the timer-thread.
      *
      * When the function returns, the timer-thread is guaranteed to have

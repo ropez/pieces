@@ -161,9 +161,7 @@ void TCPConnectionManager::handle(NetworkEvent* event)
             DEBUG << "Got network event, forwarding";
 
             // Must create a new event, because the one we got here is "used up"
-            AutoPointer<NetworkEvent> e(new NetworkEvent(event->type(), event->getSenderAddress()));
-            e->setMessageType(event->getMessageType());
-            e->setData(event->data());
+            AutoPointer<Event> e = event->clone();
             d->eventLoop->postEvent(e.release());
         }
         break;

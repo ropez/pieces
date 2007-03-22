@@ -98,18 +98,6 @@ void TimerThread::setDelay(unsigned long msec)
 }
 
 
-ByteArray TimerThread::getData() const
-{
-    return d->data;
-}
-
-
-void TimerThread::setData(const ByteArray& data)
-{
-    d->data = data;
-}
-
-
 void TimerThread::abort()
 {
     {
@@ -137,7 +125,6 @@ void TimerThread::run()
 
         // Timed out, post event
         AutoPointer<Event> e(new TimerEvent(d->id));
-        e->setData(d->data);
 
         d->eventLoop->postEvent(e.release());
     }

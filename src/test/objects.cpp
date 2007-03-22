@@ -266,7 +266,7 @@ protected:
 
         try
         {
-            BufferStream bf(event->data());
+            BufferStream bf(event->getData());
 
             std::string str;
             bf >> str;

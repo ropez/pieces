@@ -15,12 +15,16 @@ class TimerEvent : public Event
 public:
     TimerEvent(int timerId = 0);
 
-    int getTimerId() const;
-
 protected:
+
     virtual ~TimerEvent();
 
+public:
+
+    virtual AutoPointer<Event> clone() const;
     virtual void dispatch(EventHandler* h);
+
+    int getTimerId() const;
 
 private:
     int m_timerId;

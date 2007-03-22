@@ -46,6 +46,9 @@ public:
      */
     NetworkEvent(Type type, const SocketAddress& sender);
 
+    virtual AutoPointer<Event> clone() const;
+    virtual void dispatch(EventHandler* h);
+
     /**
      * Returns the event type.
      */
@@ -60,14 +63,16 @@ public:
 
     int getMessageType() const;
 
+    void setData(const ByteArray& data);
+    ByteArray getData() const;
+
 protected:
     virtual ~NetworkEvent();
-
-    virtual void dispatch(EventHandler* h);
 
 private:
     Type m_type;
     int m_messageType;
+    ByteArray m_data;
     SocketAddress m_sender;
 };
 

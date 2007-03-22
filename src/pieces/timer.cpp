@@ -67,21 +67,14 @@ void Timer::setRepeating(bool on)
 }
 
 
-void Timer::start(unsigned long delay, const ByteArray& data)
+void Timer::start(unsigned long delay)
 {
     stop();
 
     d->thread->setTimerId(d->id);
     d->thread->setDelay(delay);
-    d->thread->setData(data);
     d->thread->start();
     d->started = true;
-}
-
-
-void Timer::start(unsigned long delay)
-{
-    start(delay, ByteArray());
 }
 
 

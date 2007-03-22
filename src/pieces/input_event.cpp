@@ -13,6 +13,20 @@ InputEvent::InputEvent(int type)
 }
 
 
+AutoPointer<Event> InputEvent::clone() const
+{
+    AutoPointer<InputEvent> event(new InputEvent(type()));
+
+    return AutoPointer<Event>(event);
+}
+
+
+void InputEvent::dispatch(EventHandler* h)
+{
+    h->handle(this);
+}
+
+
 int InputEvent::type() const
 {
     return m_type;
@@ -27,12 +41,6 @@ void InputEvent::setType(int type)
 
 InputEvent::~InputEvent()
 {
-}
-
-
-void InputEvent::dispatch(EventHandler* h)
-{
-    h->handle(this);
 }
 
 } // namespace Pieces

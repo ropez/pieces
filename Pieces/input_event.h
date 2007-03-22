@@ -28,6 +28,15 @@ public:
      */
     explicit InputEvent(int type = 0);
 
+protected:
+
+    virtual ~InputEvent();
+
+public:
+
+    virtual AutoPointer<Event> clone() const;
+    virtual void dispatch(EventHandler* h);
+
     /**
      * Returns the event type.
      */
@@ -37,11 +46,6 @@ public:
      * Set or change the event type.
      */
     void setType(int type);
-
-protected:
-    virtual ~InputEvent();
-
-    virtual void dispatch(EventHandler* h);
 
 private:
     int m_type;
