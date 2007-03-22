@@ -24,7 +24,7 @@ protected:
         try
         {
             sock->setReadTimeout(50000);
-            INFO << "Timeout: " << sock->getReadTimeout();
+            PINFO << "Timeout: " << sock->getReadTimeout();
 
             DataStream ds(sock.get());
             for (;;)
@@ -44,7 +44,7 @@ protected:
         }
         catch (const Exception& e)
         {
-            ERROR << e;
+            PERROR << e;
             sock->close();
 
             // Calling close() twice
@@ -71,7 +71,7 @@ int main()
         {
             AutoPointer<TCPSocket> s = server.accept();
 
-            INFO << "Accepted connection from " << s->getPeerAddress();
+            PINFO << "Accepted connection from " << s->getPeerAddress();
 
             // This is a memory leak!
             Session* session = new Session(s.release());
@@ -80,7 +80,7 @@ int main()
     }
     catch (const Exception& e)
     {
-        ERROR << e;
+        PERROR << e;
     }
 }
 

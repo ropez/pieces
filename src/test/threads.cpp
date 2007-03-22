@@ -45,22 +45,22 @@ protected:
 
             sock->bind(3333);
 
-            DEBUG << "Waiting for datagram";
+            PDEBUG << "Waiting for datagram";
 
             Datagram dg = sock->receive(0x1000);
 
-            DEBUG << "Incoming datagram from " << dg.getAddress();
+            PDEBUG << "Incoming datagram from " << dg.getAddress();
 
             BufferStream ds(dg.getData());
             PropertyList pl;
             ds >> pl;
 
-            DEBUG << "Value 0: " << pl.get<double>(0);
-            DEBUG << "Value 1: " << pl.get<double>(1);
+            PDEBUG << "Value 0: " << pl.get<double>(0);
+            PDEBUG << "Value 1: " << pl.get<double>(1);
         }
         catch (const Exception& e)
         {
-            ERROR << e;
+            PERROR << e;
         }
     }
 };
@@ -80,7 +80,7 @@ protected:
     void handle(TimerEvent* event)
     {
         // Handle events
-        DEBUG << "Peer timer-event, id = " << event->getTimerId();
+        PDEBUG << "Peer timer-event, id = " << event->getTimerId();
 
         switch (event->getTimerId())
         {
@@ -97,7 +97,7 @@ protected:
 
     void handle(GameEvent* event)
     {
-        DEBUG << "Peer game-event, type = " << event->type();
+        PDEBUG << "Peer game-event, type = " << event->type();
     }
 
 private:
@@ -117,7 +117,7 @@ protected:
     void handle(TimerEvent* event)
     {
         // Handle events
-        DEBUG << "Host timer-event, id = " << event->getTimerId();
+        PDEBUG << "Host timer-event, id = " << event->getTimerId();
 
         try
         {
@@ -134,11 +134,11 @@ protected:
 
             sock->send(dg);
 
-            DEBUG << "Sent datagram to " << dg.getAddress();
+            PDEBUG << "Sent datagram to " << dg.getAddress();
         }
         catch (const Exception& e)
         {
-            ERROR << e;
+            PERROR << e;
         }
 
         switch (event->getTimerId())
@@ -154,7 +154,7 @@ protected:
     void handle(InputEvent* event)
     {
         // Handle events
-        DEBUG << "Host input-event, type = " << event->type();
+        PDEBUG << "Host input-event, type = " << event->type();
     }
 
 private:

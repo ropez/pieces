@@ -91,7 +91,7 @@ void File::close()
         }
         catch (const Exception& e)
         {
-            WARNING << e;
+            PWARNING << e;
         }
 
         ::close(d->fd);

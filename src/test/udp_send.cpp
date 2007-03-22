@@ -30,14 +30,14 @@ int main()
         port_t port = 5000;
         SocketAddress addr(ia, port);
 
-        DEBUG << ia;
+        PDEBUG << ia;
 
         //send data
         BufferStream data;
         data << "Dette er en test";
         std::string str;
         data >> str;
-        DEBUG << str;
+        PDEBUG << str;
         Datagram dg;
         dg.setAddress(addr);
         dg.setData(data.data());
@@ -54,7 +54,7 @@ int main()
     }
     catch(Pieces::Exception e)
     {
-        ERROR << e;
+        PERROR << e;
     }
 }
 

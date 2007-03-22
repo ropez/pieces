@@ -262,7 +262,7 @@ protected:
 
     virtual void handle(NetworkEvent* event)
     {
-        DEBUG << "Got network event, type " << event->type();
+        PDEBUG << "Got network event, type " << event->type();
 
         try
         {
@@ -270,12 +270,12 @@ protected:
 
             std::string str;
             bf >> str;
-            DEBUG << "From: " << event->getSenderAddress();
-            DEBUG << "Data (as string): " << str;
+            PDEBUG << "From: " << event->getSenderAddress();
+            PDEBUG << "Data (as string): " << str;
         }
         catch (const IOException& e)
         {
-            WARNING << e;
+            PWARNING << e;
         }
     }
 
@@ -310,11 +310,11 @@ public:
         // Test operator
         if (go == ball)
         {
-            DEBUG << "go == ball";
+            PDEBUG << "go == ball";
         }
         if (go == car)
         {
-            DEBUG << "go == car";
+            PDEBUG << "go == car";
         }
         // if (ball == car) -- illegal (distinct pointer types)
         // if (ball.get() == car.get()) -- also illegal
@@ -332,12 +332,12 @@ protected:
     {
         db()->apply(receiver.getFrameData(frame++));
 
-        DEBUG << "Moving ball, frame " << frame << ": "
+        PDEBUG << "Moving ball, frame " << frame << ": "
             << align(40) << "posx = " << ball->getPosX()
             << align(58) << "posy = " << ball->getPosY()
             << align(76) << "diam = " << ball->getDiam();
 
-        DEBUG << "BumberCar now running at: " << car->speed;
+        PDEBUG << "BumberCar now running at: " << car->speed;
 
         if (frame == 10)
             quit();

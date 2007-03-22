@@ -76,7 +76,7 @@ void TCPListenerThread::run()
         TCPServer server;
         server.listen(d->port);
 
-        DEBUG << "Server listening";
+        PDEBUG << "Server listening";
 
         for (;;)
         {
@@ -89,7 +89,7 @@ void TCPListenerThread::run()
                 s = server.accept();
             }
 
-            INFO << "Accepted connection from " << s->getPeerAddress();
+            PINFO << "Accepted connection from " << s->getPeerAddress();
 
             // Add connection to manager
             d->manager->add(new TCPConnection(s.release()));
@@ -97,7 +97,7 @@ void TCPListenerThread::run()
     }
     catch (const Exception& e)
     {
-        ERROR << e;
+        PERROR << e;
     }
 }
 

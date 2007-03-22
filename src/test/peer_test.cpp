@@ -41,7 +41,7 @@ protected:
     void handle(TimerEvent* event)
     {
         // Handle events
-        DEBUG << "Peer timer-event, id = " << event->getTimerId();
+        PDEBUG << "Peer timer-event, id = " << event->getTimerId();
 
         switch (event->getTimerId())
         {

@@ -81,7 +81,7 @@ void TCPConnectionManager::connectTo(const SocketAddress& address)
     }
     catch (const Exception& e)
     {
-        ERROR << e;
+        PERROR << e;
     }
 }
 
@@ -108,13 +108,13 @@ void TCPConnectionManager::add(TCPConnection* connection)
     SocketAddress address = conn->getPeerAddress();
     if (address.isNull())
     {
-        WARNING << "Refused connection, no peer address";
+        PWARNING << "Refused connection, no peer address";
         return;
     }
 
     if (d->connections.find(address) != d->connections.end())
     {
-        WARNING << "Refused connection, already connected to that address";
+        PWARNING << "Refused connection, already connected to that address";
         return;
     }
 
@@ -148,7 +148,7 @@ void TCPConnectionManager::handle(NetworkEvent* event)
     {
     case NetworkEvent::DISCONNECTED:
         {
-            DEBUG << "Disconnected " << event->getSenderAddress();
+            PDEBUG << "Disconnected " << event->getSenderAddress();
             remove(event->getSenderAddress());
 
             // TODO: Notify user application
@@ -158,7 +158,7 @@ void TCPConnectionManager::handle(NetworkEvent* event)
         {
             // TODO: Create differnt kinds of events
 
-            DEBUG << "Got network event, forwarding";
+            PDEBUG << "Got network event, forwarding";
 
             // Must create a new event, because the one we got here is "used up"
             AutoPointer<Event> e = event->clone();

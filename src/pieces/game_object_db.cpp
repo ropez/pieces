@@ -91,7 +91,7 @@ void GameObjectDB::apply(const FrameData& frame)
         }
         catch (const IOException& e)
         {
-            ERROR << e;
+            PERROR << e;
         }
     }
 }

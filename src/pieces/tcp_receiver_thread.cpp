@@ -74,7 +74,7 @@ void TCPReceiverThread::run()
 
     try
     {
-        DEBUG << "Receiver thread started";
+        PDEBUG << "Receiver thread started";
 
         DataStream ds(d->socket);
 
@@ -110,7 +110,7 @@ void TCPReceiverThread::run()
     }
     catch (const Exception& e)
     {
-        ERROR << e;
+        PERROR << e;
     }
 }
 

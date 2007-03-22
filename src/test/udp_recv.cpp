@@ -30,13 +30,13 @@ int main()
         us.bind(addr);
 
         //recv data
-        DEBUG  << "Bound to " << addr;
+        PDEBUG  << "Bound to " << addr;
 
         while (true)
         {
             Datagram dg(us.receive(1000));
 
-            DEBUG  << "Here";
+            PDEBUG  << "Here";
 
             ByteArray ba(dg.getData());
             BufferStream data(ba);
@@ -44,7 +44,7 @@ int main()
             std::string str;
             data >> str;
 
-            DEBUG << str;
+            PDEBUG << str;
         }
 
         //close socket
@@ -52,7 +52,7 @@ int main()
     }
     catch(Pieces::Exception e)
     {
-        ERROR << e;
+        PERROR << e;
     }
 }
 

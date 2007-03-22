@@ -60,14 +60,14 @@ void Peer::postEvent(Event* e)
 
 void Peer::exec()
 {
-    DEBUG << "Peer running";
+    PDEBUG << "Peer running";
     eventLoop()->exec();
 }
 
 
 void Peer::quit()
 {
-    DEBUG << "Peer quitting";
+    PDEBUG << "Peer quitting";
     eventLoop()->quit();
 }
 

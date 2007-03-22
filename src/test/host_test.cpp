@@ -18,7 +18,7 @@ protected:
 
     virtual void handle(NetworkEvent* event)
     {
-        DEBUG << "Got network event, type " << event->type();
+        PDEBUG << "Got network event, type " << event->type();
 
         try
         {
@@ -26,13 +26,13 @@ protected:
 
             std::string str;
             bf >> str;
-            DEBUG << "From: " << event->getSenderAddress();
-            DEBUG << "Message type: " << event->getMessageType();
-            DEBUG << "Data (as string): " << str;
+            PDEBUG << "From: " << event->getSenderAddress();
+            PDEBUG << "Message type: " << event->getMessageType();
+            PDEBUG << "Data (as string): " << str;
         }
         catch (const IOException& e)
         {
-            WARNING << e;
+            PWARNING << e;
         }
     }
 };

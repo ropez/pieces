@@ -19,13 +19,13 @@ int main()
         TCPSocket s;
         if (s.connect(SocketAddress(ia, 80)))
         {
-            INFO << "Connected";
+            PINFO << "Connected";
 
             ByteArray ba(request, strlen(request) + 1);
             s.send(ba);
-            DEBUG << "Sent request";
+            PDEBUG << "Sent request";
 
-            DEBUG << s.read(1000).data();
+            PDEBUG << s.read(1000).data();
         }
         s.close();
 
@@ -34,7 +34,7 @@ int main()
         s.open();
         if (s.connect(SocketAddress(ia, 80)))
         {
-            INFO << "Connected again";
+            PINFO << "Connected again";
         }
 
         // This will cause close() to be called twice
@@ -42,7 +42,7 @@ int main()
     }
     catch (const Exception& e)
     {
-        ERROR << e;
+        PERROR << e;
     }
 }
 

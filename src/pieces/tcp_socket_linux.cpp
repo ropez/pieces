@@ -83,7 +83,7 @@ void TCPSocket::close()
         }
         catch (const Exception& e)
         {
-            WARNING << e;
+            PWARNING << e;
         }
 
         ::close(d->fd);
@@ -234,7 +234,7 @@ void TCPSocket::setReadTimeout(unsigned long msec)
 
     if (::setsockopt(d->fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0)
     {
-        WARNING << "setReadTimeout failed: " << strerror(errno);
+        PWARNING << "setReadTimeout failed: " << strerror(errno);
     }
 }
 
@@ -257,7 +257,7 @@ void TCPSocket::setWriteTimeout(unsigned long msec)
 
     if (::setsockopt(d->fd, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv)) < 0)
     {
-        WARNING << "setReadTimeout failed: " << strerror(errno);
+        PWARNING << "setReadTimeout failed: " << strerror(errno);
     }
 }
 
