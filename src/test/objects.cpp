@@ -22,6 +22,7 @@
 #include "Pieces/GameData"
 
 #include "Pieces/UDPSocket"
+#include "Pieces/Datagram"
 
 #include "OpenThreads/Mutex"
 #include "OpenThreads/ScopedLock"
@@ -31,13 +32,14 @@
 #include <set>
 #include <cmath>
 
+
+using namespace Pieces;
+AutoPointer<Host> host;
+AutoPointer<Peer> peer;
+
+
 namespace Pieces
 {
-
-// DUMMY simulation of host and peer "UDP" functionality
-OpenThreads::Mutex mutex;
-GameData gamedata;
-
 
 class GameDataSenderPrivate;
 class GameDataSender
@@ -84,6 +86,7 @@ GameDataSenderPrivate::GameDataSenderPrivate()
 GameDataSender::GameDataSender()
 : d(new GameDataSenderPrivate)
 {
+    d->socket = new UDPSocket;
 }
 
 
@@ -115,9 +118,126 @@ void GameDataSender::sendFrameData(const FrameData& frame)
 {
     d->buffer.setFrameData(d->frameNumber, frame);
 
-    OpenThreads::ScopedLock<OpenThreads::Mutex> lock(mutex);
-    gamedata.setFrameData(d->frameNumber++, frame);
+    BufferStream bs;
+    bs << d->frameNumber << frame;
+
+    for (std::set<SocketAddress>::const_iterator it = d->receivers.begin(); it != d->receivers.end(); ++it)
+    {
+        Datagram dg(bs.data(), *it);
+        d->socket->send(dg);
+    }
+
+    ++d->frameNumber;
 }
+
+
+class GameDataReceiverThreadPrivate;
+class GameDataReceiverThread : public OpenThreads::Thread
+{
+public:
+    GameDataReceiverThread(port_t port, GameData* buffer);
+    ~GameDataReceiverThread();
+
+    void abort();
+
+protected:
+    virtual void run();
+
+private:
+    DISABLE_COPY(GameDataReceiverThread);
+
+    GameDataReceiverThreadPrivate* d;
+};
+
+using namespace OpenThreads;
+
+class GameDataReceiverThreadPrivate
+{
+public:
+    GameDataReceiverThreadPrivate();
+
+    Mutex mutex;
+
+    AutoPointer<UDPSocket> socket;
+    GameData* buffer;
+};
+
+
+GameDataReceiverThreadPrivate::GameDataReceiverThreadPrivate()
+: socket(0)
+, buffer(0)
+{
+}
+
+
+GameDataReceiverThread::GameDataReceiverThread(port_t port, GameData* buffer)
+: d(new GameDataReceiverThreadPrivate)
+{
+    d->socket = new UDPSocket;
+    d->socket->bind(port);
+
+    d->buffer = buffer;
+}
+
+
+GameDataReceiverThread::~GameDataReceiverThread()
+{
+    abort();
+    delete d;
+}
+
+
+void GameDataReceiverThread::abort()
+{
+    ScopedLock<Mutex> lock(d->mutex);
+
+    if (isRunning())
+    {
+        cancel();
+
+        // Allow thread to exit
+        ReverseScopedLock<Mutex> unlock(d->mutex);
+        join();
+    }
+}
+
+
+void GameDataReceiverThread::run()
+{
+    const size_t MAX_PACKET_SIZE = 0x1000;
+
+    ScopedLock<Mutex> lock(d->mutex);
+
+    try
+    {
+        for (;;)
+        {
+            Datagram dg;
+            {
+                ReverseScopedLock<Mutex> unlock(d->mutex);
+
+                dg = d->socket->receive(MAX_PACKET_SIZE);
+            }
+
+            BufferStream bs(dg.getData());
+
+            framenum_t frameNum = 0;
+            FrameData frame;
+            bs >> frameNum >> frame;
+
+            PDEBUG << "Got frame " << frameNum << " size = " << frame.size();
+            d->buffer->setFrameData(frameNum, frame);
+
+            // DUMMY: Trigger peer event
+            peer->postEvent(new GameEvent(frameNum));
+        }
+    }
+    catch (const Exception& e)
+    {
+        PERROR << e;
+    }
+}
+
 
 
 class GameDataReceiverPrivate;
@@ -143,14 +263,14 @@ class GameDataReceiverPrivate
 public:
     GameDataReceiverPrivate();
 
-    AutoPointer<UDPSocket> socket;
+    AutoPointer<GameDataReceiverThread> thread;
 
     GameData buffer;
 };
 
 
 GameDataReceiverPrivate::GameDataReceiverPrivate()
-: socket(0)
+: thread(0)
 , buffer()
 {
 }
@@ -172,10 +292,8 @@ void GameDataReceiver::listen(port_t port)
 {
     try
     {
-        AutoPointer<UDPSocket> tmp(new UDPSocket());
-        tmp->bind(port);
-
-        d->socket = tmp;
+        d->thread = new GameDataReceiverThread(port, &d->buffer);
+        d->thread->start();
     }
     catch (const IOException& e)
     {
@@ -186,8 +304,7 @@ void GameDataReceiver::listen(port_t port)
 
 FrameData GameDataReceiver::getFrameData(framenum_t frameNum)
 {
-    OpenThreads::ScopedLock<OpenThreads::Mutex> lock(mutex);
-    return gamedata.getFrameData(frameNum);
+    return d->buffer.getFrameData(frameNum);
 }
 
 } // namespace Pieces
@@ -195,9 +312,6 @@ FrameData GameDataReceiver::getFrameData(framenum_t frameNum)
 
 // Demonstration
 
-using namespace Pieces;
-
-AutoPointer<Host> host;
 
 class ThreadRunningHost : public OpenThreads::Thread
 {
@@ -207,8 +321,6 @@ protected:
         host->exec();
     }
 };
-
-AutoPointer<Peer> peer;
 
 class ThreadRunningPeer : public OpenThreads::Thread
 {
@@ -369,17 +481,11 @@ protected:
         db()->update(frameData);
         sender.sendFrameData(frameData);
 
-        peer->postEvent(new GameEvent());
         ++frame;
-
-        if (frame == 10)
-            quit();
     }
 
     virtual void handle(NetworkEvent* event)
     {
-        PDEBUG << "Got network event, type " << event->type();
-
         try
         {
             BufferStream bf(event->getData());
@@ -387,7 +493,12 @@ protected:
             std::string str;
             bf >> str;
             PDEBUG << "From: " << event->getSenderAddress();
+            PDEBUG << "Message type " << event->getMessageType();
             PDEBUG << "Data (as string): " << str;
+
+            SocketAddress addr(event->getSenderAddress().getInetAddress(), 3333);
+            PINFO << "Adding " << addr << " to receivers list";
+            sender.addReceiver(addr);
         }
         catch (const IOException& e)
         {
@@ -411,7 +522,6 @@ class MyPeer : public Peer
 public:
     MyPeer()
     : Peer()
-    , frame(0)
     , receiver()
     , ball(new MovingBall(idBall))
     , car(new PeerBumperCar(idCar))
@@ -420,20 +530,7 @@ public:
         db()->insert(idBall, ball.get());
         db()->insert(idCar, car.get());
 
-        // Test operator
-        ReferencePointer<GameObject> go = ball;
-
-        // Test operator
-        if (go == ball)
-        {
-            PDEBUG << "go == ball";
-        }
-        if (go == car)
-        {
-            PDEBUG << "go == car";
-        }
-        // if (ball == car) -- illegal (distinct pointer types)
-        // if (ball.get() == car.get()) -- also illegal
+        receiver.listen(3333);
     }
 
 
@@ -444,24 +541,31 @@ public:
 
 
 protected:
-    void handle(GameEvent*)
+    void handle(GameEvent* event)
     {
-        db()->apply(receiver.getFrameData(frame++));
+        framenum_t frameNum = event->type();
 
-        PDEBUG << "Moving ball, frame " << frame << ": "
+        FrameData frame = receiver.getFrameData(frameNum);
+        if (frame.isEmpty())
+        {
+            PWARNING << "Empty frame " << frameNum;
+        }
+
+        db()->apply(frame);
+
+        PDEBUG << "Moving ball, frame " << frameNum << ": "
             << align(40) << "posx = " << ball->getPosX()
             << align(58) << "posy = " << ball->getPosY()
             << align(76) << "diam = " << ball->getDiam();
 
         PDEBUG << "BumberCar now running at: " << car->speed;
 
-        if (frame == 10)
+        if (frameNum >= 10)
             quit();
     }
 
 private:
 
-    framenum_t frame;
     GameDataReceiver receiver;
     ReferencePointer<MovingBall> ball;
     ReferencePointer<PeerBumperCar> car;
@@ -470,23 +574,37 @@ private:
 };
 
 
-int main()
+int main(int argc, char** argv)
 {
-    host = new MyHost;
-    peer = new MyPeer;
+    if (argc > 1 && std::string(argv[1]) == "host")
+    {
+        host = new MyHost;
+        ThreadRunningHost th;
 
-    ThreadRunningHost th;
-    th.start();
-    ThreadRunningPeer tp;
-    tp.start();
+        AutoPointer<Timer> repeating(new Timer(0, host->eventLoop()));
+        repeating->setRepeating(true);
+        repeating->start(500);
 
-    AutoPointer<Timer> repeating(new Timer(0, host->eventLoop()));
-    repeating->setRepeating(true);
-    repeating->start(500);
+        host->connectionManager()->listen(2222);
 
-    host->connectionManager()->listen(2222);
+        th.start();
+        th.join();
+    }
+    else
+    {
+        peer = new MyPeer;
+        ThreadRunningPeer tp;
 
-    th.join();
-    tp.join();
+        peer->connectionManager()->connectTo(SocketAddress(InetAddress::getHostByName("localhost"), 2222));
+
+        // Say hello
+        BufferStream s;
+        s << "Follow the white rabbit";
+        peer->connectionManager()->sendMessage(666, s.data());
+
+
+        tp.start();
+        tp.join();
+    }
 }
 
