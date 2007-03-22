@@ -16,6 +16,10 @@
 #include <cstdlib>
 #include <string>
 
+#if defined WIN32
+#include <winsock2.h>
+#endif
+
 using namespace Pieces;
 
 
@@ -67,9 +71,19 @@ private:
 
 int main(int argc, char** argv)
 {
-    AutoPointer<PeerTest> peer(new PeerTest);
 
-    std::string hostname = "localhost";
+#if defined WIN32
+	WORD wVersionRequested;
+	WSADATA wsaData;
+	int err;
+	wVersionRequested = MAKEWORD( 2, 2 );
+
+	err = WSAStartup( wVersionRequested, &wsaData );
+#endif
+
+	AutoPointer<PeerTest> peer(new PeerTest);
+
+	std::string hostname = "localhost";
     if (argc > 1)
     {
         hostname = argv[1];
@@ -89,4 +103,8 @@ int main(int argc, char** argv)
     tQuitPeer.start(4000);
 
     peer->exec();
+
+#if defined WIN32
+	WSACleanup();
+#endif
 }

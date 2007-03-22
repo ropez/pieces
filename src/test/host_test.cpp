@@ -9,6 +9,10 @@
 #include "Pieces/IOException"
 #include "Pieces/Debug"
 
+#if defined WIN32
+#include <winsock2.h>
+#endif
+
 using namespace Pieces;
 
 
@@ -40,8 +44,22 @@ protected:
 
 int main()
 {
+
+#if defined WIN32
+    WORD wVersionRequested;
+    WSADATA wsaData;
+    int err;
+    wVersionRequested = MAKEWORD( 2, 2 );
+
+    err = WSAStartup( wVersionRequested, &wsaData );
+#endif
+
     AutoPointer<HostTest> host(new HostTest);
 
     host->connectionManager()->listen(2222);
     host->exec();
+
+#if defined WIN32
+    WSACleanup();
+#endif
 }
