@@ -5,6 +5,7 @@
 #include "Pieces/GameEvent"
 #include "Pieces/NetworkEvent"
 #include "Pieces/InputEvent"
+#include "Pieces/GameDataEvent"
 
 
 namespace Pieces
@@ -48,6 +49,13 @@ void EventHandler::handle(NetworkEvent* event)
 }
 
 void EventHandler::handle(InputEvent* event)
+{
+    // Fall back to default handler function
+    Event* e = event;
+    handle(e);
+}
+
+void EventHandler::handle(GameDataEvent* event)
 {
     // Fall back to default handler function
     Event* e = event;

@@ -12,6 +12,7 @@ class TimerEvent;
 class GameEvent;
 class NetworkEvent;
 class InputEvent;
+class GameDataEvent;
 
 
 /**
@@ -35,6 +36,7 @@ class EventHandler
     friend class GameEvent;
     friend class NetworkEvent;
     friend class InputEvent;
+    friend class GameDataEvent;
 
 public:
 
@@ -100,6 +102,17 @@ protected:
      * implementation forwards the events to the generic event handler.
      */
     virtual void handle(InputEvent* event);
+
+
+    /**
+     * Specialized event handler for input events.
+     *
+     * \overload
+     *
+     * This can be implemented to handle input events only. The default
+     * implementation forwards the events to the generic event handler.
+     */
+    virtual void handle(GameDataEvent* event);
 };
 
 } // namespace Pieces

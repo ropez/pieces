@@ -7,10 +7,12 @@
 #include "Pieces/Host"
 #include "Pieces/Peer"
 #include "Pieces/ConnectionManager"
+#include "Pieces/GameDataReceiver"
+#include "Pieces/GameDataSender"
 
 #include "Pieces/EventLoop"
 #include "Pieces/TimerEvent"
-#include "Pieces/GameEvent"
+#include "Pieces/GameDataEvent"
 #include "Pieces/NetworkEvent"
 
 #include "Pieces/Timer"
@@ -22,301 +24,15 @@
 #include "Pieces/FrameData"
 #include "Pieces/GameData"
 
-#include "Pieces/UDPSocket"
-#include "Pieces/Datagram"
-
-#include "OpenThreads/Mutex"
-#include "OpenThreads/ScopedLock"
 #include "OpenThreads/Thread"
 
 #include <map>
-#include <set>
 #include <cmath>
 
 
 using namespace Pieces;
 AutoPointer<Host> host;
 AutoPointer<Peer> peer;
-
-
-namespace Pieces
-{
-
-class GameDataSenderPrivate;
-class GameDataSender
-{
-public:
-    GameDataSender();
-    ~GameDataSender();
-
-    void addReceiver(const SocketAddress& socket);
-    void removeReceiver(const SocketAddress& socket);
-
-    FrameData getFrameData(framenum_t frameNum) const;
-
-    void sendFrameData(const FrameData& frame);
-
-private:
-    DISABLE_COPY(GameDataSender);
-
-    GameDataSenderPrivate* d;
-};
-
-
-class GameDataSenderPrivate
-{
-public:
-    GameDataSenderPrivate();
-
-    AutoPointer<UDPSocket> socket;
-    std::set<SocketAddress> receivers;
-
-    framenum_t frameNumber;
-    GameData buffer;
-};
-
-
-GameDataSenderPrivate::GameDataSenderPrivate()
-: socket(0)
-, frameNumber(0)
-, buffer()
-{
-}
-
-
-GameDataSender::GameDataSender()
-: d(new GameDataSenderPrivate)
-{
-    d->socket = new UDPSocket;
-}
-
-
-GameDataSender::~GameDataSender()
-{
-    delete d;
-}
-
-
-void GameDataSender::addReceiver(const SocketAddress& address)
-{
-    d->receivers.insert(address);
-}
-
-
-void GameDataSender::removeReceiver(const SocketAddress& address)
-{
-    d->receivers.erase(address);
-}
-
-
-FrameData GameDataSender::getFrameData(framenum_t frameNum) const
-{
-    return d->buffer.getFrameData(frameNum);
-}
-
-
-void GameDataSender::sendFrameData(const FrameData& frame)
-{
-    d->buffer.setFrameData(d->frameNumber, frame);
-
-    BufferStream bs;
-    bs << d->frameNumber << frame;
-
-    for (std::set<SocketAddress>::const_iterator it = d->receivers.begin(); it != d->receivers.end(); ++it)
-    {
-        Datagram dg(bs.data(), *it);
-        d->socket->send(dg);
-    }
-
-    ++d->frameNumber;
-}
-
-
-class GameDataReceiverThreadPrivate;
-class GameDataReceiverThread : public OpenThreads::Thread
-{
-public:
-    GameDataReceiverThread(EventLoop* eventLoop, GameData* buffer, port_t port);
-    ~GameDataReceiverThread();
-
-    void abort();
-
-protected:
-    virtual void run();
-
-private:
-    DISABLE_COPY(GameDataReceiverThread);
-
-    GameDataReceiverThreadPrivate* d;
-};
-
-using namespace OpenThreads;
-
-class GameDataReceiverThreadPrivate
-{
-public:
-    GameDataReceiverThreadPrivate();
-
-    Mutex mutex;
-
-    AutoPointer<UDPSocket> socket;
-
-    EventLoop* eventLoop;
-    GameData* buffer;
-};
-
-
-GameDataReceiverThreadPrivate::GameDataReceiverThreadPrivate()
-: socket(0)
-, eventLoop(0)
-, buffer(0)
-{
-}
-
-
-GameDataReceiverThread::GameDataReceiverThread(EventLoop* eventLoop, GameData* buffer, port_t port)
-: d(new GameDataReceiverThreadPrivate)
-{
-    d->socket = new UDPSocket;
-    d->socket->bind(port);
-
-    d->buffer = buffer;
-    d->eventLoop = eventLoop;
-}
-
-
-GameDataReceiverThread::~GameDataReceiverThread()
-{
-    abort();
-    delete d;
-}
-
-
-void GameDataReceiverThread::abort()
-{
-    ScopedLock<Mutex> lock(d->mutex);
-
-    if (isRunning())
-    {
-        cancel();
-
-        // Allow thread to exit
-        ReverseScopedLock<Mutex> unlock(d->mutex);
-        join();
-    }
-}
-
-
-void GameDataReceiverThread::run()
-{
-    const size_t MAX_PACKET_SIZE = 0x1000;
-
-    ScopedLock<Mutex> lock(d->mutex);
-
-    try
-    {
-        for (;;)
-        {
-            Datagram dg;
-            {
-                ReverseScopedLock<Mutex> unlock(d->mutex);
-
-                dg = d->socket->receive(MAX_PACKET_SIZE);
-            }
-
-            BufferStream bs(dg.getData());
-
-            framenum_t frameNum = 0;
-            FrameData frame;
-            bs >> frameNum >> frame;
-
-            PDEBUG << "Got frame " << frameNum << " size = " << frame.size();
-            d->buffer->setFrameData(frameNum, frame);
-
-            // Notify
-            d->eventLoop->postEvent(new GameEvent(frameNum));
-        }
-    }
-    catch (const Exception& e)
-    {
-        PERROR << e;
-    }
-}
-
-
-
-class GameDataReceiverPrivate;
-class GameDataReceiver
-{
-public:
-    GameDataReceiver(EventLoop* eventLoop);
-    ~GameDataReceiver();
-
-    void listen(port_t port);
-
-    FrameData getFrameData(framenum_t frameNum);
-
-private:
-    DISABLE_COPY(GameDataReceiver);
-
-    GameDataReceiverPrivate* d;
-};
-
-
-class GameDataReceiverPrivate
-{
-public:
-    GameDataReceiverPrivate();
-
-    AutoPointer<GameDataReceiverThread> thread;
-
-    EventLoop* eventLoop;
-    GameData buffer;
-};
-
-
-GameDataReceiverPrivate::GameDataReceiverPrivate()
-: thread(0)
-, eventLoop(0)
-, buffer()
-{
-}
-
-
-GameDataReceiver::GameDataReceiver(EventLoop* eventLoop)
-: d(new GameDataReceiverPrivate)
-{
-    d->eventLoop = eventLoop;
-}
-
-
-GameDataReceiver::~GameDataReceiver()
-{
-    delete d;
-}
-
-
-void GameDataReceiver::listen(port_t port)
-{
-    try
-    {
-        d->thread = new GameDataReceiverThread(d->eventLoop, &d->buffer, port);
-        d->thread->start();
-    }
-    catch (const IOException& e)
-    {
-        PERROR << e.getMessage();
-    }
-}
-
-
-FrameData GameDataReceiver::getFrameData(framenum_t frameNum)
-{
-    return d->buffer.getFrameData(frameNum);
-}
-
-} // namespace Pieces
-
 
 // Demonstration
 
@@ -549,16 +265,11 @@ public:
 
 
 protected:
-    void handle(GameEvent* event)
+    void handle(GameDataEvent* event)
     {
-        framenum_t frameNum = event->type();
+        framenum_t frameNum = event->getFrameNumber();
 
         FrameData frame = receiver->getFrameData(frameNum);
-        if (frame.isEmpty())
-        {
-            PWARNING << "Empty frame " << frameNum;
-        }
-
         db()->apply(frame);
 
         PDEBUG << "Moving ball, frame " << frameNum << ": "
