@@ -1,50 +1,34 @@
-#include "Pieces/TCPSocket"
-#include "Pieces/DataStream"
-#include "Pieces/BufferStream"
-#include "Pieces/InetAddress"
-#include "Pieces/Exception"
-#include "Pieces/Debug"
 
-#include "OpenThreads/Thread"
-#include "sys/signal.h"
+#include "Pieces/InetAddress"
+#include <iostream>
+#include <string>
+
+#if defined WIN32
+#include <winsock2.h>
+#endif
 
 using namespace Pieces;
 
 
 int main()
 {
-    signal(SIGPIPE, SIG_IGN);
-    OpenThreads::Thread::Init();
 
-    try
-    {
-        TCPSocket sock;
+#if defined WIN32
+    WORD wVersionRequested;
+    WSADATA wsaData;
+    int err;
+    wVersionRequested = MAKEWORD( 2, 2 );
 
-        if (!sock.connect(InetAddress::getHostByName("localhost"), 2222))
-        {
-            ERROR << "Server not found";
-            exit(0);
-        }
+    err = WSAStartup( wVersionRequested, &wsaData );
+#endif
 
-        DEBUG << "Connected to " << sock.getPeerAddress();
+    std::cout << InetAddress::getHostByName("www.vg.no") << std::endl;
 
-        DataStream ds(&sock);
+#if defined WIN32
+    WSACleanup();
+#endif
 
-        int count = 10;
-        while (count--)
-        {
-            std::stringstream str;
-            str << "Bomb goes off in " << count << " seconds";
-            BufferStream bs;
-            bs << str.str();
-            ds << 666 << bs.data() << flush;
-
-            OpenThreads::Thread::microSleep(1000000);
-        }
-    }
-    catch (const Exception& e)
-    {
-        ERROR << e;
-    }
+    //std::string str;
+    //std::cin >> str;
 }
 
