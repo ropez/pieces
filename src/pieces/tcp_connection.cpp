@@ -55,6 +55,8 @@ void TCPConnection::startReceiver(EventLoop* eventLoop)
 void TCPConnection::sendMessage(int messageType, const ByteArray& data)
 {
     DataStream ds(d->socket.get());
+
+    // TODO: Maybe use a MessageHeader class?
     ds << messageType << data << flush;
 }
 

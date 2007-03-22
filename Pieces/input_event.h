@@ -19,6 +19,8 @@ namespace Pieces
  */
 class InputEvent : public Event
 {
+    friend class AutoPointer<InputEvent>;
+
 public:
 
     /**

@@ -10,6 +10,8 @@ namespace Pieces
 
 class TimerEvent : public Event
 {
+    friend class AutoPointer<TimerEvent>;
+
 public:
     TimerEvent(int timerId = 0);
 

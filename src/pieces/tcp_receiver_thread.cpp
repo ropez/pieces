@@ -82,18 +82,19 @@ void TCPReceiverThread::run()
         {
             try
             {
-                int type;
+                int messageType = NetworkEvent::NO_MESSAGE_TYPE;
                 ByteArray data;
 
                 {
                     // Release lock while blocked (most of the time)
                     ReverseScopedLock<Mutex> unlock(d->mutex);
 
-                    ds >> type;
+                    ds >> messageType;
                     ds >> data;
                 }
 
-                AutoPointer<Event> e(new NetworkEvent(NetworkEvent::RECEIVED_MESSAGE, d->socket->getPeerAddress()));
+                AutoPointer<NetworkEvent> e(new NetworkEvent(NetworkEvent::RECEIVED_MESSAGE, d->socket->getPeerAddress()));
+                e->setMessageType(messageType);
                 e->setData(data);
                 d->eventLoop->postEvent(e.release());
             }

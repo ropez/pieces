@@ -115,6 +115,7 @@ void TCPConnectionManager::add(TCPConnection* connection)
     if (d->connections.find(address) != d->connections.end())
     {
         WARNING << "Refused connection, already connected to that address";
+        return;
     }
 
     // Start receiving network events on the internal event loop
@@ -160,7 +161,8 @@ void TCPConnectionManager::handle(NetworkEvent* event)
             DEBUG << "Got network event, forwarding";
 
             // Must create a new event, because the one we got here is "used up"
-            AutoPointer<Event> e(new NetworkEvent(event->type(), event->getSenderAddress()));
+            AutoPointer<NetworkEvent> e(new NetworkEvent(event->type(), event->getSenderAddress()));
+            e->setMessageType(event->getMessageType());
             e->setData(event->data());
             d->eventLoop->postEvent(e.release());
         }

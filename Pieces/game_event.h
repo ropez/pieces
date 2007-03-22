@@ -23,6 +23,8 @@ namespace Pieces
  */
 class GameEvent : public Event
 {
+    friend class AutoPointer<GameEvent>;
+
 public:
 
     /**
