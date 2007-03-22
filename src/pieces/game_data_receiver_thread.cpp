@@ -97,6 +97,9 @@ void GameDataReceiverThread::run()
             FrameData frame;
             bs >> frameNum >> frame;
 
+            // TODO: Maybe the event should contain the data, instead of adding to the buffer here.
+            // With implicit sharing, we can pass this around, and don't need to share data across threads.
+            // With an internal event loop, we could buffer the data internally at the "main" thread.
             d->buffer->setFrameData(frameNum, frame);
 
             // Notify

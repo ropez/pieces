@@ -62,5 +62,4 @@ FrameData GameDataReceiver::getFrameData(framenum_t frameNum)
     return d->buffer.getFrameData(frameNum);
 }
 
-
 } //namespace Pieces
