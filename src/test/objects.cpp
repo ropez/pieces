@@ -21,16 +21,14 @@
 #include "Pieces/FrameData"
 #include "Pieces/GameData"
 
-#include "Pieces/TCPSocket"
-#include "Pieces/TCPServer"
-#include "Pieces/TCPReceiverThread"
-#include "Pieces/TCPListenerThread"
+#include "Pieces/UDPSocket"
 
 #include "OpenThreads/Mutex"
 #include "OpenThreads/ScopedLock"
 #include "OpenThreads/Thread"
 
 #include <map>
+#include <set>
 #include <cmath>
 
 namespace Pieces
@@ -48,6 +46,9 @@ public:
     GameDataSender();
     ~GameDataSender();
 
+    void addReceiver(const SocketAddress& socket);
+    void removeReceiver(const SocketAddress& socket);
+
     FrameData getFrameData(framenum_t frameNum) const;
 
     void sendFrameData(const FrameData& frame);
@@ -64,13 +65,17 @@ class GameDataSenderPrivate
 public:
     GameDataSenderPrivate();
 
+    AutoPointer<UDPSocket> socket;
+    std::set<SocketAddress> receivers;
+
     framenum_t frameNumber;
     GameData buffer;
 };
 
 
 GameDataSenderPrivate::GameDataSenderPrivate()
-: frameNumber(0)
+: socket(0)
+, frameNumber(0)
 , buffer()
 {
 }
@@ -88,6 +93,18 @@ GameDataSender::~GameDataSender()
 }
 
 
+void GameDataSender::addReceiver(const SocketAddress& address)
+{
+    d->receivers.insert(address);
+}
+
+
+void GameDataSender::removeReceiver(const SocketAddress& address)
+{
+    d->receivers.erase(address);
+}
+
+
 FrameData GameDataSender::getFrameData(framenum_t frameNum) const
 {
     return d->buffer.getFrameData(frameNum);
@@ -102,12 +119,15 @@ void GameDataSender::sendFrameData(const FrameData& frame)
     gamedata.setFrameData(d->frameNumber++, frame);
 }
 
+
 class GameDataReceiverPrivate;
 class GameDataReceiver
 {
 public:
     GameDataReceiver();
     ~GameDataReceiver();
+
+    void listen(port_t port);
 
     FrameData getFrameData(framenum_t frameNum);
 
@@ -123,12 +143,15 @@ class GameDataReceiverPrivate
 public:
     GameDataReceiverPrivate();
 
+    AutoPointer<UDPSocket> socket;
+
     GameData buffer;
 };
 
 
 GameDataReceiverPrivate::GameDataReceiverPrivate()
-: buffer()
+: socket(0)
+, buffer()
 {
 }
 
@@ -142,6 +165,22 @@ GameDataReceiver::GameDataReceiver()
 GameDataReceiver::~GameDataReceiver()
 {
     delete d;
+}
+
+
+void GameDataReceiver::listen(port_t port)
+{
+    try
+    {
+        AutoPointer<UDPSocket> tmp(new UDPSocket());
+        tmp->bind(port);
+
+        d->socket = tmp;
+    }
+    catch (const IOException& e)
+    {
+        PERROR << e.getMessage();
+    }
 }
 
 
