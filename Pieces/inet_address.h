@@ -36,7 +36,9 @@ public:
     bool isNull() const;
 
     /**
-     * Resolve a host name and return the address
+     * Resolve a host name and return the address.
+     *
+     * Returns a null address if not found.
      */
     static InetAddress getHostByName(const std::string& name);
 

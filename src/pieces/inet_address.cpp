@@ -47,7 +47,13 @@ unsigned long InetAddress::stringToInAddr(const std::string &name)
 InetAddress InetAddress::getHostByName(const std::string& name)
 {
     // Resolve host
-    hostent* h = gethostbyname(name.c_str());
+    struct hostent* h = gethostbyname(name.c_str());
+
+    if (!h)
+    {
+        // null
+        return InetAddress();
+    }
 
     // Copy the first IP number in hostent to an in_addr
     in_addr addr;
