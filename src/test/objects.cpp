@@ -8,6 +8,7 @@
 #include "Pieces/Peer"
 #include "Pieces/ConnectionManager"
 
+#include "Pieces/EventLoop"
 #include "Pieces/TimerEvent"
 #include "Pieces/GameEvent"
 #include "Pieces/NetworkEvent"
@@ -135,7 +136,7 @@ class GameDataReceiverThreadPrivate;
 class GameDataReceiverThread : public OpenThreads::Thread
 {
 public:
-    GameDataReceiverThread(port_t port, GameData* buffer);
+    GameDataReceiverThread(EventLoop* eventLoop, GameData* buffer, port_t port);
     ~GameDataReceiverThread();
 
     void abort();
@@ -159,24 +160,28 @@ public:
     Mutex mutex;
 
     AutoPointer<UDPSocket> socket;
+
+    EventLoop* eventLoop;
     GameData* buffer;
 };
 
 
 GameDataReceiverThreadPrivate::GameDataReceiverThreadPrivate()
 : socket(0)
+, eventLoop(0)
 , buffer(0)
 {
 }
 
 
-GameDataReceiverThread::GameDataReceiverThread(port_t port, GameData* buffer)
+GameDataReceiverThread::GameDataReceiverThread(EventLoop* eventLoop, GameData* buffer, port_t port)
 : d(new GameDataReceiverThreadPrivate)
 {
     d->socket = new UDPSocket;
     d->socket->bind(port);
 
     d->buffer = buffer;
+    d->eventLoop = eventLoop;
 }
 
 
@@ -228,8 +233,8 @@ void GameDataReceiverThread::run()
             PDEBUG << "Got frame " << frameNum << " size = " << frame.size();
             d->buffer->setFrameData(frameNum, frame);
 
-            // DUMMY: Trigger peer event
-            peer->postEvent(new GameEvent(frameNum));
+            // Notify
+            d->eventLoop->postEvent(new GameEvent(frameNum));
         }
     }
     catch (const Exception& e)
@@ -244,7 +249,7 @@ class GameDataReceiverPrivate;
 class GameDataReceiver
 {
 public:
-    GameDataReceiver();
+    GameDataReceiver(EventLoop* eventLoop);
     ~GameDataReceiver();
 
     void listen(port_t port);
@@ -265,20 +270,23 @@ public:
 
     AutoPointer<GameDataReceiverThread> thread;
 
+    EventLoop* eventLoop;
     GameData buffer;
 };
 
 
 GameDataReceiverPrivate::GameDataReceiverPrivate()
 : thread(0)
+, eventLoop(0)
 , buffer()
 {
 }
 
 
-GameDataReceiver::GameDataReceiver()
+GameDataReceiver::GameDataReceiver(EventLoop* eventLoop)
 : d(new GameDataReceiverPrivate)
 {
+    d->eventLoop = eventLoop;
 }
 
 
@@ -292,7 +300,7 @@ void GameDataReceiver::listen(port_t port)
 {
     try
     {
-        d->thread = new GameDataReceiverThread(port, &d->buffer);
+        d->thread = new GameDataReceiverThread(d->eventLoop, &d->buffer, port);
         d->thread->start();
     }
     catch (const IOException& e)
@@ -522,7 +530,7 @@ class MyPeer : public Peer
 public:
     MyPeer()
     : Peer()
-    , receiver()
+    , receiver(new GameDataReceiver(eventLoop()))
     , ball(new MovingBall(idBall))
     , car(new PeerBumperCar(idCar))
     , m_db(new GameObjectDB())
@@ -530,7 +538,7 @@ public:
         db()->insert(idBall, ball.get());
         db()->insert(idCar, car.get());
 
-        receiver.listen(3333);
+        receiver->listen(3333);
     }
 
 
@@ -545,7 +553,7 @@ protected:
     {
         framenum_t frameNum = event->type();
 
-        FrameData frame = receiver.getFrameData(frameNum);
+        FrameData frame = receiver->getFrameData(frameNum);
         if (frame.isEmpty())
         {
             PWARNING << "Empty frame " << frameNum;
@@ -559,14 +567,11 @@ protected:
             << align(76) << "diam = " << ball->getDiam();
 
         PDEBUG << "BumberCar now running at: " << car->speed;
-
-        if (frameNum >= 10)
-            quit();
     }
 
 private:
 
-    GameDataReceiver receiver;
+    AutoPointer<GameDataReceiver> receiver;
     ReferencePointer<MovingBall> ball;
     ReferencePointer<PeerBumperCar> car;
 
