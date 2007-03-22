@@ -12,30 +12,43 @@ namespace Pieces
 class InetAddress
 {
 public:
-    // "any" address == 0.0.0.0
+
+    /**
+     * Default constructor
+     *
+     * Will initiate to 0.0.0.0 (null).
+     */
     InetAddress();
 
-    // Convert from a low-level address
+    /**
+     * Convert from a 32-bit address.
+     */
     InetAddress(unsigned long addr);
 
-    // String in the form of "12.23.23.2"
+    /**
+     * Create an InetAddress from a string in the format "XXX.XXX.XXX.XXX".
+     */
     InetAddress(const std::string& addr);
 
+    /**
+     * Return true if the address is 0.0.0.0.
+     */
     bool isNull() const;
 
-    // Also need DNS functionality the creates InetAddress object, like
-    // NOTE: Is this really necassary? Couldn't we let the constructor do this. / Joakim
+    /**
+     * Resolve a host name and return the address
+     */
     static InetAddress getHostByName(const std::string& name);
-    // .. or implemented in another "DNS" class?
 
-    // String in the form of "12.23.23.2"
+    /**
+     * Return a string representation of this address (XXX.XXX.XXX.XXX).
+     */
     std::string toString() const;
 
 
-    // This class also need to be able to return the address as an integral number,
-    // or the internal representation might be hidden and the other classes made friend classes.
-
-
+    /**
+     * Return the address as a 32-bit number.
+     */
     unsigned long toInt32() const;
 
 private:
