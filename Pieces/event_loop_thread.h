@@ -3,6 +3,7 @@
 #define PIECES_EVENT_LOOP_THREAD_H
 
 #include "OpenThreads/Thread"
+#include "Pieces/global"
 
 
 namespace Pieces
@@ -47,6 +48,7 @@ protected:
     virtual void run();
 
 private:
+    DISABLE_COPY(EventLoopThread);
     EventLoop* m_eventLoop;
 };
 

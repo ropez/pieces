@@ -49,6 +49,7 @@ protected:
     virtual ~GameEvent();
 
 private:
+    DISABLE_COPY(GameEvent);
     int m_type;
 };
 

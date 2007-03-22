@@ -61,9 +61,7 @@ public:
     void send(const Datagram& packet);
 
 private:
-    // Disable copy operations
-    UDPSocket(const UDPSocket&);
-    UDPSocket& operator=(const UDPSocket&);
+    DISABLE_COPY(UDPSocket);
 
     UDPSocketPrivate* d;
 };

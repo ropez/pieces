@@ -92,9 +92,7 @@ public:
 
 
 private:
-    // Disable copy operations
-    TCPSocket(const TCPSocket&);
-    TCPSocket& operator=(const TCPSocket&);
+    DISABLE_COPY(TCPSocket);
 
     // Constructor used by TCPServer::accept()
     TCPSocket(TCPSocketPrivate* data);

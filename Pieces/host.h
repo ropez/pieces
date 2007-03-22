@@ -54,10 +54,7 @@ protected:
     virtual void peerDisconnected(PeerInfo* info);
 
 private:
-
-    // Disable copy operations
-    Host(const Host&);
-    Host& operator=(const Host&);
+    DISABLE_COPY(Host);
 
     HostPrivate* d;
 };

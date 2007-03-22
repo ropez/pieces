@@ -58,9 +58,7 @@ public:
     AutoPointer<Event> pop();
 
 private:
-    // Disable copy
-    EventQueue(const EventQueue&);
-    EventQueue& operator=(const EventQueue&);
+    DISABLE_COPY(EventQueue);
 
     EventQueuePrivate* d;
 };

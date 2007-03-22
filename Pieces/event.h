@@ -27,9 +27,7 @@ protected:
     virtual ~Event();
 
 private:
-
-    Event(const Event&);
-    Event& operator=(const Event&);
+    DISABLE_COPY(Event);
 };
 
 } // namespace Pieces

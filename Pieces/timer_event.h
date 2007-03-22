@@ -27,6 +27,7 @@ public:
     int getTimerId() const;
 
 private:
+    DISABLE_COPY(TimerEvent);
     int m_timerId;
 };
 

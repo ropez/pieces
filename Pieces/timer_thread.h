@@ -3,6 +3,7 @@
 #define PIECES_TIMER_THREAD_H
 
 #include "OpenThreads/Thread"
+#include "Pieces/global"
 
 
 namespace Pieces
@@ -98,10 +99,7 @@ protected:
 
 
 private:
-
-    // Disabled copy
-    TimerThread(const TimerThread&);
-    TimerThread& operator=(const TimerThread&);
+    DISABLE_COPY(TimerThread);
 
     TimerThreadPrivate* d;
 };

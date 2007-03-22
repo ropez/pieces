@@ -72,9 +72,7 @@ protected:
     virtual void handle(Event* event);
 
 private:
-    // Disable copy operations
-    Peer(const Peer&);
-    Peer& operator=(const Peer&);
+    DISABLE_COPY(Peer);
 
     PeerPrivate* d;
 };

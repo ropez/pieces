@@ -42,9 +42,7 @@ public:
     void flush();
 
 private:
-    // Disable copy operations
-    File(const File&);
-    File& operator=(const File&);
+    DISABLE_COPY(File);
 
     FilePrivate* d;
 };

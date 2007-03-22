@@ -39,9 +39,7 @@ public:
     virtual void decode(DataStream& ds);
 
 private:
-    // Disable copy operations
-    GameObject(const GameObject&);
-    GameObject& operator=(const GameObject&);
+    DISABLE_COPY(GameObject);
 };
 
 } // namespace Pieces

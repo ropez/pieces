@@ -37,9 +37,7 @@ public:
     AutoPointer<TCPSocket> accept();
 
 private:
-    // Disable copy operations
-    TCPServer(const TCPServer&);
-    TCPServer& operator=(const TCPServer&);
+    DISABLE_COPY(TCPServer);
 
     TCPServerPrivate* d;
 };

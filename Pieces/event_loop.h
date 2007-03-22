@@ -82,9 +82,7 @@ public:
     void postEvent(Event* e);
 
 private:
-    // Disable copy
-    EventLoop(const EventLoop&);
-    EventLoop& operator=(const EventLoop&);
+    DISABLE_COPY(EventLoop);
 
     EventHandler* m_handler;
     EventQueue* m_queue;

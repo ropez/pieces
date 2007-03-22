@@ -2,6 +2,8 @@
 #ifndef PIECES_SHARED_DATA_H
 #define PIECES_SHARED_DATA_H
 
+#include "Pieces/global"
+
 namespace Pieces
 {
 
@@ -51,9 +53,7 @@ protected:
 
 private:
 
-    // Disabled copy
-    SharedData(const SharedData&);
-    SharedData& operator=(const SharedData&);
+    DISABLE_COPY(SharedData);
 
     unsigned long m_count;
 };

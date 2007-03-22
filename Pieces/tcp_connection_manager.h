@@ -26,7 +26,8 @@ public:
     /**
      * Constructor.
      *
-     * TODO: eventloop parameter should probably be removed later, and add some function to start receiving data after connected.
+     * TODO: eventloop parameter should probably be removed later, and add some
+     * function to start receiving data after connected.
      */
     TCPConnectionManager(EventLoop* eventLoop);
 
@@ -66,9 +67,7 @@ protected:
     virtual void handle(NetworkEvent* event);
 
 private:
-    // Disable copy operations
-    TCPConnectionManager(const TCPConnectionManager&);
-    TCPConnectionManager& operator=(const TCPConnectionManager&);
+    DISABLE_COPY(TCPConnectionManager);
 
     TCPConnectionManagerPrivate* d;
 };

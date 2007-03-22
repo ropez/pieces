@@ -44,9 +44,7 @@ public:
     void sendMessage(int messageType, const ByteArray& data);
 
 private:
-    // Disable copy operations
-    TCPConnection(const TCPConnection&);
-    TCPConnection& operator=(const TCPConnection&);
+    DISABLE_COPY(TCPConnection);
 
     TCPConnectionPrivate* d;
 };

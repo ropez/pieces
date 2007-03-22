@@ -48,6 +48,7 @@ public:
     void setType(int type);
 
 private:
+    DISABLE_COPY(InputEvent);
     int m_type;
 };
 

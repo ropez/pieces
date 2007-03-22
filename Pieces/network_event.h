@@ -70,6 +70,7 @@ protected:
     virtual ~NetworkEvent();
 
 private:
+    DISABLE_COPY(NetworkEvent);
     Type m_type;
     int m_messageType;
     ByteArray m_data;

@@ -30,9 +30,7 @@ public:
     objectid_t getObjectId() const;
 
 private:
-    // Disable copy operations
-    Object(const Object&);
-    Object& operator=(const Object&);
+    DISABLE_COPY(Object);
 
     // Id stored here
     objectid_t m_objectId;

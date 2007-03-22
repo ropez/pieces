@@ -171,6 +171,7 @@ public:
     void flush();
 
 private:
+    DISABLE_COPY(DataStream);
 
     // Target
     StreamTarget* m_target;

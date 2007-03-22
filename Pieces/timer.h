@@ -2,6 +2,8 @@
 #ifndef PIECES_TIMER_H
 #define PIECES_TIMER_H
 
+#include "Pieces/global"
+
 namespace Pieces
 {
 class TimerPrivate;
@@ -79,10 +81,7 @@ public:
     void stop();
 
 private:
-
-    // Disabled copy
-    Timer(const Timer&);
-    Timer& operator=(const Timer&);
+    DISABLE_COPY(Timer);
 
     TimerPrivate* d;
 };

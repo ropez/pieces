@@ -33,9 +33,7 @@ protected:
     virtual void run();
 
 private:
-    // Disable copy operations
-    TCPListenerThread(const TCPListenerThread&);
-    TCPListenerThread& operator=(const TCPListenerThread&);
+    DISABLE_COPY(TCPListenerThread);
 
     TCPListenerThreadPrivate* d;
 };

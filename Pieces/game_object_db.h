@@ -128,9 +128,7 @@ public:
     map_t::const_iterator end() const;
 
 private:
-    // Disable copy operations
-    GameObjectDB(const GameObjectDB&);
-    GameObjectDB& operator=(const GameObjectDB&);
+    DISABLE_COPY(GameObjectDB);
 
     map_t m_objects;
 };

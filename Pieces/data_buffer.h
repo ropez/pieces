@@ -43,6 +43,7 @@ public:
     void flush();
 
 private:
+    DISABLE_COPY(DataBuffer);
 
     // Current read location
     size_t m_readPtr;

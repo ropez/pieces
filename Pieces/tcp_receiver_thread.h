@@ -2,6 +2,7 @@
 #define PIECES_TCP_RECEIVER_THREAD_H
 
 #include "OpenThreads/Thread"
+#include "Pieces/global"
 
 
 namespace Pieces
@@ -36,9 +37,7 @@ protected:
     virtual void run();
 
 private:
-    // Disable copy
-    TCPReceiverThread(const TCPReceiverThread&);
-    TCPReceiverThread& operator=(const TCPReceiverThread&);
+    DISABLE_COPY(TCPReceiverThread);
 
     TCPReceiverThreadPrivate* d;
 };

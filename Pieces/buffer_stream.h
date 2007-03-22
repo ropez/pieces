@@ -76,9 +76,7 @@ public:
     ByteArray data() const;
 
 private:
-    // Disable copy operations
-    BufferStream(const BufferStream&);
-    BufferStream& operator=(const BufferStream&);
+    DISABLE_COPY(BufferStream);
 
     DataBuffer* m_buf;
 };
