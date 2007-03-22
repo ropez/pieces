@@ -128,6 +128,27 @@ bool operator>(const SocketAddress& op1, const SocketAddress& op2);
 bool operator<=(const SocketAddress& op1, const SocketAddress& op2);
 bool operator>=(const SocketAddress& op1, const SocketAddress& op2);
 
+DataStream& operator<<(DataStream& ds, const SocketAddress& sa)
+{
+    ds << sa.getInetAddress();
+    ds << sa.getPort();
+    return ds;
+}
+
+DataStream& operator>>(DataStream& ds, SocketAddress& sa)
+{
+    InetAddress ia;
+    ds >> ia;
+
+    port_t port = 0;
+    ds >> port;
+
+    sa.setInetAddress(ia);
+    sa.setPort(port);
+
+    return ds;
+}
+
 
 std::ostream& operator<<(std::ostream& os, const SocketAddress& sa)
 {

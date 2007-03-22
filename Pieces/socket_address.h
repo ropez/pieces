@@ -10,6 +10,10 @@
 namespace Pieces
 {
 
+class DataStream;
+
+
+
 class SocketAddress
 {
 public:
@@ -43,6 +47,9 @@ bool operator<(const SocketAddress& op1, const SocketAddress& op2);
 bool operator>(const SocketAddress& op1, const SocketAddress& op2);
 bool operator<=(const SocketAddress& op1, const SocketAddress& op2);
 bool operator>=(const SocketAddress& op1, const SocketAddress& op2);
+
+DataStream& operator<<(DataStream& ds, const SocketAddress& sa);
+DataStream& operator>>(DataStream& ds, SocketAddress& sa);
 
 std::ostream& operator<<(std::ostream& os, const SocketAddress& sa);
 

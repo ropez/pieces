@@ -1,6 +1,6 @@
 
 #include "Pieces/InetAddress"
-
+#include "Pieces/DataStream"
 #include <cstring>
 
 #if defined(WIN32)
@@ -91,6 +91,7 @@ int compare(const InetAddress& op1, const InetAddress& op2)
         return 1;
 
     // Equal
+
     return 0;
 }
 
@@ -130,6 +131,20 @@ bool operator>=(const InetAddress& op1, const InetAddress& op2)
     return compare(op1, op2) >= 0;
 }
 
+DataStream& operator<<(DataStream& ds, const InetAddress& ia)
+{
+    ds << ia.toInt32();
+    return ds;
+}
+
+DataStream& operator>>(DataStream& ds, InetAddress& ia)
+{
+    unsigned long addr;
+    ds >> addr;
+
+    ia = InetAddress(addr);
+    return ds;
+}
 
 std::ostream& operator<<(std::ostream& os, const InetAddress& ia)
 {

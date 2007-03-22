@@ -4,6 +4,7 @@
 
 #include <string>
 #include <ostream>
+#include <Pieces/DataStream>
 
 
 namespace Pieces
@@ -67,6 +68,9 @@ bool operator<(const InetAddress& op1, const InetAddress& op2);
 bool operator>(const InetAddress& op1, const InetAddress& op2);
 bool operator<=(const InetAddress& op1, const InetAddress& op2);
 bool operator>=(const InetAddress& op1, const InetAddress& op2);
+
+DataStream& operator<<(DataStream& ds, const InetAddress& ia);
+DataStream& operator>>(DataStream& ds, InetAddress& ia);
 
 std::ostream& operator<<(std::ostream& os, const InetAddress& ia);
 
