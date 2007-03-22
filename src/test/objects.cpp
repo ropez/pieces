@@ -40,39 +40,116 @@ namespace Pieces
 OpenThreads::Mutex mutex;
 GameData gamedata;
 
+
+class GameDataSenderPrivate;
 class GameDataSender
 {
 public:
-    GameDataSender()
-    : frameNumber(0)
-    {
-    }
+    GameDataSender();
+    ~GameDataSender();
 
-    FrameData getFrameData(framenum_t frameNum) const
-    {
-        OpenThreads::ScopedLock<OpenThreads::Mutex> lock(mutex);
-        return gamedata.getFrameData(frameNum);
-    }
+    FrameData getFrameData(framenum_t frameNum) const;
 
-    void sendFrameData(const FrameData& frame)
-    {
-        OpenThreads::ScopedLock<OpenThreads::Mutex> lock(mutex);
-        gamedata.setFrameData(frameNumber++, frame);
-    }
+    void sendFrameData(const FrameData& frame);
 
 private:
-    framenum_t frameNumber;
+    DISABLE_COPY(GameDataSender);
+
+    GameDataSenderPrivate* d;
 };
 
+
+class GameDataSenderPrivate
+{
+public:
+    GameDataSenderPrivate();
+
+    framenum_t frameNumber;
+    GameData buffer;
+};
+
+
+GameDataSenderPrivate::GameDataSenderPrivate()
+: frameNumber(0)
+, buffer()
+{
+}
+
+
+GameDataSender::GameDataSender()
+: d(new GameDataSenderPrivate)
+{
+}
+
+
+GameDataSender::~GameDataSender()
+{
+    delete d;
+}
+
+
+FrameData GameDataSender::getFrameData(framenum_t frameNum) const
+{
+    return d->buffer.getFrameData(frameNum);
+}
+
+
+void GameDataSender::sendFrameData(const FrameData& frame)
+{
+    d->buffer.setFrameData(d->frameNumber, frame);
+
+    OpenThreads::ScopedLock<OpenThreads::Mutex> lock(mutex);
+    gamedata.setFrameData(d->frameNumber++, frame);
+}
+
+class GameDataReceiverPrivate;
 class GameDataReceiver
 {
 public:
-    FrameData getFrameData(framenum_t frameNum)
-    {
-        OpenThreads::ScopedLock<OpenThreads::Mutex> lock(mutex);
-        return gamedata.getFrameData(frameNum);
-    }
+    GameDataReceiver();
+    ~GameDataReceiver();
+
+    FrameData getFrameData(framenum_t frameNum);
+
+private:
+    DISABLE_COPY(GameDataReceiver);
+
+    GameDataReceiverPrivate* d;
 };
+
+
+class GameDataReceiverPrivate
+{
+public:
+    GameDataReceiverPrivate();
+
+    GameData buffer;
+};
+
+
+GameDataReceiverPrivate::GameDataReceiverPrivate()
+: buffer()
+{
+}
+
+
+GameDataReceiver::GameDataReceiver()
+: d(new GameDataReceiverPrivate)
+{
+}
+
+
+GameDataReceiver::~GameDataReceiver()
+{
+    delete d;
+}
+
+
+FrameData GameDataReceiver::getFrameData(framenum_t frameNum)
+{
+    OpenThreads::ScopedLock<OpenThreads::Mutex> lock(mutex);
+    return gamedata.getFrameData(frameNum);
+}
 
 } // namespace Pieces
 
