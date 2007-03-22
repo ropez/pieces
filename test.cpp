@@ -5,8 +5,7 @@
 //
 // $Author$
 // $Date$
-// $url$
-// $Last modified$
+// $URL$
 //
 // Author Nisse Pisse
 // Copyright:  "The Pieces Gang"
