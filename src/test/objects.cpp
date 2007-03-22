@@ -34,27 +34,6 @@ using namespace Pieces;
 AutoPointer<Host> host;
 AutoPointer<Peer> peer;
 
-// Demonstration
-
-
-class ThreadRunningHost : public OpenThreads::Thread
-{
-protected:
-    virtual void run()
-    {
-        host->exec();
-    }
-};
-
-class ThreadRunningPeer : public OpenThreads::Thread
-{
-protected:
-    virtual void run()
-    {
-        peer->exec();
-    }
-};
-
 
 /**
  * Test implementation of GameObject
@@ -220,6 +199,9 @@ protected:
             PDEBUG << "Message type " << event->getMessageType();
             PDEBUG << "Data (as string): " << str;
 
+            // TODO: Replace this by a special message from the peer to the host, handled by pieces that tells the host to start sending data to a port selected by the peer.
+            // To be able to implement features like this, we must handle all events on an internal event handler before they are sent to the user application.
+            // I suggest adding a internal event handler class to both Peer and Host classes.
             SocketAddress addr(event->getSenderAddress().getInetAddress(), 3333);
             PINFO << "Adding " << addr << " to receivers list";
             sender.addReceiver(addr);
@@ -295,7 +277,6 @@ int main(int argc, char** argv)
     if (argc > 1 && std::string(argv[1]) == "host")
     {
         host = new MyHost;
-        ThreadRunningHost th;
 
         AutoPointer<Timer> repeating(new Timer(0, host->eventLoop()));
         repeating->setRepeating(true);
@@ -303,13 +284,11 @@ int main(int argc, char** argv)
 
         host->connectionManager()->listen(2222);
 
-        th.start();
-        th.join();
+        host->exec();
     }
     else
     {
         peer = new MyPeer;
-        ThreadRunningPeer tp;
 
         peer->connectionManager()->connectTo(SocketAddress(InetAddress::getHostByName("localhost"), 2222));
 
@@ -318,9 +297,7 @@ int main(int argc, char** argv)
         s << "Follow the white rabbit";
         peer->connectionManager()->sendMessage(666, s.data());
 
-
-        tp.start();
-        tp.join();
+        peer->exec();
     }
 }
 
