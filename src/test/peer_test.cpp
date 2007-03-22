@@ -73,17 +73,17 @@ int main(int argc, char** argv)
 {
 
 #if defined WIN32
-	WORD wVersionRequested;
-	WSADATA wsaData;
-	int err;
-	wVersionRequested = MAKEWORD( 2, 2 );
+    WORD wVersionRequested;
+    WSADATA wsaData;
+    int err;
+    wVersionRequested = MAKEWORD( 2, 2 );
 
-	err = WSAStartup( wVersionRequested, &wsaData );
+    err = WSAStartup( wVersionRequested, &wsaData );
 #endif
 
-	AutoPointer<PeerTest> peer(new PeerTest);
+    AutoPointer<PeerTest> peer(new PeerTest);
 
-	std::string hostname = "localhost";
+    std::string hostname = "localhost";
     if (argc > 1)
     {
         hostname = argv[1];
@@ -105,6 +105,6 @@ int main(int argc, char** argv)
     peer->exec();
 
 #if defined WIN32
-	WSACleanup();
+    WSACleanup();
 #endif
 }
