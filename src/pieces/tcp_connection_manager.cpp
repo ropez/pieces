@@ -135,9 +135,4 @@ void TCPConnectionManager::remove(const SocketAddress& address)
     }
 }
 
-
-void TCPConnectionManager::handle(NetworkEvent* event)
-{
-}
-
 } // namespace Pieces

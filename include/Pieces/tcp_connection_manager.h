@@ -63,9 +63,6 @@ public:
      */
     void add(TCPConnection* connection);
 
-protected:
-    virtual void handle(NetworkEvent* event);
-
 private:
     DISABLE_COPY(TCPConnectionManager);
 
