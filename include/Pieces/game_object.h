@@ -40,6 +40,14 @@ public:
     virtual void decode(DataStream& ds);
 
     /**
+     * Custom user action.
+     *
+     * This function does nothing, but may be implemented by game programmers
+     * to do anything.
+     */
+    virtual void action(framenum_t frameNum);
+
+    /**
      * Call encode(), and insert the resulting data into \a frame.
      */
     void update(FrameData& frame) const;

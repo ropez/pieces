@@ -28,6 +28,11 @@ void GameObject::decode(DataStream&)
 }
 
 
+void GameObject::action(framenum_t)
+{
+}
+
+
 void GameObject::update(FrameData& frame) const
 {
     // Encode object data

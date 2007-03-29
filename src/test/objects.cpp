@@ -63,6 +63,15 @@ public:
     }
 
 
+    virtual void action(framenum_t frameNum)
+    {
+        PDEBUG << "Moving ball, frame " << frameNum << ": "
+            << align(40) << "posx = " << getPosX()
+            << align(58) << "posy = " << getPosY()
+            << align(76) << "diam = " << getDiam();
+    }
+
+
     double getPosX() const
     {
         return m_posx;
@@ -142,6 +151,11 @@ public:
     virtual void decode(DataStream& ds)
     {
         ds >> speed;
+    }
+
+    virtual void action(framenum_t)
+    {
+        PDEBUG << "BumberCar now running at: " << speed;
     }
 
     double speed;
@@ -259,12 +273,10 @@ protected:
         FrameData frame = event->getFrameData();
         db()->apply(frame);
 
-        PDEBUG << "Moving ball, frame " << frameNum << ": "
-            << align(40) << "posx = " << ball->getPosX()
-            << align(58) << "posy = " << ball->getPosY()
-            << align(76) << "diam = " << ball->getDiam();
-
-        PDEBUG << "BumberCar now running at: " << car->speed;
+        for (GameObjectDB::map_t::iterator it = db()->begin(); it != db()->end(); ++it)
+        {
+            it->second->action(frameNum);
+        }
     }
 
 private:
