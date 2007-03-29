@@ -53,10 +53,17 @@ TCPConnectionManager::~TCPConnectionManager()
 }
 
 
-void TCPConnectionManager::listen(port_t port)
+void TCPConnectionManager::startListening(port_t port)
 {
     d->listener = new TCPListenerThread(port, this);
     d->listener->start();
+}
+
+
+void TCPConnectionManager::stopListening()
+{
+    // Stop and delete listener thread by replacing auto-pointer
+    d->listener = 0;
 }
 
 
@@ -113,7 +120,7 @@ void TCPConnectionManager::add(TCPConnection* connection)
     }
 
     // Start receiving network events on the event loop
-    conn->startReceiver(d->eventLoop);
+    conn->startReceiving(d->eventLoop);
 
     d->connections[address] = conn.release();
 }

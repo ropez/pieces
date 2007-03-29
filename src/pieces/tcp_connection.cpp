@@ -45,10 +45,17 @@ SocketAddress TCPConnection::getPeerAddress() const
 }
 
 
-void TCPConnection::startReceiver(EventLoop* eventLoop)
+void TCPConnection::startReceiving(EventLoop* eventLoop)
 {
     d->receiver = new TCPReceiverThread(d->socket.get(), eventLoop);
     d->receiver->start();
+}
+
+
+void TCPConnection::stopReceiving()
+{
+    // Stop and delete receiver thread by replacing auto-pointer
+    d->receiver = 0;
 }
 
 

@@ -39,7 +39,12 @@ public:
     /**
      * Start accepting incoming connections on the given port.
      */
-    virtual void listen(port_t port);
+    virtual void startListening(port_t port);
+
+    /**
+     * Stop accepting connections.
+     */
+    virtual void stopListening();
 
     /**
      * Create a new connection to the given address.

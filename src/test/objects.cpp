@@ -289,7 +289,7 @@ int main(int argc, char** argv)
         repeating->setRepeating(true);
         repeating->start(500);
 
-        host->connectionManager()->listen(2222);
+        host->connectionManager()->startListening(2222);
 
         host->exec();
     }

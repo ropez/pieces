@@ -39,7 +39,9 @@ public:
      */
     SocketAddress getPeerAddress() const;
 
-    void startReceiver(EventLoop* eventLoop);
+    void startReceiving(EventLoop* eventLoop);
+
+    void stopReceiving();
 
     void sendMessage(int messageType, const ByteArray& data);
 
