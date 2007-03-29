@@ -58,6 +58,12 @@ ConnectionManager* Peer::connectionManager() const
 }
 
 
+void Peer::connectTo(const SocketAddress& address)
+{
+    connectionManager()->connectTo(address);
+}
+
+
 void Peer::postEvent(Event* e)
 {
     eventLoop()->postEvent(e);

@@ -297,7 +297,7 @@ int main(int argc, char** argv)
     {
         peer = new MyPeer;
 
-        peer->connectionManager()->connectTo(SocketAddress(InetAddress::getHostByName("localhost"), 2222));
+        peer->connectTo(SocketAddress(InetAddress::getHostByName("localhost"), 2222));
 
         // Say hello
         BufferStream s;

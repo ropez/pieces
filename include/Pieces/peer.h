@@ -31,6 +31,13 @@ public:
     ConnectionManager* connectionManager() const;
 
     /**
+     * Connects the peer to the given host.
+     *
+     * Same as connectionManager()->connectTo(address).
+     */
+    void connectTo(const SocketAddress& address);
+
+    /**
      * Post an event to the event-loop.
      *
      * This is a shortcut for eventLoop()->postEvent(e).
@@ -53,13 +60,6 @@ public:
      * This will make exec() return after all event has been handled.
      */
     void quit();
-
-    /**
-     * Connects the peer to the given host.
-     *
-     * TODO: Should this be synchronous or asynchronous?
-     */
-    void connectToHost(const SocketAddress& hostAddress);
 
 protected:
 

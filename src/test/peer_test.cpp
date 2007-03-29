@@ -89,7 +89,7 @@ int main(int argc, char** argv)
     }
 
     SocketAddress address(InetAddress::getHostByName(hostname), port);
-    peer->connectionManager()->connectTo(address);
+    peer->connectTo(address);
 
     // This timer stops the Peer
     Timer tQuitPeer(ID_QUIT_PEER, peer->eventLoop());
