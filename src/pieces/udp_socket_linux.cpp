@@ -41,11 +41,6 @@ UDPSocket::UDPSocket()
     {
         throw IOException("UDPSocket::UDPSocket", strerror(errno));
     }
-
-    // TODO: Remove this, maybe implement some broadcast function
-    // Enabling broadcast
-    int opt = 1;
-    setsockopt(d->fd, SOL_SOCKET, SO_BROADCAST, &opt, sizeof(opt));
 }
 
 
