@@ -1,3 +1,6 @@
+
+#include "Pieces/Application"
+
 #include "Pieces/TCPSocket"
 #include "Pieces/SocketAddress"
 #include "Pieces/Exception"
@@ -5,10 +8,11 @@
 #include "Pieces/Debug"
 
 
-int main()
+using namespace Pieces;
+
+int main(int argc, char** argv)
 {
-    using namespace Pieces;
-    OpenThreads::Thread::Init();
+    Application application(argc, argv);
 
     const char* request = "GET /index.html HTTP/1.1\r\nHost: www.google.com\r\n\r\n";
 

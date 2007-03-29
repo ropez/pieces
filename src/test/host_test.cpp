@@ -1,4 +1,5 @@
 
+#include "Pieces/Application"
 #include "Pieces/Host"
 
 #include "Pieces/ConnectionManager"
@@ -8,10 +9,6 @@
 #include "Pieces/BufferStream"
 #include "Pieces/IOException"
 #include "Pieces/Debug"
-
-#if defined WIN32
-#include <winsock2.h>
-#endif
 
 using namespace Pieces;
 
@@ -42,24 +39,12 @@ protected:
 };
 
 
-int main()
+int main(int argc, char** argv)
 {
-
-#if defined WIN32
-    WORD wVersionRequested;
-    WSADATA wsaData;
-    int err;
-    wVersionRequested = MAKEWORD( 2, 2 );
-
-    err = WSAStartup( wVersionRequested, &wsaData );
-#endif
+    Application application(argc, argv);
 
     AutoPointer<HostTest> host(new HostTest);
 
     host->connectionManager()->listen(2222);
     host->exec();
-
-#if defined WIN32
-    WSACleanup();
-#endif
 }

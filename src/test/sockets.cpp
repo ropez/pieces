@@ -1,3 +1,4 @@
+#include "Pieces/Application"
 #include "Pieces/Debug"
 #include "Pieces/InetAddress"
 #include "Pieces/SocketAddress"
@@ -57,9 +58,11 @@ private:
 };
 
 
-int main()
+using namespace Pieces;
+
+int main(int argc, char** argv)
 {
-    using namespace Pieces;
+    Application application(argc, argv);
 
     // Echo server
     try

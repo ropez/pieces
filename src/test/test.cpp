@@ -1,34 +1,15 @@
-
+#include "Pieces/Application"
 #include "Pieces/InetAddress"
 #include <iostream>
 #include <string>
 
-#if defined WIN32
-#include <winsock2.h>
-#endif
-
 using namespace Pieces;
 
 
-int main()
+int main(int argc, char** argv)
 {
-
-#if defined WIN32
-    WORD wVersionRequested;
-    WSADATA wsaData;
-    int err;
-    wVersionRequested = MAKEWORD( 2, 2 );
-
-    err = WSAStartup( wVersionRequested, &wsaData );
-#endif
+    Application application(argc, argv);
 
     std::cout << InetAddress::getHostByName("www.vg.no") << std::endl;
-
-#if defined WIN32
-    WSACleanup();
-#endif
-
-    //std::string str;
-    //std::cin >> str;
 }
 

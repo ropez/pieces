@@ -1,4 +1,5 @@
 
+#include "Pieces/Application"
 #include "Pieces/Peer"
 
 #include "Pieces/ConnectionManager"
@@ -71,28 +72,20 @@ private:
 
 int main(int argc, char** argv)
 {
-
-#if defined WIN32
-    WORD wVersionRequested;
-    WSADATA wsaData;
-    int err;
-    wVersionRequested = MAKEWORD( 2, 2 );
-
-    err = WSAStartup( wVersionRequested, &wsaData );
-#endif
+    Application application(argc, argv);
 
     AutoPointer<PeerTest> peer(new PeerTest);
 
     std::string hostname = "localhost";
-    if (argc > 1)
+    if (app->argc() > 1)
     {
-        hostname = argv[1];
+        hostname = app->arg(1);
     }
 
     port_t port = 2222;
-    if (argc > 2)
+    if (app->argc() > 2)
     {
-        port = std::atoi(argv[2]);
+        port = std::atoi(app->arg(2).c_str());
     }
 
     SocketAddress address(InetAddress::getHostByName(hostname), port);
@@ -103,8 +96,4 @@ int main(int argc, char** argv)
     tQuitPeer.start(4000);
 
     peer->exec();
-
-#if defined WIN32
-    WSACleanup();
-#endif
 }

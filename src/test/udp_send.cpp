@@ -1,3 +1,5 @@
+#include "Pieces/Application"
+
 #include "Pieces/PropertyList"
 #include "Pieces/ValueList"
 #include "Pieces/ByteArray"
@@ -16,9 +18,10 @@
 
 using namespace Pieces;
 
-int main()
+
+int main(int argc, char** argv)
 {
-    OpenThreads::Thread::Init();
+    Application application(argc, argv);
 
     try
     {

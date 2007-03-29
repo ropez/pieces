@@ -1,3 +1,4 @@
+#include "Pieces/Application"
 #include "Pieces/Exception"
 #include "Pieces/PropertyList"
 #include "Pieces/ValueList"
@@ -16,9 +17,9 @@
 
 using namespace Pieces;
 
-int main()
+int main(int argc, char** argv)
 {
-    OpenThreads::Thread::Init();
+    Application application(argc, argv);
 
     try
     {

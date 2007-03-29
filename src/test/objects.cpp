@@ -4,6 +4,8 @@
 
 #include "Pieces/IOException"
 
+#include "Pieces/Application"
+
 #include "Pieces/Host"
 #include "Pieces/Peer"
 #include "Pieces/ConnectionManager"
@@ -274,7 +276,9 @@ private:
 
 int main(int argc, char** argv)
 {
-    if (argc > 1 && std::string(argv[1]) == "host")
+    Application application(argc, argv);
+
+    if (app->argc() > 1 && app->arg(1) == "host")
     {
         host = new MyHost;
 

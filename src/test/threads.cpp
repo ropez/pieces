@@ -1,3 +1,5 @@
+
+#include "Pieces/Application"
 #include "Pieces/Debug"
 #include "Pieces/Timer"
 #include "Pieces/Host"
@@ -182,8 +184,10 @@ protected:
 };
 
 
-int main()
+int main(int argc, char** argv)
 {
+    Application application(argc, argv);
+
     host = new MyHost;
     peer = new MyPeer;
 
