@@ -1,10 +1,6 @@
 
 #include "Pieces/GameObjectDB"
 #include "Pieces/GameObject"
-#include "Pieces/FrameData"
-#include "Pieces/BufferStream"
-#include "Pieces/IOException"
-#include "Pieces/Debug"
 
 
 namespace Pieces
@@ -60,14 +56,8 @@ void GameObjectDB::update(FrameData& frame) const
 {
     for (map_t::const_iterator it = begin(); it != end(); ++it)
     {
-        objectid_t id = it->first;
         const ptr_t obj = it->second;
-
-        // Object data
-        BufferStream s;
-        obj->encode(s);
-
-        frame.setObjectData(id, s.data());
+        obj->update(frame);
     }
 }
 
@@ -76,23 +66,8 @@ void GameObjectDB::apply(const FrameData& frame)
 {
     for (map_t::iterator it = begin(); it != end(); ++it)
     {
-        objectid_t id = it->first;
         ptr_t obj = it->second;
-
-        // Object data
-        BufferStream s(frame.getObjectData(id));
-
-
-        // TODO: Don't catch exception here
-        try
-        {
-            // Decode object data into stream
-            obj->decode(s);
-        }
-        catch (const IOException& e)
-        {
-            PERROR << e;
-        }
+        obj->apply(frame);
     }
 }
 

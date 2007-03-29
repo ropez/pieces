@@ -9,6 +9,7 @@
 namespace Pieces
 {
 class DataStream;
+class FrameData;
 
 
 /**
@@ -37,6 +38,16 @@ public:
     virtual void encode(DataStream& ds) const;
 
     virtual void decode(DataStream& ds);
+
+    /**
+     * Call encode(), and insert the resulting data into \a frame.
+     */
+    void update(FrameData& frame) const;
+
+    /**
+     * Extract object data for this object from \a frame, and call decode().
+     */
+    void apply(const FrameData& frame);
 
 private:
     DISABLE_COPY(GameObject);
