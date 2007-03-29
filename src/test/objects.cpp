@@ -248,12 +248,10 @@ public:
     MyPeer()
     : Peer()
     , receiver(new GameDataReceiver(eventLoop()))
-    , ball(new MovingBall(idBall))
-    , car(new PeerBumperCar(idCar))
     , m_db(new GameObjectDB())
     {
-        db()->insert(idBall, ball.get());
-        db()->insert(idCar, car.get());
+        db()->insert(idBall, new MovingBall(idBall));
+        db()->insert(idCar, new PeerBumperCar(idCar));
 
         receiver->listen(3333);
     }
@@ -282,8 +280,6 @@ protected:
 private:
 
     AutoPointer<GameDataReceiver> receiver;
-    ReferencePointer<MovingBall> ball;
-    ReferencePointer<PeerBumperCar> car;
 
     AutoPointer<GameObjectDB> m_db;
 };
