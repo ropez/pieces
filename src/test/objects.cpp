@@ -40,7 +40,10 @@ AutoPointer<Peer> peer;
 enum MessageType
 {
     OBJECT_CREATE,
-    OBJECT_REMOVE
+    OBJECT_REMOVE,
+
+    GAMEDATA_CONNECT,
+    GAMEDATA_DISCONNECT
 };
 
 
@@ -196,6 +199,8 @@ public:
 };
 
 
+const port_t portMessage = 2222;
+
 const objectid_t idBall = 100;
 const objectid_t idCar = 200;
 
@@ -267,28 +272,19 @@ protected:
     {
         if (event->type() == NetworkEvent::RECEIVED_MESSAGE)
         {
-            try
+            if (event->getMessageType() == GAMEDATA_CONNECT)
             {
-                BufferStream bf(event->getData());
+                // TODO: Move this functionality to an internal event handler
+                BufferStream s(event->getData());
 
-                std::string str;
-                bf >> str;
-                PDEBUG << "From: " << event->getSenderAddress();
-                PDEBUG << "Message type " << event->getMessageType();
-                PDEBUG << "Data (as string): " << str;
+                port_t port;
+                s >> port;
 
-                // TODO: Replace this by a special message from the peer to the host, handled by pieces that tells the host to start sending data to a port selected by the peer.
-                // To be able to implement features like this, we must handle all events on an internal event handler before they are sent to the user application.
-                // I suggest adding a internal event handler class to both Peer and Host classes.
-                SocketAddress addr(event->getSenderAddress().getInetAddress(), 3333);
+                SocketAddress addr(event->getSenderAddress().getInetAddress(), port);
                 PINFO << "Adding " << addr << " to receivers list";
                 sender.addReceiver(addr);
 
                 startGame();
-            }
-            catch (const IOException& e)
-            {
-                PWARNING << e;
             }
         }
     }
@@ -314,7 +310,16 @@ public:
     , receiver(new GameDataReceiver(eventLoop()))
     , m_db(new GameObjectDB())
     {
-        receiver->listen(3333);
+        connectTo(SocketAddress(InetAddress::getHostByName("localhost"), portMessage));
+
+        // Connect to data channel
+        const port_t portData = 3333;
+
+        BufferStream s;
+        s << portData;
+        connectionManager()->sendMessage(GAMEDATA_CONNECT, s.data());
+
+        receiver->listen(portData);
     }
 
 
@@ -386,21 +391,13 @@ int main(int argc, char** argv)
     {
         host = new MyHost;
 
-        host->startListening(2222);
+        host->startListening(portMessage);
 
         host->exec();
     }
     else
     {
         peer = new MyPeer;
-
-        peer->connectTo(SocketAddress(InetAddress::getHostByName("localhost"), 2222));
-
-        // Say hello
-        BufferStream s;
-        s << "Follow the white rabbit";
-        peer->connectionManager()->sendMessage(666, s.data());
-
         peer->exec();
     }
 }
