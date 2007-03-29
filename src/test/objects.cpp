@@ -37,6 +37,20 @@ AutoPointer<Host> host;
 AutoPointer<Peer> peer;
 
 
+enum MessageType
+{
+    OBJECT_CREATE,
+    OBJECT_REMOVE
+};
+
+
+enum ObjectType
+{
+    MOVING_BALL,
+    BUMPER_CAR
+};
+
+
 /**
  * Test implementation of GameObject
  */
@@ -49,6 +63,13 @@ public:
     , m_posy(0.0)
     , m_diam(10.0)
     {
+        PDEBUG << "Created MovingBall, id = " << getObjectId();
+    }
+
+
+    ~MovingBall()
+    {
+        PDEBUG << "Deleted MovingBall, id = " << getObjectId();
     }
 
 
@@ -124,6 +145,12 @@ public:
     : GameObject(objectId)
     , speed(0)
     {
+        PDEBUG << "Created HostBumperCar, id = " << getObjectId();
+    }
+
+    ~HostBumperCar()
+    {
+        PDEBUG << "Deleted HostBumperCar, id = " << getObjectId();
     }
 
     virtual void encode(DataStream& ds) const
@@ -146,7 +173,14 @@ public:
     : GameObject(objectId)
     , speed(0)
     {
+        PDEBUG << "Created PeerBumperCar, id = " << getObjectId();
     }
+
+    ~PeerBumperCar()
+    {
+        PDEBUG << "Deleted PeerBumperCar, id = " << getObjectId();
+    }
+
 
     virtual void decode(DataStream& ds)
     {
@@ -174,16 +208,42 @@ public:
     , m_db(new GameObjectDB())
     , frame(0)
     , sender()
-    , ball(new MovingBall(idBall))
-    , car(new HostBumperCar(idCar))
+    , ball(0)
+    , car(0)
+    , m_timer(0)
     {
-        db()->insert(idBall, ball.get());
-        db()->insert(idCar, car.get());
     }
 
     GameObjectDB* db()
     {
         return m_db.get();
+    }
+
+    void startGame()
+    {
+        {
+            ball = new MovingBall(idBall);
+            db()->insert(idBall, ball.get());
+
+            BufferStream s;
+            s << MOVING_BALL << idBall;
+
+            connectionManager()->sendMessage(OBJECT_CREATE, s.data());
+        }
+
+        {
+            car = new HostBumperCar(idCar);
+            db()->insert(idCar, car.get());
+
+            BufferStream s;
+            s << BUMPER_CAR << idCar;
+
+            connectionManager()->sendMessage(OBJECT_CREATE, s.data());
+        }
+
+        m_timer = new Timer(0, eventLoop());
+        m_timer->setRepeating(true);
+        m_timer->start(500);
     }
 
 protected:
@@ -223,6 +283,8 @@ protected:
                 SocketAddress addr(event->getSenderAddress().getInetAddress(), 3333);
                 PINFO << "Adding " << addr << " to receivers list";
                 sender.addReceiver(addr);
+
+                startGame();
             }
             catch (const IOException& e)
             {
@@ -238,6 +300,8 @@ private:
     GameDataSender sender;
     ReferencePointer<MovingBall> ball;
     ReferencePointer<HostBumperCar> car;
+
+    AutoPointer<Timer> m_timer;
 };
 
 
@@ -250,9 +314,6 @@ public:
     , receiver(new GameDataReceiver(eventLoop()))
     , m_db(new GameObjectDB())
     {
-        db()->insert(idBall, new MovingBall(idBall));
-        db()->insert(idCar, new PeerBumperCar(idCar));
-
         receiver->listen(3333);
     }
 
@@ -277,10 +338,42 @@ protected:
         }
     }
 
+    void handle(NetworkEvent* event)
+    {
+        if (event->type() == NetworkEvent::RECEIVED_MESSAGE)
+        {
+            if (event->getMessageType() == OBJECT_CREATE)
+            {
+                BufferStream s(event->getData());
+
+                int objectType;
+                s >> objectType;
+
+                objectid_t objectId;
+                s >> objectId;
+
+                ReferencePointer<GameObject> obj;
+                switch (objectType)
+                {
+                case MOVING_BALL:
+                    obj = new MovingBall(objectId);
+                    break;
+                case BUMPER_CAR:
+                    obj = new PeerBumperCar(objectId);
+                    break;
+                default:
+                    PWARNING << "Unknown object type: " << objectType;
+                    return;
+                }
+
+                db()->insert(objectId, obj.get());
+            }
+        }
+    }
+
 private:
 
     AutoPointer<GameDataReceiver> receiver;
-
     AutoPointer<GameObjectDB> m_db;
 };
 
@@ -292,10 +385,6 @@ int main(int argc, char** argv)
     if (app->argc() > 1 && app->arg(1) == "host")
     {
         host = new MyHost;
-
-        AutoPointer<Timer> repeating(new Timer(0, host->eventLoop()));
-        repeating->setRepeating(true);
-        repeating->start(500);
 
         host->startListening(2222);
 
