@@ -31,6 +31,20 @@ public:
     ConnectionManager* connectionManager() const;
 
     /**
+     * Start accepting incoming connections on the given port.
+     *
+     * Same as connectionManager()->startListening(port).
+     */
+    void startListening(port_t port);
+
+    /**
+     * Stop accepting connections.
+     *
+     * Same as connectionManager()->stopListening().
+     */
+    void stopListening();
+
+    /**
      * Post an event to the event-loop.
      *
      * This is a shortcut for getEventLoop()->postEvent(e).

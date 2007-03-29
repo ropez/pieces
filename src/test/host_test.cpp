@@ -45,6 +45,6 @@ int main(int argc, char** argv)
 
     AutoPointer<HostTest> host(new HostTest);
 
-    host->connectionManager()->startListening(2222);
+    host->startListening(2222);
     host->exec();
 }

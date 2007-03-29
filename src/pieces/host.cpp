@@ -59,6 +59,18 @@ ConnectionManager* Host::connectionManager() const
 }
 
 
+void Host::startListening(port_t port)
+{
+    connectionManager()->startListening(port);
+}
+
+
+void Host::stopListening()
+{
+    connectionManager()->stopListening();
+}
+
+
 void Host::postEvent(Event* e)
 {
     eventLoop()->postEvent(e);
