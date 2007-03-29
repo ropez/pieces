@@ -6,7 +6,7 @@
 
 #include <osgProducer/Viewer>
 
-#include <osgText/Text>
+//#include <osgText/Text>
 
 osg::ref_ptr<osg::Node> createMenu()
 {
