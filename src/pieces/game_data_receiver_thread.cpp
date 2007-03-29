@@ -103,7 +103,7 @@ void GameDataReceiverThread::run()
             d->buffer->setFrameData(frameNum, frame);
 
             // Notify
-            d->eventLoop->postEvent(new GameDataEvent(frameNum));
+            d->eventLoop->postEvent(new GameDataEvent(frameNum, frame));
         }
     }
     catch (const Exception& e)

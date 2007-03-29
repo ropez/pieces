@@ -253,7 +253,7 @@ protected:
     {
         framenum_t frameNum = event->getFrameNumber();
 
-        FrameData frame = receiver->getFrameData(frameNum);
+        FrameData frame = event->getFrameData();
         db()->apply(frame);
 
         PDEBUG << "Moving ball, frame " << frameNum << ": "

@@ -6,15 +6,16 @@
 namespace Pieces
 {
 
-GameDataEvent::GameDataEvent(framenum_t frameNum)
+GameDataEvent::GameDataEvent(framenum_t frameNum, const FrameData& frameData)
 : m_frameNum(frameNum)
+, m_frameData(frameData)
 {
 }
 
 
 AutoPointer<Event> GameDataEvent::clone() const
 {
-    return AutoPointer<Event>(new GameDataEvent(getFrameNumber()));
+    return AutoPointer<Event>(new GameDataEvent(getFrameNumber(), getFrameData()));
 }
 
 
@@ -29,6 +30,11 @@ framenum_t GameDataEvent::getFrameNumber() const
     return m_frameNum;
 }
 
+
+FrameData GameDataEvent::getFrameData() const
+{
+    return m_frameData;
+}
 
 
 GameDataEvent::~GameDataEvent()
