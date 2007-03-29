@@ -4,6 +4,8 @@
 #include "Pieces/EventLoop"
 #include "Pieces/TCPConnectionManager"
 
+#include "NetworkEventFilter"
+
 
 namespace Pieces
 {
@@ -15,12 +17,15 @@ public:
 
     AutoPointer<EventLoop> eventLoop;
     AutoPointer<TCPConnectionManager> connectionManager;
+
+    AutoPointer<NetworkEventFilter> networkEventFilter;
 };
 
 
 PeerPrivate::PeerPrivate()
 : eventLoop(0)
 , connectionManager(0)
+, networkEventFilter(0)
 {
 }
 
@@ -29,8 +34,9 @@ Peer::Peer()
 : EventHandler()
 , d(new PeerPrivate)
 {
-    d->eventLoop = new EventLoop(this);
+    d->eventLoop = new EventLoop();
     d->connectionManager = new TCPConnectionManager(eventLoop());
+    d->networkEventFilter = new NetworkEventFilter(this, d->connectionManager.get());
 }
 
 
@@ -61,7 +67,7 @@ void Peer::postEvent(Event* e)
 void Peer::exec()
 {
     PDEBUG << "Peer running";
-    eventLoop()->exec();
+    eventLoop()->exec(d->networkEventFilter.get());
 }
 
 

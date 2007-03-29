@@ -19,7 +19,7 @@ class TCPConnectionManagerPrivate;
  *
  * \author Robin Pedersen
  */
-class TCPConnectionManager : public EventHandler, public ConnectionManager
+class TCPConnectionManager : public ConnectionManager
 {
 public:
 

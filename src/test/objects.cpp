@@ -191,26 +191,29 @@ protected:
 
     virtual void handle(NetworkEvent* event)
     {
-        try
+        if (event->type() == NetworkEvent::RECEIVED_MESSAGE)
         {
-            BufferStream bf(event->getData());
+            try
+            {
+                BufferStream bf(event->getData());
 
-            std::string str;
-            bf >> str;
-            PDEBUG << "From: " << event->getSenderAddress();
-            PDEBUG << "Message type " << event->getMessageType();
-            PDEBUG << "Data (as string): " << str;
+                std::string str;
+                bf >> str;
+                PDEBUG << "From: " << event->getSenderAddress();
+                PDEBUG << "Message type " << event->getMessageType();
+                PDEBUG << "Data (as string): " << str;
 
-            // TODO: Replace this by a special message from the peer to the host, handled by pieces that tells the host to start sending data to a port selected by the peer.
-            // To be able to implement features like this, we must handle all events on an internal event handler before they are sent to the user application.
-            // I suggest adding a internal event handler class to both Peer and Host classes.
-            SocketAddress addr(event->getSenderAddress().getInetAddress(), 3333);
-            PINFO << "Adding " << addr << " to receivers list";
-            sender.addReceiver(addr);
-        }
-        catch (const IOException& e)
-        {
-            PWARNING << e;
+                // TODO: Replace this by a special message from the peer to the host, handled by pieces that tells the host to start sending data to a port selected by the peer.
+                // To be able to implement features like this, we must handle all events on an internal event handler before they are sent to the user application.
+                // I suggest adding a internal event handler class to both Peer and Host classes.
+                SocketAddress addr(event->getSenderAddress().getInetAddress(), 3333);
+                PINFO << "Adding " << addr << " to receivers list";
+                sender.addReceiver(addr);
+            }
+            catch (const IOException& e)
+            {
+                PWARNING << e;
+            }
         }
     }
 

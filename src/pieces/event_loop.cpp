@@ -7,9 +7,8 @@
 namespace Pieces
 {
 
-EventLoop::EventLoop(EventHandler* handler)
-: m_handler(handler)
-, m_queue(new EventQueue)
+EventLoop::EventLoop()
+: m_queue(new EventQueue)
 {
 }
 
@@ -21,7 +20,7 @@ EventLoop::~EventLoop()
 }
 
 
-void EventLoop::exec()
+void EventLoop::exec(EventHandler* handler)
 {
     for (;;)
     {
@@ -33,7 +32,7 @@ void EventLoop::exec()
             break;
 
         // Dispatch the event to the correct event-handler function
-        e->dispatch(m_handler);
+        e->dispatch(handler);
     }
 }
 

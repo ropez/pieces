@@ -4,6 +4,9 @@
 #include "Pieces/EventLoop"
 #include "Pieces/TCPConnectionManager"
 
+#include "NetworkEventFilter"
+
+
 
 namespace Pieces
 {
@@ -16,14 +19,14 @@ public:
     AutoPointer<EventLoop> eventLoop;
     AutoPointer<TCPConnectionManager> connectionManager;
 
-    bool accepting;
+    AutoPointer<NetworkEventFilter> networkEventFilter;
 };
 
 
 HostPrivate::HostPrivate()
 : eventLoop(0)
 , connectionManager(0)
-, accepting(false)
+, networkEventFilter(0)
 {
 }
 
@@ -32,8 +35,9 @@ Host::Host()
 : EventHandler()
 , d(new HostPrivate)
 {
-    d->eventLoop = new EventLoop(this);
+    d->eventLoop = new EventLoop();
     d->connectionManager = new TCPConnectionManager(eventLoop());
+    d->networkEventFilter = new NetworkEventFilter(this, d->connectionManager.get());
 }
 
 
@@ -64,7 +68,7 @@ void Host::postEvent(Event* e)
 void Host::exec()
 {
     PDEBUG << "Host running";
-    eventLoop()->exec();
+    eventLoop()->exec(d->networkEventFilter.get());
 }
 
 
@@ -72,19 +76,6 @@ void Host::quit()
 {
     PDEBUG << "Host quitting";
     eventLoop()->quit();
-}
-
-
-bool Host::isAcceptingConnections() const
-{
-    return d->accepting;
-}
-
-
-void Host::setAcceptingConnections(bool v)
-{
-    // TODO: Do something with listening socket, or just keep it listening?
-    d->accepting = v;
 }
 
 

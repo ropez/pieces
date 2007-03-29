@@ -49,6 +49,8 @@ protected:
 
 private:
     DISABLE_COPY(EventLoopThread);
+
+    EventHandler* m_handler;
     EventLoop* m_eventLoop;
 };
 

@@ -7,7 +7,8 @@ namespace Pieces
 {
 
 EventLoopThread::EventLoopThread(EventHandler* handler)
-: m_eventLoop(new EventLoop(handler))
+: m_handler(handler)
+, m_eventLoop(new EventLoop)
 {
 }
 
@@ -29,7 +30,7 @@ EventLoop* EventLoopThread::eventLoop() const
 
 void EventLoopThread::run()
 {
-    m_eventLoop->exec();
+    m_eventLoop->exec(m_handler);
 }
 
 } // namespace Pieces

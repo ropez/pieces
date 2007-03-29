@@ -6,8 +6,6 @@
 #include "Pieces/SocketAddress"
 
 #include "Pieces/EventLoop"
-#include "Pieces/EventLoopThread"
-#include "Pieces/NetworkEvent"
 
 #include "Pieces/AutoPointer"
 #include "Pieces/Exception"
@@ -31,7 +29,6 @@ public:
     map_t connections;
 
     AutoPointer<TCPListenerThread> listener;
-    AutoPointer<EventLoopThread> eventLoopThread;
 };
 
 
@@ -39,7 +36,6 @@ TCPConnectionManagerPrivate::TCPConnectionManagerPrivate()
 : eventLoop(0)
 , connections()
 , listener(0)
-, eventLoopThread(0)
 {
 }
 
@@ -48,8 +44,6 @@ TCPConnectionManager::TCPConnectionManager(EventLoop* eventLoop)
 : d(new TCPConnectionManagerPrivate)
 {
     d->eventLoop = eventLoop;
-    d->eventLoopThread = new EventLoopThread(this);
-    d->eventLoopThread->start();
 }
 
 
@@ -118,8 +112,8 @@ void TCPConnectionManager::add(TCPConnection* connection)
         return;
     }
 
-    // Start receiving network events on the internal event loop
-    conn->startReceiver(d->eventLoopThread->eventLoop());
+    // Start receiving network events on the event loop
+    conn->startReceiver(d->eventLoop);
 
     d->connections[address] = conn.release();
 }
@@ -144,28 +138,6 @@ void TCPConnectionManager::remove(const SocketAddress& address)
 
 void TCPConnectionManager::handle(NetworkEvent* event)
 {
-    switch (event->type())
-    {
-    case NetworkEvent::DISCONNECTED:
-        {
-            PDEBUG << "Disconnected " << event->getSenderAddress();
-            remove(event->getSenderAddress());
-
-            // TODO: Notify user application
-        }
-        break;
-    case NetworkEvent::RECEIVED_MESSAGE:
-        {
-            // TODO: Create differnt kinds of events
-
-            PDEBUG << "Got network event, forwarding";
-
-            // Must create a new event, because the one we got here is "used up"
-            AutoPointer<Event> e = event->clone();
-            d->eventLoop->postEvent(e.release());
-        }
-        break;
-    }
 }
 
 } // namespace Pieces

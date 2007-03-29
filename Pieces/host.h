@@ -43,9 +43,6 @@ public:
 
     void quit();
 
-    bool isAcceptingConnections() const;
-    void setAcceptingConnections(bool v);
-
 protected:
     virtual void handle(Event* event);
 

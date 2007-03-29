@@ -36,7 +36,7 @@ public:
     /**
      * Create event-loop object.
      */
-    EventLoop(EventHandler* handler);
+    EventLoop();
 
     /**
      * Destructor.
@@ -57,7 +57,7 @@ public:
      *
      * This function must only be called from one thread.
      */
-    void exec();
+    void exec(EventHandler* handler);
 
     /**
      * Quit the event-loop.
@@ -84,7 +84,6 @@ public:
 private:
     DISABLE_COPY(EventLoop);
 
-    EventHandler* m_handler;
     EventQueue* m_queue;
 };
 
