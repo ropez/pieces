@@ -1,6 +1,8 @@
 
 #include "Pieces/TCPConnection"
 #include "Pieces/TCPSocket"
+#include "Pieces/Message"
+#include "Pieces/MessageQueue"
 #include "Pieces/TCPReceiverThread"
 #include "Pieces/DataStream"
 #include "Pieces/AutoPointer"
@@ -16,12 +18,15 @@ public:
 
     AutoPointer<TCPSocket> socket;
     AutoPointer<TCPReceiverThread> receiver;
+
+    MessageQueue queue;
 };
 
 
 TCPConnectionPrivate::TCPConnectionPrivate()
 : socket(0)
 , receiver(0)
+, queue()
 {
 }
 
@@ -61,10 +66,12 @@ void TCPConnection::stopReceiving()
 
 void TCPConnection::sendMessage(int messageType, const ByteArray& data)
 {
+    d->queue.push(Message(messageType, data));
+
     DataStream ds(d->socket.get());
 
-    // TODO: Maybe use a MessageHeader class?
-    ds << messageType << data << flush;
+    // TODO: Use a different thread to pop and send
+    ds << d->queue.pop() << flush;
 }
 
 } // namespace Pieces
