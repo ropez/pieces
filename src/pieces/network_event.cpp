@@ -9,9 +9,8 @@ namespace Pieces
 NetworkEvent::NetworkEvent(Type type, const SocketAddress& sender)
 : Event()
 , m_type(type)
-, m_messageType(NO_MESSAGE_TYPE)
-, m_data()
 , m_sender(sender)
+, m_message()
 {
 }
 
@@ -20,8 +19,7 @@ AutoPointer<Event> NetworkEvent::clone() const
 {
     AutoPointer<NetworkEvent> event(new NetworkEvent(type(), getSenderAddress()));
 
-    event->setMessageType(getMessageType());
-    event->setData(getData());
+    event->setMessage(getMessage());
 
     return AutoPointer<Event>(event);
 }
@@ -45,27 +43,15 @@ SocketAddress NetworkEvent::getSenderAddress() const
 }
 
 
-void NetworkEvent::setMessageType(int messageType)
+void NetworkEvent::setMessage(const Message& message)
 {
-    m_messageType = messageType;
+    m_message = message;
 }
 
 
-int NetworkEvent::getMessageType() const
+Message NetworkEvent::getMessage() const
 {
-    return m_messageType;
-}
-
-
-void NetworkEvent::setData(const ByteArray& data)
-{
-    m_data = data;
-}
-
-
-ByteArray NetworkEvent::getData() const
-{
-    return m_data;
+    return m_message;
 }
 
 

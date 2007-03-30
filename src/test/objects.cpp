@@ -273,10 +273,12 @@ protected:
     {
         if (event->type() == NetworkEvent::RECEIVED_MESSAGE)
         {
-            if (event->getMessageType() == GAMEDATA_CONNECT)
+            Message message = event->getMessage();
+
+            if (message.getMessageType() == GAMEDATA_CONNECT)
             {
                 // TODO: Move this functionality to an internal event handler
-                BufferStream s(event->getData());
+                BufferStream s(message.getMessageData());
 
                 port_t port;
                 s >> port;
@@ -348,9 +350,11 @@ protected:
     {
         if (event->type() == NetworkEvent::RECEIVED_MESSAGE)
         {
-            if (event->getMessageType() == OBJECT_CREATE)
+            Message message = event->getMessage();
+
+            if (message.getMessageType() == OBJECT_CREATE)
             {
-                BufferStream s(event->getData());
+                BufferStream s(message.getMessageData());
 
                 int objectType;
                 s >> objectType;

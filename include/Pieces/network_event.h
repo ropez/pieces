@@ -4,6 +4,8 @@
 
 #include "Pieces/Event"
 #include "Pieces/SocketAddress"
+#include "Pieces/Message"
+
 
 namespace Pieces
 {
@@ -12,9 +14,6 @@ namespace Pieces
 /**
  * \class NetworkEvent
  * \brief A network-specific event.
- *
- *
- *
  *
  * \author Tord Heimdal
  */
@@ -35,6 +34,8 @@ public:
 
     /**
      * Default message types.
+     *
+     * TODO: Move to Message
      */
     enum MessageType
     {
@@ -59,22 +60,19 @@ public:
      */
     SocketAddress getSenderAddress() const;
 
-    void setMessageType(int messageType);
+    void setMessage(const Message& message);
 
-    int getMessageType() const;
-
-    void setData(const ByteArray& data);
-    ByteArray getData() const;
+    Message getMessage() const;
 
 protected:
     virtual ~NetworkEvent();
 
 private:
     DISABLE_COPY(NetworkEvent);
+
     Type m_type;
-    int m_messageType;
-    ByteArray m_data;
     SocketAddress m_sender;
+    Message m_message;
 };
 
 } // namespace Pieces

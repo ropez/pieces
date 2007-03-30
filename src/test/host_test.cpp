@@ -23,12 +23,12 @@ protected:
 
         try
         {
-            BufferStream bf(event->getData());
+            BufferStream bf(event->getMessage().getMessageData());
 
             std::string str;
             bf >> str;
             PDEBUG << "From: " << event->getSenderAddress();
-            PDEBUG << "Message type: " << event->getMessageType();
+            PDEBUG << "Message type: " << event->getMessage().getMessageType();
             PDEBUG << "Data (as string): " << str;
         }
         catch (const IOException& e)

@@ -82,20 +82,16 @@ void TCPReceiverThread::run()
         {
             try
             {
-                int messageType = NetworkEvent::NO_MESSAGE_TYPE;
-                ByteArray data;
-
+                Message message;
                 {
                     // Release lock while blocked (most of the time)
                     ReverseScopedLock<Mutex> unlock(d->mutex);
 
-                    ds >> messageType;
-                    ds >> data;
+                    ds >> message;
                 }
 
                 AutoPointer<NetworkEvent> e(new NetworkEvent(NetworkEvent::RECEIVED_MESSAGE, d->socket->getPeerAddress()));
-                e->setMessageType(messageType);
-                e->setData(data);
+                e->setMessage(message);
                 d->eventLoop->postEvent(e.release());
             }
             catch (const TimeoutException&)
