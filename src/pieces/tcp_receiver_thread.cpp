@@ -5,7 +5,6 @@
 #include "Pieces/TCPSocket"
 #include "Pieces/EventLoop"
 #include "Pieces/Exception"
-#include "Pieces/TimeoutException"
 #include "Pieces/DisconnectedException"
 
 #include "OpenThreads/Mutex"
@@ -80,24 +79,17 @@ void TCPReceiverThread::run()
 
         for (;;)
         {
-            try
+            Message message;
             {
-                Message message;
-                {
-                    // Release lock while blocked (most of the time)
-                    ReverseScopedLock<Mutex> unlock(d->mutex);
+                // Release lock while blocked (most of the time)
+                ReverseScopedLock<Mutex> unlock(d->mutex);
 
-                    ds >> message;
-                }
+                ds >> message;
+            }
 
-                AutoPointer<NetworkEvent> e(new NetworkEvent(NetworkEvent::RECEIVED_MESSAGE, d->socket->getPeerAddress()));
-                e->setMessage(message);
-                d->eventLoop->postEvent(e.release());
-            }
-            catch (const TimeoutException&)
-            {
-                // Ignore, try again
-            }
+            AutoPointer<NetworkEvent> e(new NetworkEvent(NetworkEvent::RECEIVED_MESSAGE, d->socket->getPeerAddress()));
+            e->setMessage(message);
+            d->eventLoop->postEvent(e.release());
         }
     }
     catch (const DisconnectedException&)
