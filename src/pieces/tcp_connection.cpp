@@ -39,7 +39,6 @@ TCPConnection::TCPConnection(TCPSocket* socket)
 : d(new TCPConnectionPrivate)
 {
     d->socket = socket;
-    d->queue = new MessageQueue;
 }
 
 
@@ -72,8 +71,10 @@ void TCPConnection::stopReceiving()
 }
 
 
-void TCPConnection::startSending()
+void TCPConnection::startSending(const std::deque<Message>& messages)
 {
+    d->queue = new MessageQueue(messages);
+
     d->sender = new TCPSenderThread(d->socket.get(), d->queue.get());
     d->sender->start();
 }
@@ -83,12 +84,18 @@ void TCPConnection::stopSending()
 {
     // Stop and delete sender thread by replacing auto-pointer
     d->sender = 0;
+
+    // Delete pending messages
+    d->queue = 0;
 }
 
 
 void TCPConnection::sendMessage(const Message& message)
 {
-    d->queue->push(message);
+    if (d->queue.isValid())
+    {
+        d->queue->push(message);
+    }
 }
 
 } // namespace Pieces

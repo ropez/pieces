@@ -18,6 +18,7 @@ class MessageQueuePrivate;
  *
  * \author Robin Pedersen
  */
+
 class MessageQueue
 {
 public:

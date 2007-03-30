@@ -3,6 +3,7 @@
 #define PIECES_TCP_CONNECTION_H
 
 #include "Pieces/global"
+#include <deque>
 
 
 namespace Pieces
@@ -44,10 +45,21 @@ public:
 
     void stopReceiving();
 
-    void startSending();
+    /**
+     * Start sending messages, starting with the given messages.
+     */
+    void startSending(const std::deque<Message>& messages);
 
+    /**
+     * Stop sending messages, and delete all pending messages.
+     */
     void stopSending();
 
+    /**
+     * Add a message to sending queue.
+     *
+     * If sending is not started, this function does nothing.
+     */
     void sendMessage(const Message& message);
 
 private:

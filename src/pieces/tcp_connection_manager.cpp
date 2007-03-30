@@ -29,6 +29,10 @@ public:
     typedef std::map<SocketAddress, TCPConnection*> map_t;
     map_t connections;
 
+    // History of messages that has been sent.
+    // These are all sent to peers that connects to the host.
+    std::deque<Message> messages;
+
     AutoPointer<TCPListenerThread> listener;
 };
 
@@ -36,6 +40,7 @@ public:
 TCPConnectionManagerPrivate::TCPConnectionManagerPrivate()
 : eventLoop(0)
 , connections()
+, messages()
 , listener(0)
 {
 }
@@ -98,6 +103,9 @@ void TCPConnectionManager::sendMessage(const Message& message)
 
         conn->sendMessage(message);
     }
+
+    // Add to buffer, so that future connections get the message
+    d->messages.push_back(message);
 }
 
 
@@ -122,7 +130,7 @@ void TCPConnectionManager::add(TCPConnection* connection)
 
     // Start receiving network events on the event loop
     conn->startReceiving(d->eventLoop);
-    conn->startSending();
+    conn->startSending(d->messages);
 
     d->connections[address] = conn.release();
 }
