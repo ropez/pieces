@@ -218,6 +218,7 @@ public:
     , car(0)
     , m_timer(0)
     {
+        startGame();
     }
 
     GameObjectDB* db()
@@ -286,8 +287,6 @@ protected:
                 SocketAddress addr(event->getSenderAddress().getInetAddress(), port);
                 PINFO << "Adding " << addr << " to receivers list";
                 sender.addReceiver(addr);
-
-                startGame();
             }
         }
     }
