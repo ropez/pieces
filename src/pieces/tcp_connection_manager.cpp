@@ -122,6 +122,7 @@ void TCPConnectionManager::add(TCPConnection* connection)
 
     // Start receiving network events on the event loop
     conn->startReceiving(d->eventLoop);
+    conn->startSending();
 
     d->connections[address] = conn.release();
 }

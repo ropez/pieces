@@ -44,6 +44,10 @@ public:
 
     void stopReceiving();
 
+    void startSending();
+
+    void stopSending();
+
     void sendMessage(const Message& message);
 
 private:
