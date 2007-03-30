@@ -19,14 +19,14 @@ public:
     AutoPointer<TCPSocket> socket;
     AutoPointer<TCPReceiverThread> receiver;
 
-    MessageQueue queue;
+    AutoPointer<MessageQueue> queue;
 };
 
 
 TCPConnectionPrivate::TCPConnectionPrivate()
 : socket(0)
 , receiver(0)
-, queue()
+, queue(0)
 {
 }
 
@@ -35,6 +35,7 @@ TCPConnection::TCPConnection(TCPSocket* socket)
 : d(new TCPConnectionPrivate)
 {
     d->socket = socket;
+    d->queue = new MessageQueue;
 }
 
 
@@ -64,14 +65,14 @@ void TCPConnection::stopReceiving()
 }
 
 
-void TCPConnection::sendMessage(int messageType, const ByteArray& data)
+void TCPConnection::sendMessage(const Message& message)
 {
-    d->queue.push(Message(messageType, data));
+    d->queue->push(message);
 
     DataStream ds(d->socket.get());
 
     // TODO: Use a different thread to pop and send
-    ds << d->queue.pop() << flush;
+    ds << d->queue->pop() << flush;
 }
 
 } // namespace Pieces

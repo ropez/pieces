@@ -9,6 +9,7 @@ namespace Pieces
 {
 class TCPSocket;
 class SocketAddress;
+class Message;
 class EventLoop;
 class ByteArray;
 class TCPConnectionPrivate;
@@ -43,7 +44,7 @@ public:
 
     void stopReceiving();
 
-    void sendMessage(int messageType, const ByteArray& data);
+    void sendMessage(const Message& message);
 
 private:
     DISABLE_COPY(TCPConnection);

@@ -9,6 +9,7 @@ namespace Pieces
 {
 class TCPConnection;
 class SocketAddress;
+class Message;
 class EventLoop;
 class ByteArray;
 
@@ -58,7 +59,7 @@ public:
     /**
      * Send a message on all connections.
      */
-    virtual void sendMessage(int messageType, const ByteArray& data) = 0;
+    virtual void sendMessage(const Message& message) = 0;
 
     /**
      * Close and delete the connection to the given \a address.

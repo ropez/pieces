@@ -3,6 +3,7 @@
 #include "Pieces/Peer"
 
 #include "Pieces/ConnectionManager"
+#include "Pieces/Message"
 
 #include "Pieces/Timer"
 #include "Pieces/TimerEvent"
@@ -54,7 +55,7 @@ protected:
             {
                 BufferStream s;
                 s << "Follow the white rabbit";
-                connectionManager()->sendMessage(666, s.data());
+                connectionManager()->sendMessage(Message(666, s.data()));
             }
             break;
         case ID_QUIT_PEER:

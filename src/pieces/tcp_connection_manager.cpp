@@ -4,6 +4,7 @@
 #include "Pieces/TCPSocket"
 #include "Pieces/TCPListenerThread"
 #include "Pieces/SocketAddress"
+#include "Pieces/Message"
 
 #include "Pieces/EventLoop"
 
@@ -87,7 +88,7 @@ void TCPConnectionManager::connectTo(const SocketAddress& address)
 }
 
 
-void TCPConnectionManager::sendMessage(int messageType, const ByteArray& data)
+void TCPConnectionManager::sendMessage(const Message& message)
 {
     typedef TCPConnectionManagerPrivate::map_t::iterator iterator_t;
 
@@ -95,7 +96,7 @@ void TCPConnectionManager::sendMessage(int messageType, const ByteArray& data)
     {
         TCPConnection* conn = it->second;
 
-        conn->sendMessage(messageType, data);
+        conn->sendMessage(message);
     }
 }
 

@@ -9,6 +9,7 @@
 #include "Pieces/Host"
 #include "Pieces/Peer"
 #include "Pieces/ConnectionManager"
+#include "Pieces/Message"
 #include "Pieces/GameDataReceiver"
 #include "Pieces/GameDataSender"
 
@@ -233,7 +234,7 @@ public:
             BufferStream s;
             s << MOVING_BALL << idBall;
 
-            connectionManager()->sendMessage(OBJECT_CREATE, s.data());
+            connectionManager()->sendMessage(Message(OBJECT_CREATE, s.data()));
         }
 
         {
@@ -243,7 +244,7 @@ public:
             BufferStream s;
             s << BUMPER_CAR << idCar;
 
-            connectionManager()->sendMessage(OBJECT_CREATE, s.data());
+            connectionManager()->sendMessage(Message(OBJECT_CREATE, s.data()));
         }
 
         m_timer = new Timer(0, eventLoop());
@@ -317,7 +318,7 @@ public:
 
         BufferStream s;
         s << portData;
-        connectionManager()->sendMessage(GAMEDATA_CONNECT, s.data());
+        connectionManager()->sendMessage(Message(GAMEDATA_CONNECT, s.data()));
 
         receiver->listen(portData);
     }

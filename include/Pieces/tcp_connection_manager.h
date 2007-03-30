@@ -56,7 +56,7 @@ public:
     /**
      * Send a message on all connections.
      */
-    virtual void sendMessage(int messageType, const ByteArray& data);
+    virtual void sendMessage(const Message& message);
 
     /**
      * Close the connection to the given \a address.
