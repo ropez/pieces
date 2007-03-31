@@ -279,12 +279,17 @@ class MyHost : public Host
 public:
     MyHost()
     : Host()
+    , m_sender(new GameDataSender())
     , m_db(new GameObjectDB())
-    , frameNum(0)
-    , sender()
     , m_timer(0)
+    , frameNum(0)
     {
         startGame();
+    }
+
+    GameDataSender* sender()
+    {
+        return m_sender.get();
     }
 
     GameObjectDB* db()
@@ -333,7 +338,7 @@ protected:
         FrameData frameData;
         try
         {
-            frameData = sender.getFrameData(frameNum);
+            frameData = sender()->getFrameData(frameNum);
         }
         catch (const InvalidKeyException&)
         {
@@ -341,7 +346,7 @@ protected:
         }
 
         db()->updateFrameData(frameData);
-        sender.sendFrameData(frameData);
+        sender()->sendFrameData(frameData);
 
         ++frameNum;
     }
@@ -359,18 +364,17 @@ protected:
 
                 SocketAddress addr(event->getSenderAddress().getInetAddress(), port);
                 PINFO << "Adding " << addr << " to receivers list";
-                sender.addReceiver(addr);
+                sender()->addReceiver(addr);
             }
         }
     }
 
 private:
+    AutoPointer<GameDataSender> m_sender;
     AutoPointer<GameObjectDB> m_db;
+    AutoPointer<Timer> m_timer;
 
     framenum_t frameNum;
-    GameDataSender sender;
-
-    AutoPointer<Timer> m_timer;
 };
 
 
@@ -380,7 +384,7 @@ class MyPeer : public Peer
 public:
     MyPeer()
     : Peer()
-    , receiver(new GameDataReceiver(eventLoop()))
+    , m_receiver(new GameDataReceiver(eventLoop()))
     , m_db(new GameObjectDB())
     {
         connectTo(SocketAddress(InetAddress::getHostByName("localhost"), portMessage));
@@ -393,7 +397,13 @@ public:
 
         connectionManager()->sendMessage(message);
 
-        receiver->listen(portData);
+        receiver()->listen(portData);
+    }
+
+
+    GameDataReceiver* receiver()
+    {
+        return m_receiver.get();
     }
 
 
@@ -450,7 +460,7 @@ protected:
 
 private:
 
-    AutoPointer<GameDataReceiver> receiver;
+    AutoPointer<GameDataReceiver> m_receiver;
     AutoPointer<GameObjectDB> m_db;
 };
 
