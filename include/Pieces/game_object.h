@@ -42,13 +42,6 @@ public:
     virtual void decode(DataStream& ds);
 
     /**
-     * Custom user action.
-     */
-    void setAction(int actionType, GameObjectAction* action);
-
-    void applyAction(int actionType, framenum_t frameNum);
-
-    /**
      * Call encode(), and insert the resulting data into \a frame.
      */
     void update(FrameData& frame) const;
@@ -57,6 +50,27 @@ public:
      * Extract object data for this object from \a frame, and call decode().
      */
     void apply(const FrameData& frame);
+
+    /**
+     * Custom user action.
+     *
+     * This function adds a reference to the \a action object. If the reference
+     * counter becomes 0 when the function is replaced or the game object
+     * deleted, the action function is deleted.
+     *
+     * The \a action function should not contain a reference pointer to this
+     * game object, but a normal pointer is OK.
+     */
+    void setAction(int actionType, GameObjectAction* action);
+
+    /**
+     * Call the action function assiciated with this object for the given
+     * \a actionType.
+     *
+     * If no action is set for this action-type, it throws an InvalidKeyException.
+     * If a null-pointer is set for this action, this function does nothing.
+     */
+    void applyAction(int actionType, framenum_t frameNum);
 
 private:
     DISABLE_COPY(GameObject);

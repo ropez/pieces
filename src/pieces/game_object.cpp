@@ -44,29 +44,6 @@ void GameObject::decode(DataStream&)
 }
 
 
-void GameObject::setAction(int actionType, GameObjectAction* action)
-{
-    d->actions[actionType] = action;
-}
-
-
-void GameObject::applyAction(int actionType, framenum_t frameNum)
-{
-    GameObjectPrivate::action_map_t::iterator it = d->actions.find(actionType);
-
-    if (it == d->actions.end())
-        throw InvalidKeyException();
-
-    if (it->second.isValid())
-    {
-        GameObjectAction* function = it->second.get();
-
-        // Call action
-        (*function)(frameNum);
-    }
-}
-
-
 void GameObject::update(FrameData& frame) const
 {
     // Encode object data
@@ -98,6 +75,29 @@ void GameObject::apply(const FrameData& frame)
 
     // Decode object data from stream
     decode(s);
+}
+
+
+void GameObject::setAction(int actionType, GameObjectAction* action)
+{
+    d->actions[actionType] = action;
+}
+
+
+void GameObject::applyAction(int actionType, framenum_t frameNum)
+{
+    GameObjectPrivate::action_map_t::iterator it = d->actions.find(actionType);
+
+    if (it == d->actions.end())
+        throw InvalidKeyException();
+
+    if (it->second.isValid())
+    {
+        GameObjectAction* function = it->second.get();
+
+        // Call action
+        (*function)(frameNum);
+    }
 }
 
 } // namespace Pieces
