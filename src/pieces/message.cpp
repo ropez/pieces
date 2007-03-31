@@ -16,11 +16,11 @@ Message::~Message()
 }
 
 
-Message::Message(int messageType, const PropertyList& messageData)
+Message::Message(int messageType, const PropertyList& properties)
 : d(new Data)
 {
     d->type = messageType;
-    d->data = messageData;
+    d->properties = properties;
 }
 
 
@@ -40,7 +40,7 @@ Message& Message::operator=(const Message& other)
 void Message::clear()
 {
     d->type = NO_MESSAGE_TYPE;
-    d->data.clear();
+    d->properties.clear();
 }
 
 
@@ -56,22 +56,22 @@ int Message::getMessageType() const
 }
 
 
-void Message::setMessageData(const PropertyList& messageData)
+void Message::setProperties(const PropertyList& properties)
 {
-    d->data = messageData;
+    d->properties = properties;
 }
 
 
-PropertyList Message::getMessageData() const
+PropertyList Message::getProperties() const
 {
-    return d->data;
+    return d->properties;
 }
 
 
 Message::Data::Data()
 : SharedData()
 , type(NO_MESSAGE_TYPE)
-, data()
+, properties()
 {
 }
 
@@ -79,7 +79,7 @@ Message::Data::Data()
 Message::Data::Data(const Data& other)
 : SharedData()
 , type(other.type)
-, data(other.data)
+, properties(other.properties)
 {
 }
 
@@ -87,7 +87,7 @@ Message::Data::Data(const Data& other)
 Message::Data& Message::Data::operator=(const Data& other)
 {
     type = other.type;
-    data = other.data;
+    properties = other.properties;
 
     return *this;
 }
@@ -95,7 +95,7 @@ Message::Data& Message::Data::operator=(const Data& other)
 
 DataStream& operator<<(DataStream& ds, const Message& msg)
 {
-    return ds << msg.getMessageType() << msg.getMessageData();
+    return ds << msg.getMessageType() << msg.getProperties();
 }
 
 
@@ -107,9 +107,9 @@ DataStream& operator>>(DataStream& ds, Message& msg)
     ds >> messageType;
     msg.setMessageType(messageType);
 
-    PropertyList messageData;
-    ds >> messageData;
-    msg.setMessageData(messageData);
+    PropertyList properties;
+    ds >> properties;
+    msg.setProperties(properties);
 
     return ds;
 }

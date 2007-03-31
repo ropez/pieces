@@ -24,7 +24,7 @@ protected:
         try
         {
             Message message = event->getMessage();
-            PropertyList properties = message.getMessageData();
+            PropertyList properties = message.getProperties();
 
             PDEBUG << "From: " << event->getSenderAddress();
             PDEBUG << "Message type: " << message.getMessageType();

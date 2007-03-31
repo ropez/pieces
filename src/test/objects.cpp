@@ -271,7 +271,7 @@ protected:
             if (message.getMessageType() == GAMEDATA_CONNECT)
             {
                 // TODO: Move this functionality to an internal event handler
-                PropertyList properties = message.getMessageData();
+                PropertyList properties = message.getProperties();
 
                 port_t port = properties.get<port_t>(PR_PORT);
 
@@ -345,7 +345,7 @@ protected:
 
             if (message.getMessageType() == OBJECT_CREATE)
             {
-                PropertyList properties = message.getMessageData();
+                PropertyList properties = message.getProperties();
 
                 int objectType = properties.get<int>(PR_OBJECT_TYPE);
                 objectid_t objectId = properties.get<objectid_t>(PR_OBJECT_ID);

@@ -24,21 +24,21 @@ public:
     Message();
     ~Message();
 
-    Message(int messageType, const PropertyList& messageData);
+    Message(int messageType, const PropertyList& properties);
 
     Message(const Message& other);
     Message& operator=(const Message& other);
 
     /**
-     * Set type to 0 and clear data.
+     * Set type to NO_MESSAGE_TYPE and remove all properties.
      */
     void clear();
 
     void setMessageType(int messageType);
     int getMessageType() const;
 
-    void setMessageData(const PropertyList& messageData);
-    PropertyList getMessageData() const;
+    void setProperties(const PropertyList& properties);
+    PropertyList getProperties() const;
 
 private:
     class Data : public SharedData
@@ -50,7 +50,7 @@ private:
         Data& operator=(const Data& other);
 
         int type;
-        PropertyList data;
+        PropertyList properties;
     };
 
     SharedDataPointer<Data> d;
