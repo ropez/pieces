@@ -33,16 +33,6 @@ public:
     };
 
     /**
-     * Default message types.
-     *
-     * TODO: Move to Message
-     */
-    enum MessageType
-    {
-        NO_MESSAGE_TYPE
-    };
-
-    /**
      * Creates an event of the given type, from the given sender.
      */
     NetworkEvent(Type type, const SocketAddress& sender);

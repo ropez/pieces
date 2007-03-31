@@ -23,13 +23,12 @@ protected:
 
         try
         {
-            BufferStream bf(event->getMessage().getMessageData());
+            Message message = event->getMessage();
+            PropertyList properties = message.getMessageData();
 
-            std::string str;
-            bf >> str;
             PDEBUG << "From: " << event->getSenderAddress();
-            PDEBUG << "Message type: " << event->getMessage().getMessageType();
-            PDEBUG << "Data (as string): " << str;
+            PDEBUG << "Message type: " << message.getMessageType();
+            PDEBUG << "Data (as string): " << properties.get<std::string>(PR_TEXT);
         }
         catch (const IOException& e)
         {

@@ -19,6 +19,37 @@ typedef unsigned long framenum_t;
 // Port number
 typedef unsigned short port_t;
 
+
+/**
+ * \enum MessageType
+ * \brief Predefined message types.
+ *
+ * \author Robin Pedersen
+ */
+enum MessageType
+{
+    NO_MESSAGE_TYPE,
+
+    OBJECT_CREATE,
+    OBJECT_REMOVE,
+
+    GAMEDATA_CONNECT,
+    GAMEDATA_DISCONNECT
+};
+
+
+enum MessageProperty
+{
+    NO_MESSAGE_PROPERTY,
+
+    PR_TEXT,
+
+    PR_OBJECT_TYPE,
+    PR_OBJECT_ID,
+
+    PR_PORT
+};
+
 } // namespace Pieces
 
 #endif // PIECES_GLOBAL_H

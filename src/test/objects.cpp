@@ -38,16 +38,6 @@ AutoPointer<Host> host;
 AutoPointer<Peer> peer;
 
 
-enum MessageType
-{
-    OBJECT_CREATE,
-    OBJECT_REMOVE,
-
-    GAMEDATA_CONNECT,
-    GAMEDATA_DISCONNECT
-};
-
-
 enum ObjectType
 {
     MOVING_BALL,
@@ -232,20 +222,22 @@ public:
             ball = new MovingBall(idBall);
             db()->insert(idBall, ball.get());
 
-            BufferStream s;
-            s << MOVING_BALL << idBall;
+            PropertyList properties;
+            properties.set(PR_OBJECT_TYPE, MOVING_BALL);
+            properties.set(PR_OBJECT_ID, idBall);
 
-            connectionManager()->sendMessage(Message(OBJECT_CREATE, s.data()));
+            connectionManager()->sendMessage(Message(OBJECT_CREATE, properties));
         }
 
         {
             car = new HostBumperCar(idCar);
             db()->insert(idCar, car.get());
 
-            BufferStream s;
-            s << BUMPER_CAR << idCar;
+            PropertyList properties;
+            properties.set(PR_OBJECT_TYPE, BUMPER_CAR);
+            properties.set(PR_OBJECT_ID, idCar);
 
-            connectionManager()->sendMessage(Message(OBJECT_CREATE, s.data()));
+            connectionManager()->sendMessage(Message(OBJECT_CREATE, properties));
         }
 
         m_timer = new Timer(0, eventLoop());
@@ -279,10 +271,9 @@ protected:
             if (message.getMessageType() == GAMEDATA_CONNECT)
             {
                 // TODO: Move this functionality to an internal event handler
-                BufferStream s(message.getMessageData());
+                PropertyList properties = message.getMessageData();
 
-                port_t port;
-                s >> port;
+                port_t port = properties.get<port_t>(PR_PORT);
 
                 SocketAddress addr(event->getSenderAddress().getInetAddress(), port);
                 PINFO << "Adding " << addr << " to receivers list";
@@ -317,9 +308,10 @@ public:
         // Connect to data channel
         const port_t portData = 3333;
 
-        BufferStream s;
-        s << portData;
-        connectionManager()->sendMessage(Message(GAMEDATA_CONNECT, s.data()));
+        PropertyList properties;
+        properties.set(PR_PORT, portData);
+
+        connectionManager()->sendMessage(Message(GAMEDATA_CONNECT, properties));
 
         receiver->listen(portData);
     }
@@ -353,13 +345,10 @@ protected:
 
             if (message.getMessageType() == OBJECT_CREATE)
             {
-                BufferStream s(message.getMessageData());
+                PropertyList properties = message.getMessageData();
 
-                int objectType;
-                s >> objectType;
-
-                objectid_t objectId;
-                s >> objectId;
+                int objectType = properties.get<int>(PR_OBJECT_TYPE);
+                objectid_t objectId = properties.get<objectid_t>(PR_OBJECT_ID);
 
                 ReferencePointer<GameObject> obj;
                 switch (objectType)

@@ -4,7 +4,7 @@
 
 #include "Pieces/SharedData"
 #include "Pieces/SharedDataPointer"
-#include "Pieces/ByteArray"
+#include "Pieces/PropertyList"
 #include "Pieces/DataStream"
 
 
@@ -24,7 +24,7 @@ public:
     Message();
     ~Message();
 
-    Message(int messageType, const ByteArray& messageData);
+    Message(int messageType, const PropertyList& messageData);
 
     Message(const Message& other);
     Message& operator=(const Message& other);
@@ -37,8 +37,8 @@ public:
     void setMessageType(int messageType);
     int getMessageType() const;
 
-    void setMessageData(const ByteArray& messageData);
-    ByteArray getMessageData() const;
+    void setMessageData(const PropertyList& messageData);
+    PropertyList getMessageData() const;
 
 private:
     class Data : public SharedData
@@ -50,7 +50,7 @@ private:
         Data& operator=(const Data& other);
 
         int type;
-        ByteArray data;
+        PropertyList data;
     };
 
     SharedDataPointer<Data> d;

@@ -16,7 +16,7 @@ Message::~Message()
 }
 
 
-Message::Message(int messageType, const ByteArray& messageData)
+Message::Message(int messageType, const PropertyList& messageData)
 : d(new Data)
 {
     d->type = messageType;
@@ -39,7 +39,7 @@ Message& Message::operator=(const Message& other)
 
 void Message::clear()
 {
-    d->type = 0;
+    d->type = NO_MESSAGE_TYPE;
     d->data.clear();
 }
 
@@ -56,13 +56,13 @@ int Message::getMessageType() const
 }
 
 
-void Message::setMessageData(const ByteArray& messageData)
+void Message::setMessageData(const PropertyList& messageData)
 {
     d->data = messageData;
 }
 
 
-ByteArray Message::getMessageData() const
+PropertyList Message::getMessageData() const
 {
     return d->data;
 }
@@ -70,7 +70,7 @@ ByteArray Message::getMessageData() const
 
 Message::Data::Data()
 : SharedData()
-, type(0)
+, type(NO_MESSAGE_TYPE)
 , data()
 {
 }
@@ -103,11 +103,11 @@ DataStream& operator>>(DataStream& ds, Message& msg)
 {
     msg.clear();
 
-    int messageType = 0;
+    int messageType = NO_MESSAGE_TYPE;
     ds >> messageType;
     msg.setMessageType(messageType);
 
-    ByteArray messageData;
+    PropertyList messageData;
     ds >> messageData;
     msg.setMessageData(messageData);
 

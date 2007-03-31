@@ -53,9 +53,10 @@ protected:
         {
         case ID_REPEATING:
             {
-                BufferStream s;
-                s << "Follow the white rabbit";
-                connectionManager()->sendMessage(Message(666, s.data()));
+                PropertyList properties;
+                properties.set<std::string>(PR_TEXT, "Follow the white rabbit");
+
+                connectionManager()->sendMessage(Message(666, properties));
             }
             break;
         case ID_QUIT_PEER:
