@@ -3,6 +3,7 @@
 #include "Pieces/Debug"
 
 #include "Pieces/IOException"
+#include "Pieces/InvalidKeyException"
 
 #include "Pieces/Application"
 
@@ -255,7 +256,16 @@ protected:
         car->speed += 0.1;
         car->speed *= 2.5;
 
-        FrameData frameData = sender.getFrameData(frame);
+        FrameData frameData;
+        try
+        {
+            frameData = sender.getFrameData(frame);
+        }
+        catch (const InvalidKeyException&)
+        {
+            frameData = FrameData();
+        }
+
         db()->update(frameData);
         sender.sendFrameData(frameData);
 

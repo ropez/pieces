@@ -10,6 +10,7 @@
 
 #include "Pieces/AutoPointer"
 #include "Pieces/Exception"
+#include "Pieces/InvalidKeyException"
 #include "Pieces/Debug"
 
 #include "OpenThreads/Thread"
@@ -142,14 +143,14 @@ void TCPConnectionManager::remove(const SocketAddress& address)
 
     iterator_t it = d->connections.find(address);
 
-    if (it != d->connections.end())
-    {
-        AutoPointer<TCPConnection> conn(it->second);
-        d->connections.erase(it);
+    if (it == d->connections.end())
+        throw InvalidKeyException("TCPConnectionManager::remove", "Address not found");
 
-        // Connection is automatically deleted at the end of this scope.
-        // Can do some final operations here, like sending goodbye message.
-    }
+    AutoPointer<TCPConnection> conn(it->second);
+    d->connections.erase(it);
+
+    // Connection is automatically deleted at the end of this scope.
+    // Can do some final operations here, like sending goodbye message.
 }
 
 } // namespace Pieces

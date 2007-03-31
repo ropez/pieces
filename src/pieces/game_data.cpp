@@ -1,5 +1,6 @@
 
 #include "Pieces/GameData"
+#include "Pieces/InvalidKeyException"
 
 
 namespace Pieces
@@ -24,7 +25,7 @@ FrameData GameData::getFrameData(framenum_t frameNum) const
     map_t::const_iterator it = d->frameData.find(frameNum);
 
     if (it == d->frameData.end())
-        return FrameData();
+        throw InvalidKeyException("GameData::getFrameData", "Frame not found");
 
     return it->second;
 }

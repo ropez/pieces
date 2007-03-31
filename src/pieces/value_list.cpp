@@ -1,6 +1,7 @@
 #include "Pieces/ValueList"
 #include "Pieces/DataStream"
 #include "Pieces/BufferStream"
+#include "Pieces/InvalidKeyException"
 
 #include <iostream>
 #include <sstream>
@@ -62,6 +63,9 @@ ValueList& ValueList::addValue(const ByteArray& value)
 
 ByteArray ValueList::getValue(int index) const
 {
+    if (index < 0 || index >= size())
+        throw InvalidKeyException("ValueList::getValue", "Invalid index");
+
     return d->values[index];
 }
 

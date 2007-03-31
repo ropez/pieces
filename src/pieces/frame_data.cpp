@@ -1,6 +1,7 @@
 
 #include "Pieces/FrameData"
 #include "Pieces/DataStream"
+#include "Pieces/InvalidKeyException"
 
 
 namespace Pieces
@@ -49,7 +50,7 @@ ByteArray FrameData::getObjectData(objectid_t objectId) const
     map_t::const_iterator it = d->objectData.find(objectId);
 
     if (it == d->objectData.end())
-        return ByteArray();
+        throw InvalidKeyException("FrameData::getObjectData", "Object not found");
 
     return it->second;
 }

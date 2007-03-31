@@ -2,6 +2,7 @@
 #include "Pieces/GameObject"
 #include "Pieces/BufferStream"
 #include "Pieces/FrameData"
+#include "Pieces/InvalidKeyException"
 
 
 namespace Pieces
@@ -39,8 +40,18 @@ void GameObject::update(FrameData& frame) const
     BufferStream s;
     encode(s);
 
+    ByteArray oldData;
+    try
+    {
+        oldData = frame.getObjectData(getObjectId());
+    }
+    catch (const InvalidKeyException&)
+    {
+        oldData = ByteArray();
+    }
+
     // Avoid replacing equal data, to maximize effect of implicit sharing
-    if (frame.getObjectData(getObjectId()) != s.data())
+    if (s.data() != oldData)
     {
         frame.setObjectData(getObjectId(), s.data());
     }
