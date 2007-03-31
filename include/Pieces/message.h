@@ -24,6 +24,7 @@ public:
     Message();
     ~Message();
 
+    explicit Message(int messageType);
     Message(int messageType, const PropertyList& properties);
 
     Message(const Message& other);
@@ -39,6 +40,32 @@ public:
 
     void setProperties(const PropertyList& properties);
     PropertyList getProperties() const;
+
+
+    /**
+     * Add or update a property, converted from T.
+     *
+     * Equivalent to:
+     * \code
+     * PropertyList p = getProperties();
+     * p.set<T>(property, value);
+     * setProperties(p);
+     * \endcode
+     */
+    template<typename T>
+    void set(int property, const T& value);
+
+    /**
+     * Get a property value, converted to T.
+     *
+     * Equivalent to:
+     * \code
+     * PropertyList p = getProperties();
+     * p.get<T>(property, defval);
+     * \endcode
+     */
+    template<typename T>
+    T get(int property, const T& defval = T()) const;
 
 private:
     class Data : public SharedData
@@ -58,6 +85,19 @@ private:
 
 DataStream& operator<<(DataStream& ds, const Message& msg);
 DataStream& operator>>(DataStream& ds, Message& msg);
+
+
+template<typename T>
+void Message::set(int property, const T& value)
+{
+    d->properties.set<T>(property, value);
+}
+
+template<typename T>
+T Message::get(int property, const T& defval) const
+{
+    return d->properties.get<T>(property, defval);
+}
 
 } // namespace Pieces
 

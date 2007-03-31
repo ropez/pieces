@@ -222,22 +222,22 @@ public:
             ball = new MovingBall(idBall);
             db()->insert(idBall, ball.get());
 
-            PropertyList properties;
-            properties.set(PR_OBJECT_TYPE, MOVING_BALL);
-            properties.set(PR_OBJECT_ID, idBall);
+            Message message(OBJECT_CREATE);
+            message.set(PR_OBJECT_TYPE, MOVING_BALL);
+            message.set(PR_OBJECT_ID, idBall);
 
-            connectionManager()->sendMessage(Message(OBJECT_CREATE, properties));
+            connectionManager()->sendMessage(message);
         }
 
         {
             car = new HostBumperCar(idCar);
             db()->insert(idCar, car.get());
 
-            PropertyList properties;
-            properties.set(PR_OBJECT_TYPE, BUMPER_CAR);
-            properties.set(PR_OBJECT_ID, idCar);
+            Message message(OBJECT_CREATE);
+            message.set(PR_OBJECT_TYPE, BUMPER_CAR);
+            message.set(PR_OBJECT_ID, idCar);
 
-            connectionManager()->sendMessage(Message(OBJECT_CREATE, properties));
+            connectionManager()->sendMessage(message);
         }
 
         m_timer = new Timer(0, eventLoop());
@@ -271,9 +271,7 @@ protected:
             if (message.getMessageType() == GAMEDATA_CONNECT)
             {
                 // TODO: Move this functionality to an internal event handler
-                PropertyList properties = message.getProperties();
-
-                port_t port = properties.get<port_t>(PR_PORT);
+                port_t port = message.get<port_t>(PR_PORT);
 
                 SocketAddress addr(event->getSenderAddress().getInetAddress(), port);
                 PINFO << "Adding " << addr << " to receivers list";
@@ -308,10 +306,10 @@ public:
         // Connect to data channel
         const port_t portData = 3333;
 
-        PropertyList properties;
-        properties.set(PR_PORT, portData);
+        Message message(GAMEDATA_CONNECT);
+        message.set(PR_PORT, portData);
 
-        connectionManager()->sendMessage(Message(GAMEDATA_CONNECT, properties));
+        connectionManager()->sendMessage(message);
 
         receiver->listen(portData);
     }
@@ -345,10 +343,8 @@ protected:
 
             if (message.getMessageType() == OBJECT_CREATE)
             {
-                PropertyList properties = message.getProperties();
-
-                int objectType = properties.get<int>(PR_OBJECT_TYPE);
-                objectid_t objectId = properties.get<objectid_t>(PR_OBJECT_ID);
+                int objectType = message.get<int>(PR_OBJECT_TYPE);
+                objectid_t objectId = message.get<objectid_t>(PR_OBJECT_ID);
 
                 ReferencePointer<GameObject> obj;
                 switch (objectType)
@@ -380,18 +376,23 @@ int main(int argc, char** argv)
 {
     Application application(argc, argv);
 
-    if (app->argc() > 1 && app->arg(1) == "host")
+    try
     {
-        host = new MyHost;
-
-        host->startListening(portMessage);
-
-        host->exec();
+        if (app->argc() > 1 && app->arg(1) == "host")
+        {
+            host = new MyHost;
+            host->startListening(portMessage);
+            host->exec();
+        }
+        else
+        {
+            peer = new MyPeer;
+            peer->exec();
+        }
     }
-    else
+    catch (const Exception& e)
     {
-        peer = new MyPeer;
-        peer->exec();
+        PERROR << e;
     }
 }
 

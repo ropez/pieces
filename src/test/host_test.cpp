@@ -24,11 +24,10 @@ protected:
         try
         {
             Message message = event->getMessage();
-            PropertyList properties = message.getProperties();
 
             PDEBUG << "From: " << event->getSenderAddress();
             PDEBUG << "Message type: " << message.getMessageType();
-            PDEBUG << "Data (as string): " << properties.get<std::string>(PR_TEXT);
+            PDEBUG << "Data (as string): " << message.get<std::string>(PR_TEXT);
         }
         catch (const IOException& e)
         {

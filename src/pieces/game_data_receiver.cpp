@@ -45,15 +45,8 @@ GameDataReceiver::~GameDataReceiver()
 
 void GameDataReceiver::listen(port_t port)
 {
-    try
-    {
-        d->thread = new GameDataReceiverThread(d->eventLoop, &d->buffer, port);
-        d->thread->start();
-    }
-    catch (const IOException& e)
-    {
-        PERROR << e.getMessage();
-    }
+    d->thread = new GameDataReceiverThread(d->eventLoop, &d->buffer, port);
+    d->thread->start();
 }
 
 

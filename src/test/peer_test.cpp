@@ -53,10 +53,10 @@ protected:
         {
         case ID_REPEATING:
             {
-                PropertyList properties;
-                properties.set<std::string>(PR_TEXT, "Follow the white rabbit");
+                Message message(666);
+                message.set<std::string>(PR_TEXT, "Follow the white rabbit");
 
-                connectionManager()->sendMessage(Message(666, properties));
+                connectionManager()->sendMessage(message);
             }
             break;
         case ID_QUIT_PEER:

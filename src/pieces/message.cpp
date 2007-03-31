@@ -16,6 +16,13 @@ Message::~Message()
 }
 
 
+Message::Message(int messageType)
+: d(new Data)
+{
+    d->type = messageType;
+}
+
+
 Message::Message(int messageType, const PropertyList& properties)
 : d(new Data)
 {
