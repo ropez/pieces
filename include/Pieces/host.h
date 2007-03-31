@@ -9,7 +9,7 @@ namespace Pieces
 {
 class EventLoop;
 class ConnectionManager;
-class TimerEvent;
+class GameDataSender;
 class PeerInfo;
 class HostPrivate;
 
@@ -29,6 +29,8 @@ public:
     EventLoop* eventLoop() const;
 
     ConnectionManager* connectionManager() const;
+
+    GameDataSender* sender();
 
     /**
      * Start accepting incoming connections on the given port.

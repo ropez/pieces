@@ -279,17 +279,11 @@ class MyHost : public Host
 public:
     MyHost()
     : Host()
-    , m_sender(new GameDataSender())
     , m_db(new GameObjectDB())
     , m_timer(0)
     , frameNum(0)
     {
         startGame();
-    }
-
-    GameDataSender* sender()
-    {
-        return m_sender.get();
     }
 
     GameObjectDB* db()
@@ -370,7 +364,6 @@ protected:
     }
 
 private:
-    AutoPointer<GameDataSender> m_sender;
     AutoPointer<GameObjectDB> m_db;
     AutoPointer<Timer> m_timer;
 
@@ -384,7 +377,6 @@ class MyPeer : public Peer
 public:
     MyPeer()
     : Peer()
-    , m_receiver(new GameDataReceiver(eventLoop()))
     , m_db(new GameObjectDB())
     {
         connectTo(SocketAddress(InetAddress::getHostByName("localhost"), portMessage));
@@ -398,12 +390,6 @@ public:
         connectionManager()->sendMessage(message);
 
         receiver()->listen(portData);
-    }
-
-
-    GameDataReceiver* receiver()
-    {
-        return m_receiver.get();
     }
 
 
@@ -460,7 +446,6 @@ protected:
 
 private:
 
-    AutoPointer<GameDataReceiver> m_receiver;
     AutoPointer<GameObjectDB> m_db;
 };
 

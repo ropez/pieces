@@ -9,6 +9,7 @@ namespace Pieces
 {
 class EventLoop;
 class ConnectionManager;
+class GameDataReceiver;
 class SocketAddress;
 class PeerPrivate;
 
@@ -29,6 +30,8 @@ public:
     EventLoop* eventLoop();
 
     ConnectionManager* connectionManager() const;
+
+    GameDataReceiver* receiver();
 
     /**
      * Connects the peer to the given host.

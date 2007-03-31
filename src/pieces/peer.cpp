@@ -2,6 +2,7 @@
 #include "Pieces/Peer"
 #include "Pieces/Debug"
 #include "Pieces/EventLoop"
+#include "Pieces/GameDataReceiver"
 #include "Pieces/TCPConnectionManager"
 
 #include "NetworkEventFilter"
@@ -17,6 +18,7 @@ public:
 
     AutoPointer<EventLoop> eventLoop;
     AutoPointer<TCPConnectionManager> connectionManager;
+    AutoPointer<GameDataReceiver> receiver;
 
     AutoPointer<NetworkEventFilter> networkEventFilter;
 };
@@ -25,6 +27,7 @@ public:
 PeerPrivate::PeerPrivate()
 : eventLoop(0)
 , connectionManager(0)
+, receiver(0)
 , networkEventFilter(0)
 {
 }
@@ -55,6 +58,17 @@ EventLoop* Peer::eventLoop()
 ConnectionManager* Peer::connectionManager() const
 {
     return d->connectionManager.get();
+}
+
+
+GameDataReceiver* Peer::receiver()
+{
+    // Lazy instantiation
+    if (d->receiver.isNull())
+    {
+        d->receiver = new GameDataReceiver(eventLoop());
+    }
+    return d->receiver.get();
 }
 
 
