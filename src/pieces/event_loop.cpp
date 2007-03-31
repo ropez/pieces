@@ -2,6 +2,8 @@
 #include "Pieces/EventLoop"
 #include "Pieces/EventHandler"
 #include "Pieces/EventQueue"
+#include "Pieces/Exception"
+#include "Pieces/Debug"
 
 
 namespace Pieces
@@ -15,7 +17,6 @@ EventLoop::EventLoop()
 
 EventLoop::~EventLoop()
 {
-    quit();
     delete m_queue;
 }
 
@@ -31,8 +32,15 @@ void EventLoop::exec(EventHandler* handler)
         if (e.isNull())
             break;
 
-        // Dispatch the event to the correct event-handler function
-        e->dispatch(handler);
+        try
+        {
+            // Dispatch the event to the correct event-handler function
+            e->dispatch(handler);
+        }
+        catch (const Exception& e)
+        {
+            PERROR << "Unhandled exception in event handler: " << e;
+        }
     }
 }
 

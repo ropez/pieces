@@ -1,10 +1,4 @@
 
-#include "Pieces/BufferStream"
-#include "Pieces/Debug"
-
-#include "Pieces/IOException"
-#include "Pieces/InvalidKeyException"
-
 #include "Pieces/Application"
 
 #include "Pieces/Host"
@@ -29,6 +23,12 @@
 #include "Pieces/GameData"
 
 #include "OpenThreads/Thread"
+
+#include "Pieces/BufferStream"
+#include "Pieces/Debug"
+
+#include "Pieces/IOException"
+#include "Pieces/InvalidKeyException"
 
 #include <map>
 #include <cmath>
