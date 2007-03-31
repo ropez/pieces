@@ -24,6 +24,8 @@ public:
 
     Mutex mutex;
 
+    AutoPointer<TCPServer> server;
+
     port_t port;
     TCPConnectionManager* manager;
 };
@@ -31,6 +33,7 @@ public:
 
 TCPListenerThreadPrivate::TCPListenerThreadPrivate()
 : mutex()
+, server(0)
 , port(0)
 , manager(0)
 {
@@ -42,6 +45,9 @@ TCPListenerThread::TCPListenerThread(port_t port, TCPConnectionManager* manager)
 {
     d->port = port;
     d->manager = manager;
+
+    d->server = new TCPServer;
+    d->server->listen(d->port);
 }
 
 
@@ -73,9 +79,6 @@ void TCPListenerThread::run()
 
     try
     {
-        TCPServer server;
-        server.listen(d->port);
-
         PDEBUG << "Server listening";
 
         for (;;)
@@ -86,7 +89,7 @@ void TCPListenerThread::run()
                 // Release lock while blocked (most of the time)
                 ReverseScopedLock<Mutex> unlock(d->mutex);
 
-                s = server.accept();
+                s = d->server->accept();
             }
 
             PINFO << "Accepted connection from " << s->getPeerAddress();
