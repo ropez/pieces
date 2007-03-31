@@ -34,11 +34,45 @@ class GameObjectPrivate;
 class GameObject : public Object
 {
 public:
+
+    /**
+     * Creates a game object with the given \a objectId.
+     */
     GameObject(objectid_t objectId);
+
+    /**
+     * Virtual destructor to make sure objects are correctly deleted.
+     *
+     * When using reference pointers, it's normally never necessary to delete
+     * an object manually.
+     */
     virtual ~GameObject();
 
+    /**
+     * Encode object state onto the data stream.
+     *
+     * This function must be reimplemented in game object classes used in a
+     * host process to make it possible to transfer object data to peers.
+     *
+     * The implementation must be compatible with the corresponding decode()
+     * function.
+     *
+     * The default implementation does nothing.
+     */
     virtual void encode(DataStream& ds) const;
 
+    /**
+     * Decode object state from a data stream.
+     *
+     * This function must be reimplemented in game object classes used in a
+     * peer process to make it possible to use object data transferred from
+     * the host.
+     *
+     * The implementation must be compatible with the corresponding encode()
+     * function.
+     *
+     * The default implementation does nothing.
+     */
     virtual void decode(DataStream& ds);
 
     /**
