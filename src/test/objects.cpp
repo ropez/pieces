@@ -46,6 +46,14 @@ enum ObjectType
 };
 
 
+enum ActionType
+{
+    NO_ACTION,
+
+    DEBUG_ACTION
+};
+
+
 /**
  * Test implementation of GameObject
  */
@@ -76,15 +84,6 @@ public:
     virtual void decode(DataStream& ds)
     {
         ds >> m_posx >> m_posy >> m_diam;
-    }
-
-
-    virtual void action(framenum_t frameNum)
-    {
-        PDEBUG << "Moving ball, frame " << frameNum << ": "
-            << align(40) << "posx = " << getPosX()
-            << align(58) << "posy = " << getPosY()
-            << align(76) << "diam = " << getDiam();
     }
 
 
@@ -127,6 +126,28 @@ private:
     double m_posx;
     double m_posy;
     double m_diam;
+};
+
+
+class DebugMovingBall : public GameObjectAction
+{
+public:
+    DebugMovingBall(MovingBall* ball)
+    : GameObjectAction()
+    , m_ball(ball)
+    {
+    }
+
+    virtual void operator()(framenum_t frameNum)
+    {
+        PDEBUG << "Moving ball, frame " << frameNum << ": "
+            << align(40) << "posx = " << m_ball->getPosX()
+            << align(58) << "posy = " << m_ball->getPosY()
+            << align(76) << "diam = " << m_ball->getDiam();
+    }
+
+private:
+    MovingBall* m_ball;
 };
 
 
@@ -182,12 +203,26 @@ public:
         ds >> speed;
     }
 
-    virtual void action(framenum_t)
+    double speed;
+};
+
+
+class DebugBumperCar : public GameObjectAction
+{
+public:
+    DebugBumperCar(PeerBumperCar* car)
+    : GameObjectAction()
+    , m_car(car)
     {
-        PDEBUG << "BumberCar now running at: " << speed;
     }
 
-    double speed;
+    virtual void operator()(framenum_t)
+    {
+        PDEBUG << "BumberCar now running at: " << m_car->speed;
+    }
+
+private:
+    PeerBumperCar* m_car;
 };
 
 
@@ -341,7 +376,7 @@ protected:
 
         for (GameObjectDB::map_t::iterator it = db()->begin(); it != db()->end(); ++it)
         {
-            it->second->action(frameNum);
+            it->second->applyAction(DEBUG_ACTION, frameNum);
         }
     }
 
@@ -356,21 +391,26 @@ protected:
                 int objectType = message.get<int>(PR_OBJECT_TYPE);
                 objectid_t objectId = message.get<objectid_t>(PR_OBJECT_ID);
 
-                ReferencePointer<GameObject> obj;
                 switch (objectType)
                 {
                 case MOVING_BALL:
-                    obj = new MovingBall(objectId);
+                    {
+                        ReferencePointer<MovingBall> ball = new MovingBall(objectId);
+                        ball->setAction(DEBUG_ACTION, new DebugMovingBall(ball.get()));
+                        db()->insert(objectId, ball.get());
+                    }
                     break;
                 case BUMPER_CAR:
-                    obj = new PeerBumperCar(objectId);
+                    {
+                        ReferencePointer<PeerBumperCar> car = new PeerBumperCar(objectId);
+                        car->setAction(DEBUG_ACTION, new DebugBumperCar(car.get()));
+                        db()->insert(objectId, car.get());
+                    }
                     break;
                 default:
                     PWARNING << "Unknown object type: " << objectType;
                     return;
                 }
-
-                db()->insert(objectId, obj.get());
             }
         }
     }

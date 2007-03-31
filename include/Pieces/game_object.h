@@ -5,12 +5,23 @@
 #include "Pieces/global"
 #include "Pieces/Object"
 
+#include "Pieces/SharedData"
 
 namespace Pieces
 {
 class DataStream;
 class FrameData;
 
+
+class GameObjectAction : public SharedData
+{
+public:
+    virtual ~GameObjectAction() {};
+
+    virtual void operator()(framenum_t frameNum) = 0;
+};
+
+class GameObjectPrivate;
 
 /**
  * \class GameObject
@@ -41,11 +52,10 @@ public:
 
     /**
      * Custom user action.
-     *
-     * This function does nothing, but may be implemented by game programmers
-     * to do anything.
      */
-    virtual void action(framenum_t frameNum);
+    void setAction(int actionType, GameObjectAction* action);
+
+    void applyAction(int actionType, framenum_t frameNum);
 
     /**
      * Call encode(), and insert the resulting data into \a frame.
@@ -59,6 +69,8 @@ public:
 
 private:
     DISABLE_COPY(GameObject);
+
+    GameObjectPrivate* d;
 };
 
 } // namespace Pieces
