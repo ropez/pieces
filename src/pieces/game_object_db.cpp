@@ -52,22 +52,32 @@ GameObjectDB::ptr_t GameObjectDB::remove(map_t::iterator it)
 }
 
 
-void GameObjectDB::update(FrameData& frame) const
+void GameObjectDB::updateFrameData(FrameData& frame) const
 {
     for (map_t::const_iterator it = begin(); it != end(); ++it)
     {
-        const ptr_t obj = it->second;
-        obj->update(frame);
+        const ptr_t& obj = it->second;
+        obj->updateFrameData(frame);
     }
 }
 
 
-void GameObjectDB::apply(const FrameData& frame)
+void GameObjectDB::applyFrameData(const FrameData& frame)
 {
     for (map_t::iterator it = begin(); it != end(); ++it)
     {
-        ptr_t obj = it->second;
-        obj->apply(frame);
+        const ptr_t& obj = it->second;
+        obj->applyFrameData(frame);
+    }
+}
+
+
+void GameObjectDB::applyAction(int actionType, framenum_t frameNum)
+{
+    for (map_t::iterator it = begin(); it != end(); ++it)
+    {
+        const ptr_t& obj = it->second;
+        obj->applyAction(actionType, frameNum);
     }
 }
 

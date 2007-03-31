@@ -44,7 +44,7 @@ void GameObject::decode(DataStream&)
 }
 
 
-void GameObject::update(FrameData& frame) const
+void GameObject::updateFrameData(FrameData& frame) const
 {
     // Encode object data
     BufferStream s;
@@ -68,7 +68,7 @@ void GameObject::update(FrameData& frame) const
 }
 
 
-void GameObject::apply(const FrameData& frame)
+void GameObject::applyFrameData(const FrameData& frame)
 {
     // Object data
     BufferStream s(frame.getObjectData(getObjectId()));

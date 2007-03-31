@@ -51,6 +51,7 @@ enum ActionType
 {
     NO_ACTION,
 
+    UPDATE_ACTION,
     DEBUG_ACTION
 };
 
@@ -152,6 +153,26 @@ private:
 };
 
 
+class UpdateMovingBall : public GameObjectAction
+{
+public:
+    UpdateMovingBall(MovingBall* ball)
+    : GameObjectAction()
+    , m_ball(ball)
+    {
+    }
+
+    virtual void operator()(framenum_t frameNum)
+    {
+        m_ball->setPosX(std::sin(frameNum / 10.0));
+        m_ball->setPosY(std::cos(frameNum / 10.0));
+        m_ball->setDiam(m_ball->getDiam() + 1.0);
+    }
+
+private:
+    MovingBall* m_ball;
+};
+
 /**
  * Test implementation of host-specific GameObject
  */
@@ -177,6 +198,26 @@ public:
 
     double speed;
     double host_specific_data;
+};
+
+
+class UpdateBumperCar : public GameObjectAction
+{
+public:
+    UpdateBumperCar(HostBumperCar* car)
+    : GameObjectAction()
+    , m_car(car)
+    {
+    }
+
+    virtual void operator()(framenum_t)
+    {
+        m_car->speed += 0.1;
+        m_car->speed *= 2.5;
+    }
+
+private:
+    HostBumperCar* m_car;
 };
 
 
@@ -239,10 +280,8 @@ public:
     MyHost()
     : Host()
     , m_db(new GameObjectDB())
-    , frame(0)
+    , frameNum(0)
     , sender()
-    , ball(0)
-    , car(0)
     , m_timer(0)
     {
         startGame();
@@ -256,7 +295,9 @@ public:
     void startGame()
     {
         {
-            ball = new MovingBall(idBall);
+            ReferencePointer<MovingBall> ball = new MovingBall(idBall);
+            ball->setAction(UPDATE_ACTION, new UpdateMovingBall(ball.get()));
+
             db()->insert(idBall, ball.get());
 
             Message message(OBJECT_CREATE);
@@ -267,7 +308,9 @@ public:
         }
 
         {
-            car = new HostBumperCar(idCar);
+            ReferencePointer<HostBumperCar> car = new HostBumperCar(idCar);
+            car->setAction(UPDATE_ACTION, new UpdateBumperCar(car.get()));
+
             db()->insert(idCar, car.get());
 
             Message message(OBJECT_CREATE);
@@ -285,27 +328,22 @@ public:
 protected:
     virtual void handle(TimerEvent*)
     {
-        ball->setPosX(std::sin(frame / 10.0));
-        ball->setPosY(std::cos(frame / 10.0));
-        ball->setDiam(ball->getDiam() + 1.0);
-
-        car->speed += 0.1;
-        car->speed *= 2.5;
+        db()->applyAction(UPDATE_ACTION, frameNum);
 
         FrameData frameData;
         try
         {
-            frameData = sender.getFrameData(frame);
+            frameData = sender.getFrameData(frameNum);
         }
         catch (const InvalidKeyException&)
         {
             frameData = FrameData();
         }
 
-        db()->update(frameData);
+        db()->updateFrameData(frameData);
         sender.sendFrameData(frameData);
 
-        ++frame;
+        ++frameNum;
     }
 
     virtual void handle(NetworkEvent* event)
@@ -329,10 +367,8 @@ protected:
 private:
     AutoPointer<GameObjectDB> m_db;
 
-    framenum_t frame;
+    framenum_t frameNum;
     GameDataSender sender;
-    ReferencePointer<MovingBall> ball;
-    ReferencePointer<HostBumperCar> car;
 
     AutoPointer<Timer> m_timer;
 };
@@ -373,12 +409,8 @@ protected:
         framenum_t frameNum = event->getFrameNumber();
 
         FrameData frame = event->getFrameData();
-        db()->apply(frame);
-
-        for (GameObjectDB::map_t::iterator it = db()->begin(); it != db()->end(); ++it)
-        {
-            it->second->applyAction(DEBUG_ACTION, frameNum);
-        }
+        db()->applyFrameData(frame);
+        db()->applyAction(DEBUG_ACTION, frameNum);
     }
 
     void handle(NetworkEvent* event)

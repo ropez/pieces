@@ -86,10 +86,10 @@ public:
      * Encode object data for all objects.
      *
      * Update the frame date referenced by \a frame by calling the
-     * \link GameObject::encode() encode() \endlink function in all object,
-     * and storing the results in \a frame.
+     * \link GameObject::updateFrameData() updateFrameData() \endlink function
+     * in all objects, and storing the results in \a frame.
      */
-    void update(FrameData& frame) const;
+    void updateFrameData(FrameData& frame) const;
 
     /**
      * Decode object data for all objects.
@@ -97,7 +97,20 @@ public:
      * Update all objects by reading from the frame data referenced by \a frame,
      * and calling the decode function in all objects.
      */
-    void apply(const FrameData& frame);
+    void applyFrameData(const FrameData& frame);
+
+    /**
+     * Apply action function for all objects.
+     *
+     * Calls the \link GameObject::applyAction() applyAction() \endlink
+     * function on all game objects.
+     *
+     * An action function must have been assiciated with all objects for the
+     * given \a actionType. If not, an InvalidKeyException is thrown. If an
+     * object doesn't need a particular action for this \a actionType, it
+     * should have a null-pointer associated to it.
+     */
+    void applyAction(int actionType, framenum_t frameNum);
 
     /**
      * Returns an iterator at the beginning of the map.

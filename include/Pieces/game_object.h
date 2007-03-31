@@ -78,12 +78,12 @@ public:
     /**
      * Call encode(), and insert the resulting data into \a frame.
      */
-    void update(FrameData& frame) const;
+    void updateFrameData(FrameData& frame) const;
 
     /**
      * Extract object data for this object from \a frame, and call decode().
      */
-    void apply(const FrameData& frame);
+    void applyFrameData(const FrameData& frame);
 
     /**
      * Custom user action.
