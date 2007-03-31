@@ -1,5 +1,6 @@
 
 #include "Pieces/GameObject"
+#include "Pieces/GameObjectAction"
 #include "Pieces/BufferStream"
 #include "Pieces/FrameData"
 #include "Pieces/InvalidKeyException"

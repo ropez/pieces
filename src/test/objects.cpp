@@ -17,6 +17,7 @@
 
 #include "Pieces/GameObject"
 #include "Pieces/GameObjectDB"
+#include "Pieces/GameObjectAction"
 #include "Pieces/ReferencePointer"
 
 #include "Pieces/FrameData"

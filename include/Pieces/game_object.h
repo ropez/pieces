@@ -5,23 +5,14 @@
 #include "Pieces/global"
 #include "Pieces/Object"
 
-#include "Pieces/SharedData"
 
 namespace Pieces
 {
 class DataStream;
 class FrameData;
-
-
-class GameObjectAction : public SharedData
-{
-public:
-    virtual ~GameObjectAction() {};
-
-    virtual void operator()(framenum_t frameNum) = 0;
-};
-
+class GameObjectAction;
 class GameObjectPrivate;
+
 
 /**
  * \class GameObject
