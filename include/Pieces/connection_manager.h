@@ -2,14 +2,13 @@
 #ifndef PIECES_CONNECTION_MANAGER_H
 #define PIECES_CONNECTION_MANAGER_H
 
-#include "Pieces/global"
+#include "Pieces/Message"
 
 
 namespace Pieces
 {
 class TCPConnection;
 class SocketAddress;
-class Message;
 class EventLoop;
 class ByteArray;
 
@@ -58,8 +57,35 @@ public:
 
     /**
      * Send a message on all connections.
+     *
+     * The message is added to a message history list, and sent on all
+     * connections, even those that are established in the future.
+     *
+     * Returns the ID of the sent message.
      */
-    virtual void sendMessage(const Message& message) = 0;
+    virtual msgid_t sendMessage(const Message& message) = 0;
+
+    /**
+     * Send a message on all connections.
+     *
+     * \overload
+     *
+     * The value of \a originalId must refer to a message previously sent,
+     * and the result after sending these two messages must be equivalent
+     * to not sending any of them.
+     *
+     * If a message with \a originalId is found in the message history, the
+     * original message is removed instead of adding this message to the
+     * history. This is used to avoid that the message history keeps growing
+     * if something is switced back and forth between two states. For instance
+     * if a game object is created and removed repeatedly. Instead of adding
+     * a remove message to the message history, the create message is deleted.
+     *
+     * If no message is found with \a originalId, the result is equivalent to
+     * calling the overload with one parameter. The message is added to the
+     * history.
+     */
+    virtual msgid_t sendMessage(const Message& message, msgid_t originalId) = 0;
 
     /**
      * Close and delete the connection to the given \a address.

@@ -16,9 +16,9 @@ class MessageQueuePrivate
 {
 public:
     MessageQueuePrivate();
-    MessageQueuePrivate(const std::deque<Message>& messages);
+    MessageQueuePrivate(const std::deque<msgpair_t>& messages);
 
-    std::queue<Message> queue;
+    std::queue<msgpair_t> queue;
     Mutex mutex;
     Condition cond;
 };
@@ -32,7 +32,7 @@ MessageQueuePrivate::MessageQueuePrivate()
 }
 
 
-MessageQueuePrivate::MessageQueuePrivate(const std::deque<Message>& messages)
+MessageQueuePrivate::MessageQueuePrivate(const std::deque<msgpair_t>& messages)
 : queue(messages)
 , mutex()
 , cond()
@@ -46,7 +46,7 @@ MessageQueue::MessageQueue()
 }
 
 
-MessageQueue::MessageQueue(const std::deque<Message>& messages)
+MessageQueue::MessageQueue(const std::deque<msgpair_t>& messages)
 : d(new MessageQueuePrivate(messages))
 {
 }
@@ -58,7 +58,7 @@ MessageQueue::~MessageQueue()
 }
 
 
-void MessageQueue::push(const Message& message)
+void MessageQueue::push(const msgpair_t& message)
 {
     ScopedLock<Mutex> lock(d->mutex);
 
@@ -67,14 +67,14 @@ void MessageQueue::push(const Message& message)
 }
 
 
-Message MessageQueue::pop()
+msgpair_t MessageQueue::pop()
 {
     ScopedLock<Mutex> lock(d->mutex);
     while (d->queue.empty())
     {
         d->cond.wait(&d->mutex);
     }
-    Message message(d->queue.front());
+    msgpair_t message(d->queue.front());
     d->queue.pop();
 
     return message;

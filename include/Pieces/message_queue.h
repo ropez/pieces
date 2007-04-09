@@ -2,7 +2,7 @@
 #ifndef PIECES_MESSAGE_QUEUE_H
 #define PIECES_MESSAGE_QUEUE_H
 
-#include "Pieces/global"
+#include "Pieces/Message"
 #include <deque>
 
 
@@ -18,7 +18,6 @@ class MessageQueuePrivate;
  *
  * \author Robin Pedersen
  */
-
 class MessageQueue
 {
 public:
@@ -31,7 +30,7 @@ public:
     /**
      * Create a queue initialized width the given messages.
      */
-    MessageQueue(const std::deque<Message>& messages);
+    MessageQueue(const std::deque<msgpair_t>& messages);
 
     /**
      * Delete the queue.
@@ -40,8 +39,8 @@ public:
      */
     ~MessageQueue();
 
-    void push(const Message& message);
-    Message pop();
+    void push(const msgpair_t& message);
+    msgpair_t pop();
 
 private:
     DISABLE_COPY(MessageQueue);

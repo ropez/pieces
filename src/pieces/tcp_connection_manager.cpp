@@ -25,6 +25,8 @@ class TCPConnectionManagerPrivate
 public:
     TCPConnectionManagerPrivate();
 
+    std::deque<msgpair_t>::iterator findId(msgid_t id);
+
     EventLoop* eventLoop;
 
     typedef std::map<SocketAddress, TCPConnection*> map_t;
@@ -32,7 +34,10 @@ public:
 
     // History of messages that has been sent.
     // These are all sent to peers that connects to the host.
-    std::deque<Message> messages;
+    std::deque<msgpair_t> messages;
+
+    // Message id counter, increased by one before every new message is added
+    msgid_t countId;
 
     AutoPointer<TCPListenerThread> listener;
 };
@@ -42,8 +47,29 @@ TCPConnectionManagerPrivate::TCPConnectionManagerPrivate()
 : eventLoop(0)
 , connections()
 , messages()
+, countId(0)
 , listener(0)
 {
+}
+
+
+std::deque<msgpair_t>::iterator TCPConnectionManagerPrivate::findId(msgid_t id)
+{
+    // Comparison function
+    MessageIdLess comp;
+
+    // Binary search
+    std::deque<msgpair_t>::iterator it = std::lower_bound(messages.begin(), messages.end(), id, comp);
+    if (it != messages.end() && (*it).first == id)
+    {
+        // Found
+        return it;
+    }
+    else
+    {
+        // Not found
+        return messages.end();
+    }
 }
 
 
@@ -56,6 +82,15 @@ TCPConnectionManager::TCPConnectionManager(EventLoop* eventLoop)
 
 TCPConnectionManager::~TCPConnectionManager()
 {
+    typedef TCPConnectionManagerPrivate::map_t::iterator iterator_t;
+
+    // Delete all remaining connections
+    for (iterator_t it = d->connections.begin(); it != d->connections.end(); ++it)
+    {
+        AutoPointer<TCPConnection> conn(it->second);
+        it->second = 0;
+    }
+
     delete d;
 }
 
@@ -94,19 +129,39 @@ void TCPConnectionManager::connectTo(const SocketAddress& address)
 }
 
 
-void TCPConnectionManager::sendMessage(const Message& message)
+msgid_t TCPConnectionManager::sendMessage(const Message& message)
+{
+    return sendMessage(message, 0);
+}
+
+
+msgid_t TCPConnectionManager::sendMessage(const Message& message, msgid_t originalId)
 {
     typedef TCPConnectionManagerPrivate::map_t::iterator iterator_t;
+
+    msgpair_t msg(++d->countId, message);
 
     for (iterator_t it = d->connections.begin(); it != d->connections.end(); ++it)
     {
         TCPConnection* conn = it->second;
 
-        conn->sendMessage(message);
+        conn->sendMessage(msg);
     }
 
     // Add to buffer, so that future connections get the message
-    d->messages.push_back(message);
+    std::deque<msgpair_t>::iterator it = d->findId(originalId);
+    if (it != d->messages.end())
+    {
+        // Remove original message from history
+        d->messages.erase(it);
+    }
+    else
+    {
+        // Add message to history
+        d->messages.push_back(msg);
+    }
+
+    return d->countId;
 }
 
 

@@ -47,6 +47,12 @@ GameDataSender::~GameDataSender()
 }
 
 
+framenum_t GameDataSender::getFrameNumber() const
+{
+    return d->frameNumber;
+}
+
+
 void GameDataSender::addReceiver(const SocketAddress& address)
 {
     d->receivers.insert(address);

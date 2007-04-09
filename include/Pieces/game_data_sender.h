@@ -24,6 +24,8 @@ public:
     GameDataSender();
     ~GameDataSender();
 
+    framenum_t getFrameNumber() const;
+
     void addReceiver(const SocketAddress& socket);
     void removeReceiver(const SocketAddress& socket);
 

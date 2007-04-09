@@ -76,16 +76,16 @@ void TCPSenderThread::run()
         for (;;)
         {
             // Pop message from queue
-            Message message;
+            msgpair_t msg;
             {
                 // Release lock while blocked (most of the time)
                 ReverseScopedLock<Mutex> unlock(d->mutex);
 
-                message = d->queue->pop();
+                msg = d->queue->pop();
             }
 
             // Send message
-            ds << message << flush;
+            ds << msg.second << flush;
         }
     }
     catch (const Exception& e)

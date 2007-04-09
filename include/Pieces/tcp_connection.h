@@ -2,7 +2,7 @@
 #ifndef PIECES_TCP_CONNECTION_H
 #define PIECES_TCP_CONNECTION_H
 
-#include "Pieces/global"
+#include "Pieces/Message"
 #include <deque>
 
 
@@ -10,7 +10,6 @@ namespace Pieces
 {
 class TCPSocket;
 class SocketAddress;
-class Message;
 class EventLoop;
 class ByteArray;
 class TCPConnectionPrivate;
@@ -48,7 +47,7 @@ public:
     /**
      * Start sending messages, starting with the given messages.
      */
-    void startSending(const std::deque<Message>& messages);
+    void startSending(const std::deque<msgpair_t>& messages);
 
     /**
      * Stop sending messages, and delete all pending messages.
@@ -60,7 +59,7 @@ public:
      *
      * If sending is not started, this function does nothing.
      */
-    void sendMessage(const Message& message);
+    void sendMessage(const msgpair_t& message);
 
 private:
     DISABLE_COPY(TCPConnection);

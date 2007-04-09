@@ -56,7 +56,12 @@ public:
     /**
      * Send a message on all connections.
      */
-    virtual void sendMessage(const Message& message);
+    virtual msgid_t sendMessage(const Message& message);
+
+    /**
+     * Send a message on all connections.
+     */
+    virtual msgid_t sendMessage(const Message& message, msgid_t originalId);
 
     /**
      * Close the connection to the given \a address.

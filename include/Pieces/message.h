@@ -87,6 +87,35 @@ DataStream& operator<<(DataStream& ds, const Message& msg);
 DataStream& operator>>(DataStream& ds, Message& msg);
 
 
+typedef unsigned long msgid_t;
+typedef std::pair<msgid_t, Message> msgpair_t;
+
+
+class MessageIdLess
+{
+public:
+    bool operator()(const msgid_t& idl, msgid_t idr)
+    {
+        return (idl < idr);
+    }
+
+    bool operator()(const msgpair_t& msg, msgid_t id)
+    {
+        return operator()(msg.first, id);
+    }
+
+    bool operator()(msgid_t id, const msgpair_t& msg)
+    {
+        return operator()(id, msg.first);
+    }
+
+    bool operator()(const msgpair_t& msgl, const msgpair_t& msgr)
+    {
+        return operator()(msgl.first, msgr.first);
+    }
+};
+
+
 template<typename T>
 void Message::set(int property, const T& value)
 {

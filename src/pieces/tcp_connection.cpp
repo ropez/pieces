@@ -71,7 +71,7 @@ void TCPConnection::stopReceiving()
 }
 
 
-void TCPConnection::startSending(const std::deque<Message>& messages)
+void TCPConnection::startSending(const std::deque<msgpair_t>& messages)
 {
     d->queue = new MessageQueue(messages);
 
@@ -90,7 +90,7 @@ void TCPConnection::stopSending()
 }
 
 
-void TCPConnection::sendMessage(const Message& message)
+void TCPConnection::sendMessage(const msgpair_t& message)
 {
     if (d->queue.isValid())
     {

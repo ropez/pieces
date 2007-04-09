@@ -36,8 +36,6 @@
 
 
 using namespace Pieces;
-AutoPointer<Host> host;
-AutoPointer<Peer> peer;
 
 
 enum ObjectType
@@ -281,7 +279,7 @@ public:
     : Host()
     , m_db(new GameObjectDB())
     , m_timer(0)
-    , frameNum(0)
+    , m_origId(0)
     {
         startGame();
     }
@@ -306,19 +304,6 @@ public:
             connectionManager()->sendMessage(message);
         }
 
-        {
-            ReferencePointer<HostBumperCar> car = new HostBumperCar(idCar);
-            car->setAction(UPDATE_ACTION, new UpdateBumperCar(car.get()));
-
-            db()->insert(idCar, car.get());
-
-            Message message(OBJECT_CREATE);
-            message.set(PR_OBJECT_TYPE, BUMPER_CAR);
-            message.set(PR_OBJECT_ID, idCar);
-
-            connectionManager()->sendMessage(message);
-        }
-
         m_timer = new Timer(0, eventLoop());
         m_timer->setRepeating(true);
         m_timer->start(500);
@@ -327,12 +312,45 @@ public:
 protected:
     virtual void handle(TimerEvent*)
     {
+        framenum_t frameNum = sender()->getFrameNumber();
+
+        if (frameNum % 10 == 0)
+        {
+            switch (frameNum / 10 % 2)
+            {
+            case 0:
+                {
+                    ReferencePointer<HostBumperCar> car = new HostBumperCar(idCar);
+                    car->setAction(UPDATE_ACTION, new UpdateBumperCar(car.get()));
+
+                    db()->insert(idCar, car.get());
+
+                    Message message(OBJECT_CREATE);
+                    message.set(PR_OBJECT_TYPE, BUMPER_CAR);
+                    message.set(PR_OBJECT_ID, idCar);
+
+                    m_origId = connectionManager()->sendMessage(message);
+                }
+                break;
+            case 1:
+                {
+                    db()->remove(idCar);
+
+                    Message message(OBJECT_REMOVE);
+                    message.set(PR_OBJECT_ID, idCar);
+
+                    connectionManager()->sendMessage(message, m_origId);
+                }
+                break;
+            }
+        }
+
         db()->applyAction(UPDATE_ACTION, frameNum);
 
         FrameData frameData;
         try
         {
-            frameData = sender()->getFrameData(frameNum);
+            frameData = sender()->getFrameData(frameNum - 1);
         }
         catch (const InvalidKeyException&)
         {
@@ -341,8 +359,6 @@ protected:
 
         db()->updateFrameData(frameData);
         sender()->sendFrameData(frameData);
-
-        ++frameNum;
     }
 
     virtual void handle(NetworkEvent* event)
@@ -367,7 +383,7 @@ private:
     AutoPointer<GameObjectDB> m_db;
     AutoPointer<Timer> m_timer;
 
-    framenum_t frameNum;
+    msgid_t m_origId;
 };
 
 
@@ -375,15 +391,13 @@ private:
 class MyPeer : public Peer
 {
 public:
-    MyPeer()
+    MyPeer(port_t portData)
     : Peer()
     , m_db(new GameObjectDB())
     {
         connectTo(SocketAddress(InetAddress::getHostByName("localhost"), portMessage));
 
         // Connect to data channel
-        const port_t portData = 3333;
-
         Message message(GAMEDATA_CONNECT);
         message.set(PR_PORT, portData);
 
@@ -441,6 +455,11 @@ protected:
                     return;
                 }
             }
+            else if (message.getMessageType() == OBJECT_REMOVE)
+            {
+                objectid_t objectId = message.get<objectid_t>(PR_OBJECT_ID);
+                db()->remove(objectId);
+            }
         }
     }
 
@@ -458,13 +477,19 @@ int main(int argc, char** argv)
     {
         if (app->argc() > 1 && app->arg(1) == "host")
         {
-            host = new MyHost;
+            AutoPointer<Host> host(new MyHost);
             host->startListening(portMessage);
             host->exec();
         }
         else
         {
-            peer = new MyPeer;
+            port_t portData = 3333;
+            if (app->argc() > 1)
+            {
+                portData = atoi(app->arg(1).c_str());
+            }
+
+            AutoPointer<Peer> peer(new MyPeer(portData));
             peer->exec();
         }
     }
