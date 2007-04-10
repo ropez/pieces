@@ -59,23 +59,6 @@ EventLoop* Host::eventLoop() const
 }
 
 
-ConnectionManager* Host::connectionManager() const
-{
-    return d->connectionManager.get();
-}
-
-
-GameDataSender* Host::sender()
-{
-    // Lazy instantiation
-    if (d->sender.isNull())
-    {
-        d->sender = new GameDataSender();
-    }
-    return d->sender.get();
-}
-
-
 void Host::startListening(port_t port)
 {
     connectionManager()->startListening(port);
@@ -148,8 +131,20 @@ void Host::quit()
 }
 
 
-void Host::handle(Event* /*event*/)
+ConnectionManager* Host::connectionManager() const
 {
+    return d->connectionManager.get();
+}
+
+
+GameDataSender* Host::sender()
+{
+    // Lazy instantiation
+    if (d->sender.isNull())
+    {
+        d->sender = new GameDataSender();
+    }
+    return d->sender.get();
 }
 
 

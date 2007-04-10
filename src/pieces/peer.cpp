@@ -55,23 +55,6 @@ EventLoop* Peer::eventLoop()
 }
 
 
-ConnectionManager* Peer::connectionManager() const
-{
-    return d->connectionManager.get();
-}
-
-
-GameDataReceiver* Peer::receiver()
-{
-    // Lazy instantiation
-    if (d->receiver.isNull())
-    {
-        d->receiver = new GameDataReceiver(eventLoop());
-    }
-    return d->receiver.get();
-}
-
-
 void Peer::connectTo(const SocketAddress& address)
 {
     connectionManager()->connectTo(address);
@@ -104,8 +87,20 @@ void Peer::quit()
 }
 
 
-void Peer::handle(Event*)
+ConnectionManager* Peer::connectionManager() const
 {
+    return d->connectionManager.get();
+}
+
+
+GameDataReceiver* Peer::receiver()
+{
+    // Lazy instantiation
+    if (d->receiver.isNull())
+    {
+        d->receiver = new GameDataReceiver(eventLoop());
+    }
+    return d->receiver.get();
 }
 
 }

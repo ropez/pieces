@@ -29,10 +29,6 @@ public:
 
     EventLoop* eventLoop() const;
 
-    ConnectionManager* connectionManager() const;
-
-    GameDataSender* sender();
-
     /**
      * Start accepting incoming connections on the given port.
      *
@@ -116,7 +112,10 @@ public:
     void quit();
 
 protected:
-    virtual void handle(Event* event);
+
+    ConnectionManager* connectionManager() const;
+
+    GameDataSender* sender();
 
     virtual void peerConnected(PeerInfo* info);
 

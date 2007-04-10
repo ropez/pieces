@@ -3,7 +3,6 @@
 
 #include "Pieces/Host"
 #include "Pieces/Peer"
-#include "Pieces/ConnectionManager"
 #include "Pieces/Message"
 #include "Pieces/GameDataReceiver"
 #include "Pieces/GameDataSender"

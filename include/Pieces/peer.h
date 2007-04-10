@@ -30,10 +30,6 @@ public:
 
     EventLoop* eventLoop();
 
-    ConnectionManager* connectionManager() const;
-
-    GameDataReceiver* receiver();
-
     /**
      * Connects the peer to the given host.
      *
@@ -82,13 +78,9 @@ public:
 
 protected:
 
-    /**
-     * This is the top level event dispatcher.
-     *
-     * It handles all events in the event queue. Some of them are forwarded to
-     * other special purpose event handlers like userDefinedEvent().
-     */
-    virtual void handle(Event* event);
+    ConnectionManager* connectionManager() const;
+
+    GameDataReceiver* receiver();
 
 private:
     DISABLE_COPY(Peer);
