@@ -1,6 +1,7 @@
 #include "Pieces/TCPReceiverThread"
 #include "Pieces/Debug"
-#include "Pieces/NetworkEvent"
+#include "Pieces/MessageReceivedEvent"
+#include "Pieces/DisconnectedEvent"
 #include "Pieces/DataStream"
 #include "Pieces/TCPSocket"
 #include "Pieces/EventLoop"
@@ -87,14 +88,14 @@ void TCPReceiverThread::run()
                 ds >> message;
             }
 
-            AutoPointer<NetworkEvent> e(new NetworkEvent(NetworkEvent::RECEIVED_MESSAGE, d->socket->getPeerAddress()));
+            AutoPointer<MessageReceivedEvent> e(new MessageReceivedEvent(d->socket->getPeerAddress()));
             e->setMessage(message);
             d->eventLoop->postEvent(e.release());
         }
     }
     catch (const DisconnectedException&)
     {
-        d->eventLoop->postEvent(new NetworkEvent(NetworkEvent::DISCONNECTED, d->socket->getPeerAddress()));
+        d->eventLoop->postEvent(new DisconnectedEvent(d->socket->getPeerAddress()));
     }
     catch (const Exception& e)
     {

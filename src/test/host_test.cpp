@@ -4,7 +4,7 @@
 
 #include "Pieces/ConnectionManager"
 
-#include "Pieces/NetworkEvent"
+#include "Pieces/MessageReceivedEvent"
 #include "Pieces/SocketAddress"
 #include "Pieces/BufferStream"
 #include "Pieces/IOException"
@@ -17,9 +17,9 @@ class HostTest : public Host
 {
 protected:
 
-    virtual void handle(NetworkEvent* event)
+    virtual void handle(MessageReceivedEvent* event)
     {
-        PDEBUG << "Got network event, type " << event->type();
+        PDEBUG << "Got network event, type ReceivedMessageEvent";
 
         try
         {

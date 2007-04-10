@@ -11,6 +11,9 @@ class Event;
 class TimerEvent;
 class GameEvent;
 class NetworkEvent;
+class MessageReceivedEvent;
+class ConnectedEvent;
+class DisconnectedEvent;
 class InputEvent;
 class GameDataEvent;
 
@@ -22,7 +25,7 @@ class GameDataEvent;
  * This is a base class that event-handling classes must derive from to be
  * used together with an EventLoop. This class provides absolutely no
  * functionality by itself.
- *
+ *Network
  * For each incoming event, an overloaded handler() function is called with
  * a pointer to the event object.
  *
@@ -35,6 +38,9 @@ class EventHandler
     friend class TimerEvent;
     friend class GameEvent;
     friend class NetworkEvent;
+    friend class MessageReceivedEvent;
+    friend class ConnectedEvent;
+    friend class DisconnectedEvent;
     friend class InputEvent;
     friend class GameDataEvent;
 
@@ -91,6 +97,36 @@ protected:
      * implementation forwards the events to the generic event handler.
      */
     virtual void handle(NetworkEvent* event);
+
+    /**
+     * Specialized event handler for network events.
+     *
+     * \overload
+     *
+     * This can be implemented to handle networks events only. The default
+     * implementation forwards the events to the generic event handler.
+     */
+    virtual void handle(MessageReceivedEvent* event);
+
+    /**
+     * Specialized event handler for network events.
+     *
+     * \overload
+     *
+     * This can be implemented to handle networks events only. The default
+     * implementation forwards the events to the generic event handler.
+     */
+    virtual void handle(ConnectedEvent* event);
+
+    /**
+     * Specialized event handler for network events.
+     *
+     * \overload
+     *
+     * This can be implemented to handle networks events only. The default
+     * implementation forwards the events to the generic event handler.
+     */
+    virtual void handle(DisconnectedEvent* event);
 
 
     /**

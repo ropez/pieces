@@ -19,7 +19,7 @@ public:
     NetworkEventFilter(EventHandler* nextHandler, ConnectionManager* manager);
 
 protected:
-    virtual void handle(NetworkEvent* event);
+    virtual void handle(DisconnectedEvent* event);
 
 private:
     DISABLE_COPY(NetworkEventFilter);

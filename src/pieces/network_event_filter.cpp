@@ -1,6 +1,6 @@
 
 #include "NetworkEventFilter"
-#include "Pieces/NetworkEvent"
+#include "Pieces/DisconnectedEvent"
 #include "Pieces/Debug"
 #include "Pieces/ConnectionManager"
 
@@ -15,19 +15,10 @@ NetworkEventFilter::NetworkEventFilter(EventHandler* nextHandler, ConnectionMana
 }
 
 
-void NetworkEventFilter::handle(NetworkEvent* event)
+void NetworkEventFilter::handle(DisconnectedEvent* event)
 {
-    switch (event->type())
-    {
-    case NetworkEvent::DISCONNECTED:
-        {
-            PDEBUG << "Disconnected " << event->getSenderAddress();
-            m_manager->remove(event->getSenderAddress());
-        }
-        break;
-    default:
-        break;
-    }
+    PDEBUG << "Disconnected " << event->getSenderAddress();
+    m_manager->remove(event->getSenderAddress());
 
     // Forward all events
     EventFilter::handle(event);

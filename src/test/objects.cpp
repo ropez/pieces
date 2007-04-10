@@ -11,7 +11,7 @@
 #include "Pieces/EventLoop"
 #include "Pieces/TimerEvent"
 #include "Pieces/GameDataEvent"
-#include "Pieces/NetworkEvent"
+#include "Pieces/MessageReceivedEvent"
 
 #include "Pieces/Timer"
 
@@ -347,21 +347,18 @@ protected:
         sender()->sendFrameData(frameData);
     }
 
-    virtual void handle(NetworkEvent* event)
+    virtual void handle(MessageReceivedEvent* event)
     {
-        if (event->type() == NetworkEvent::RECEIVED_MESSAGE)
+        Message message = event->getMessage();
+
+        if (message.getMessageType() == GAMEDATA_CONNECT)
         {
-            Message message = event->getMessage();
+            // TODO: Move this functionality to an internal event handler
+            port_t port = message.get<port_t>(PR_PORT);
 
-            if (message.getMessageType() == GAMEDATA_CONNECT)
-            {
-                // TODO: Move this functionality to an internal event handler
-                port_t port = message.get<port_t>(PR_PORT);
-
-                SocketAddress addr(event->getSenderAddress().getInetAddress(), port);
-                PINFO << "Adding " << addr << " to receivers list";
-                sender()->addReceiver(addr);
-            }
+            SocketAddress addr(event->getSenderAddress().getInetAddress(), port);
+            PINFO << "Adding " << addr << " to receivers list";
+            sender()->addReceiver(addr);
         }
     }
 
@@ -407,43 +404,40 @@ protected:
         db()->applyAction(DEBUG_ACTION, frameNum);
     }
 
-    void handle(NetworkEvent* event)
+    void handle(MessageReceivedEvent* event)
     {
-        if (event->type() == NetworkEvent::RECEIVED_MESSAGE)
+        Message message = event->getMessage();
+
+        if (message.getMessageType() == OBJECT_CREATE)
         {
-            Message message = event->getMessage();
+            int objectType = message.get<int>(PR_OBJECT_TYPE);
+            objectid_t objectId = message.get<objectid_t>(PR_OBJECT_ID);
 
-            if (message.getMessageType() == OBJECT_CREATE)
+            switch (objectType)
             {
-                int objectType = message.get<int>(PR_OBJECT_TYPE);
-                objectid_t objectId = message.get<objectid_t>(PR_OBJECT_ID);
-
-                switch (objectType)
+            case MOVING_BALL:
                 {
-                case MOVING_BALL:
-                    {
-                        ReferencePointer<MovingBall> ball = new MovingBall(objectId);
-                        ball->setAction(DEBUG_ACTION, new DebugMovingBall(ball.get()));
-                        db()->insert(objectId, ball.get());
-                    }
-                    break;
-                case BUMPER_CAR:
-                    {
-                        ReferencePointer<PeerBumperCar> car = new PeerBumperCar(objectId);
-                        car->setAction(DEBUG_ACTION, new DebugBumperCar(car.get()));
-                        db()->insert(objectId, car.get());
-                    }
-                    break;
-                default:
-                    PWARNING << "Unknown object type: " << objectType;
-                    return;
+                    ReferencePointer<MovingBall> ball = new MovingBall(objectId);
+                    ball->setAction(DEBUG_ACTION, new DebugMovingBall(ball.get()));
+                    db()->insert(objectId, ball.get());
                 }
+                break;
+            case BUMPER_CAR:
+                {
+                    ReferencePointer<PeerBumperCar> car = new PeerBumperCar(objectId);
+                    car->setAction(DEBUG_ACTION, new DebugBumperCar(car.get()));
+                    db()->insert(objectId, car.get());
+                }
+                break;
+            default:
+                PWARNING << "Unknown object type: " << objectType;
+                return;
             }
-            else if (message.getMessageType() == OBJECT_REMOVE)
-            {
-                objectid_t objectId = message.get<objectid_t>(PR_OBJECT_ID);
-                db()->remove(objectId);
-            }
+        }
+        else if (message.getMessageType() == OBJECT_REMOVE)
+        {
+            objectid_t objectId = message.get<objectid_t>(PR_OBJECT_ID);
+            db()->remove(objectId);
         }
     }
 
