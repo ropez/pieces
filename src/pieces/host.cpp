@@ -22,6 +22,8 @@ public:
     AutoPointer<GameDataSender> sender;
 
     AutoPointer<NetworkEventFilter> networkEventFilter;
+
+    std::map<objectid_t, msgid_t> createMessageIds;
 };
 
 
@@ -30,6 +32,7 @@ HostPrivate::HostPrivate()
 , connectionManager(0)
 , sender(0)
 , networkEventFilter(0)
+, createMessageIds()
 {
 }
 
@@ -88,6 +91,46 @@ void Host::stopListening()
 void Host::postEvent(Event* e)
 {
     eventLoop()->postEvent(e);
+}
+
+
+msgid_t Host::sendMessage(const Message& message)
+{
+    return connectionManager()->sendMessage(message);
+}
+
+
+msgid_t Host::sendMessage(const Message& message, msgid_t originalId)
+{
+    return connectionManager()->sendMessage(message, originalId);
+}
+
+
+void Host::sendCreateObject(objectid_t objectId, int objectType)
+{
+    Message message(OBJECT_CREATE);
+    message.set(PR_OBJECT_TYPE, objectType);
+    message.set(PR_OBJECT_ID, objectId);
+
+    msgid_t msgid = sendMessage(message);
+    d->createMessageIds[objectId] = msgid;
+}
+
+
+void Host::sendRemoveObject(objectid_t objectId)
+{
+    Message message(OBJECT_REMOVE);
+    message.set(PR_OBJECT_ID, objectId);
+
+    if (d->createMessageIds.find(objectId) != d->createMessageIds.end())
+    {
+        sendMessage(message, d->createMessageIds[objectId]);
+        d->createMessageIds.erase(objectId);
+    }
+    else
+    {
+        sendMessage(message);
+    }
 }
 
 
