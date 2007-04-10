@@ -385,7 +385,7 @@ public:
         Message message(GAMEDATA_CONNECT);
         message.set(PR_PORT, portData);
 
-        connectionManager()->sendMessage(message);
+        sendMessage(message);
 
         receiver()->listen(portData);
     }

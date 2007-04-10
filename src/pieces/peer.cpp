@@ -84,6 +84,12 @@ void Peer::postEvent(Event* e)
 }
 
 
+void Peer::sendMessage(const Message& message)
+{
+    connectionManager()->sendMessage(message);
+}
+
+
 void Peer::exec()
 {
     PDEBUG << "Peer running";

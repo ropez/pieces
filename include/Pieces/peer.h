@@ -11,6 +11,7 @@ class EventLoop;
 class ConnectionManager;
 class GameDataReceiver;
 class SocketAddress;
+class Message;
 class PeerPrivate;
 
 
@@ -48,6 +49,21 @@ public:
      * \see EventLoop::postEvent()
      */
     void postEvent(Event* e);
+
+    /**
+     * Send a message to the host.
+     *
+     * The message is added to a message history list, and resent when a new
+     * connection is established, in case the message is sent before a
+     * connection is established to a host.
+     *
+     * This is a shortcut for
+     * \link
+     * ConnectionManager::sendMessage(const Message&)
+     * connectionManager()->sendMessage(message)
+     * \endlink
+     */
+    void sendMessage(const Message& message);
 
     /**
      * Enter the peer's main event loop.
