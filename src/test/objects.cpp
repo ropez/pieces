@@ -279,7 +279,7 @@ public:
     : Host()
     , m_db(new GameObjectDB())
     , m_timer(0)
-    , m_origId(0)
+    , m_createMessageIds()
     {
         startGame();
     }
@@ -289,19 +289,40 @@ public:
         return m_db.get();
     }
 
+    void createObject(objectid_t objectId, int objectType)
+    {
+        Message message(OBJECT_CREATE);
+        message.set(PR_OBJECT_TYPE, objectType);
+        message.set(PR_OBJECT_ID, objectId);
+
+        msgid_t msgid = connectionManager()->sendMessage(message);
+        m_createMessageIds[objectId] = msgid;
+    }
+
+    void removeObject(objectid_t objectId)
+    {
+        Message message(OBJECT_REMOVE);
+        message.set(PR_OBJECT_ID, objectId);
+
+        if (m_createMessageIds.find(objectId) != m_createMessageIds.end())
+        {
+            connectionManager()->sendMessage(message, m_createMessageIds[objectId]);
+            m_createMessageIds.erase(objectId);
+        }
+        else
+        {
+            connectionManager()->sendMessage(message);
+        }
+    }
+
     void startGame()
     {
         {
             ReferencePointer<MovingBall> ball = new MovingBall(idBall);
             ball->setAction(UPDATE_ACTION, new UpdateMovingBall(ball.get()));
-
             db()->insert(idBall, ball.get());
 
-            Message message(OBJECT_CREATE);
-            message.set(PR_OBJECT_TYPE, MOVING_BALL);
-            message.set(PR_OBJECT_ID, idBall);
-
-            connectionManager()->sendMessage(message);
+            createObject(idBall, MOVING_BALL);
         }
 
         m_timer = new Timer(0, eventLoop());
@@ -322,24 +343,16 @@ protected:
                 {
                     ReferencePointer<HostBumperCar> car = new HostBumperCar(idCar);
                     car->setAction(UPDATE_ACTION, new UpdateBumperCar(car.get()));
-
                     db()->insert(idCar, car.get());
 
-                    Message message(OBJECT_CREATE);
-                    message.set(PR_OBJECT_TYPE, BUMPER_CAR);
-                    message.set(PR_OBJECT_ID, idCar);
-
-                    m_origId = connectionManager()->sendMessage(message);
+                    createObject(idCar, BUMPER_CAR);
                 }
                 break;
             case 1:
                 {
+                    removeObject(idCar);
+
                     db()->remove(idCar);
-
-                    Message message(OBJECT_REMOVE);
-                    message.set(PR_OBJECT_ID, idCar);
-
-                    connectionManager()->sendMessage(message, m_origId);
                 }
                 break;
             }
@@ -383,7 +396,7 @@ private:
     AutoPointer<GameObjectDB> m_db;
     AutoPointer<Timer> m_timer;
 
-    msgid_t m_origId;
+    std::map<objectid_t, msgid_t> m_createMessageIds;
 };
 
 
