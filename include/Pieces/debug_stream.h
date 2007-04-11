@@ -127,10 +127,10 @@ std::ostream& warning(std::ostream& os);
  */
 std::ostream& error(std::ostream& os);
 
-#define PDEBUG DebugStream() << debug
-#define PINFO DebugStream() << info
-#define PWARNING DebugStream() << warning
-#define PERROR DebugStream() << error
+#define PDEBUG Pieces::DebugStream() << Pieces::debug
+#define PINFO Pieces::DebugStream() << Pieces::info
+#define PWARNING Pieces::DebugStream() << Pieces::warning
+#define PERROR Pieces::DebugStream() << Pieces::error
 
 } // namespace Pieces
 
