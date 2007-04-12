@@ -83,6 +83,11 @@ public:
     ptr_t remove(map_t::iterator it);
 
     /**
+     * Return a pointer to an object.
+     */
+    ptr_t get(objectid_t objectId) const;
+
+    /**
      * Encode object data for all objects.
      *
      * Update the frame date referenced by \a frame by calling the

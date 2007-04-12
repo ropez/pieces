@@ -61,7 +61,7 @@ void GameObject::updateFrameData(FrameData& frame) const
     }
 
     // Avoid replacing equal data, to maximize effect of implicit sharing
-    if (s.data() != oldData)
+    if (oldData.isEmpty() || s.data() != oldData)
     {
         frame.setObjectData(getObjectId(), s.data());
     }

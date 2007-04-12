@@ -3,6 +3,7 @@
 #include "Pieces/DataStream"
 #include "Pieces/InvalidKeyException"
 
+#include <sstream>
 
 namespace Pieces
 {
@@ -50,7 +51,11 @@ ByteArray FrameData::getObjectData(objectid_t objectId) const
     map_t::const_iterator it = d->objectData.find(objectId);
 
     if (it == d->objectData.end())
-        throw InvalidKeyException("FrameData::getObjectData", "Object not found");
+    {
+        std::stringstream ss;
+        ss << "Object not found, id = " << objectId;
+        throw InvalidKeyException("FrameData::getObjectData", ss.str());
+    }
 
     return it->second;
 }

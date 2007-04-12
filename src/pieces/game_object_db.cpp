@@ -52,6 +52,18 @@ GameObjectDB::ptr_t GameObjectDB::remove(map_t::iterator it)
 }
 
 
+GameObjectDB::ptr_t GameObjectDB::get(objectid_t objectId) const
+{
+    map_t::const_iterator it = m_objects.find(objectId);
+
+    if (it != end())
+    {
+        return it->second;
+    }
+    return 0;
+}
+
+
 void GameObjectDB::updateFrameData(FrameData& frame) const
 {
     for (map_t::const_iterator it = begin(); it != end(); ++it)
