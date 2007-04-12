@@ -15,6 +15,7 @@
 
 #include "OpenThreads/Thread"
 #include <map>
+#include <algorithm>
 
 
 namespace Pieces
