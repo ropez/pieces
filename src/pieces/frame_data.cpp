@@ -91,8 +91,8 @@ void FrameData::setObjectData(objectid_t objectId, const ByteArray& data)
         // Not found, inserting using the position we already know
 
         // Unfortunately, to use map::insert efficiently, without lookup,
-        // the iterator must point to the element PRECEEDING the position where
-        // we want to insert, which is pretty stupid
+        // the iterator must point to the element that PRECEDES the position
+        // where we want to insert, which is pretty stupid
         if (it != d->objectData.begin())
         {
             --it;
