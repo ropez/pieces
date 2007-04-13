@@ -370,6 +370,7 @@ class MyPeer : public Peer
 public:
     MyPeer(port_t portData)
     : Peer()
+    , m_data(10)
     , m_db(new GameObjectDB())
     {
         connectTo(SocketAddress(InetAddress::getHostByName("localhost"), portMessage));
@@ -396,6 +397,7 @@ protected:
         framenum_t frameNum = event->getFrameNumber();
 
         FrameData frameData = event->getFrameData();
+        m_data.setFrameData(event->getFrameNumber(), frameData);
         db()->applyFrameData(event->getFrameNumber(), frameData);
         db()->applyAction(DEBUG_ACTION, frameNum);
     }
@@ -438,6 +440,7 @@ protected:
     }
 
 private:
+    GameData m_data;
 
     AutoPointer<GameObjectDB> m_db;
 };
