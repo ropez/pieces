@@ -29,25 +29,22 @@ public:
     AutoPointer<UDPSocket> socket;
 
     EventLoop* eventLoop;
-    GameData* buffer;
 };
 
 
 GameDataReceiverThreadPrivate::GameDataReceiverThreadPrivate()
 : socket(0)
 , eventLoop(0)
-, buffer(0)
 {
 }
 
 
-GameDataReceiverThread::GameDataReceiverThread(EventLoop* eventLoop, GameData* buffer, port_t port)
+GameDataReceiverThread::GameDataReceiverThread(EventLoop* eventLoop, port_t port)
 : d(new GameDataReceiverThreadPrivate)
 {
     d->socket = new UDPSocket;
     d->socket->bind(port);
 
-    d->buffer = buffer;
     d->eventLoop = eventLoop;
 }
 
@@ -94,16 +91,11 @@ void GameDataReceiverThread::run()
             BufferStream bs(dg.getData());
 
             framenum_t frameNum = 0;
-            FrameData frame;
-            bs >> frameNum >> frame;
-
-            // TODO: Maybe the event should contain the data, instead of adding to the buffer here.
-            // With implicit sharing, we can pass this around, and don't need to share data across threads.
-            // With an internal event loop, we could buffer the data internally at the "main" thread.
-            d->buffer->setFrameData(frameNum, frame);
+            FrameData frameData;
+            bs >> frameNum >> frameData;
 
             // Notify
-            d->eventLoop->postEvent(new GameDataEvent(frameNum, frame));
+            d->eventLoop->postEvent(new GameDataEvent(frameNum, frameData));
         }
     }
     catch (const Exception& e)

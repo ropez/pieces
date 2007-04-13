@@ -90,19 +90,19 @@ public:
     /**
      * Encode object data for all objects.
      *
-     * Update the frame date referenced by \a frame by calling the
+     * Update the frame date referenced by \a frameData by calling the
      * \link GameObject::updateFrameData() updateFrameData() \endlink function
-     * in all objects, and storing the results in \a frame.
+     * in all objects, and storing the results in \a frameData.
      */
-    void updateFrameData(FrameData& frame) const;
+    void updateFrameData(FrameData& frameData) const;
 
     /**
      * Decode object data for all objects.
      *
-     * Update all objects by reading from the frame data referenced by \a frame,
+     * Update all objects by reading from the frame data referenced by \a frameData,
      * and calling the decode function in all objects.
      */
-    void applyFrameData(const FrameData& frame);
+    void applyFrameData(const FrameData& frameData);
 
     /**
      * Apply action function for all objects.

@@ -26,8 +26,6 @@ public:
 
     void listen(port_t port);
 
-    FrameData getFrameData(framenum_t frameNum);
-
 private:
     DISABLE_COPY(GameDataReceiver);
 

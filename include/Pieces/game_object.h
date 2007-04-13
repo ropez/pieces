@@ -76,14 +76,14 @@ public:
     virtual void decode(DataStream& ds);
 
     /**
-     * Call encode(), and insert the resulting data into \a frame.
+     * Call encode(), and insert the resulting data into \a frameData.
      */
-    void updateFrameData(FrameData& frame) const;
+    void updateFrameData(FrameData& frameData) const;
 
     /**
-     * Extract object data for this object from \a frame, and call decode().
+     * Extract object data for this object from \a frameData, and call decode().
      */
-    void applyFrameData(const FrameData& frame);
+    void applyFrameData(const FrameData& frameData);
 
     /**
      * Custom user action.

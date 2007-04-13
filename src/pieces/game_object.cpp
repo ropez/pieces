@@ -44,7 +44,7 @@ void GameObject::decode(DataStream&)
 }
 
 
-void GameObject::updateFrameData(FrameData& frame) const
+void GameObject::updateFrameData(FrameData& frameData) const
 {
     // Encode object data
     BufferStream s;
@@ -53,7 +53,7 @@ void GameObject::updateFrameData(FrameData& frame) const
     ByteArray oldData;
     try
     {
-        oldData = frame.getObjectData(getObjectId());
+        oldData = frameData.getObjectData(getObjectId());
     }
     catch (const InvalidKeyException&)
     {
@@ -63,15 +63,15 @@ void GameObject::updateFrameData(FrameData& frame) const
     // Avoid replacing equal data, to maximize effect of implicit sharing
     if (oldData.isEmpty() || s.data() != oldData)
     {
-        frame.setObjectData(getObjectId(), s.data());
+        frameData.setObjectData(getObjectId(), s.data());
     }
 }
 
 
-void GameObject::applyFrameData(const FrameData& frame)
+void GameObject::applyFrameData(const FrameData& frameData)
 {
     // Object data
-    BufferStream s(frame.getObjectData(getObjectId()));
+    BufferStream s(frameData.getObjectData(getObjectId()));
 
     // Decode object data from stream
     decode(s);

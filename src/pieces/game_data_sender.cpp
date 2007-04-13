@@ -22,14 +22,12 @@ public:
     std::set<SocketAddress> receivers;
 
     framenum_t frameNumber;
-    GameData buffer;
 };
 
 
 GameDataSenderPrivate::GameDataSenderPrivate()
 : socket(0)
 , frameNumber(0)
-, buffer()
 {
 }
 
@@ -65,18 +63,12 @@ void GameDataSender::removeReceiver(const SocketAddress& address)
 }
 
 
-FrameData GameDataSender::getFrameData(framenum_t frameNum) const
+void GameDataSender::sendFrameData(const FrameData& frameData)
 {
-    return d->buffer.getFrameData(frameNum);
-}
-
-
-void GameDataSender::sendFrameData(const FrameData& frame)
-{
-    d->buffer.setFrameData(d->frameNumber, frame);
+    // TODO: Background thread!
 
     BufferStream bs;
-    bs << d->frameNumber << frame;
+    bs << d->frameNumber << frameData;
 
     for (std::set<SocketAddress>::const_iterator it = d->receivers.begin(); it != d->receivers.end(); ++it)
     {

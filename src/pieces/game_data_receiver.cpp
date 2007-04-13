@@ -19,13 +19,11 @@ public:
     AutoPointer<GameDataReceiverThread> thread;
 
     EventLoop* eventLoop;
-    GameData buffer;
 };
 
 GameDataReceiverPrivate::GameDataReceiverPrivate()
 : thread(0)
 , eventLoop(0)
-, buffer()
 {
 }
 
@@ -45,14 +43,8 @@ GameDataReceiver::~GameDataReceiver()
 
 void GameDataReceiver::listen(port_t port)
 {
-    d->thread = new GameDataReceiverThread(d->eventLoop, &d->buffer, port);
+    d->thread = new GameDataReceiverThread(d->eventLoop, port);
     d->thread->start();
-}
-
-
-FrameData GameDataReceiver::getFrameData(framenum_t frameNum)
-{
-    return d->buffer.getFrameData(frameNum);
 }
 
 } //namespace Pieces

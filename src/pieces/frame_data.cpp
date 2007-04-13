@@ -106,10 +106,10 @@ FrameData::Data& FrameData::Data::operator=(const Data& other)
 }
 
 
-DataStream& operator<<(DataStream& ds, const FrameData& frame)
+DataStream& operator<<(DataStream& ds, const FrameData& fd)
 {
-    ds << frame.size();
-    for (FrameData::map_t::const_iterator it = frame.begin(); it != frame.end(); ++it)
+    ds << fd.size();
+    for (FrameData::map_t::const_iterator it = fd.begin(); it != fd.end(); ++it)
     {
         ds << it->first;
         ds << it->second;
@@ -118,9 +118,9 @@ DataStream& operator<<(DataStream& ds, const FrameData& frame)
 }
 
 
-DataStream& operator>>(DataStream& ds, FrameData& frame)
+DataStream& operator>>(DataStream& ds, FrameData& fd)
 {
-    frame.clear();
+    fd.clear();
 
     size_t size;
     ds >> size;
@@ -132,7 +132,7 @@ DataStream& operator>>(DataStream& ds, FrameData& frame)
         ByteArray data;
         ds >> data;
 
-        frame.setObjectData(id, data);
+        fd.setObjectData(id, data);
     }
     return ds;
 }

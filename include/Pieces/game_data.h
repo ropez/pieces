@@ -29,7 +29,7 @@ public:
     FrameData getFrameData(framenum_t frameNum) const;
 
     bool removeFrameData(framenum_t frameNum);
-    void setFrameData(framenum_t frameNum, const FrameData& data);
+    void setFrameData(framenum_t frameNum, const FrameData& frameData);
 
 private:
     typedef std::map<framenum_t, FrameData> map_t;

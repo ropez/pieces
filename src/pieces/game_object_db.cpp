@@ -64,22 +64,22 @@ GameObjectDB::ptr_t GameObjectDB::get(objectid_t objectId) const
 }
 
 
-void GameObjectDB::updateFrameData(FrameData& frame) const
+void GameObjectDB::updateFrameData(FrameData& frameData) const
 {
     for (map_t::const_iterator it = begin(); it != end(); ++it)
     {
         const ptr_t& obj = it->second;
-        obj->updateFrameData(frame);
+        obj->updateFrameData(frameData);
     }
 }
 
 
-void GameObjectDB::applyFrameData(const FrameData& frame)
+void GameObjectDB::applyFrameData(const FrameData& frameData)
 {
     for (map_t::iterator it = begin(); it != end(); ++it)
     {
         const ptr_t& obj = it->second;
-        obj->applyFrameData(frame);
+        obj->applyFrameData(frameData);
     }
 }
 

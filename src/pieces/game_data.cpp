@@ -43,9 +43,9 @@ bool GameData::removeFrameData(framenum_t frameNum)
 }
 
 
-void GameData::setFrameData(framenum_t frameNum, const FrameData& data)
+void GameData::setFrameData(framenum_t frameNum, const FrameData& frameData)
 {
-    d->frameData[frameNum] = data;
+    d->frameData[frameNum] = frameData;
 }
 
 

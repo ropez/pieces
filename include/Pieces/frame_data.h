@@ -61,8 +61,8 @@ private:
     SharedDataPointer<Data> d;
 };
 
-DataStream& operator<<(DataStream& ds, const FrameData& frame);
-DataStream& operator>>(DataStream& ds, FrameData& frame);
+DataStream& operator<<(DataStream& ds, const FrameData& fd);
+DataStream& operator>>(DataStream& ds, FrameData& fd);
 
 } // namespace Pieces
 

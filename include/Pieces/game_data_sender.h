@@ -31,7 +31,7 @@ public:
 
     FrameData getFrameData(framenum_t frameNum) const;
 
-    void sendFrameData(const FrameData& frame);
+    void sendFrameData(const FrameData& frameData);
 
 private:
     DISABLE_COPY(GameDataSender);

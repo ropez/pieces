@@ -24,7 +24,7 @@ class GameDataReceiverThreadPrivate;
 class GameDataReceiverThread : public OpenThreads::Thread
 {
 public:
-    GameDataReceiverThread(EventLoop* eventLoop, GameData* buffer, port_t port);
+    GameDataReceiverThread(EventLoop* eventLoop, port_t port);
     ~GameDataReceiverThread();
 
     void abort();

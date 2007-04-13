@@ -333,15 +333,6 @@ protected:
         db()->applyAction(UPDATE_ACTION, frameNum);
 
         FrameData frameData;
-        try
-        {
-            frameData = sender()->getFrameData(frameNum - 1);
-        }
-        catch (const InvalidKeyException&)
-        {
-            frameData = FrameData();
-        }
-
         db()->updateFrameData(frameData);
         sender()->sendFrameData(frameData);
     }
@@ -398,8 +389,8 @@ protected:
     {
         framenum_t frameNum = event->getFrameNumber();
 
-        FrameData frame = event->getFrameData();
-        db()->applyFrameData(frame);
+        FrameData frameData = event->getFrameData();
+        db()->applyFrameData(frameData);
         db()->applyAction(DEBUG_ACTION, frameNum);
     }
 
