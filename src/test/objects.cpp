@@ -139,6 +139,9 @@ public:
 
     virtual void operator()(framenum_t frameNum)
     {
+        if (frameNum != m_ball->getFrameNumber())
+            PWARNING << "Different frame numbers";
+
         PDEBUG << "Moving ball, frame " << frameNum << ": "
             << align(40) << "posx = " << m_ball->getPosX()
             << align(58) << "posy = " << m_ball->getPosY()
@@ -255,8 +258,11 @@ public:
     {
     }
 
-    virtual void operator()(framenum_t)
+    virtual void operator()(framenum_t frameNum)
     {
+        if (frameNum != m_car->getFrameNumber())
+            PWARNING << "Different frame numbers";
+
         PDEBUG << "BumberCar now running at: " << m_car->speed;
     }
 
