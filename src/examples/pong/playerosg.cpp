@@ -1,9 +1,9 @@
-#include "player.h"
+#include "playerosg.h"
 #include "config.h"
 #include <osg/Geode>
 #include <osg/Geometry>
 
-Player::Player()
+PlayerOSG::PlayerOSG()
 : osg::MatrixTransform()
 , _xPos(0.0)
 , _zPos(0.0)
@@ -11,11 +11,11 @@ Player::Player()
     addChild(createGeode().get());
 }
 
-Player::~Player()
+PlayerOSG::~PlayerOSG()
 {
 }
 
-osg::ref_ptr<osg::Geode> Player::createGeode()
+osg::ref_ptr<osg::Geode> PlayerOSG::createGeode()
 {
     osg::ref_ptr<osg::Geode> geode = new osg::Geode();
 
@@ -63,24 +63,24 @@ osg::ref_ptr<osg::Geode> Player::createGeode()
 
 }
 
-void Player::setPositionX(double xPos)
+void PlayerOSG::setPositionX(double xPos)
 {
     _xPos = xPos;
     setMatrix(osg::Matrix::translate(osg::Vec3(_xPos, 0.0, _zPos)));
 }
 
-void Player::setPositionZ(double zPos)
+void PlayerOSG::setPositionZ(double zPos)
 {
     _zPos = zPos;
     setMatrix(osg::Matrix::translate(osg::Vec3(_xPos, 0.0, _zPos)));
 }
 
-double Player::getPositionZ()
+double PlayerOSG::getPositionZ()
 {
     return _zPos;
 }
 
-void Player::addRelativeZ(double zOffset)
+void PlayerOSG::addRelativeZ(double zOffset)
 {
     _zPos += zOffset;
     setPositionZ(_zPos);

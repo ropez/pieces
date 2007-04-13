@@ -13,9 +13,9 @@
 #include "Pieces/Debug"
 
 #include "ball.h"
-#include "BallUpdateCallback.h"
+#include "BallHostCallback.h"
 #include "Player.h"
-#include "PlayerUpdateCallback.h"
+#include "PlayerHostCallback.h"
 #include "pong_defines.h"
 
 using namespace Pieces;

@@ -1,4 +1,4 @@
-#include "player.h"
+#include "playerosg.h"
 #include "ballosg.h"
 #include "frame.h"
 #include "event_handler.h"
@@ -122,9 +122,9 @@ osg::ref_ptr<osg::Node> createMenu()
 	return 0;
 }
 
-osg::ref_ptr<Player> setUpPlayer(double x, double z)
+osg::ref_ptr<PlayerOSG> setUpPlayer(double x, double z)
 {
-    osg::ref_ptr<Player> player = new Player();
+    osg::ref_ptr<PlayerOSG> player = new PlayerOSG();
     player->setPositionX(x);
     player->setPositionZ(z);
 
@@ -161,8 +161,8 @@ int main(int argc, char** argv)
 
     viewer.setClearColor(osg::Vec4(1.0, 0.6, 0.6, 1.0));
 
-    osg::ref_ptr<Player> player1 = setUpPlayer(cfg::player1XPos, 0);
-    osg::ref_ptr<Player> player2 = setUpPlayer(cfg::player2XPos, 0);
+    osg::ref_ptr<PlayerOSG> player1 = setUpPlayer(cfg::player1XPos, 0);
+    osg::ref_ptr<PlayerOSG> player2 = setUpPlayer(cfg::player2XPos, 0);
 
     osg::ref_ptr<BallOSG> ball = new BallOSG();
     

@@ -3,11 +3,11 @@
 
 #include <osg/MatrixTransform>
 
-class Player : public osg::MatrixTransform
+class PlayerOSG : public osg::MatrixTransform
 {
 public:
-    Player();
-    ~Player();
+    PlayerOSG();
+    ~PlayerOSG();
 
     double getPositionZ();
     void addRelativeZ(double zOffset);

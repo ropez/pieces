@@ -4,7 +4,7 @@
 #include <osg/Geometry>
 #include <iostream>
 
-PongEventHandler::PongEventHandler(osg::ref_ptr<Player> player1, osg::ref_ptr<Player> player2, osg::ref_ptr<BallOSG> ball)
+PongEventHandler::PongEventHandler(osg::ref_ptr<PlayerOSG> player1, osg::ref_ptr<PlayerOSG> player2, osg::ref_ptr<BallOSG> ball)
 : osgGA::GUIEventHandler()
 , m_player1(player1)
 , m_player2(player2)
@@ -26,6 +26,7 @@ PongEventHandler::~PongEventHandler()
 
 bool PongEventHandler::handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter&)
 {
+
     switch(ea.getEventType())
     {
     case(osgGA::GUIEventAdapter::FRAME):

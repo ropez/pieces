@@ -2,20 +2,20 @@
 #define EVENT_HANDLER_H
 
 #include <osgGA/GUIEventHandler>
-#include "player.h"
+#include "playerosg.h"
 #include "ballosg.h"
 
 class PongEventHandler : public osgGA::GUIEventHandler
 {
 public:
-    PongEventHandler(osg::ref_ptr<Player> player1, osg::ref_ptr<Player> player2, osg::ref_ptr<BallOSG> ball);
+    PongEventHandler(osg::ref_ptr<PlayerOSG> player1, osg::ref_ptr<PlayerOSG> player2, osg::ref_ptr<BallOSG> ball);
     ~PongEventHandler();
     
     virtual void operator()(osg::Node* node, osg::NodeVisitor* nv);
     bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter&);
 private:
-    osg::ref_ptr<Player> m_player1;
-    osg::ref_ptr<Player> m_player2;
+    osg::ref_ptr<PlayerOSG> m_player1;
+    osg::ref_ptr<PlayerOSG> m_player2;
     osg::ref_ptr<BallOSG> m_ball;
     bool m_player1Up;
     bool m_player1Down;
