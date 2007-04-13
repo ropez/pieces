@@ -29,6 +29,7 @@ class FrameData
 public:
     // TODO: Do we need an ObjectData class, or is ByteArray sufficient? (Robin)
     typedef std::map<objectid_t, ByteArray> map_t;
+    typedef map_t::value_type pair_t;
 
     FrameData();
 

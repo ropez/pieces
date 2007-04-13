@@ -3,6 +3,8 @@
 #include "Pieces/DataStream"
 #include "Pieces/InvalidKeyException"
 
+#include "Pieces/Debug"
+
 #include <sstream>
 
 namespace Pieces
@@ -81,7 +83,28 @@ bool FrameData::removeObjectData(objectid_t objectId)
 
 void FrameData::setObjectData(objectid_t objectId, const ByteArray& data)
 {
-    d->objectData[objectId] = data;
+    // Maximize effect of implicit sharing by only replacing changed data.
+    // This code is written so that it should only do one lookup in the map.
+    map_t::iterator it = d->objectData.lower_bound(objectId);
+    if (it == d->objectData.end() || it->first != objectId)
+    {
+        // Not found, inserting using the position we already know
+
+        // Unfortunately, to use map::insert efficiently, without lookup,
+        // the iterator must point to the element PRECEEDING the position where
+        // we want to insert, which is pretty stupid
+        if (it != d->objectData.begin())
+        {
+            --it;
+        }
+
+        d->objectData.insert(it, pair_t(objectId, data));
+    }
+    else if (it->second != data)
+    {
+        // Found, but must be replaced
+        it->second = data;
+    }
 }
 
 
