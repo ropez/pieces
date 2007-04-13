@@ -346,11 +346,11 @@ void ByteArray::Data::allocate(size_t size)
 
 bool operator==(const ByteArray& op1, const ByteArray& op2)
 {
-    if (op1.data() == op2.data())
-        return true;
-
     if (op1.size() != op2.size())
         return false;
+
+    if (op1.data() == op2.data())
+        return true;
 
     return (memcmp(op1.data(), op2.data(), op1.size()) == 0);
 }
