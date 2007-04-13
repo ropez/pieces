@@ -6,9 +6,23 @@
 namespace Pieces
 {
 
-GameData::GameData()
+GameData::GameData(size_t maxFrames)
 : d(new Data)
 {
+    d->maxFrames = maxFrames;
+}
+
+
+GameData::GameData(const GameData& other)
+: d(other.d)
+{
+}
+
+
+GameData& GameData::operator=(const GameData& other)
+{
+    d = other.d;
+    return *this;
 }
 
 
@@ -45,12 +59,29 @@ bool GameData::removeFrameData(framenum_t frameNum)
 
 void GameData::setFrameData(framenum_t frameNum, const FrameData& frameData)
 {
-    d->frameData[frameNum] = frameData;
+    map_t::iterator it = d->frameData.find(frameNum);
+    if (it != d->frameData.end())
+    {
+        // Update
+        it->second = frameData;
+    }
+    else
+    {
+        if (d->frameData.size() >= d->maxFrames)
+        {
+            // Remove first element
+            d->frameData.erase(d->frameData.begin());
+        }
+
+        // Insert new data
+        d->frameData.insert(map_t::value_type(frameNum, frameData));
+    }
 }
 
 
 GameData::Data::Data()
 : SharedData()
+, maxFrames(-1)
 , frameData()
 {
 }
@@ -58,6 +89,7 @@ GameData::Data::Data()
 
 GameData::Data::Data(const Data& other)
 : SharedData()
+, maxFrames(other.maxFrames)
 , frameData(other.frameData)
 {
 }
@@ -65,6 +97,7 @@ GameData::Data::Data(const Data& other)
 
 GameData::Data& GameData::Data::operator=(const Data& other)
 {
+    maxFrames = other.maxFrames;
     frameData = other.frameData;
     return *this;
 }

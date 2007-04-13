@@ -23,7 +23,10 @@ namespace Pieces
 class GameData
 {
 public:
-    GameData();
+    explicit GameData(size_t maxFrames);
+
+    GameData(const GameData& other);
+    GameData& operator=(const GameData& other);
 
     bool hasFrameData(framenum_t frameNum) const;
     FrameData getFrameData(framenum_t frameNum) const;
@@ -42,6 +45,7 @@ private:
         Data(const Data& other);
         Data& operator=(const Data& other);
 
+        size_t maxFrames;
         map_t frameData;
     };
 
