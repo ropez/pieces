@@ -102,7 +102,7 @@ public:
      * Update all objects by reading from the frame data referenced by \a frameData,
      * and calling the decode function in all objects.
      */
-    void applyFrameData(const FrameData& frameData);
+    void applyFrameData(framenum_t frameNum, const FrameData& frameData);
 
     /**
      * Apply action function for all objects.

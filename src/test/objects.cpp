@@ -390,7 +390,7 @@ protected:
         framenum_t frameNum = event->getFrameNumber();
 
         FrameData frameData = event->getFrameData();
-        db()->applyFrameData(frameData);
+        db()->applyFrameData(event->getFrameNumber(), frameData);
         db()->applyAction(DEBUG_ACTION, frameNum);
     }
 

@@ -49,6 +49,11 @@ public:
     virtual ~GameObject();
 
     /**
+     * Get the frame number of the data applied to this object.
+     */
+    framenum_t getFrameNumber() const;
+
+    /**
      * Encode object state onto the data stream.
      *
      * This function must be reimplemented in game object classes used in a
@@ -82,8 +87,11 @@ public:
 
     /**
      * Extract object data for this object from \a frameData, and call decode().
+     *
+     * If data for this object is found, and the operation succeeds,
+     * getFrameNumber() will return \a frameNum afterwards.
      */
-    void applyFrameData(const FrameData& frameData);
+    void applyFrameData(framenum_t frameNum, const FrameData& frameData);
 
     /**
      * Custom user action.

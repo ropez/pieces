@@ -63,8 +63,8 @@ protected:
     {
         Pieces::FrameData frameData = event->getFrameData();
 
-        m_db->applyFrameData(event->getFrameData());
-        
+        m_db->applyFrameData(event->getFrameNumber(), event->getFrameData());
+
         m_db->applyAction(ACTION_DRAW, event->getFrameNumber());
 
         m_viewer.update();
@@ -88,9 +88,9 @@ protected:
                     PDEBUG << "Creating ball";
                     Pieces::ReferencePointer<Ball> ball = new Ball(objectId);
                     Pieces::ReferencePointer<BallPeerCallback> ballPeerCallback = new BallPeerCallback(ball.get(), m_ballOSG);
-                    
+
                     ball->setAction(ACTION_DRAW, ballPeerCallback.get());
-                    
+
                     m_db->insert(objectId, ball.get());
 
                     break;
@@ -164,7 +164,7 @@ int main(int argc, char** argv)
     osg::ref_ptr<PlayerOSG> player2 = setUpPlayer(cfg::player2XPos, 0);
 
     osg::ref_ptr<BallOSG> ball = new BallOSG();
-    
+
     osg::ref_ptr<osg::Group> world = setUpWorld();
     world->addChild(player1.get());
     world->addChild(player2.get());
@@ -175,12 +175,12 @@ int main(int argc, char** argv)
 
     //osg::ref_ptr<osg::DisplaySettings> ds = new osg::DisplaySettings();
     Producer::Camera* camera = viewer.getCamera(0);
- 
+
     Producer::Camera::Lens* lens = new Producer::Camera::Lens();
     lens->setFrustum(-640, 640, -512, 512, 2048, 10000);
     lens->setAutoAspect(true);
     camera->setLens(lens);
-    
+
 
     viewer.setSceneData(world.get());
     viewer.realize();

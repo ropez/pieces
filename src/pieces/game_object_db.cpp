@@ -74,12 +74,12 @@ void GameObjectDB::updateFrameData(FrameData& frameData) const
 }
 
 
-void GameObjectDB::applyFrameData(const FrameData& frameData)
+void GameObjectDB::applyFrameData(framenum_t frameNum, const FrameData& frameData)
 {
     for (map_t::iterator it = begin(); it != end(); ++it)
     {
         const ptr_t& obj = it->second;
-        obj->applyFrameData(frameData);
+        obj->applyFrameData(frameNum, frameData);
     }
 }
 

@@ -15,11 +15,22 @@ namespace Pieces
 class GameObjectPrivate
 {
 public:
+    GameObjectPrivate();
+
     typedef ReferencePointer<GameObjectAction> action_ptr_t;
     typedef std::map<int, action_ptr_t> action_map_t;
 
+    framenum_t frameNum;
     action_map_t actions;
 };
+
+
+GameObjectPrivate::GameObjectPrivate()
+: frameNum(0)
+, actions()
+{
+}
+
 
 GameObject::GameObject(objectid_t objectId)
 : Object(objectId)
@@ -31,6 +42,12 @@ GameObject::GameObject(objectid_t objectId)
 GameObject::~GameObject()
 {
     delete d;
+}
+
+
+framenum_t GameObject::getFrameNumber() const
+{
+    return d->frameNum;
 }
 
 
@@ -50,25 +67,12 @@ void GameObject::updateFrameData(FrameData& frameData) const
     BufferStream s;
     encode(s);
 
-    ByteArray oldData;
-    try
-    {
-        oldData = frameData.getObjectData(getObjectId());
-    }
-    catch (const InvalidKeyException&)
-    {
-        oldData = ByteArray();
-    }
-
-    // Avoid replacing equal data, to maximize effect of implicit sharing
-    if (oldData.isEmpty() || s.data() != oldData)
-    {
-        frameData.setObjectData(getObjectId(), s.data());
-    }
+    // Add to frame data
+    frameData.setObjectData(getObjectId(), s.data());
 }
 
 
-void GameObject::applyFrameData(const FrameData& frameData)
+void GameObject::applyFrameData(framenum_t frameNum, const FrameData& frameData)
 {
     try
     {
@@ -77,6 +81,8 @@ void GameObject::applyFrameData(const FrameData& frameData)
 
         // Decode object data from stream
         decode(s);
+
+        d->frameNum = frameNum;
     }
     catch (const InvalidKeyException&)
     {
