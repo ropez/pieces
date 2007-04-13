@@ -4,7 +4,7 @@
 #include <osg/Geometry>
 #include <iostream>
 
-PongEventHandler::PongEventHandler(osg::ref_ptr<Player> player1, osg::ref_ptr<Player> player2, osg::ref_ptr<Ball> ball)
+PongEventHandler::PongEventHandler(osg::ref_ptr<Player> player1, osg::ref_ptr<Player> player2, osg::ref_ptr<BallOSG> ball)
 : osgGA::GUIEventHandler()
 , m_player1(player1)
 , m_player2(player2)
@@ -67,33 +67,6 @@ bool PongEventHandler::handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionA
                 }
             }
 
-            // update the ball
-            m_ball->update();
-
-            // Check if ball hit wall
-            if(m_ball->getPositionX() >= cfg::frameInsideRight - cfg::ballSizeHalf)
-            {
-                m_ball->setAngle(osg::PI * 2 - m_ball->getAngle());
-                ++m_scorePlayer1;
-                std::cout << "Player1:\t" << m_scorePlayer1 << "\tPlayer2:\t" << m_scorePlayer2 << "\r";
-            }
-
-            if(m_ball->getPositionX() <= cfg::frameInsideLeft + cfg::ballSizeHalf)
-            {
-                m_ball->setAngle(osg::PI * 2 - m_ball->getAngle());
-                ++m_scorePlayer2;
-                std::cout << "Player1:\t" << m_scorePlayer1 << "\tPlayer2:\t" << m_scorePlayer2 << "\r";
-            }
-
-            if(m_ball->getPositionZ() >= cfg::frameInsideTop - cfg::ballSizeHalf)
-            {
-                m_ball->setAngle(osg::PI - m_ball->getAngle());
-            }
-
-            if(m_ball->getPositionZ() <= cfg::frameInsideBottom + cfg::ballSizeHalf)
-            {
-                m_ball->setAngle(osg::PI - m_ball->getAngle());
-            }
 
             // Check if ball hit player
             if(m_waitCollisionPlayer2 == 0)

@@ -1,9 +1,9 @@
-#include "ball.h"
+#include "ballosg.h"
 #include "config.h"
 #include <osg/Geode>
 #include <osg/Geometry>
 
-Ball::Ball()
+BallOSG::BallOSG()
 : osg::MatrixTransform()
 , _xPos(0.0)
 , _zPos(0.0)
@@ -13,11 +13,11 @@ Ball::Ball()
     addChild(createGeode().get());
 }
 
-Ball::~Ball()
+BallOSG::~BallOSG()
 {
 }
 
-void Ball::update()
+void BallOSG::update()
 {
     osg::Vec3 currPos = getMatrix().getTrans();
     currPos.x() += m_velocity * sin(m_angle);
@@ -27,7 +27,7 @@ void Ball::update()
     
 }
 
-osg::ref_ptr<osg::Geode> Ball::createGeode()
+osg::ref_ptr<osg::Geode> BallOSG::createGeode()
 {
     osg::ref_ptr<osg::Geode> geode = new osg::Geode();
 
@@ -72,45 +72,45 @@ osg::ref_ptr<osg::Geode> Ball::createGeode()
 
 }
 
-void Ball::setPositionX(double xPos)
+void BallOSG::setPositionX(double xPos)
 {
     _xPos = xPos;
     setMatrix(osg::Matrix::translate(osg::Vec3(_xPos, 0.0, _zPos)));
 }
 
-void Ball::setPositionZ(double zPos)
+void BallOSG::setPositionZ(double zPos)
 {
     _zPos = zPos;
     setMatrix(osg::Matrix::translate(osg::Vec3(_xPos, 0.0, _zPos)));
 }
 
-void Ball::addRelativeZ(double zOffset)
+void BallOSG::addRelativeZ(double zOffset)
 {
     _zPos += zOffset;
     setPositionZ(_zPos);
 }
 
-void Ball::setVelocity(double velocity)
+void BallOSG::setVelocity(double velocity)
 {
     m_velocity = velocity;
 }
 
-void Ball::setAngle(double angle)
+void BallOSG::setAngle(double angle)
 {
     m_angle = angle;
 }
 
-double Ball::getAngle()
+double BallOSG::getAngle()
 {
     return m_angle;
 }
 
-double Ball::getPositionX()
+double BallOSG::getPositionX()
 {
     return getMatrix().getTrans().x();
 }
 
-double Ball::getPositionZ()
+double BallOSG::getPositionZ()
 {
     return getMatrix().getTrans().z();
 }

@@ -1,13 +1,13 @@
-#if !defined BALL_H
-#define BALL_H
+#if !defined BALLOSG_H
+#define BALLOSG_H
 
 #include <osg/MatrixTransform>
 
-class Ball : public osg::MatrixTransform
+class BallOSG : public osg::MatrixTransform
 {
 public:
-    Ball();
-    ~Ball();
+    BallOSG();
+    ~BallOSG();
 
     void addRelativeZ(double zOffset);
     double getPositionX();
@@ -31,4 +31,4 @@ private:
 
 };
 
-#endif // BALL_H
+#endif // BALLOSG_H

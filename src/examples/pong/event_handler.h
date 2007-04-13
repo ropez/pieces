@@ -3,12 +3,12 @@
 
 #include <osgGA/GUIEventHandler>
 #include "player.h"
-#include "ball.h"
+#include "ballosg.h"
 
 class PongEventHandler : public osgGA::GUIEventHandler
 {
 public:
-    PongEventHandler(osg::ref_ptr<Player> player1, osg::ref_ptr<Player> player2, osg::ref_ptr<Ball> ball);
+    PongEventHandler(osg::ref_ptr<Player> player1, osg::ref_ptr<Player> player2, osg::ref_ptr<BallOSG> ball);
     ~PongEventHandler();
     
     virtual void operator()(osg::Node* node, osg::NodeVisitor* nv);
@@ -16,7 +16,7 @@ public:
 private:
     osg::ref_ptr<Player> m_player1;
     osg::ref_ptr<Player> m_player2;
-    osg::ref_ptr<Ball> m_ball;
+    osg::ref_ptr<BallOSG> m_ball;
     bool m_player1Up;
     bool m_player1Down;
     bool m_player2Up;
