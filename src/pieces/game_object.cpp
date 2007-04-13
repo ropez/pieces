@@ -70,11 +70,18 @@ void GameObject::updateFrameData(FrameData& frameData) const
 
 void GameObject::applyFrameData(const FrameData& frameData)
 {
-    // Object data
-    BufferStream s(frameData.getObjectData(getObjectId()));
+    try
+    {
+        // Object data
+        BufferStream s(frameData.getObjectData(getObjectId()));
 
-    // Decode object data from stream
-    decode(s);
+        // Decode object data from stream
+        decode(s);
+    }
+    catch (const InvalidKeyException&)
+    {
+        // Ignore
+    }
 }
 
 
