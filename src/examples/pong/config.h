@@ -30,6 +30,8 @@ namespace cfg
     const double ballVelocity = 10.0;
 
     const double playerVelocity = 7.0;
+
+	const double pi = 3.1415926535897932384626433832795;
 }
 
 #endif // CONFIG_H

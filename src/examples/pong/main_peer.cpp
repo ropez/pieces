@@ -145,7 +145,6 @@ int main(int argc, char** argv)
     unsigned short v = 1;
     unsigned short& w = v;
 
-    std::cout << "Hej og velkommen, sizeof shorts er: " << sizeof(w) << std::endl;
     Pieces::Application application(argc, argv);
 
     osgProducer::Viewer viewer;
