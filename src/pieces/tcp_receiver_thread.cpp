@@ -80,16 +80,15 @@ void TCPReceiverThread::run()
 
         for (;;)
         {
-            Message message;
+            msgpair_t msg;
             {
                 // Release lock while blocked (most of the time)
                 ReverseScopedLock<Mutex> unlock(d->mutex);
 
-                ds >> message;
+                ds >> msg.first >> msg.second;
             }
 
-            AutoPointer<MessageReceivedEvent> e(new MessageReceivedEvent(d->socket->getPeerAddress()));
-            e->setMessage(message);
+            AutoPointer<MessageReceivedEvent> e(new MessageReceivedEvent(d->socket->getPeerAddress(), msg));
             d->eventLoop->postEvent(e.release());
         }
     }

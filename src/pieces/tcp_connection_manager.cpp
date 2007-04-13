@@ -151,6 +151,8 @@ msgid_t TCPConnectionManager::sendMessage(const Message& message, msgid_t origin
 
     if (message.getFlags() & Message::FL_PERMANENT)
     {
+        PDEBUG << "Adding permanent message";
+
         // Add to buffer, so that future connections get the message
         std::deque<msgpair_t>::iterator it = d->findId(originalId);
         if (it != d->messages.end())

@@ -24,15 +24,12 @@ public:
     /**
      * Constructor.
      */
-    MessageReceivedEvent(const SocketAddress& sender);
-
-public:
+    MessageReceivedEvent(const SocketAddress& sender, const msgpair_t& msg);
 
     virtual AutoPointer<Event> clone() const;
     virtual void dispatch(EventHandler* h);
 
-    void setMessage(const Message& message);
-
+    msgid_t getMessageId() const;
     Message getMessage() const;
 
 protected:
@@ -42,7 +39,7 @@ protected:
 
 private:
     DISABLE_COPY(MessageReceivedEvent);
-    Message m_message;
+    msgpair_t m_msg;
 };
 
 } // namespace Pieces

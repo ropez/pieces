@@ -85,7 +85,7 @@ void TCPSenderThread::run()
             }
 
             // Send message
-            ds << msg.second << flush;
+            ds << msg.first << msg.second << flush;
         }
     }
     catch (const Exception& e)

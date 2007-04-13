@@ -16,10 +16,11 @@ Message::~Message()
 }
 
 
-Message::Message(int messageType, flags_t)
+Message::Message(int messageType, flags_t flags)
 : d(new Data)
 {
     d->type = messageType;
+    d->flags = flags;
 }
 
 Message::Message(const Message& other)
@@ -38,6 +39,7 @@ Message& Message::operator=(const Message& other)
 void Message::clear()
 {
     d->type = NO_MESSAGE_TYPE;
+    d->flags = 0;
     d->properties.clear();
 }
 
@@ -53,10 +55,12 @@ int Message::getMessageType() const
     return d->type;
 }
 
+
 void Message::setFlags(flags_t flags)
 {
     d->flags = flags;
 }
+
 
 flags_t Message::getFlags() const
 {
@@ -79,6 +83,7 @@ PropertyList Message::getProperties() const
 Message::Data::Data()
 : SharedData()
 , type(NO_MESSAGE_TYPE)
+, flags(0)
 , properties()
 {
 }
@@ -87,6 +92,7 @@ Message::Data::Data()
 Message::Data::Data(const Data& other)
 : SharedData()
 , type(other.type)
+, flags(other.flags)
 , properties(other.properties)
 {
 }
@@ -95,6 +101,7 @@ Message::Data::Data(const Data& other)
 Message::Data& Message::Data::operator=(const Data& other)
 {
     type = other.type;
+    flags = other.flags;
     properties = other.properties;
 
     return *this;
@@ -103,7 +110,7 @@ Message::Data& Message::Data::operator=(const Data& other)
 
 DataStream& operator<<(DataStream& ds, const Message& msg)
 {
-    return ds << msg.getMessageType() << msg.getProperties();
+    return ds << msg.getMessageType() << msg.getFlags() << msg.getProperties();
 }
 
 
@@ -114,6 +121,10 @@ DataStream& operator>>(DataStream& ds, Message& msg)
     int messageType = NO_MESSAGE_TYPE;
     ds >> messageType;
     msg.setMessageType(messageType);
+
+    flags_t flags = 0;
+    ds >> flags;
+    msg.setFlags(flags);
 
     PropertyList properties;
     ds >> properties;

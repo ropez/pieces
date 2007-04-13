@@ -6,18 +6,16 @@
 namespace Pieces
 {
 
-MessageReceivedEvent::MessageReceivedEvent(const SocketAddress& sender)
+MessageReceivedEvent::MessageReceivedEvent(const SocketAddress& sender, const msgpair_t& msg)
 : NetworkEvent(sender)
-, m_message()
+, m_msg(msg)
 {
 }
 
 
 AutoPointer<Event> MessageReceivedEvent::clone() const
 {
-    AutoPointer<MessageReceivedEvent> event(new MessageReceivedEvent(getSenderAddress()));
-
-    event->setMessage(getMessage());
+    AutoPointer<MessageReceivedEvent> event(new MessageReceivedEvent(getSenderAddress(), m_msg));
 
     return AutoPointer<Event>(event);
 }
@@ -29,15 +27,15 @@ void MessageReceivedEvent::dispatch(EventHandler* h)
 }
 
 
-void MessageReceivedEvent::setMessage(const Message& message)
+msgid_t MessageReceivedEvent::getMessageId() const
 {
-    m_message = message;
+    return m_msg.first;
 }
 
 
 Message MessageReceivedEvent::getMessage() const
 {
-    return m_message;
+    return m_msg.second;
 }
 
 
