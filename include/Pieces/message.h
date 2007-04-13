@@ -44,7 +44,7 @@ public:
     int getMessageType() const;
 
     void setFlags(flags_t flags);
-    flags_t getFlags();
+    flags_t getFlags() const;
 
     void setProperties(const PropertyList& properties);
     PropertyList getProperties() const;

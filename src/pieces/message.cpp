@@ -58,7 +58,7 @@ void Message::setFlags(flags_t flags)
     d->flags = flags;
 }
 
-flags_t Message::getFlags()
+flags_t Message::getFlags() const
 {
     return d->flags;
 }

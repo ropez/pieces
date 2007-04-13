@@ -149,17 +149,20 @@ msgid_t TCPConnectionManager::sendMessage(const Message& message, msgid_t origin
         conn->sendMessage(msg);
     }
 
-    // Add to buffer, so that future connections get the message
-    std::deque<msgpair_t>::iterator it = d->findId(originalId);
-    if (it != d->messages.end())
+    if (message.getFlags() & Message::FL_PERMANENT)
     {
-        // Remove original message from history
-        d->messages.erase(it);
-    }
-    else
-    {
-        // Add message to history
-        d->messages.push_back(msg);
+        // Add to buffer, so that future connections get the message
+        std::deque<msgpair_t>::iterator it = d->findId(originalId);
+        if (it != d->messages.end())
+        {
+            // Remove original message from history
+            d->messages.erase(it);
+        }
+        else
+        {
+            // Add message to history
+            d->messages.push_back(msg);
+        }
     }
 
     return d->countId;
