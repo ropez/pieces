@@ -91,7 +91,7 @@ msgid_t Host::sendMessage(const Message& message, msgid_t originalId)
 
 void Host::sendCreateObject(objectid_t objectId, int objectType)
 {
-    Message message(OBJECT_CREATE);
+    Message message(OBJECT_CREATE, Message::FL_PERMANENT);
     message.set(PR_OBJECT_TYPE, objectType);
     message.set(PR_OBJECT_ID, objectId);
 
@@ -102,7 +102,7 @@ void Host::sendCreateObject(objectid_t objectId, int objectType)
 
 void Host::sendRemoveObject(objectid_t objectId)
 {
-    Message message(OBJECT_REMOVE);
+    Message message(OBJECT_REMOVE, Message::FL_PERMANENT);
     message.set(PR_OBJECT_ID, objectId);
 
     if (d->createMessageIds.find(objectId) != d->createMessageIds.end())

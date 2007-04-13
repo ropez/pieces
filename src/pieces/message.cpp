@@ -16,20 +16,11 @@ Message::~Message()
 }
 
 
-Message::Message(int messageType)
+Message::Message(int messageType, flags_t)
 : d(new Data)
 {
     d->type = messageType;
 }
-
-
-Message::Message(int messageType, const PropertyList& properties)
-: d(new Data)
-{
-    d->type = messageType;
-    d->properties = properties;
-}
-
 
 Message::Message(const Message& other)
 : d(other.d)
@@ -60,6 +51,16 @@ void Message::setMessageType(int messageType)
 int Message::getMessageType() const
 {
     return d->type;
+}
+
+void Message::setFlags(flags_t flags)
+{
+    d->flags = flags;
+}
+
+flags_t Message::getFlags()
+{
+    return d->flags;
 }
 
 

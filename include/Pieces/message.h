@@ -21,11 +21,16 @@ namespace Pieces
 class Message
 {
 public:
+
+    enum MessageFlags
+    {
+        FL_PERMANENT = 0x01
+    };
+
     Message();
     ~Message();
 
-    explicit Message(int messageType);
-    Message(int messageType, const PropertyList& properties);
+    explicit Message(int messageType, flags_t flags = 0);
 
     Message(const Message& other);
     Message& operator=(const Message& other);
@@ -37,6 +42,9 @@ public:
 
     void setMessageType(int messageType);
     int getMessageType() const;
+
+    void setFlags(flags_t flags);
+    flags_t getFlags();
 
     void setProperties(const PropertyList& properties);
     PropertyList getProperties() const;
@@ -77,6 +85,7 @@ private:
         Data& operator=(const Data& other);
 
         int type;
+        flags_t flags;
         PropertyList properties;
     };
 
