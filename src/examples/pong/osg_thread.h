@@ -1,19 +1,20 @@
-
 #ifndef OSG_THREAD_H
 #define OSG_THREAD_H
 
 #include "OpenThreads/Thread"
-#include <osgProducer/Viewer>
+
 #include "playerosg.h"
 
+#include "Pieces/Peer"
+
+#include <osgProducer/Viewer>
+
+
 /**
- * \class EventLoopThread
- * \brief A thread that runs an event loop.
+ * \class OSGThread
+ * \brief The thread that updates the graphics.
  *
- * EventLoop::exec() blocks the calling thread, and the event handler
- * is called on the same thread. This is a convenience class that runs an
- * eventloop in a background thread, and calls the event handler in this
- * thread.
+ *  Creates and initalize an osgProducer::Viewer object, that will serve as display.
  *
  * \author Joakim Simonsson
  */
@@ -22,12 +23,12 @@ class OSGThread : public OpenThreads::Thread
 public:
 
     /**
-     * Create an event loop thread that will send events to the given \a handler.
+     * 
      */
-    OSGThread(osg::ref_ptr<osg::Group> root);
+    OSGThread(osg::ref_ptr<osg::Group> root, pcs::Peer& peer);
 
     /**
-     * Quits the event loop and joins the thread.
+     * 
      */
     ~OSGThread();
 

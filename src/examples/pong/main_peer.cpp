@@ -129,13 +129,15 @@ int main(int argc, char** argv)
 
     osg::ref_ptr<osg::Group> root = new osg::Group();
     
-    // Start graphics thread.
-    OSGThread osgThread(root.get());
-
-    // Start network loop
     PongPeer pongPeer(root.get());
 
+    OSGThread osgThread(root.get(), pongPeer);
+
+        
+    // Start graphics thread.
     osgThread.start();
+
+    // Start network loop
     pongPeer.exec();
 
 }

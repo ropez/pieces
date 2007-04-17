@@ -92,10 +92,25 @@ protected:
             }
             break;
         case MSG_UP_PRESSED:
+            {
+                PDEBUG << "up p";
+                break;
+            }
         case MSG_UP_RELEASED:
+            {
+                PDEBUG << "up r";
+                break;
+            }
         case MSG_DOWN_PRESSED:
+            {
+                PDEBUG << "down p";
+                break;
+            }
         case MSG_DOWN_RELEASED:
-            break;
+            {
+                PDEBUG << "down r";
+                break;
+            }
         }
     }
 

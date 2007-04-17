@@ -1,4 +1,3 @@
-
 #include "osg_thread.h"
 
 #include "ballosg.h"
@@ -6,7 +5,7 @@
 #include "event_handler.h"
 #include "frame.h"
 
-OSGThread::OSGThread(osg::ref_ptr<osg::Group> root)
+OSGThread::OSGThread(osg::ref_ptr<osg::Group> root, pcs::Peer& peer)
 : OpenThreads::Thread()
 , m_viewer()
 , m_root(root)
@@ -31,8 +30,8 @@ OSGThread::OSGThread(osg::ref_ptr<osg::Group> root)
     m_root->addChild(player2.get());
 
 
-    //PongEventHandler* peh = new PongEventHandler(player1, player2, 0);
-    //m_viewer.getEventHandlerList().push_back(peh);
+    PongEventHandler* peh = new PongEventHandler(peer);
+    m_viewer.getEventHandlerList().push_back(peh);
 
     //osg::ref_ptr<osg::DisplaySettings> ds = new osg::DisplaySettings();
     Producer::Camera* camera = m_viewer.getCamera(0);

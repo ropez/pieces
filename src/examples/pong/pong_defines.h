@@ -1,6 +1,7 @@
 #if !defined PONG_DEFINES_H
 #define PONG_DEFINES_H
 
+
 // Host specific
 
 enum ObjectTypes
@@ -9,6 +10,8 @@ enum ObjectTypes
     TYPE_PLAYER
 };
 
+
+// Common
 enum MessageTypes
 {
     MSG_GAME_EVENT_JOIN = 1000,
