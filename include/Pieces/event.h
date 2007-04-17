@@ -6,7 +6,7 @@
 #include "Pieces/ByteArray"
 
 
-namespace Pieces
+namespace pcs
 {
 class EventHandler;
 
@@ -30,6 +30,6 @@ private:
     DISABLE_COPY(Event);
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_EVENT_H

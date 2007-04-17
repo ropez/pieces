@@ -5,7 +5,7 @@
 #include "Pieces/DataStream"
 
 
-namespace Pieces
+namespace pcs
 {
 class DataBuffer;
 
@@ -81,6 +81,6 @@ private:
     DataBuffer* m_buf;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_BUFFER_STREAM_H

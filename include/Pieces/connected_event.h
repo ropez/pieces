@@ -5,7 +5,7 @@
 #include "Pieces/NetworkEvent"
 
 
-namespace Pieces
+namespace pcs
 {
 
 /**
@@ -39,6 +39,6 @@ private:
     DISABLE_COPY(ConnectedEvent);
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_CONNECTED_EVENT_H

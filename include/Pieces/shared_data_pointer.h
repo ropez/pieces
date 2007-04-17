@@ -2,14 +2,14 @@
 #ifndef PIECES_SHARED_DATA_POINTER_H
 #define PIECES_SHARED_DATA_POINTER_H
 
-namespace Pieces
+namespace pcs
 {
 
 
 /**
  * Smart pointer that automatically handles implicit sharing.
  *
- * T must be a class derived from Pieces::SharedData.
+ * T must be a class derived from pcs::SharedData.
  */
 template<class T>
 class SharedDataPointer
@@ -288,6 +288,6 @@ void SharedDataPointer<T>::detach()
 }
 
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_SHARED_DATA_POINTER_H

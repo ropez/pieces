@@ -10,7 +10,7 @@
 #include <set>
 
 
-namespace Pieces
+namespace pcs
 {
 
 class GameDataSenderPrivate
@@ -79,4 +79,4 @@ void GameDataSender::sendFrameData(const FrameData& frameData)
     ++d->frameNumber;
 }
 
-} //namespace Pieces
+} //namespace pcs

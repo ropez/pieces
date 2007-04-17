@@ -1,7 +1,7 @@
 #include "Pieces/TimeoutException"
 
 
-namespace Pieces
+namespace pcs
 {
 
 TimeoutException::TimeoutException()
@@ -27,4 +27,4 @@ std::string TimeoutException::getClassName() const
     return "TimeoutException";
 }
 
-} // namespace Pieces
+} // namespace pcs

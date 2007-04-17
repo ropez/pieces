@@ -5,7 +5,7 @@
 
 #include "Pieces/Debug"
 
-using namespace Pieces;
+using namespace pcs;
 
 Ball::Ball(objectid_t objectId)
 : GameObject(objectId)

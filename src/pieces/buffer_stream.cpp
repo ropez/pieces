@@ -3,7 +3,7 @@
 #include "Pieces/DataBuffer"
 #include "Pieces/Debug"
 
-namespace Pieces
+namespace pcs
 {
 
 BufferStream::BufferStream()
@@ -35,4 +35,4 @@ ByteArray BufferStream::data() const
     return m_buf->data();
 }
 
-} // namespace Pieces
+} // namespace pcs

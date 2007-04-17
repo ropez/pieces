@@ -7,7 +7,7 @@
 #include <sstream>
 #include <iomanip>
 
-namespace Pieces
+namespace pcs
 {
 
 ValueList::Data::Data()
@@ -143,4 +143,4 @@ void decode(const ByteArray& ba, ValueList& l)
     ds >> l;
 }
 
-} // namespace Pieces
+} // namespace pcs

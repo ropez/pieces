@@ -6,13 +6,13 @@
 
 
 BallPeerCallback::BallPeerCallback(Ball* ball, osg::ref_ptr<BallOSG> ballOSG)
-: Pieces::GameObjectAction()
+: pcs::GameObjectAction()
 , m_ball(ball)
 , m_ballOSG(ballOSG)
 {
 }
 
-void BallPeerCallback::operator()(Pieces::framenum_t frameNum)
+void BallPeerCallback::operator()(pcs::framenum_t frameNum)
 {
     if(m_ballOSG.valid())
     {

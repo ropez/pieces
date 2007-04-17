@@ -18,7 +18,7 @@
 #include "PlayerHostCallback.h"
 #include "pong_defines.h"
 
-using namespace Pieces;
+using namespace pcs;
 
 
 /**
@@ -35,7 +35,7 @@ class RunnerHost : public Host
 {
 public:
     RunnerHost()
-        : Pieces::Host()
+        : pcs::Host()
         , m_dbBalls(new GameObjectDB())
     {
         startListening(2222);
@@ -84,7 +84,7 @@ protected:
         {
         case MSG_GAME_EVENT_JOIN:
             {
-                Pieces::port_t port = message.get<port_t>(PR_PORT);
+                pcs::port_t port = message.get<port_t>(PR_PORT);
 
                 SocketAddress peer = event->getSenderAddress();
                 peer.setPort(port);

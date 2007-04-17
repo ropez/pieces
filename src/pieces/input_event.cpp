@@ -3,7 +3,7 @@
 #include "Pieces/EventHandler"
 
 
-namespace Pieces
+namespace pcs
 {
 
 InputEvent::InputEvent(int type)
@@ -43,4 +43,4 @@ InputEvent::~InputEvent()
 {
 }
 
-} // namespace Pieces
+} // namespace pcs

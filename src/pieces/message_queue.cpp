@@ -8,7 +8,7 @@
 #include <queue>
 
 
-namespace Pieces
+namespace pcs
 {
 using namespace OpenThreads;
 
@@ -80,4 +80,4 @@ msgpair_t MessageQueue::pop()
     return message;
 }
 
-} // namespace Pieces
+} // namespace pcs

@@ -7,7 +7,7 @@
 #include <Pieces/DataStream>
 
 
-namespace Pieces
+namespace pcs
 {
 
 class InetAddress
@@ -74,6 +74,6 @@ DataStream& operator>>(DataStream& ds, InetAddress& ia);
 
 std::ostream& operator<<(std::ostream& os, const InetAddress& ia);
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_INET_ADDRESS_H

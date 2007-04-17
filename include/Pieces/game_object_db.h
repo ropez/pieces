@@ -7,7 +7,7 @@
 
 #include <map>
 
-namespace Pieces
+namespace pcs
 {
 class GameObject;
 class FrameData;
@@ -151,6 +151,6 @@ private:
     map_t m_objects;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_GAME_OBJECT_DB

@@ -34,7 +34,7 @@
 #include <cmath>
 
 
-using namespace Pieces;
+using namespace pcs;
 
 
 enum ObjectType

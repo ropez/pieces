@@ -3,7 +3,7 @@
 #include "Pieces/EventHandler"
 
 
-namespace Pieces
+namespace pcs
 {
 
 ConnectedEvent::ConnectedEvent(const SocketAddress& sender)
@@ -30,4 +30,4 @@ ConnectedEvent::~ConnectedEvent()
 {
 }
 
-} // namespace Pieces
+} // namespace pcs

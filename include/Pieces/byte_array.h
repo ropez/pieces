@@ -8,7 +8,7 @@
 #include <iostream>
 
 
-namespace Pieces
+namespace pcs
 {
 
 /**
@@ -298,6 +298,6 @@ ByteArray operator+(const ByteArray& op1, const ByteArray& op2);
  */
 std::ostream& operator<<(std::ostream& os, const ByteArray& ba);
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_BYTE_ARRAY_H

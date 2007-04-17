@@ -6,7 +6,7 @@
 #include "Pieces/global"
 
 
-namespace Pieces
+namespace pcs
 {
 class EventLoop;
 class EventHandler;
@@ -54,6 +54,6 @@ private:
     EventLoop* m_eventLoop;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_EVENT_LOOP_THREAD_H

@@ -5,7 +5,7 @@
 #include "Pieces/EventHandler"
 
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -47,6 +47,6 @@ private:
     EventHandler* m_nextHandler;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_EVENT_FILTER_H

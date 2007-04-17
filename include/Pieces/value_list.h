@@ -8,7 +8,7 @@
 #include <vector>
 
 
-namespace Pieces
+namespace pcs
 {
 class DataStream;
 
@@ -195,6 +195,6 @@ T ValueList::get(int index) const
     return result;
 }
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_VALUE_LIST_H

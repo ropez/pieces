@@ -5,7 +5,7 @@
 #include "Pieces/Exception"
 
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -19,6 +19,6 @@ public:
     virtual std::string getClassName() const;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_INVALID_KEY_EXCEPTION_H

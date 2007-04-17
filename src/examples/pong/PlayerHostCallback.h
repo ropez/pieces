@@ -4,12 +4,12 @@
 #include "player.h"
 #include "Pieces/GameObjectAction"
 
-class PlayerUpdateCallback : public Pieces::GameObjectAction
+class PlayerUpdateCallback : public pcs::GameObjectAction
 {
 public:
     PlayerUpdateCallback(Player* player);
 
-    virtual void operator()(Pieces::framenum_t);
+    virtual void operator()(pcs::framenum_t);
 
 private:
     Player* m_player;

@@ -5,7 +5,7 @@
 #include "Pieces/Event"
 
 
-namespace Pieces
+namespace pcs
 {
 class EventQueuePrivate;
 
@@ -63,6 +63,6 @@ private:
     EventQueuePrivate* d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_EVENT_QUEUE_H

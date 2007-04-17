@@ -27,22 +27,22 @@
 
 
 
-class PongPeer : public Pieces::Peer
+class PongPeer : public pcs::Peer
 {
 public:
     PongPeer(osg::ref_ptr<osg::Group> rootOSG)
-        : Pieces::Peer()
-        , m_db(new Pieces::GameObjectDB())
+        : pcs::Peer()
+        , m_db(new pcs::GameObjectDB())
         , m_rootOSG(rootOSG)
     {
         std::string host = "localhost";
 
-        if (Pieces::app->argc() > 1)
+        if (pcs::app->argc() > 1)
         {
-            host = Pieces::app->arg(1);
+            host = pcs::app->arg(1);
         }
 
-        Pieces::SocketAddress sa(Pieces::InetAddress::getHostByName(host), 2222);
+        pcs::SocketAddress sa(pcs::InetAddress::getHostByName(host), 2222);
 
         PDEBUG << "Connecting to " << sa;
 
@@ -50,8 +50,8 @@ public:
 
         // Join game
         {
-            Pieces::Message message(MSG_GAME_EVENT_JOIN);
-            message.set<Pieces::port_t>(Pieces::PR_PORT, 3333);
+            pcs::Message message(MSG_GAME_EVENT_JOIN);
+            message.set<pcs::port_t>(pcs::PR_PORT, 3333);
             sendMessage(message);
         }
 
@@ -60,31 +60,31 @@ public:
 
 protected:
 
-    virtual void handle(Pieces::GameDataEvent* event)
+    virtual void handle(pcs::GameDataEvent* event)
     {
-        Pieces::FrameData frameData = event->getFrameData();
+        pcs::FrameData frameData = event->getFrameData();
 
         m_db->applyFrameData(event->getFrameNumber(), event->getFrameData());
 
         m_db->applyAction(ACTION_DRAW, event->getFrameNumber());
     }
 
-    virtual void handle(Pieces::MessageReceivedEvent* event)
+    virtual void handle(pcs::MessageReceivedEvent* event)
     {
-        Pieces::Message message = event->getMessage();
+        pcs::Message message = event->getMessage();
 
-        if (message.getMessageType() == Pieces::OBJECT_CREATE)
+        if (message.getMessageType() == pcs::OBJECT_CREATE)
         {
-            int objectType = message.get<int>(Pieces::PR_OBJECT_TYPE);
-            Pieces::objectid_t objectId = message.get<Pieces::objectid_t>(Pieces::PR_OBJECT_ID);
+            int objectType = message.get<int>(pcs::PR_OBJECT_TYPE);
+            pcs::objectid_t objectId = message.get<pcs::objectid_t>(pcs::PR_OBJECT_ID);
 
             switch (objectType)
             {
             case TYPE_BALL:
                 {
                     PDEBUG << "Creating ball";
-                    Pieces::ReferencePointer<Ball> ball = new Ball(objectId);
-                    Pieces::ReferencePointer<BallPeerCallback> ballPeerCallback = new BallPeerCallback(ball.get(), 0);
+                    pcs::ReferencePointer<Ball> ball = new Ball(objectId);
+                    pcs::ReferencePointer<BallPeerCallback> ballPeerCallback = new BallPeerCallback(ball.get(), 0);
                     ball->setAction(ACTION_DRAW, ballPeerCallback.get());
 
                     osg::ref_ptr<BallOSG> ballOSG = new BallOSG(ball);
@@ -100,15 +100,15 @@ protected:
                 return;
             }
         }
-        else if (message.getMessageType() == Pieces::OBJECT_REMOVE)
+        else if (message.getMessageType() == pcs::OBJECT_REMOVE)
         {
-            Pieces::objectid_t objectId = message.get<Pieces::objectid_t>(Pieces::PR_OBJECT_ID);
+            pcs::objectid_t objectId = message.get<pcs::objectid_t>(pcs::PR_OBJECT_ID);
             m_db->remove(objectId);
         }
     }
 
 private:
-    Pieces::AutoPointer<Pieces::GameObjectDB> m_db;
+    pcs::AutoPointer<pcs::GameObjectDB> m_db;
     osg::ref_ptr<osg::Group> m_rootOSG;
 };
 
@@ -125,7 +125,7 @@ osg::ref_ptr<osg::Node> createMenu()
 int main(int argc, char** argv)
 {
 
-    Pieces::Application application(argc, argv);
+    pcs::Application application(argc, argv);
 
     osg::ref_ptr<osg::Group> root = new osg::Group();
     

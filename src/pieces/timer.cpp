@@ -4,7 +4,7 @@
 #include "Pieces/ByteArray"
 
 
-namespace Pieces
+namespace pcs
 {
 
 class TimerPrivate
@@ -87,4 +87,4 @@ void Timer::stop()
     }
 }
 
-} // namespace Pieces
+} // namespace pcs

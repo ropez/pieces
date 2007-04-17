@@ -2,7 +2,7 @@
 #include "Pieces/SocketAddress"
 
 
-namespace Pieces
+namespace pcs
 {
 
 SocketAddress::SocketAddress()
@@ -155,4 +155,4 @@ std::ostream& operator<<(std::ostream& os, const SocketAddress& sa)
     return os << sa.getInetAddress() << ":" << sa.getPort();
 }
 
-} // namespace Pieces
+} // namespace pcs

@@ -7,7 +7,7 @@
 #include <iomanip>
 
 
-namespace Pieces
+namespace pcs
 {
 
 OpenThreads::Mutex DebugStream::mutex;
@@ -59,4 +59,4 @@ std::ostream& error(std::ostream& os)
     return os << tid << "ERROR" << align(16);
 }
 
-} // namespace Pieces
+} // namespace pcs

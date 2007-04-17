@@ -7,12 +7,12 @@
 #include "Pieces/GameObjectAction"
 #include "ballosg.h"
 
-class BallPeerCallback : public Pieces::GameObjectAction
+class BallPeerCallback : public pcs::GameObjectAction
 {
 public:
     BallPeerCallback(Ball* ball, osg::ref_ptr<BallOSG> ballOSG);
 
-    virtual void operator()(Pieces::framenum_t);
+    virtual void operator()(pcs::framenum_t);
 
 private:
     Ball* m_ball;

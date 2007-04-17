@@ -6,7 +6,7 @@
 #include "Pieces/SharedData"
 
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -36,6 +36,6 @@ private:
     objectid_t m_objectId;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_OBJECT_H

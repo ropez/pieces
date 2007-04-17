@@ -22,7 +22,7 @@
 #include <winsock2.h>
 #endif
 
-using namespace Pieces;
+using namespace pcs;
 
 
 enum MyEvents

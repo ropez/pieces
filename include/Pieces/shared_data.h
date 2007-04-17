@@ -4,7 +4,7 @@
 
 #include "Pieces/global"
 
-namespace Pieces
+namespace pcs
 {
 
 class SharedData
@@ -58,6 +58,6 @@ private:
     unsigned long m_count;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_SHARED_DATA_H

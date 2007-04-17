@@ -9,7 +9,7 @@
 
 
 
-namespace Pieces
+namespace pcs
 {
 
 class HostPrivate
@@ -159,4 +159,4 @@ void Host::peerDisconnected(PeerInfo* /*info*/)
     // TODO: Anything to do if user haven't implemented this?
 }
 
-} // namespace Pieces
+} // namespace pcs

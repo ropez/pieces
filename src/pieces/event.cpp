@@ -3,7 +3,7 @@
 #include "Pieces/EventHandler"
 
 
-namespace Pieces
+namespace pcs
 {
 
 Event::Event()
@@ -15,4 +15,4 @@ Event::~Event()
 {
 }
 
-} // namespace Pieces
+} // namespace pcs

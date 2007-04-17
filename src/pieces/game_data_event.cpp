@@ -3,7 +3,7 @@
 #include "Pieces/EventHandler"
 
 
-namespace Pieces
+namespace pcs
 {
 
 GameDataEvent::GameDataEvent(framenum_t frameNum, const FrameData& frameData)
@@ -43,4 +43,4 @@ GameDataEvent::~GameDataEvent()
 
 
 
-} // namespace Pieces
+} // namespace pcs

@@ -8,7 +8,7 @@
 #include "NetworkEventFilter"
 
 
-namespace Pieces
+namespace pcs
 {
 
 class PeerPrivate

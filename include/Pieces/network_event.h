@@ -7,7 +7,7 @@
 #include "Pieces/Message"
 
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -45,6 +45,6 @@ private:
     SocketAddress m_sender;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_NETWORK_EVENT_H

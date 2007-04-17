@@ -6,7 +6,7 @@
 #include "Pieces/InetAddress"
 #include "Pieces/SocketAddress"
 
-namespace Pieces
+namespace pcs
 {
 class TCPSocketPrivate;
 
@@ -100,6 +100,6 @@ private:
     TCPSocketPrivate* d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_TCP_SOCKET_H

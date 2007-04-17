@@ -7,7 +7,7 @@
 #include <string>
 
 
-namespace Pieces
+namespace pcs
 {
 class ApplicationPrivate;
 
@@ -41,6 +41,6 @@ private:
 
 extern Application* app;
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_APPLICATION_H

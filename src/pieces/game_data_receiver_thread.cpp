@@ -15,7 +15,7 @@
 #include "OpenThreads/ScopedLock"
 
 
-namespace Pieces
+namespace pcs
 {
 using namespace OpenThreads;
 
@@ -104,4 +104,4 @@ void GameDataReceiverThread::run()
     }
 }
 
-} // namespace Pieces
+} // namespace pcs

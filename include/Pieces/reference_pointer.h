@@ -3,7 +3,7 @@
 #define PIECES_REFERENCE_POINTER_H
 
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -308,6 +308,6 @@ void ReferencePointer<T>::deref()
     }
 }
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_REFERENCE_POINTER_H

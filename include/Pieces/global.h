@@ -7,7 +7,7 @@
 #define DISABLE_COPY(c) c(const c&); c& operator=(const c&);
 
 
-namespace Pieces
+namespace pcs
 {
 
 // Bit field flags
@@ -53,6 +53,6 @@ enum MessageProperty
     PR_PORT
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_GLOBAL_H

@@ -6,7 +6,7 @@
 #include <deque>
 
 
-namespace Pieces
+namespace pcs
 {
 class TCPSocket;
 class SocketAddress;
@@ -67,6 +67,6 @@ private:
     TCPConnectionPrivate* d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_TCP_CONNECTION_H

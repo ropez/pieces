@@ -6,7 +6,7 @@
 #include <deque>
 
 
-namespace Pieces
+namespace pcs
 {
 class Message;
 class MessageQueuePrivate;
@@ -47,6 +47,6 @@ private:
     MessageQueuePrivate* d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_MESSAGE_QUEUE_H

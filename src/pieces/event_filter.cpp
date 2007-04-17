@@ -3,7 +3,7 @@
 #include "Pieces/Event"
 
 
-namespace Pieces
+namespace pcs
 {
 
 EventFilter::EventFilter(EventHandler* nextHandler)
@@ -18,4 +18,4 @@ void EventFilter::handle(Event* event)
 }
 
 
-} // namespace Pieces
+} // namespace pcs

@@ -7,7 +7,7 @@
 
 #include <sstream>
 
-namespace Pieces
+namespace pcs
 {
 
 FrameData::FrameData()
@@ -160,4 +160,4 @@ DataStream& operator>>(DataStream& ds, FrameData& fd)
     return ds;
 }
 
-} // namespace Pieces
+} // namespace pcs

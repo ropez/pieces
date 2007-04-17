@@ -2,7 +2,7 @@
 #include "Pieces/Message"
 
 
-namespace Pieces
+namespace pcs
 {
 
 Message::Message()
@@ -133,4 +133,4 @@ DataStream& operator>>(DataStream& ds, Message& msg)
     return ds;
 }
 
-} // namespace Pieces
+} // namespace pcs

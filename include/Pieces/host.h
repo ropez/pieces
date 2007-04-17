@@ -6,7 +6,7 @@
 #include "Pieces/Message"
 
 
-namespace Pieces
+namespace pcs
 {
 class EventLoop;
 class ConnectionManager;
@@ -127,6 +127,6 @@ private:
     HostPrivate* d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_HOST_H

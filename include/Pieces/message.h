@@ -8,7 +8,7 @@
 #include "Pieces/DataStream"
 
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -137,6 +137,6 @@ T Message::get(int property, const T& defval) const
     return d->properties.get<T>(property, defval);
 }
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_MESSAGE_H

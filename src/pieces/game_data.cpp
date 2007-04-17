@@ -3,7 +3,7 @@
 #include "Pieces/InvalidKeyException"
 
 
-namespace Pieces
+namespace pcs
 {
 
 GameData::GameData(size_t maxFrames)
@@ -102,4 +102,4 @@ GameData::Data& GameData::Data::operator=(const Data& other)
     return *this;
 }
 
-} // namespace Pieces
+} // namespace pcs

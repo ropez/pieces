@@ -8,7 +8,7 @@
 #include "OpenThreads/ScopedLock"
 
 
-namespace Pieces
+namespace pcs
 {
 
 using OpenThreads::Mutex;
@@ -131,4 +131,4 @@ void TimerThread::run()
     while (d->repeating);
 }
 
-} // namespace Pieces
+} // namespace pcs

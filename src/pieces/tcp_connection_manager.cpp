@@ -18,7 +18,7 @@
 #include <algorithm>
 
 
-namespace Pieces
+namespace pcs
 {
 
 class TCPConnectionManagerPrivate
@@ -212,4 +212,4 @@ void TCPConnectionManager::remove(const SocketAddress& address)
     // Can do some final operations here, like sending goodbye message.
 }
 
-} // namespace Pieces
+} // namespace pcs

@@ -3,7 +3,7 @@
 #include "Pieces/EventHandler"
 
 
-namespace Pieces
+namespace pcs
 {
 
 TimerEvent::TimerEvent(int timerId)
@@ -37,4 +37,4 @@ int TimerEvent::getTimerId() const
     return m_timerId;
 }
 
-} // namespace Pieces
+} // namespace pcs

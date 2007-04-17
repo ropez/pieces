@@ -8,7 +8,7 @@
 #include "Pieces/SocketAddress"
 
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -94,6 +94,6 @@ private:
     SharedDataPointer<Data> d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_DATAGRAM_H

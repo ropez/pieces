@@ -8,7 +8,7 @@
 #include <cstring>
 
 
-namespace Pieces
+namespace pcs
 {
 
 DataStream::DataStream()
@@ -539,4 +539,4 @@ DataStream& flush(DataStream& ds)
     return ds;
 }
 
-} // namespace Pieces
+} // namespace pcs

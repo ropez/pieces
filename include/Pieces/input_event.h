@@ -4,7 +4,7 @@
 
 #include "Pieces/Event"
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -52,6 +52,6 @@ private:
     int m_type;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_INPUT_EVENT_H

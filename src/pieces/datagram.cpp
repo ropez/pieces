@@ -4,7 +4,7 @@
 #include "Pieces/InetAddress"
 
 
-namespace Pieces
+namespace pcs
 {
 
 Datagram::Datagram()
@@ -100,4 +100,4 @@ Datagram::Data& Datagram::Data::operator=(const Data& other)
     return *this;
 }
 
-} // namespace Pieces
+} // namespace pcs

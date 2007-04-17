@@ -9,7 +9,7 @@
 #include "Pieces/AutoPointer"
 
 
-namespace Pieces
+namespace pcs
 {
 
 class TCPConnectionPrivate
@@ -98,4 +98,4 @@ void TCPConnection::sendMessage(const msgpair_t& message)
     }
 }
 
-} // namespace Pieces
+} // namespace pcs

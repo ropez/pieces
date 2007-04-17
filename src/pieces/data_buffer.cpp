@@ -3,7 +3,7 @@
 #include "Pieces/IOException"
 
 
-namespace Pieces
+namespace pcs
 {
 
 DataBuffer::DataBuffer()
@@ -62,5 +62,5 @@ void DataBuffer::flush()
     // Do nothing
 }
 
-} // namespace Pieces
+} // namespace pcs
 

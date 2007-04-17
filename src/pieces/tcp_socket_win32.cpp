@@ -12,12 +12,12 @@
 
 
 
-namespace Pieces
+namespace pcs
 {
 
 class TCPSocketPrivate
 {
-public:// namespace Pieces
+public:// namespace pcs
 
     // Default constructor.
     TCPSocketPrivate();
@@ -343,4 +343,4 @@ AutoPointer<TCPSocket> TCPServer::accept()
 }
 
 
-} // namespace Pieces
+} // namespace pcs

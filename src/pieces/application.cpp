@@ -7,7 +7,7 @@
 #endif
 
 
-namespace Pieces
+namespace pcs
 {
 
 class ApplicationPrivate
@@ -67,4 +67,4 @@ std::string Application::arg(int index) const
 
 Application* app = 0;
 
-} // namespace Pieces
+} // namespace pcs

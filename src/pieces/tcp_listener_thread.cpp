@@ -12,7 +12,7 @@
 #include "OpenThreads/Thread"
 
 
-namespace Pieces
+namespace pcs
 {
 
 using namespace OpenThreads;
@@ -105,4 +105,4 @@ void TCPListenerThread::run()
 }
 
 
-} // namespace Pieces
+} // namespace pcs

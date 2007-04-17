@@ -6,7 +6,7 @@
 #include "Pieces/Debug"
 
 
-namespace Pieces
+namespace pcs
 {
 
 EventLoop::EventLoop()
@@ -59,4 +59,4 @@ void EventLoop::postEvent(Event* e)
     }
 }
 
-} // namespace Pieces
+} // namespace pcs

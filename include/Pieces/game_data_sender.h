@@ -5,7 +5,7 @@
 #include "Pieces/global"
 
 
-namespace Pieces
+namespace pcs
 {
 class SocketAddress;
 class FrameData;
@@ -39,6 +39,6 @@ private:
     GameDataSenderPrivate* d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_GAME_DATA_SENDER_H

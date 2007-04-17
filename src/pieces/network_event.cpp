@@ -3,7 +3,7 @@
 #include "Pieces/EventHandler"
 
 
-namespace Pieces
+namespace pcs
 {
 
 NetworkEvent::NetworkEvent(const SocketAddress& sender)
@@ -37,4 +37,4 @@ NetworkEvent::~NetworkEvent()
 {
 }
 
-} // namespace Pieces
+} // namespace pcs

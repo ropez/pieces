@@ -5,7 +5,7 @@
 #include "Pieces/Message"
 
 
-namespace Pieces
+namespace pcs
 {
 class TCPConnection;
 class SocketAddress;
@@ -93,6 +93,6 @@ public:
     virtual void remove(const SocketAddress& address) = 0;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_CONNECTION_MANAGER_H

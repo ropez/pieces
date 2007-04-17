@@ -3,7 +3,7 @@
 #include "Pieces/GameObject"
 
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -117,4 +117,4 @@ GameObjectDB::map_t::const_iterator GameObjectDB::end() const
     return m_objects.end();
 }
 
-} // namespace Pieces
+} // namespace pcs

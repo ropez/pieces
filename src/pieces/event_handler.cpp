@@ -11,7 +11,7 @@
 #include "Pieces/GameDataEvent"
 
 
-namespace Pieces
+namespace pcs
 {
 
 EventHandler::EventHandler()

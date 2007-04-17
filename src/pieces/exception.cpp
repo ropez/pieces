@@ -1,7 +1,7 @@
 #include "Pieces/Exception"
 
 
-namespace Pieces
+namespace pcs
 {
 
 Exception::Exception()

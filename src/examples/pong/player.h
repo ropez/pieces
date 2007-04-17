@@ -3,12 +3,12 @@
 
 #include "Pieces/GameObject"
 
-class Player : public Pieces::GameObject
+class Player : public pcs::GameObject
 {
 public:
-    Player(Pieces::objectid_t objectId, int posX);
+    Player(pcs::objectid_t objectId, int posX);
 
-    void encode(Pieces::DataStream& ds) const;
+    void encode(pcs::DataStream& ds) const;
 
 private:
     const double m_posX;

@@ -6,7 +6,7 @@
 #include "Pieces/ConnectionManager"
 
 
-namespace Pieces
+namespace pcs
 {
 class TCPConnectionManagerPrivate;
 
@@ -79,6 +79,6 @@ private:
     TCPConnectionManagerPrivate* d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_TCP_CONNECTION_MANAGER_H

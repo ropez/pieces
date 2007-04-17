@@ -3,7 +3,7 @@
 #include "Pieces/EventLoop"
 
 
-namespace Pieces
+namespace pcs
 {
 
 EventLoopThread::EventLoopThread(EventHandler* handler)
@@ -33,4 +33,4 @@ void EventLoopThread::run()
     m_eventLoop->exec(m_handler);
 }
 
-} // namespace Pieces
+} // namespace pcs

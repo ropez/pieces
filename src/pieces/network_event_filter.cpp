@@ -5,7 +5,7 @@
 #include "Pieces/ConnectionManager"
 
 
-namespace Pieces
+namespace pcs
 {
 
 NetworkEventFilter::NetworkEventFilter(EventHandler* nextHandler, ConnectionManager* manager)
@@ -24,4 +24,4 @@ void NetworkEventFilter::handle(DisconnectedEvent* event)
     EventFilter::handle(event);
 }
 
-} // namespace Pieces
+} // namespace pcs

@@ -10,7 +10,7 @@
 #include <map>
 
 
-namespace Pieces
+namespace pcs
 {
 class DataStream;
 
@@ -65,6 +65,6 @@ private:
 DataStream& operator<<(DataStream& ds, const FrameData& fd);
 DataStream& operator>>(DataStream& ds, FrameData& fd);
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_FRAME_DATA_H

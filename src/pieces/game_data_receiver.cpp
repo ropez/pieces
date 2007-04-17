@@ -8,7 +8,7 @@
 
 
 
-namespace Pieces
+namespace pcs
 {
 
 class GameDataReceiverPrivate
@@ -47,4 +47,4 @@ void GameDataReceiver::listen(port_t port)
     d->thread->start();
 }
 
-} //namespace Pieces
+} //namespace pcs

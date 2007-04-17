@@ -3,7 +3,7 @@
 #include "Pieces/EventHandler"
 
 
-namespace Pieces
+namespace pcs
 {
 
 MessageReceivedEvent::MessageReceivedEvent(const SocketAddress& sender, const msgpair_t& msg)
@@ -43,4 +43,4 @@ MessageReceivedEvent::~MessageReceivedEvent()
 {
 }
 
-} // namespace Pieces
+} // namespace pcs

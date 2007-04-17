@@ -7,7 +7,7 @@
 #include <iomanip>
 
 
-namespace Pieces
+namespace pcs
 {
 
 PropertyList::Data::Data()
@@ -156,4 +156,4 @@ void decode(const ByteArray& ba, PropertyList& p)
     ds >> p;
 }
 
-} // namespace Pieces
+} // namespace pcs

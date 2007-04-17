@@ -5,7 +5,7 @@
 #include "Pieces/SharedData"
 
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -44,6 +44,6 @@ public:
     virtual void operator()(framenum_t frameNum) = 0;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_GAME_OBJECT_ACTION_H

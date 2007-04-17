@@ -7,12 +7,12 @@
 
 
 BallUpdateCallback::BallUpdateCallback(Ball* ball)
-: Pieces::GameObjectAction()
+: pcs::GameObjectAction()
 , m_ball(ball)
 {
 }
 
-void BallUpdateCallback::operator()(Pieces::framenum_t /*frameNum*/)
+void BallUpdateCallback::operator()(pcs::framenum_t /*frameNum*/)
 {
     double angle = m_ball->getAngle();
     double velocity = m_ball->getVelocity();

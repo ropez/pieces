@@ -8,7 +8,7 @@
 class BallOSG : public osg::MatrixTransform
 {
 public:
-    BallOSG(Pieces::ReferencePointer<Ball> ball);
+    BallOSG(pcs::ReferencePointer<Ball> ball);
     ~BallOSG();
 
     void addRelativeZ(double zOffset);
@@ -26,7 +26,7 @@ public:
 private:
     osg::ref_ptr<osg::Geode> createGeode();
     
-    Pieces::ReferencePointer<Ball> m_ball;
+    pcs::ReferencePointer<Ball> m_ball;
     double m_xPos;
     double m_zPos;
     double m_velocity;

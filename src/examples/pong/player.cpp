@@ -4,7 +4,7 @@
 
 #include "Pieces/Debug"
 
-using namespace Pieces;
+using namespace pcs;
 
 Player::Player(objectid_t objectId, int posX)
 : GameObject(objectId)

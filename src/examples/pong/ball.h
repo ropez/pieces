@@ -4,13 +4,13 @@
 #include "Pieces/GameObject"
 #include "Pieces/GameObjectAction"
 
-class Ball : public Pieces::GameObject
+class Ball : public pcs::GameObject
 {
 public:
-    Ball(Pieces::objectid_t objectId);
+    Ball(pcs::objectid_t objectId);
 
-    void encode(Pieces::DataStream& ds) const;
-    void decode(Pieces::DataStream& ds);
+    void encode(pcs::DataStream& ds) const;
+    void decode(pcs::DataStream& ds);
 
     void setPositionZ(double pos);
     void setPositionX(double pos);

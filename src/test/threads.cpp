@@ -19,7 +19,7 @@
 #include "OpenThreads/Thread"
 
 
-using namespace Pieces;
+using namespace pcs;
 
 enum MyEvents
 {

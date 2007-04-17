@@ -5,7 +5,7 @@
 #include "OpenThreads/Thread"
 
 
-namespace Pieces
+namespace pcs
 {
 class TCPSocket;
 class MessageQueue;
@@ -35,6 +35,6 @@ private:
     TCPSenderThreadPrivate* d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_TCP_SENDER_THREAD_H

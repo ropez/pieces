@@ -5,7 +5,7 @@
 #include "Pieces/Event"
 
 
-namespace Pieces
+namespace pcs
 {
 class EventHandler;
 class EventQueue;
@@ -87,6 +87,6 @@ private:
     EventQueue* m_queue;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_EVENT_LOOP_H

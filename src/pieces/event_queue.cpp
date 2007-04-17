@@ -8,7 +8,7 @@
 #include <queue>
 
 
-namespace Pieces
+namespace pcs
 {
 using OpenThreads::Condition;
 using OpenThreads::Mutex;
@@ -65,4 +65,4 @@ AutoPointer<Event> EventQueue::pop()
     return e;
 }
 
-} // namespace Pieces
+} // namespace pcs

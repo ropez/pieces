@@ -3,7 +3,7 @@
 #define PIECES_AUTO_POINTER_H
 
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -374,6 +374,6 @@ AutoPointer<T>::operator AutoPointer<Tp>()
     return AutoPointer<Tp>(release());
 }
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_REFERENCE_POINTER_H

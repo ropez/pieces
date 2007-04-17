@@ -2,7 +2,7 @@
 #include "Pieces/Object"
 
 
-namespace Pieces
+namespace pcs
 {
 
 Object::Object(objectid_t objectId)
@@ -21,4 +21,4 @@ objectid_t Object::getObjectId() const
     return m_objectId;
 }
 
-} // namespace Pieces
+} // namespace pcs

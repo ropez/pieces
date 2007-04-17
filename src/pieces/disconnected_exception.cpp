@@ -1,7 +1,7 @@
 #include "Pieces/DisconnectedException"
 
 
-namespace Pieces
+namespace pcs
 {
 
 DisconnectedException::DisconnectedException()
@@ -27,4 +27,4 @@ std::string DisconnectedException::getClassName() const
     return "DisconnectedException";
 }
 
-} // namespace Pieces
+} // namespace pcs

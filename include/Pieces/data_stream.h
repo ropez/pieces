@@ -4,7 +4,7 @@
 
 #include "Pieces/ByteArray"
 
-namespace Pieces
+namespace pcs
 {
 class StreamTarget;
 
@@ -447,6 +447,6 @@ void decode(const ByteArray& ba, std::string& v);
  */
 DataStream& flush(DataStream& ds);
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_DATA_STREAM_H

@@ -4,7 +4,7 @@
 
 #include "Pieces/Event"
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -53,6 +53,6 @@ private:
     int m_type;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_GAME_EVENT_H

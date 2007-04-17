@@ -5,7 +5,7 @@
 #include "Pieces/global"
 
 
-namespace Pieces
+namespace pcs
 {
 class Event;
 class TimerEvent;
@@ -151,6 +151,6 @@ protected:
     virtual void handle(GameDataEvent* event);
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_EVENT_HANDLER_H

@@ -5,7 +5,7 @@
 #include <ostream>
 
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -41,6 +41,6 @@ private:
 
 std::ostream& operator<<(std::ostream& os, const Exception& e);
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_EXCEPTION_H

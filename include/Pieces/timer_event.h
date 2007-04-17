@@ -4,7 +4,7 @@
 
 #include "Pieces/Event"
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -31,6 +31,6 @@ private:
     int m_timerId;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_TIMER_EVENT_H

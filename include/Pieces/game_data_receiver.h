@@ -5,7 +5,7 @@
 #include "Pieces/global"
 
 
-namespace Pieces
+namespace pcs
 {
 class EventLoop;
 class FrameData;
@@ -32,7 +32,7 @@ private:
     GameDataReceiverPrivate* d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_GAME_DATA_RECEIVER_H
 

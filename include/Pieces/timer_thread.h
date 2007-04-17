@@ -6,7 +6,7 @@
 #include "Pieces/global"
 
 
-namespace Pieces
+namespace pcs
 {
 class TimerThreadPrivate;
 class ByteArray;
@@ -104,6 +104,6 @@ private:
     TimerThreadPrivate* d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_TIMER_THREAD_H

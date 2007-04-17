@@ -7,7 +7,7 @@
 #include <iomanip>
 
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -388,4 +388,4 @@ std::ostream& operator<<(std::ostream& os, const ByteArray& ba)
     return os << ss.str();
 }
 
-} // namespace Pieces
+} // namespace pcs

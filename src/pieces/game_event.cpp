@@ -3,7 +3,7 @@
 #include "Pieces/EventHandler"
 
 
-namespace Pieces
+namespace pcs
 {
 
 GameEvent::GameEvent(int type)
@@ -43,4 +43,4 @@ GameEvent::~GameEvent()
 {
 }
 
-} // namespace Pieces
+} // namespace pcs

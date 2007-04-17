@@ -6,7 +6,7 @@
 #include "Pieces/AutoPointer"
 
 
-namespace Pieces
+namespace pcs
 {
 class TCPSocket;
 class TCPServerPrivate;
@@ -42,6 +42,6 @@ private:
     TCPServerPrivate* d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_TCP_SERVER_H

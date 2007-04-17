@@ -5,7 +5,7 @@
 #include "Pieces/ByteArray"
 
 
-namespace Pieces
+namespace pcs
 {
 
 class StreamTarget
@@ -41,6 +41,6 @@ public:
     virtual void flush() = 0;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_STREAM_TARGET_H

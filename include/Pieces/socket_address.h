@@ -7,7 +7,7 @@
 
 
 
-namespace Pieces
+namespace pcs
 {
 
 class DataStream;
@@ -53,6 +53,6 @@ DataStream& operator>>(DataStream& ds, SocketAddress& sa);
 
 std::ostream& operator<<(std::ostream& os, const SocketAddress& sa);
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_SOCKET_ADDRESS_H

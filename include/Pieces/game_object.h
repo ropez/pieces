@@ -6,7 +6,7 @@
 #include "Pieces/Object"
 
 
-namespace Pieces
+namespace pcs
 {
 class DataStream;
 class FrameData;
@@ -120,6 +120,6 @@ private:
     GameObjectPrivate* d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_GAME_OBJECT_H

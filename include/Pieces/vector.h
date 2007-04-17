@@ -7,7 +7,7 @@
 
 #include <vector>
 
-namespace Pieces
+namespace pcs
 {
 
 template<typename T>
@@ -447,6 +447,6 @@ Vector<T>::Data::~Data()
 {
 }
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_VECTOR_H

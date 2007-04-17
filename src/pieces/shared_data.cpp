@@ -3,7 +3,7 @@
 #include "atomic.h"
 
 
-namespace Pieces
+namespace pcs
 {
 
 bool SharedData::shared() const
@@ -34,4 +34,4 @@ SharedData::~SharedData()
 {
 }
 
-} // namespace Pieces
+} // namespace pcs

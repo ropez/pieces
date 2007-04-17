@@ -6,7 +6,7 @@
 #include "Pieces/Message"
 
 
-namespace Pieces
+namespace pcs
 {
 
 /**
@@ -42,6 +42,6 @@ private:
     msgpair_t m_msg;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_MESSAGE_RECEIVED_EVENT_H

@@ -9,7 +9,7 @@
 #include <map>
 
 
-namespace Pieces
+namespace pcs
 {
 
 class GameObjectPrivate
@@ -113,4 +113,4 @@ void GameObject::applyAction(int actionType, framenum_t frameNum)
     }
 }
 
-} // namespace Pieces
+} // namespace pcs

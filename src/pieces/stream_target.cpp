@@ -2,11 +2,11 @@
 #include "Pieces/StreamTarget"
 
 
-namespace Pieces
+namespace pcs
 {
 
 StreamTarget::~StreamTarget()
 {
 }
 
-} // namespace Pieces
+} // namespace pcs

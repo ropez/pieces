@@ -1,7 +1,7 @@
 #include "Pieces/IOException"
 
 
-namespace Pieces
+namespace pcs
 {
 
 IOException::IOException()
@@ -27,4 +27,4 @@ std::string IOException::getClassName() const
     return "IOException";
 }
 
-} // namespace Pieces
+} // namespace pcs

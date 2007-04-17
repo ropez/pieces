@@ -6,7 +6,7 @@
 #include "OpenThreads/Thread"
 
 
-namespace Pieces
+namespace pcs
 {
 class TCPConnectionManager;
 class TCPListenerThreadPrivate;
@@ -38,6 +38,6 @@ private:
     TCPListenerThreadPrivate* d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_TCP_LISTENER_THREAD_H

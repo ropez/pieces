@@ -8,7 +8,7 @@
 #include "Pieces/FrameData"
 
 
-namespace Pieces
+namespace pcs
 {
 
 /**
@@ -52,6 +52,6 @@ private:
     SharedDataPointer<Data> d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_GAME_DATA_H

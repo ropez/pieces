@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-using namespace Pieces;
+using namespace pcs;
 
 
 int main(int argc, char** argv)

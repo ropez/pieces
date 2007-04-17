@@ -10,7 +10,7 @@
 #include "Pieces/IOException"
 #include "Pieces/Debug"
 
-using namespace Pieces;
+using namespace pcs;
 
 
 class HostTest : public Host

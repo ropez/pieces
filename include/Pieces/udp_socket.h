@@ -5,7 +5,7 @@
 #include "Pieces/SocketAddress"
 
 
-namespace Pieces
+namespace pcs
 {
 class Datagram;
 class UDPSocketPrivate;
@@ -66,6 +66,6 @@ private:
     UDPSocketPrivate* d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_UDP_SOCKET_H

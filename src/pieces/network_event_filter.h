@@ -5,7 +5,7 @@
 #include "Pieces/EventFilter"
 
 
-namespace Pieces
+namespace pcs
 {
 class ConnectionManager;
 
@@ -27,6 +27,6 @@ private:
     ConnectionManager* m_manager;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_NETWORK_EVENT_FILTER_H

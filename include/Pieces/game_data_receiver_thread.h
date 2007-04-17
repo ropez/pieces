@@ -6,7 +6,7 @@
 #include "OpenThreads/Thread"
 
 
-namespace Pieces
+namespace pcs
 {
 class EventLoop;
 class GameData;
@@ -38,6 +38,6 @@ private:
     GameDataReceiverThreadPrivate* d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_GAME_DATA_RECEIVER_THREAD_H

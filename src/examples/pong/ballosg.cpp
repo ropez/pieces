@@ -8,7 +8,7 @@
 class BallOSGUpdateCallback : public osg::NodeCallback
 {
 public:
-    BallOSGUpdateCallback(Pieces::ReferencePointer<Ball> ball)
+    BallOSGUpdateCallback(pcs::ReferencePointer<Ball> ball)
         : osg::NodeCallback()
         , m_ball(ball)
     {
@@ -27,10 +27,10 @@ public:
     }
 
 private:
-    Pieces::ReferencePointer<Ball> m_ball;
+    pcs::ReferencePointer<Ball> m_ball;
 };
 
-BallOSG::BallOSG(Pieces::ReferencePointer<Ball> ball)
+BallOSG::BallOSG(pcs::ReferencePointer<Ball> ball)
 : osg::MatrixTransform()
 , m_ball(ball)
 , m_xPos(0.0)

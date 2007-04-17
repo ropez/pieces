@@ -2,7 +2,7 @@
 #include "Pieces/InvalidKeyException"
 
 
-namespace Pieces
+namespace pcs
 {
 
 InvalidKeyException::InvalidKeyException()
@@ -28,4 +28,4 @@ std::string InvalidKeyException::getClassName() const
     return "InvalidKeyException";
 }
 
-} // namespace Pieces
+} // namespace pcs

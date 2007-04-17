@@ -6,7 +6,7 @@
 #include "Pieces/FrameData"
 
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -44,6 +44,6 @@ private:
     FrameData m_frameData;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_GAME_DATA_EVENT_H

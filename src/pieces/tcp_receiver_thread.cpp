@@ -14,7 +14,7 @@
 using namespace OpenThreads;
 
 
-namespace Pieces
+namespace pcs
 {
 
 class TCPReceiverThreadPrivate
@@ -102,4 +102,4 @@ void TCPReceiverThread::run()
     }
 }
 
-} // namespace Pieces
+} // namespace pcs

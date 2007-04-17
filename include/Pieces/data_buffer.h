@@ -5,7 +5,7 @@
 #include "Pieces/StreamTarget"
 
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -52,6 +52,6 @@ private:
     ByteArray m_data;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_DATA_BUFFER_H

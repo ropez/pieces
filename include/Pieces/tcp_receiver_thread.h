@@ -5,7 +5,7 @@
 #include "Pieces/global"
 
 
-namespace Pieces
+namespace pcs
 {
 class TCPSocket;
 class EventLoop;
@@ -42,6 +42,6 @@ private:
     TCPReceiverThreadPrivate* d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_TCP_RECEIVER_THREAD_H

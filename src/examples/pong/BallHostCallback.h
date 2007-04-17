@@ -6,12 +6,12 @@
 #include "Pieces/GameObject"
 #include "Pieces/GameObjectAction"
 
-class BallUpdateCallback : public Pieces::GameObjectAction
+class BallUpdateCallback : public pcs::GameObjectAction
 {
 public:
     BallUpdateCallback(Ball* ball);
 
-    virtual void operator()(Pieces::framenum_t);
+    virtual void operator()(pcs::framenum_t);
 
 private:
     Ball* m_ball;

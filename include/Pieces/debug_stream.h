@@ -7,7 +7,7 @@
 #include <sstream>
 
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -127,11 +127,11 @@ std::ostream& warning(std::ostream& os);
  */
 std::ostream& error(std::ostream& os);
 
-#define PDEBUG Pieces::DebugStream() << Pieces::debug
-#define PINFO Pieces::DebugStream() << Pieces::info
-#define PWARNING Pieces::DebugStream() << Pieces::warning
-#define PERROR Pieces::DebugStream() << Pieces::error
+#define PDEBUG pcs::DebugStream() << pcs::debug
+#define PINFO pcs::DebugStream() << pcs::info
+#define PWARNING pcs::DebugStream() << pcs::warning
+#define PERROR pcs::DebugStream() << pcs::error
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_DEBUG_STREAM_H

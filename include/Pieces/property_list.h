@@ -9,7 +9,7 @@
 #include <map>
 
 
-namespace Pieces
+namespace pcs
 {
 class DataStream;
 
@@ -211,6 +211,6 @@ T PropertyList::get(int property, const T& defval) const
     }
 }
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_PROPERTY_LIST_H

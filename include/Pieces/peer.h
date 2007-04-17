@@ -5,7 +5,7 @@
 #include "Pieces/EventHandler"
 
 
-namespace Pieces
+namespace pcs
 {
 class EventLoop;
 class ConnectionManager;
@@ -88,6 +88,6 @@ private:
     PeerPrivate* d;
 };
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_PEER_H

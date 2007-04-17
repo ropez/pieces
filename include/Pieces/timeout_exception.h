@@ -4,7 +4,7 @@
 #include "Pieces/IOException"
 
 
-namespace Pieces
+namespace pcs
 {
 
 
@@ -25,6 +25,6 @@ public:
 };
 
 
-} // namespace Pieces
+} // namespace pcs
 
 #endif // PIECES_TIMEOUT_EXCEPTION_H
