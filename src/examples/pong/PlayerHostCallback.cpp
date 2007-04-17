@@ -1,12 +1,29 @@
 #include "PlayerHostCallback.h"
+#include "Pieces/DebugStream"
 
-PlayerUpdateCallback::PlayerUpdateCallback(Player* player)
+PlayerHostCallback::PlayerHostCallback(Player* player)
 : pcs::GameObjectAction()
 , m_player(player)
 {
 }
 
-void PlayerUpdateCallback::operator()(pcs::framenum_t)
+void PlayerHostCallback::operator()(pcs::framenum_t)
 {
-    // Collition detection
+    switch(m_player->getMovingState())
+    {
+    case Player::STATE_UP:
+        {
+            PDEBUG << " Movin' up " << m_player->getObjectId();
+            break;
+        }
+    case Player::STATE_DOWN:
+        {
+            PDEBUG << " Movin' down " << m_player->getObjectId();
+            break;
+        }
+    default:
+        {
+            break;
+        }
+    }
 }

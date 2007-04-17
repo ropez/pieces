@@ -1,13 +1,13 @@
-#if !defined PLAYERUPDATE_H
-#define PLAYERUPDATE_H
+#if !defined PLAYER_HOST_CALLBACK_H
+#define PLAYER_HOST_CALLBACK_H
 
 #include "player.h"
 #include "Pieces/GameObjectAction"
 
-class PlayerUpdateCallback : public pcs::GameObjectAction
+class PlayerHostCallback : public pcs::GameObjectAction
 {
 public:
-    PlayerUpdateCallback(Player* player);
+    PlayerHostCallback(Player* player);
 
     virtual void operator()(pcs::framenum_t);
 
@@ -15,4 +15,4 @@ private:
     Player* m_player;
 };
 
-#endif // PLAYERUPDATE_H
+#endif // PLAYER_HOST_CALLBACK_H

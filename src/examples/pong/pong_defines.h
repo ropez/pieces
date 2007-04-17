@@ -7,7 +7,8 @@
 enum ObjectTypes
 {
     TYPE_BALL,
-    TYPE_PLAYER
+    TYPE_PLAYER_1,
+    TYPE_PLAYER_2
 };
 
 

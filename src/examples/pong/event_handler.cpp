@@ -128,20 +128,6 @@ bool PongEventHandler::handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionA
         {
             switch(ea.getKey())
             {
-            case 'q':
-                m_player1Up = true;
-                if(m_player1Down)
-                {
-                    m_player1Down = false;
-                }
-                break;
-            case 'a':
-                m_player1Down = true;
-                if(m_player1Up)
-                {
-                    m_player1Up = false;
-                }
-                break;
             case osgGA::GUIEventAdapter::KEY_Up:
                 {
                     if(!m_player2Up)
@@ -179,12 +165,6 @@ bool PongEventHandler::handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionA
         {
             switch(ea.getKey())
             {
-            case 'q':
-                m_player1Up = false;
-                break;
-            case 'a':
-                m_player1Down = false;
-                break;
             case osgGA::GUIEventAdapter::KEY_Up:
                 {
                     m_player2Up = false;
