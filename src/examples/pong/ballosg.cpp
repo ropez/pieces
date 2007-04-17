@@ -3,14 +3,43 @@
 #include <osg/Geode>
 #include <osg/Geometry>
 
-BallOSG::BallOSG()
+#include <iostream>
+
+class BallOSGUpdateCallback : public osg::NodeCallback
+{
+public:
+    BallOSGUpdateCallback(Pieces::ReferencePointer<Ball> ball)
+        : osg::NodeCallback()
+        , m_ball(ball)
+    {
+    }
+
+    void operator() (osg::Node* node, osg::NodeVisitor* nv)
+    {
+        BallOSG* ballOSG = dynamic_cast<BallOSG*>(node);
+        
+        if(ballOSG)
+        {
+            ballOSG->setMatrix(osg::Matrix::translate(osg::Vec3(m_ball->getPositionX(), 0.0, m_ball->getPositionZ())));
+        }
+
+        traverse(node, nv);
+    }
+
+private:
+    Pieces::ReferencePointer<Ball> m_ball;
+};
+
+BallOSG::BallOSG(Pieces::ReferencePointer<Ball> ball)
 : osg::MatrixTransform()
-, _xPos(0.0)
-, _zPos(0.0)
+, m_ball(ball)
+, m_xPos(0.0)
+, m_zPos(0.0)
 , m_velocity(0.0)
 , m_angle(0.0)
 {
     addChild(createGeode().get());
+    setUpdateCallback(new BallOSGUpdateCallback(ball));
 }
 
 BallOSG::~BallOSG()
@@ -74,20 +103,20 @@ osg::ref_ptr<osg::Geode> BallOSG::createGeode()
 
 void BallOSG::setPositionX(double xPos)
 {
-    _xPos = xPos;
-    setMatrix(osg::Matrix::translate(osg::Vec3(_xPos, 0.0, _zPos)));
+    m_xPos = xPos;
+    setMatrix(osg::Matrix::translate(osg::Vec3(m_xPos, 0.0, m_zPos)));
 }
 
 void BallOSG::setPositionZ(double zPos)
 {
-    _zPos = zPos;
-    setMatrix(osg::Matrix::translate(osg::Vec3(_xPos, 0.0, _zPos)));
+    m_zPos = zPos;
+    setMatrix(osg::Matrix::translate(osg::Vec3(m_xPos, 0.0, m_zPos)));
 }
 
 void BallOSG::addRelativeZ(double zOffset)
 {
-    _zPos += zOffset;
-    setPositionZ(_zPos);
+    m_zPos += zOffset;
+    setPositionZ(m_zPos);
 }
 
 void BallOSG::setVelocity(double velocity)

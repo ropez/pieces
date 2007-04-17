@@ -2,11 +2,13 @@
 #define BALLOSG_H
 
 #include <osg/MatrixTransform>
+#include "ball.h"
+#include "Pieces/ReferencePointer"
 
 class BallOSG : public osg::MatrixTransform
 {
 public:
-    BallOSG();
+    BallOSG(Pieces::ReferencePointer<Ball> ball);
     ~BallOSG();
 
     void addRelativeZ(double zOffset);
@@ -24,11 +26,12 @@ public:
 private:
     osg::ref_ptr<osg::Geode> createGeode();
     
-    double _xPos;
-    double _zPos;
+    Pieces::ReferencePointer<Ball> m_ball;
+    double m_xPos;
+    double m_zPos;
     double m_velocity;
     double m_angle;
-
+    
 };
 
 #endif // BALLOSG_H

@@ -19,6 +19,8 @@
 #include "Pieces/FrameData"
 #include "Pieces/Global"
 #include "Pieces/ReferencePointer"
+
+#include "osg_thread.h"
 #include "ball.h"
 #include "BallPeerCallback.h"
 //#include <osgText/Text>
@@ -28,11 +30,10 @@
 class PongPeer : public Pieces::Peer
 {
 public:
-    PongPeer(osgProducer::Viewer& viewer, osg::ref_ptr<BallOSG> ballOSG)
+    PongPeer(osg::ref_ptr<osg::Group> rootOSG)
         : Pieces::Peer()
         , m_db(new Pieces::GameObjectDB())
-        , m_viewer(viewer)
-        , m_ballOSG(ballOSG)
+        , m_rootOSG(rootOSG)
     {
         std::string host = "localhost";
 
@@ -66,10 +67,6 @@ protected:
         m_db->applyFrameData(event->getFrameNumber(), event->getFrameData());
 
         m_db->applyAction(ACTION_DRAW, event->getFrameNumber());
-
-        m_viewer.update();
-        m_viewer.frame();
-
     }
 
     virtual void handle(Pieces::MessageReceivedEvent* event)
@@ -87,9 +84,12 @@ protected:
                 {
                     PDEBUG << "Creating ball";
                     Pieces::ReferencePointer<Ball> ball = new Ball(objectId);
-                    Pieces::ReferencePointer<BallPeerCallback> ballPeerCallback = new BallPeerCallback(ball.get(), m_ballOSG);
-
+                    Pieces::ReferencePointer<BallPeerCallback> ballPeerCallback = new BallPeerCallback(ball.get(), 0);
                     ball->setAction(ACTION_DRAW, ballPeerCallback.get());
+
+                    osg::ref_ptr<BallOSG> ballOSG = new BallOSG(ball);
+                    m_rootOSG->addChild(ballOSG.get());
+
 
                     m_db->insert(objectId, ball.get());
 
@@ -109,8 +109,7 @@ protected:
 
 private:
     Pieces::AutoPointer<Pieces::GameObjectDB> m_db;
-    osgProducer::Viewer& m_viewer;
-    osg::ref_ptr<BallOSG> m_ballOSG;
+    osg::ref_ptr<osg::Group> m_rootOSG;
 };
 
 
@@ -122,80 +121,21 @@ osg::ref_ptr<osg::Node> createMenu()
 	return 0;
 }
 
-osg::ref_ptr<PlayerOSG> setUpPlayer(double x, double z)
-{
-    osg::ref_ptr<PlayerOSG> player = new PlayerOSG();
-    player->setPositionX(x);
-    player->setPositionZ(z);
-
-    return player;
- }
-
-osg::ref_ptr<osg::Group> setUpWorld()
-{
-    osg::ref_ptr<osg::Group> world = new Frame();
-
-    return world;
-}
-
 
 int main(int argc, char** argv)
 {
 
-    unsigned short v = 1;
-    unsigned short& w = v;
-
     Pieces::Application application(argc, argv);
 
-    osgProducer::Viewer viewer;
+    osg::ref_ptr<osg::Group> root = new osg::Group();
+    
+    // Start graphics thread.
+    OSGThread osgThread(root.get());
 
-    viewer.setUpViewer(
-        osgProducer::Viewer::TRACKBALL_MANIPULATOR |
-        osgProducer::Viewer::STATE_MANIPULATOR |
-        osgProducer::Viewer::HEAD_LIGHT_SOURCE |
-        osgProducer::Viewer::VIEWER_MANIPULATOR |
-        osgProducer::Viewer::ESCAPE_SETS_DONE);
+    // Start network loop
+    PongPeer pongPeer(root.get());
 
-    viewer.getCameraConfig()->getRenderSurface(0)->setWindowName("Pong");
-
-    viewer.setClearColor(osg::Vec4(1.0, 0.6, 0.6, 1.0));
-
-    osg::ref_ptr<PlayerOSG> player1 = setUpPlayer(cfg::player1XPos, 0);
-    osg::ref_ptr<PlayerOSG> player2 = setUpPlayer(cfg::player2XPos, 0);
-
-    osg::ref_ptr<BallOSG> ball = new BallOSG();
-
-    osg::ref_ptr<osg::Group> world = setUpWorld();
-    world->addChild(player1.get());
-    world->addChild(player2.get());
-    world->addChild(ball.get());
-
-    PongEventHandler* peh = new PongEventHandler(player1, player2, ball);
-    viewer.getEventHandlerList().push_back(peh);
-
-    //osg::ref_ptr<osg::DisplaySettings> ds = new osg::DisplaySettings();
-    Producer::Camera* camera = viewer.getCamera(0);
-
-    Producer::Camera::Lens* lens = new Producer::Camera::Lens();
-    lens->setFrustum(-640, 640, -512, 512, 2048, 10000);
-    lens->setAutoAspect(true);
-    camera->setLens(lens);
-
-
-    viewer.setSceneData(world.get());
-    viewer.realize();
-
-    PongPeer pongPeer(viewer, ball);
-
+    osgThread.start();
     pongPeer.exec();
-
-    // wait for all cull and draw threads to complete.
-    viewer.sync();
-
-    // run a clean up frame to delete all OpenGL objects.
-    viewer.cleanup_frame();
-
-    // wait for all the clean up frame to complete.
-    viewer.sync();
 
 }

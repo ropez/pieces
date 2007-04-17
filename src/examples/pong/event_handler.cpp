@@ -68,48 +68,51 @@ bool PongEventHandler::handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionA
                 }
             }
 
-
-            // Check if ball hit player
-            if(m_waitCollisionPlayer2 == 0)
+            if(m_ball.valid())
             {
-                if(m_ball->getPositionX() + cfg::ballSizeHalf >= cfg::player2XPos &&
-                    cfg::player2XPos + cfg::playerWidth >= m_ball->getPositionX() + cfg::ballSizeHalf)
+
+                // Check if ball hit player
+                if(m_waitCollisionPlayer2 == 0)
                 {
-                    if(m_player2->getPositionZ() - 50 < m_ball->getPositionZ() &&
-                        m_ball->getPositionZ() < m_player2->getPositionZ() + 50)
+                    if(m_ball->getPositionX() + cfg::ballSizeHalf >= cfg::player2XPos &&
+                        cfg::player2XPos + cfg::playerWidth >= m_ball->getPositionX() + cfg::ballSizeHalf)
                     {
-                        m_waitCollisionPlayer2 = 10;
+                        if(m_player2->getPositionZ() - 50 < m_ball->getPositionZ() &&
+                            m_ball->getPositionZ() < m_player2->getPositionZ() + 50)
+                        {
+                            m_waitCollisionPlayer2 = 10;
 
-                        double centerOffset = (m_player2->getPositionZ() - m_ball->getPositionZ()) / cfg::playerHeightHalf;
+                            double centerOffset = (m_player2->getPositionZ() - m_ball->getPositionZ()) / cfg::playerHeightHalf;
 
-                        m_ball->setAngle(osg::PI - (centerOffset * cfg::maxAngle - osg::PI_2));
+                            m_ball->setAngle(osg::PI - (centerOffset * cfg::maxAngle - osg::PI_2));
+                        }
                     }
                 }
-            }
-            else
-            {
-                --m_waitCollisionPlayer2;
-            }
-
-            if(m_waitCollisionPlayer1 == 0)
-            {
-                if(m_ball->getPositionX() - cfg::ballSizeHalf <= cfg::player1XPos &&
-                    cfg::player1XPos - cfg::playerWidth <= m_ball->getPositionX() + cfg::ballSizeHalf)
+                else
                 {
-                    if(m_player1->getPositionZ() - cfg::playerHeightHalf < m_ball->getPositionZ() &&
-                        m_ball->getPositionZ() < m_player1->getPositionZ() + cfg::playerHeightHalf)
+                    --m_waitCollisionPlayer2;
+                }
+
+                if(m_waitCollisionPlayer1 == 0)
+                {
+                    if(m_ball->getPositionX() - cfg::ballSizeHalf <= cfg::player1XPos &&
+                        cfg::player1XPos - cfg::playerWidth <= m_ball->getPositionX() + cfg::ballSizeHalf)
                     {
-                        m_waitCollisionPlayer1 = 10;
+                        if(m_player1->getPositionZ() - cfg::playerHeightHalf < m_ball->getPositionZ() &&
+                            m_ball->getPositionZ() < m_player1->getPositionZ() + cfg::playerHeightHalf)
+                        {
+                            m_waitCollisionPlayer1 = 10;
 
-                        double centerOffset = (m_player1->getPositionZ() - m_ball->getPositionZ()) / cfg::playerHeightHalf;
+                            double centerOffset = (m_player1->getPositionZ() - m_ball->getPositionZ()) / cfg::playerHeightHalf;
 
-                        m_ball->setAngle(osg::PI * 2 - (centerOffset * -cfg::maxAngle - osg::PI_2));
+                            m_ball->setAngle(osg::PI * 2 - (centerOffset * -cfg::maxAngle - osg::PI_2));
+                        }
                     }
                 }
-            }
-            else
-            {
-                --m_waitCollisionPlayer1;
+                else
+                {
+                    --m_waitCollisionPlayer1;
+                }
             }
 
             return true;
