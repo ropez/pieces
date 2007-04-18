@@ -22,28 +22,28 @@ void BallUpdateCallback::operator()(pcs::framenum_t /*frameNum*/)
 
 
     // Check if ball hit wall
-	if(m_ball->getPositionX() >= cfg::frameInsideRight - cfg::ballSizeHalf)
+    if(m_ball->getPositionX() >= cfg::frameInsideRight - cfg::ballSizeHalf)
     {
-		m_ball->setAngle(cfg::pi * 2 - m_ball->getAngle());
+        m_ball->setAngle(cfg::pi * 2 - m_ball->getAngle());
 //        ++m_scorePlayer1;
 //        std::cout << "Player1:\t" << m_scorePlayer1 << "\tPlayer2:\t" << m_scorePlayer2 << "\r";
     }
 
     if(m_ball->getPositionX() <= cfg::frameInsideLeft + cfg::ballSizeHalf)
     {
-		m_ball->setAngle(cfg::pi * 2 - m_ball->getAngle());
+        m_ball->setAngle(cfg::pi * 2 - m_ball->getAngle());
  //       ++m_scorePlayer2;
 //        std::cout << "Player1:\t" << m_scorePlayer1 << "\tPlayer2:\t" << m_scorePlayer2 << "\r";
     }
 
     if(m_ball->getPositionZ() >= cfg::frameInsideTop - cfg::ballSizeHalf)
     {
-		m_ball->setAngle(cfg::pi - m_ball->getAngle());
+        m_ball->setAngle(cfg::pi - m_ball->getAngle());
     }
 
     if(m_ball->getPositionZ() <= cfg::frameInsideBottom + cfg::ballSizeHalf)
     {
-		m_ball->setAngle(cfg::pi - m_ball->getAngle());
+        m_ball->setAngle(cfg::pi - m_ball->getAngle());
     }
 
 

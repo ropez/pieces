@@ -116,9 +116,9 @@ private:
 
 osg::ref_ptr<osg::Node> createMenu()
 {
-	osg::ref_ptr<osg::MatrixTransform> host = new osg::MatrixTransform();
-//	host->addChild(osgText::Text);
-	return 0;
+    osg::ref_ptr<osg::MatrixTransform> host = new osg::MatrixTransform();
+//  host->addChild(osgText::Text);
+    return 0;
 }
 
 

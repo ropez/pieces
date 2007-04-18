@@ -146,5 +146,3 @@ int main(int argc, char** argv)
 
     host->exec();
 }
-
-
