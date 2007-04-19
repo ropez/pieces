@@ -1,4 +1,3 @@
-// host.cpp
 #include "ball.h"
 
 #include "Pieces/DataStream"
@@ -25,7 +24,6 @@ void Ball::decode(DataStream& ds)
 {
     ds >> m_posX >> m_posZ;
 }
-
 
 void Ball::setPositionX(double pos)
 {

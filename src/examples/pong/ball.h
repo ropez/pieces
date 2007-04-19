@@ -17,7 +17,6 @@ public:
 
     void addRelativeX(double xOffset);
     void addRelativeZ(double zOffset);
-
     
     double getPositionZ();
     double getPositionX();

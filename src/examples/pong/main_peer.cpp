@@ -4,7 +4,6 @@
 #include "event_handler.h"
 #include "config.h"
 
-#include <osgProducer/Viewer>
 #include "pong_defines.h"
 
 #include "Pieces/Application"
@@ -23,6 +22,8 @@
 #include "osg_thread.h"
 #include "ball.h"
 #include "BallPeerCallback.h"
+#include "player.h"
+#include "PlayerPeerCallback.h"
 //#include <osgText/Text>
 
 
@@ -73,43 +74,59 @@ protected:
     {
         pcs::Message message = event->getMessage();
 
-        if (message.getMessageType() == pcs::OBJECT_CREATE)
+        switch(message.getMessageType())
         {
-            int objectType = message.get<int>(pcs::PR_OBJECT_TYPE);
-            pcs::objectid_t objectId = message.get<pcs::objectid_t>(pcs::PR_OBJECT_ID);
-
-            switch (objectType)
+        case pcs::OBJECT_CREATE:
             {
-            case TYPE_BALL:
+                int objectType = message.get<int>(pcs::PR_OBJECT_TYPE);
+                pcs::objectid_t objectId = message.get<pcs::objectid_t>(pcs::PR_OBJECT_ID);
+
+                switch (objectType)
                 {
-                    PDEBUG << "Creating ball";
-                    pcs::ReferencePointer<Ball> ball = new Ball(objectId);
-                    pcs::ReferencePointer<BallPeerCallback> ballPeerCallback = new BallPeerCallback(ball.get(), 0);
-                    ball->setAction(ACTION_DRAW, ballPeerCallback.get());
+                case TYPE_BALL:
+                    {
+                        PDEBUG << "Creating ball";
+                        pcs::ReferencePointer<Ball> ball = new Ball(objectId);
+                        pcs::ReferencePointer<BallPeerCallback> ballPeerCallback = new BallPeerCallback(ball.get());
+                        ball->setAction(ACTION_DRAW, ballPeerCallback.get());
 
-                    osg::ref_ptr<BallOSG> ballOSG = new BallOSG(ball);
-                    m_rootOSG->addChild(ballOSG.get());
+                        osg::ref_ptr<BallOSG> ballOSG = new BallOSG(ball);
+                        m_rootOSG->addChild(ballOSG.get());
 
+                        m_db->insert(objectId, ball.get());
+                    }
+                    break;
+                case TYPE_PLAYER_1:
+                    {
+                        PDEBUG << "Creating player 1";
+                        pcs::ReferencePointer<Player> player = new Player(objectId, cfg::player1XPos);
+                        player->setAction(ACTION_DRAW, new PlayerPeerCallback(player.get()));
 
-                    m_db->insert(objectId, ball.get());
+                        osg::ref_ptr<PlayerOSG> playerOSG = new PlayerOSG(player);
+                        m_rootOSG->addChild(playerOSG.get());
 
+                        m_db->insert(objectId, player.get());
+                    }
+                    break;
+                default:
+                    PWARNING << "Unknown object type: " << objectType;
                     break;
                 }
-            default:
-                PWARNING << "Unknown object type: " << objectType;
-                return;
             }
-        }
-        else if (message.getMessageType() == pcs::OBJECT_REMOVE)
-        {
-            pcs::objectid_t objectId = message.get<pcs::objectid_t>(pcs::PR_OBJECT_ID);
-            m_db->remove(objectId);
+            break;
+        case pcs::OBJECT_REMOVE:
+            {
+                pcs::objectid_t objectId = message.get<pcs::objectid_t>(pcs::PR_OBJECT_ID);
+                m_db->remove(objectId);
+            }
+            break;
         }
     }
 
 private:
     pcs::AutoPointer<pcs::GameObjectDB> m_db;
     osg::ref_ptr<osg::Group> m_rootOSG;
+
 };
 
 

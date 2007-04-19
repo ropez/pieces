@@ -15,7 +15,13 @@ public:
 
     Player(pcs::objectid_t objectId, int posX);
 
-    void encode(pcs::DataStream& ds) const;
+    virtual void encode(pcs::DataStream& ds) const;
+    virtual void decode(pcs::DataStream& ds);
+
+    void addRelativeZ(double offsetZ);
+    void setPositionZ(double posZ);
+    double getPositionZ() const;
+    double getPositionX() const;
 
     void setMovingState(MovingState state);
     MovingState getMovingState();

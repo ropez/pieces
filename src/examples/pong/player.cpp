@@ -1,4 +1,3 @@
-// host.cpp
 #include "player.h"
 #include "Pieces/DataStream"
 
@@ -19,6 +18,12 @@ void Player::encode(DataStream& ds) const
     ds << m_posZ;
 }
 
+void Player::decode(DataStream& ds)
+{
+    ds >> m_posZ;
+}
+
+
 void Player::setMovingState(Player::MovingState state)
 {
     m_movingState = state;
@@ -27,4 +32,24 @@ void Player::setMovingState(Player::MovingState state)
 Player::MovingState Player::getMovingState()
 {
     return m_movingState;
+}
+
+void Player::addRelativeZ(double zOffset)
+{
+    m_posZ += zOffset;
+}
+
+void Player::setPositionZ(double posZ)
+{
+    m_posZ = posZ;
+}
+
+double Player::getPositionZ() const
+{
+    return m_posZ;
+}
+
+double Player::getPositionX() const
+{
+    return m_posX;
 }

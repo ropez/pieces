@@ -39,7 +39,6 @@ protected:
 private:
     //DISABLE_COPY(OSGThread);
 
-    osg::ref_ptr<PlayerOSG> setUpPlayer(double x, double z);
     osg::ref_ptr<osg::Group> setUpWorld();
 
     osgProducer::Viewer m_viewer;

@@ -21,14 +21,9 @@ OSGThread::OSGThread(osg::ref_ptr<osg::Group> root, pcs::Peer& peer)
 
     m_viewer.setClearColor(osg::Vec4(0.0, 0.0, 0.0, 1.0));
 
-    osg::ref_ptr<PlayerOSG> player1 = setUpPlayer(cfg::player1XPos, 0);
-    osg::ref_ptr<PlayerOSG> player2 = setUpPlayer(cfg::player2XPos, 0);
     osg::ref_ptr<osg::Group> world = setUpWorld();
     
     m_root->addChild(world.get());    
-    m_root->addChild(player1.get());
-    m_root->addChild(player2.get());
-
 
     PongEventHandler* peh = new PongEventHandler(peer);
     m_viewer.getEventHandlerList().push_back(peh);
@@ -51,15 +46,6 @@ OSGThread::~OSGThread()
     join();
 }
 
-
-osg::ref_ptr<PlayerOSG> OSGThread::setUpPlayer(double x, double z)
-{
-    osg::ref_ptr<PlayerOSG> player = new PlayerOSG();
-    player->setPositionX(x);
-    player->setPositionZ(z);
-
-    return player;
- }
 
 osg::ref_ptr<osg::Group> OSGThread::setUpWorld()
 {

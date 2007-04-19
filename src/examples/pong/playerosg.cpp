@@ -1,14 +1,46 @@
 #include "playerosg.h"
+
 #include "config.h"
+
 #include <osg/Geode>
 #include <osg/Geometry>
 
-PlayerOSG::PlayerOSG()
+#include "Pieces/Debug"
+
+class PlayerOSGUpdateCallback : public osg::NodeCallback
+{
+public:
+    PlayerOSGUpdateCallback(pcs::ReferencePointer<Player> player)
+        : osg::NodeCallback()
+        , m_player(player)
+    {
+    }
+
+    void operator() (osg::Node* node, osg::NodeVisitor* nv)
+    {
+        PlayerOSG* playerOSG = dynamic_cast<PlayerOSG*>(node);
+        
+        if(playerOSG)
+        {
+            playerOSG->setMatrix(osg::Matrix::translate(osg::Vec3(m_player->getPositionX(), 0.0, m_player->getPositionZ())));
+        }
+
+        traverse(node, nv);
+    }
+
+private:
+    pcs::ReferencePointer<Player> m_player;
+};
+
+
+PlayerOSG::PlayerOSG(pcs::ReferencePointer<Player> player)
 : osg::MatrixTransform()
-, _xPos(0.0)
-, _zPos(0.0)
+, m_player(player)
+, m_xPos(0.0)
+, m_zPos(0.0)
 {
     addChild(createGeode().get());
+    setUpdateCallback(new PlayerOSGUpdateCallback(player));
 }
 
 PlayerOSG::~PlayerOSG()
@@ -65,23 +97,23 @@ osg::ref_ptr<osg::Geode> PlayerOSG::createGeode()
 
 void PlayerOSG::setPositionX(double xPos)
 {
-    _xPos = xPos;
-    setMatrix(osg::Matrix::translate(osg::Vec3(_xPos, 0.0, _zPos)));
+    m_xPos = xPos;
+    setMatrix(osg::Matrix::translate(osg::Vec3(m_xPos, 0.0, m_zPos)));
 }
 
 void PlayerOSG::setPositionZ(double zPos)
 {
-    _zPos = zPos;
-    setMatrix(osg::Matrix::translate(osg::Vec3(_xPos, 0.0, _zPos)));
+    m_zPos = zPos;
+    setMatrix(osg::Matrix::translate(osg::Vec3(m_xPos, 0.0, m_zPos)));
 }
 
 double PlayerOSG::getPositionZ()
 {
-    return _zPos;
+    return m_zPos;
 }
 
 void PlayerOSG::addRelativeZ(double zOffset)
 {
-    _zPos += zOffset;
-    setPositionZ(_zPos);
+    m_zPos += zOffset;
+    setPositionZ(m_zPos);
 }
