@@ -35,12 +35,20 @@ public:
         : pcs::Peer()
         , m_db(new pcs::GameObjectDB())
         , m_rootOSG(rootOSG)
+        , m_numPlayers(0)
     {
         std::string host = "localhost";
+        pcs::port_t listenPort = 3333;
 
-        if (pcs::app->argc() > 1)
+        if(pcs::app->argc() > 1)
         {
             host = pcs::app->arg(1);
+        }
+
+        if(pcs::app->argc() > 2)
+        {
+            std::stringstream ss(pcs::app->arg(2));
+            ss >> listenPort;
         }
 
         pcs::SocketAddress sa(pcs::InetAddress::getHostByName(host), 2222);
@@ -52,11 +60,18 @@ public:
         // Join game
         {
             pcs::Message message(MSG_GAME_EVENT_JOIN);
-            message.set<pcs::port_t>(pcs::PR_PORT, 3333);
+            message.set<pcs::port_t>(pcs::PR_PORT, listenPort);
             sendMessage(message);
         }
 
-        receiver()->listen(3333);
+        try
+        {
+            receiver()->listen(listenPort);
+        }
+        catch(...)
+        {
+            PERROR << "Network error";
+        }
     }
 
 protected:
@@ -96,16 +111,30 @@ protected:
                         m_db->insert(objectId, ball.get());
                     }
                     break;
-                case TYPE_PLAYER_1:
+                case TYPE_PLAYER:
                     {
-                        PDEBUG << "Creating player 1";
-                        pcs::ReferencePointer<Player> player = new Player(objectId, cfg::player1XPos);
+                        PDEBUG << "Creating player " << m_numPlayers + 1;
+
+                        double posX = 0.0;
+                        switch(m_numPlayers)
+                        {
+                        case 0:
+                            posX = cfg::player1XPos;
+                            break;
+                        case 1:
+                            posX = cfg::player2XPos;
+                            break;
+                        }
+
+                        pcs::ReferencePointer<Player> player = new Player(objectId, posX);
                         player->setAction(ACTION_DRAW, new PlayerPeerCallback(player.get()));
 
                         osg::ref_ptr<PlayerOSG> playerOSG = new PlayerOSG(player);
                         m_rootOSG->addChild(playerOSG.get());
 
                         m_db->insert(objectId, player.get());
+
+                        ++m_numPlayers;
                     }
                     break;
                 default:
@@ -126,6 +155,7 @@ protected:
 private:
     pcs::AutoPointer<pcs::GameObjectDB> m_db;
     osg::ref_ptr<osg::Group> m_rootOSG;
+    int m_numPlayers;
 
 };
 

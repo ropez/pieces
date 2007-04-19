@@ -18,8 +18,7 @@
 #include "PlayerHostCallback.h"
 #include "pong_defines.h"
 
-using namespace pcs;
-
+#include <list>
 
 /**
  * This host only acts as a message server forwarding events (messages)
@@ -29,19 +28,20 @@ using namespace pcs;
  * The host doesn't use the Character class, and doesn't really know anything
  * about the actual "game".
  */
-const objectid_t idBall = 10000;
-const objectid_t idPlayer1 = 10001;
-const objectid_t idPlayer2 = 10002;
+const pcs::objectid_t idBall = 10000;
+const pcs::objectid_t idPlayers = 10100;
 
 
-class RunnerHost : public Host
+class RunnerHost : public pcs::Host
 {
+private:
+    typedef std::list<pcs::ReferencePointer<Player> > PlayerList_t;
+
 public:
     RunnerHost()
         : pcs::Host()
-        , m_dbBalls(new GameObjectDB())
-        , m_player1(new Player(idPlayer1, -20))
-        , m_player2(new Player(idPlayer2, 20))
+        , m_dbBalls(new pcs::GameObjectDB())
+        , m_players()
         , m_numConnectedPeers(0)
     {
         startListening(2222);
@@ -49,44 +49,51 @@ public:
         PDEBUG << "Creating ball";
         
         // Initialize ball
-        ReferencePointer<Ball> ball = new Ball(idBall);
+        pcs::ReferencePointer<Ball> ball = new Ball(idBall);
         m_dbBalls->insert(idBall, ball.get());
 
-        ReferencePointer<BallUpdateCallback> ballUpd = new BallUpdateCallback(ball.get());
+        pcs::ReferencePointer<BallUpdateCallback> ballUpd = new BallUpdateCallback(ball.get());
         ball->setAction(ACTION_UPDATE, ballUpd.get());
 
         sendCreateObject(idBall, TYPE_BALL);
 
-        // Intialize players
-        m_player1->setAction(ACTION_UPDATE, new PlayerHostCallback(m_player1));
-        m_player2->setAction(ACTION_UPDATE, new PlayerHostCallback(m_player2));
+        // Create and and initialize players
+        const int numPlayers = 2;
+        for(int i = 0; i < numPlayers; ++i)
+        {
+        }
 
         // Create timer
-        m_timer = new Timer(eventLoop());
+        m_timer = new pcs::Timer(eventLoop());
         m_timer->setRepeating(true);
         m_timer->start(20);
     }
 
 protected:
 
-    virtual void handle(TimerEvent*)
+    virtual void handle(pcs::TimerEvent*)
     {
         pcs::framenum_t frameNum = sender()->getFrameNumber();
         
-        // Execute callbacks.
+        // Execute callback for ball(s)
         m_dbBalls->applyAction(ACTION_UPDATE, frameNum);
-        m_player1->applyAction(ACTION_UPDATE, frameNum);
-        m_player2->applyAction(ACTION_UPDATE, frameNum);
 
+        // Execute callback for players
+        for(PlayerList_t::iterator it = m_players.begin(); it != m_players.end(); ++it)
+        {
+            (*it)->applyAction(ACTION_UPDATE, frameNum);
+        }
+        
 
         // Get the new update data for ball(s) and players.
         // and store in frame data.
-        FrameData frameData;
+        pcs::FrameData frameData;
         m_dbBalls->updateFrameData(frameData);
-        m_player1->updateFrameData(frameData);
-        m_player2->updateFrameData(frameData);
-
-
+        for(PlayerList_t::iterator it = m_players.begin(); it != m_players.end(); ++it)
+        {
+            (*it)->updateFrameData(frameData);
+        }
+        
         // Send the frame data
         if (frameData.size())
         {
@@ -100,77 +107,129 @@ protected:
     }
 
 
-    virtual void handle(MessageReceivedEvent* event)
+    virtual void handle(pcs::MessageReceivedEvent* event)
     {
-        Message message = event->getMessage();
+        pcs::Message message = event->getMessage();
+
+        PDEBUG << event->getSenderAddress();
 
         switch(message.getMessageType())
         {
         case MSG_GAME_EVENT_JOIN:
             {
-                pcs::port_t port = message.get<port_t>(PR_PORT);
+                pcs::port_t port = message.get<pcs::port_t>(pcs::PR_PORT);
 
-                SocketAddress peer = event->getSenderAddress();
+                pcs::SocketAddress peer = event->getSenderAddress();
                 peer.setPort(port);
                 sender()->addReceiver(peer);
 
-                switch(m_numConnectedPeers)
+                const size_t numConnectedPlayers = m_players.size();
+                if(numConnectedPlayers < 2)
                 {
-                case 0:
-                    sendCreateObject(idPlayer1, TYPE_PLAYER_1);
-                    ++m_numConnectedPeers;
-                    break;
-                case 1:
-                    sendCreateObject(idPlayer2, TYPE_PLAYER_2);
-                    ++m_numConnectedPeers;
-                    break;
-                default:
+                    // Generated unique id
+                    pcs::objectid_t id = idPlayers + numConnectedPlayers;
+
+                    // Create Player
+                    pcs::ReferencePointer<Player> player = new Player(id, 0);
+
+                    // Store senders address in player
+                    player->setPeerAddress(event->getSenderAddress());
+
+                    // Add callback
+                    player->setAction(ACTION_UPDATE, new PlayerHostCallback(player.get()));
+
+                    // Send Create message to peers.
+                    sendCreateObject(id, TYPE_PLAYER);
+                    
+                    // Add player to players list.
+                    m_players.push_back(player);
+                }
+                else
+                {
                     PINFO << "Server full";
-                    break;
                 }
             }
             break;
         case MSG_UP_PRESSED:
             {
-                PDEBUG << "up p";
-                m_player1->setMovingState(Player::STATE_UP);
+                pcs::ReferencePointer<Player> player = 0;
+                for(PlayerList_t::iterator it = m_players.begin(); it != m_players.end(); ++it)
+                {
+                    if((*it)->getPeerAddress() == event->getSenderAddress())
+                    {
+                        player = (*it);
+                        break;
+                    }
+                }
+
+                player->setMovingState(Player::STATE_UP);
+
                 break;
             }
         case MSG_UP_RELEASED:
             {
-                PDEBUG << "up r";
-                m_player1->setMovingState(Player::STATE_STOPPED);
+                pcs::ReferencePointer<Player> player = 0;
+                for(PlayerList_t::iterator it = m_players.begin(); it != m_players.end(); ++it)
+                {
+                    if((*it)->getPeerAddress() == event->getSenderAddress())
+                    {
+                        player = (*it);
+                        break;
+                    }
+                }
+
+                player->setMovingState(Player::STATE_STOPPED);
+
                 break;
             }
         case MSG_DOWN_PRESSED:
             {
-                PDEBUG << "down p";
-                m_player1->setMovingState(Player::STATE_DOWN);
+                pcs::ReferencePointer<Player> player = 0;
+                for(PlayerList_t::iterator it = m_players.begin(); it != m_players.end(); ++it)
+                {
+                    if((*it)->getPeerAddress() == event->getSenderAddress())
+                    {
+                        player = (*it);
+                        break;
+                    }
+                }
+
+                player->setMovingState(Player::STATE_DOWN);
+
                 break;
             }
         case MSG_DOWN_RELEASED:
             {
-                PDEBUG << "down r";
-                m_player1->setMovingState(Player::STATE_STOPPED);
+                pcs::ReferencePointer<Player> player = 0;
+                for(PlayerList_t::iterator it = m_players.begin(); it != m_players.end(); ++it)
+                {
+                    if((*it)->getPeerAddress() == event->getSenderAddress())
+                    {
+                        player = (*it);
+                        break;
+                    }
+                }
+
+                player->setMovingState(Player::STATE_STOPPED);
                 break;
             }
         }
     }
 
 private:
-    AutoPointer<Timer> m_timer;
-    AutoPointer<GameObjectDB> m_dbBalls;
-    Player* m_player1;
-    Player* m_player2;
+    pcs::AutoPointer<pcs::Timer> m_timer;
+    pcs::AutoPointer<pcs::GameObjectDB> m_dbBalls;
+    PlayerList_t m_players;
+
     unsigned int m_numConnectedPeers;
 };
 
 
 int main(int argc, char** argv)
 {
-    Application application(argc, argv);
+    pcs::Application application(argc, argv);
 
-    AutoPointer<RunnerHost> host(new RunnerHost());
+    pcs::AutoPointer<RunnerHost> host(new RunnerHost());
 
     host->exec();
 }

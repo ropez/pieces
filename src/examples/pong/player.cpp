@@ -7,6 +7,7 @@ using namespace pcs;
 
 Player::Player(objectid_t objectId, int posX)
 : GameObject(objectId)
+, m_peerAddress()
 , m_movingState(Player::STATE_STOPPED)
 , m_posX(posX)
 , m_posZ(0.0)
@@ -23,6 +24,15 @@ void Player::decode(DataStream& ds)
     ds >> m_posZ;
 }
 
+const pcs::SocketAddress& Player::getPeerAddress()
+{
+    return m_peerAddress;
+}
+
+void Player::setPeerAddress(const pcs::SocketAddress& peerAddress)
+{
+    m_peerAddress = peerAddress;
+}
 
 void Player::setMovingState(Player::MovingState state)
 {

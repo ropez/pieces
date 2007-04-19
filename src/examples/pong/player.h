@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include "Pieces/GameObject"
+#include "Pieces/SocketAddress"
 
 class Player : public pcs::GameObject
 {
@@ -23,10 +24,18 @@ public:
     double getPositionZ() const;
     double getPositionX() const;
 
+    // Host specific function. Returns the address of the peer that is
+    // associated with this player.
+    const pcs::SocketAddress& getPeerAddress();
+
+    // Host specific function. Associates a peer address with this player.
+    void setPeerAddress(const pcs::SocketAddress& peerAddress);
+
     void setMovingState(MovingState state);
     MovingState getMovingState();
 
 private:
+    pcs::SocketAddress m_peerAddress; // Host Specific
     MovingState m_movingState;
     const double m_posX;
     double m_posZ;

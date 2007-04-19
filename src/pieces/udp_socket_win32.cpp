@@ -69,6 +69,7 @@ void UDPSocket::bind(const SocketAddress& addr)
     int ret = ::bind(d->fd, reinterpret_cast<sockaddr*>(&sock_addr), sizeof(sock_addr));
     if (ret == SOCKET_ERROR)
     {
+        std::cerr << "Error in void UDPSocket::bind(const SocketAddress& addr) ErrorCode: " << WSAGetLastError() << std::endl;
         throw IOException("UDPSocket::bind", strerror(errno));
     }
 }

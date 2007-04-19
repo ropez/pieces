@@ -4,7 +4,7 @@
 
 #include "Pieces/DebugStream"
 
-PlayerHostCallback::PlayerHostCallback(Player* player)
+PlayerHostCallback::PlayerHostCallback(pcs::ReferencePointer<Player> player)
 : pcs::GameObjectAction()
 , m_player(player)
 {
