@@ -42,7 +42,6 @@ public:
         : pcs::Host()
         , m_dbBalls(new pcs::GameObjectDB())
         , m_players()
-        , m_numConnectedPeers(0)
     {
         startListening(2222);
 
@@ -56,12 +55,6 @@ public:
         ball->setAction(ACTION_UPDATE, ballUpd.get());
 
         sendCreateObject(idBall, TYPE_BALL);
-
-        // Create and and initialize players
-        const int numPlayers = 2;
-        for(int i = 0; i < numPlayers; ++i)
-        {
-        }
 
         // Create timer
         m_timer = new pcs::Timer(eventLoop());
@@ -152,76 +145,80 @@ protected:
             break;
         case MSG_UP_PRESSED:
             {
-                pcs::ReferencePointer<Player> player = 0;
-                for(PlayerList_t::iterator it = m_players.begin(); it != m_players.end(); ++it)
+                pcs::ReferencePointer<Player> player = getPlayer(event->getSenderAddress());
+                if(player.isValid())
                 {
-                    if((*it)->getPeerAddress() == event->getSenderAddress())
-                    {
-                        player = (*it);
-                        break;
-                    }
+                    player->setUpPressed(true);
+                    player->setMovingState(Player::STATE_UP);
                 }
-
-                player->setMovingState(Player::STATE_UP);
-
                 break;
             }
         case MSG_UP_RELEASED:
             {
-                pcs::ReferencePointer<Player> player = 0;
-                for(PlayerList_t::iterator it = m_players.begin(); it != m_players.end(); ++it)
+                pcs::ReferencePointer<Player> player = getPlayer(event->getSenderAddress());
+                if(player.isValid())
                 {
-                    if((*it)->getPeerAddress() == event->getSenderAddress())
+                    player->setUpPressed(false);
+                    if(player->isDownPressed())
                     {
-                        player = (*it);
-                        break;
+                        player->setMovingState(Player::STATE_DOWN);
+                    }
+                    else
+                    {
+                        player->setMovingState(Player::STATE_STOPPED);
                     }
                 }
-
-                player->setMovingState(Player::STATE_STOPPED);
-
                 break;
             }
         case MSG_DOWN_PRESSED:
             {
-                pcs::ReferencePointer<Player> player = 0;
-                for(PlayerList_t::iterator it = m_players.begin(); it != m_players.end(); ++it)
+                pcs::ReferencePointer<Player> player = getPlayer(event->getSenderAddress());
+                if(player.isValid())
                 {
-                    if((*it)->getPeerAddress() == event->getSenderAddress())
-                    {
-                        player = (*it);
-                        break;
-                    }
+                    player->setDownPressed(true);
+                    player->setMovingState(Player::STATE_DOWN);
                 }
-
-                player->setMovingState(Player::STATE_DOWN);
-
                 break;
             }
         case MSG_DOWN_RELEASED:
             {
-                pcs::ReferencePointer<Player> player = 0;
-                for(PlayerList_t::iterator it = m_players.begin(); it != m_players.end(); ++it)
+                pcs::ReferencePointer<Player> player = getPlayer(event->getSenderAddress());
+                if(player.isValid())
                 {
-                    if((*it)->getPeerAddress() == event->getSenderAddress())
+                    player->setDownPressed(false);
+                    if(player->isUpPressed())
                     {
-                        player = (*it);
-                        break;
+                        player->setMovingState(Player::STATE_UP);
+                    }
+                    else
+                    {
+                        player->setMovingState(Player::STATE_STOPPED);
                     }
                 }
-
-                player->setMovingState(Player::STATE_STOPPED);
                 break;
             }
         }
     }
 
 private:
+    // Returns the correct Player based on socket address. Returns 0 is no
+    // Player matches the socket address.
+    pcs::ReferencePointer<Player> getPlayer(pcs::SocketAddress sockAddr)
+    {
+        for(PlayerList_t::iterator it = m_players.begin(); it != m_players.end(); ++it)
+        {
+            if((*it)->getPeerAddress() == sockAddr)
+            {
+                return (*it);
+            }
+        }
+        return 0;
+    }
+
+    // Member variables
     pcs::AutoPointer<pcs::Timer> m_timer;
     pcs::AutoPointer<pcs::GameObjectDB> m_dbBalls;
     PlayerList_t m_players;
-
-    unsigned int m_numConnectedPeers;
 };
 
 

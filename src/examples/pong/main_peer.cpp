@@ -115,18 +115,7 @@ protected:
                     {
                         PDEBUG << "Creating player " << m_numPlayers + 1;
 
-                        double posX = 0.0;
-                        switch(m_numPlayers)
-                        {
-                        case 0:
-                            posX = cfg::player1XPos;
-                            break;
-                        case 1:
-                            posX = cfg::player2XPos;
-                            break;
-                        }
-
-                        pcs::ReferencePointer<Player> player = new Player(objectId, posX);
+                        pcs::ReferencePointer<Player> player = new Player(objectId, 0.0);
                         player->setAction(ACTION_DRAW, new PlayerPeerCallback(player.get()));
 
                         osg::ref_ptr<PlayerOSG> playerOSG = new PlayerOSG(player);
@@ -171,7 +160,6 @@ osg::ref_ptr<osg::Node> createMenu()
 
 int main(int argc, char** argv)
 {
-
     pcs::Application application(argc, argv);
 
     osg::ref_ptr<osg::Group> root = new osg::Group();

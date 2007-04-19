@@ -44,6 +44,25 @@ Player::MovingState Player::getMovingState()
     return m_movingState;
 }
 
+void Player::setDownPressed(bool pressed)
+{
+    m_downIsPressed = pressed;
+}
+bool Player::isDownPressed()
+{
+    return m_downIsPressed;
+}
+
+void Player::setUpPressed(bool pressed)
+{
+    m_upIsPressed = pressed;
+}
+bool Player::isUpPressed()
+{
+    return m_upIsPressed;
+}
+
+
 void Player::addRelativeZ(double zOffset)
 {
     m_posZ += zOffset;

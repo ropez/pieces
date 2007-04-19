@@ -34,11 +34,21 @@ public:
     void setMovingState(MovingState state);
     MovingState getMovingState();
 
+    void setDownPressed(bool pressed);
+    bool isDownPressed();
+
+    void setUpPressed(bool pressed);
+    bool isUpPressed();
+
+
 private:
     pcs::SocketAddress m_peerAddress; // Host Specific
     MovingState m_movingState;
     const double m_posX;
     double m_posZ;
+
+    bool m_downIsPressed;
+    bool m_upIsPressed;
 };
 
 #endif //PLAYER_H
