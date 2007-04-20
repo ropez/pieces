@@ -1,10 +1,19 @@
 #if !defined CONFIG_H
 #define CONFIG_H
 
-#include <osg/math>
 
 namespace cfg
 {
+    const double pi = 3.1415926535897932384626433832795;
+    const double pi_2 = pi / 2.0;
+    const double pi_4 = pi / 4.0;
+
+    const double pi2 = pi * 2.0;
+    const double pi4 = pi * 4.0;
+
+
+    inline double degreesToRadians(double angle) { return angle * pi / 180.0; }
+
     const double frameOutsideLeft   = -640.0;
     const double frameOutsideRight  =  640.0;
     const double frameOutsideTop    =  512.0;
@@ -16,22 +25,23 @@ namespace cfg
     const double frameInsideBottom =  -482.0;
     
     const double playerHeight = 100.0;
-    const double playerHeightHalf = playerHeight / 2;
+    const double playerHeightHalf = playerHeight / 2.0;
     const double playerWidth  = 20.0;
+    const double playerWidthHalf  = playerWidth / 2.0;
 
     const double ballSize = 20.0;
-    const double ballSizeHalf = ballSize / 2;
+    const double ballSizeHalf = ballSize / 2.0;
 
     const double player1XPos = -500.0;
     const double player2XPos =  500.0;
 
-    const double maxAngle = osg::DegreesToRadians(70.0);
+    const double maxAngle = degreesToRadians(70.0);
 
     const double ballVelocity = 10.0;
 
     const double playerVelocity = 7.0;
 
-    const double pi = 3.1415926535897932384626433832795;
+    
 }
 
 #endif // CONFIG_H

@@ -5,23 +5,23 @@
 
 using namespace pcs;
 
-Player::Player(objectid_t objectId, int posX)
+Player::Player(objectid_t objectId)
 : GameObject(objectId)
 , m_peerAddress()
 , m_movingState(Player::STATE_STOPPED)
-, m_posX(posX)
+, m_posX(0.0)
 , m_posZ(0.0)
 {
 }
 
 void Player::encode(DataStream& ds) const
 {
-    ds << m_posZ;
+    ds << m_posX << m_posZ;
 }
 
 void Player::decode(DataStream& ds)
 {
-    ds >> m_posZ;
+    ds >> m_posX >> m_posZ;
 }
 
 const pcs::SocketAddress& Player::getPeerAddress()
@@ -39,7 +39,7 @@ void Player::setMovingState(Player::MovingState state)
     m_movingState = state;
 }
 
-Player::MovingState Player::getMovingState()
+Player::MovingState Player::getMovingState() const
 {
     return m_movingState;
 }
@@ -48,7 +48,7 @@ void Player::setDownPressed(bool pressed)
 {
     m_downIsPressed = pressed;
 }
-bool Player::isDownPressed()
+bool Player::isDownPressed() const
 {
     return m_downIsPressed;
 }
@@ -57,20 +57,25 @@ void Player::setUpPressed(bool pressed)
 {
     m_upIsPressed = pressed;
 }
-bool Player::isUpPressed()
+bool Player::isUpPressed() const
 {
     return m_upIsPressed;
 }
 
 
-void Player::addRelativeZ(double zOffset)
+void Player::addRelativeZ(double offset)
 {
-    m_posZ += zOffset;
+    m_posZ += offset;
 }
 
-void Player::setPositionZ(double posZ)
+void Player::setPositionZ(double pos)
 {
-    m_posZ = posZ;
+    m_posZ = pos;
+}
+
+void Player::setPositionX(double pos)
+{
+    m_posX = pos;
 }
 
 double Player::getPositionZ() const

@@ -4,9 +4,8 @@
 
 #include "Pieces/Debug"
 
-using namespace pcs;
 
-Ball::Ball(objectid_t objectId)
+Ball::Ball(pcs::objectid_t objectId)
 : GameObject(objectId)
 , m_posX(0.0)
 , m_posZ(0.0)
@@ -15,12 +14,12 @@ Ball::Ball(objectid_t objectId)
 {
 }
 
-void Ball::encode(DataStream& ds) const
+void Ball::encode(pcs::DataStream& ds) const
 {
     ds << m_posX << m_posZ;
 }
 
-void Ball::decode(DataStream& ds)
+void Ball::decode(pcs::DataStream& ds)
 {
     ds >> m_posX >> m_posZ;
 }

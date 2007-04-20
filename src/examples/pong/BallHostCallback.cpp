@@ -7,9 +7,10 @@
 #include <math.h>
 
 
-BallUpdateCallback::BallUpdateCallback(Ball* ball)
+BallUpdateCallback::BallUpdateCallback(Ball* ball, PlayerList_t* playerList)
 : pcs::GameObjectAction()
 , m_ball(ball)
+, m_playerList(playerList)
 {
 }
 
@@ -48,6 +49,69 @@ void BallUpdateCallback::operator()(pcs::framenum_t /*frameNum*/)
     }
 
 
+    // Make angle in the interval [0, 2*PI)  (If someone knows a better way to do this,
+    // please let me know, Joakim)
+    m_ball->setAngle(fmod(cfg::pi2 + fmod(m_ball->getAngle(), cfg::pi2), cfg::pi2));
     
+
     // Collition detection
+
+    // Check if ball hit player
+    for(PlayerList_t::iterator it = m_playerList->begin(); it != m_playerList->end(); ++it)
+    {
+        pcs::ReferencePointer<Player> player = (*it);
+        
+        double ballPotentialHitSide = 0.0;
+        double playerPotentialHitSide = 0.0;
+
+        if(m_ball->getAngle() > cfg::pi_2)
+        {
+            // Ball is moving towards left
+            ballPotentialHitSide = -cfg::ballSizeHalf;
+            playerPotentialHitSide = cfg::playerWidth;
+        }
+        else
+        {
+            // Ball is moving towards right
+            ballPotentialHitSide = cfg::ballSizeHalf;
+            playerPotentialHitSide = -cfg::playerWidth;
+        }
+
+        ballPotentialHitSide += m_ball->getPositionX();
+        playerPotentialHitSide += player->getPositionX();
+
+        // Constants that makes the tests more understandable for humans.
+        double playerSideRight  = player->getPositionX() + cfg::playerWidthHalf;
+        double playerSideLeft   = player->getPositionX() - cfg::playerWidthHalf;
+        double playerSideTop    = player->getPositionZ() + cfg::playerHeightHalf;
+        double playerSideBottom = player->getPositionZ() - cfg::playerHeightHalf;
+
+        if((playerSideLeft <= ballPotentialHitSide) && (ballPotentialHitSide <= playerSideRight))
+        {
+            if((playerSideBottom <= m_ball->getPositionZ()) && (m_ball->getPositionZ() <= playerSideTop))
+            {
+                // The ball has hit the player.
+                double centerOffset = (player->getPositionZ() - m_ball->getPositionZ()) / cfg::playerHeightHalf;
+
+                if(m_ball->getAngle() > cfg::pi_2)
+                {
+                    PDEBUG << "To the left";
+                    m_ball->setAngle(cfg::pi2 - (centerOffset * -cfg::maxAngle - cfg::pi_2));
+                }
+                else
+                {
+                    PDEBUG << "To the right";
+                    m_ball->setAngle(cfg::pi - (centerOffset * cfg::maxAngle - cfg::pi_2));
+                }
+
+                // This "break" is a tiny optimization, since we assume the ball cannot hit to players in the same frame.
+                break; 
+            }
+        }
+    }
+
+    // Make angle in the interval [0, 2*PI)  (If someone knows a better way to do this,
+    // please let me know, Joakim)
+    m_ball->setAngle(fmod(cfg::pi2 + fmod(m_ball->getAngle(), cfg::pi2), cfg::pi2));
+
 }

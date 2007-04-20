@@ -18,6 +18,8 @@
 #include "PlayerHostCallback.h"
 #include "pong_defines.h"
 
+#include "config.h"
+
 #include <list>
 
 /**
@@ -34,9 +36,6 @@ const pcs::objectid_t idPlayers = 10100;
 
 class RunnerHost : public pcs::Host
 {
-private:
-    typedef std::list<pcs::ReferencePointer<Player> > PlayerList_t;
-
 public:
     RunnerHost()
         : pcs::Host()
@@ -51,7 +50,7 @@ public:
         pcs::ReferencePointer<Ball> ball = new Ball(idBall);
         m_dbBalls->insert(idBall, ball.get());
 
-        pcs::ReferencePointer<BallUpdateCallback> ballUpd = new BallUpdateCallback(ball.get());
+        pcs::ReferencePointer<BallUpdateCallback> ballUpd = new BallUpdateCallback(ball.get(), &m_players);
         ball->setAction(ACTION_UPDATE, ballUpd.get());
 
         sendCreateObject(idBall, TYPE_BALL);
@@ -104,8 +103,6 @@ protected:
     {
         pcs::Message message = event->getMessage();
 
-        PDEBUG << event->getSenderAddress();
-
         switch(message.getMessageType())
         {
         case MSG_GAME_EVENT_JOIN:
@@ -123,7 +120,19 @@ protected:
                     pcs::objectid_t id = idPlayers + numConnectedPlayers;
 
                     // Create Player
-                    pcs::ReferencePointer<Player> player = new Player(id, 0);
+                    pcs::ReferencePointer<Player> player = new Player(id);
+
+                    // Set initial position
+                    switch(numConnectedPlayers)
+                    {
+                    case 0:
+                        player->setPositionX(cfg::player1XPos);
+                        break;
+                    case 1:
+                        player->setPositionX(cfg::player2XPos);
+                        break;
+                    }
+
 
                     // Store senders address in player
                     player->setPeerAddress(event->getSenderAddress());
@@ -136,6 +145,7 @@ protected:
                     
                     // Add player to players list.
                     m_players.push_back(player);
+
                 }
                 else
                 {
@@ -201,7 +211,7 @@ protected:
     }
 
 private:
-    // Returns the correct Player based on socket address. Returns 0 is no
+    // Returns the correct Player based on socket address. Returns 0 if no
     // Player matches the socket address.
     pcs::ReferencePointer<Player> getPlayer(pcs::SocketAddress sockAddr)
     {

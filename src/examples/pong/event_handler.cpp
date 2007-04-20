@@ -38,43 +38,6 @@ bool PongEventHandler::handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionA
     {
     case(osgGA::GUIEventAdapter::FRAME):
         {
-            //// Move players
-            //if(m_player1Up)
-            //{
-            //    m_player1->addRelativeZ(cfg::playerVelocity);
-            //    if(m_player1->getPositionZ() + cfg::playerHeightHalf > cfg::frameInsideTop)
-            //    {
-            //        m_player1->setPositionZ(cfg::frameInsideTop - cfg::playerHeightHalf);
-            //    }
-            //}
-
-            //if(m_player1Down)
-            //{
-            //    m_player1->addRelativeZ(-cfg::playerVelocity);
-            //    if(m_player1->getPositionZ() - cfg::playerHeightHalf < cfg::frameInsideBottom)
-            //    {
-            //        m_player1->setPositionZ(cfg::frameInsideBottom + cfg::playerHeightHalf);
-            //    }
-            //}
-
-            //if(m_player2Up)
-            //{
-            //    m_player2->addRelativeZ(cfg::playerVelocity);
-            //    if(m_player2->getPositionZ() + cfg::playerHeightHalf > cfg::frameInsideTop)
-            //    {
-            //        m_player2->setPositionZ(cfg::frameInsideTop - cfg::playerHeightHalf);
-            //    }
-            //}
-            //
-            //if(m_player2Down)
-            //{
-            //    m_player2->addRelativeZ(-cfg::playerVelocity);
-            //    if(m_player2->getPositionZ() - cfg::playerHeightHalf < cfg::frameInsideBottom)
-            //    {
-            //        m_player2->setPositionZ(cfg::frameInsideBottom + cfg::playerHeightHalf);
-            //    }
-            //}
-
             //if(m_ball.valid())
             //{
 

@@ -115,7 +115,7 @@ protected:
                     {
                         PDEBUG << "Creating player " << m_numPlayers + 1;
 
-                        pcs::ReferencePointer<Player> player = new Player(objectId, 0.0);
+                        pcs::ReferencePointer<Player> player = new Player(objectId);
                         player->setAction(ACTION_DRAW, new PlayerPeerCallback(player.get()));
 
                         osg::ref_ptr<PlayerOSG> playerOSG = new PlayerOSG(player);

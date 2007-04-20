@@ -14,13 +14,14 @@ public:
         STATE_DOWN
     };
 
-    Player(pcs::objectid_t objectId, int posX);
+    Player(pcs::objectid_t objectId);
 
     virtual void encode(pcs::DataStream& ds) const;
     virtual void decode(pcs::DataStream& ds);
 
-    void addRelativeZ(double offsetZ);
-    void setPositionZ(double posZ);
+    void addRelativeZ(double offset);
+    void setPositionZ(double pos);
+    void setPositionX(double pos);
     double getPositionZ() const;
     double getPositionX() const;
 
@@ -32,19 +33,19 @@ public:
     void setPeerAddress(const pcs::SocketAddress& peerAddress);
 
     void setMovingState(MovingState state);
-    MovingState getMovingState();
+    MovingState getMovingState() const;
 
     void setDownPressed(bool pressed);
-    bool isDownPressed();
+    bool isDownPressed() const;
 
     void setUpPressed(bool pressed);
-    bool isUpPressed();
+    bool isUpPressed() const;
 
 
 private:
     pcs::SocketAddress m_peerAddress; // Host Specific
     MovingState m_movingState;
-    const double m_posX;
+    double m_posX;
     double m_posZ;
 
     bool m_downIsPressed;

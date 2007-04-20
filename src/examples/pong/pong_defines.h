@@ -1,8 +1,13 @@
 #if !defined PONG_DEFINES_H
 #define PONG_DEFINES_H
 
+#include "Pieces/ReferencePointer"
+#include "player.h"
+#include <list>
 
 // Host specific
+
+typedef std::list<pcs::ReferencePointer<Player> > PlayerList_t;
 
 enum ObjectTypes
 {
