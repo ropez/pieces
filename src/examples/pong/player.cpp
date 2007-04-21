@@ -8,7 +8,9 @@ using namespace pcs;
 Player::Player(objectid_t objectId)
 : GameObject(objectId)
 , m_peerAddress()
+, m_location(Player::LEFT)
 , m_movingState(Player::STATE_STOPPED)
+, m_score(0)
 , m_posX(0.0)
 , m_posZ(0.0)
 {
@@ -62,7 +64,6 @@ bool Player::isUpPressed() const
     return m_upIsPressed;
 }
 
-
 void Player::addRelativeZ(double offset)
 {
     m_posZ += offset;
@@ -86,4 +87,24 @@ double Player::getPositionZ() const
 double Player::getPositionX() const
 {
     return m_posX;
+}
+
+void Player::setLocation(Player::Location location)
+{
+    m_location = location;
+}
+
+Player::Location Player::getLocation() const
+{
+    return m_location;
+}
+
+void Player::increaseScore()
+{
+    ++m_score;
+}
+
+int Player::getScore() const
+{
+    return m_score;
 }

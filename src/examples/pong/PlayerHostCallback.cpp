@@ -4,14 +4,30 @@
 
 #include "Pieces/DebugStream"
 
-PlayerHostCallback::PlayerHostCallback(pcs::ReferencePointer<Player> player)
+PlayerHostCallback::PlayerHostCallback(pcs::ReferencePointer<Player> player, GameState* gameState)
 : pcs::GameObjectAction()
+, m_gameState(gameState)
 , m_player(player)
 {
 }
 
 void PlayerHostCallback::operator()(pcs::framenum_t)
 {
+
+    if(m_player->getLocation() == Player::RIGHT && m_gameState->ballIsLostForPlayerLeft)
+    {
+        m_player->increaseScore();
+        PINFO << "Score Player Right: " << m_player->getScore();
+    }
+    else if(m_player->getLocation() == Player::LEFT && m_gameState->ballIsLostForPlayerRight)
+    {
+        m_player->increaseScore();
+        PINFO << "Score Player Left: " << m_player->getScore();
+    }
+
+
+    // 
+    // Move player
     switch(m_player->getMovingState())
     {
     case Player::STATE_UP:

@@ -7,10 +7,13 @@
 #include <math.h>
 
 
-BallUpdateCallback::BallUpdateCallback(Ball* ball, PlayerList_t* playerList)
+BallUpdateCallback::BallUpdateCallback(Ball* ball, GameState* gameState, PlayerList_t* playerList)
 : pcs::GameObjectAction()
+, m_gameState(gameState)
 , m_ball(ball)
 , m_playerList(playerList)
+, m_wallHitRight(false)
+, m_wallHitLeft(false)
 {
 }
 
@@ -19,25 +22,24 @@ void BallUpdateCallback::operator()(pcs::framenum_t /*frameNum*/)
     double angle = m_ball->getAngle();
     double velocity = m_ball->getVelocity();
     
+    // Update balls position w.r.t velocity and angle.
     m_ball->addRelativeX(velocity * sin(angle));
     m_ball->addRelativeZ(velocity * cos(angle));
 
     // Check if ball hits walls
-
+    
     // Check right wall
     if(m_ball->getPositionX() >= cfg::frameInsideRight - cfg::ballSizeHalf)
     {
         m_ball->setAngle(cfg::pi * 2 - m_ball->getAngle());
-//        ++m_scorePlayer1;
-//        std::cout << "Player1:\t" << m_scorePlayer1 << "\tPlayer2:\t" << m_scorePlayer2 << "\r";
+        m_gameState->ballIsLostForPlayerRight = true;
     }
 
     // Check left wall
     if(m_ball->getPositionX() <= cfg::frameInsideLeft + cfg::ballSizeHalf)
     {
         m_ball->setAngle(cfg::pi * 2 - m_ball->getAngle());
- //       ++m_scorePlayer2;
-//        std::cout << "Player1:\t" << m_scorePlayer1 << "\tPlayer2:\t" << m_scorePlayer2 << "\r";
+        m_gameState->ballIsLostForPlayerLeft = true;
     }
 
     // Check top wall
@@ -66,7 +68,9 @@ void BallUpdateCallback::operator()(pcs::framenum_t /*frameNum*/)
         double ballPotentialHitSide = 0.0;
         double playerPotentialHitSide = 0.0;
 
-        if(m_ball->getAngle() > cfg::pi)
+        const bool ballIsMovingTowardLeft = m_ball->getAngle() > cfg::pi ? true : false;
+        
+        if(ballIsMovingTowardLeft)
         {
             // Ball is moving towards left
             ballPotentialHitSide = -cfg::ballSizeHalf;
@@ -83,10 +87,10 @@ void BallUpdateCallback::operator()(pcs::framenum_t /*frameNum*/)
         playerPotentialHitSide += player->getPositionX();
 
         // Constants that makes the tests more understandable for humans.
-        double playerSideRight  = player->getPositionX() + cfg::playerWidthHalf;
-        double playerSideLeft   = player->getPositionX() - cfg::playerWidthHalf;
-        double playerSideTop    = player->getPositionZ() + cfg::playerHeightHalf;
-        double playerSideBottom = player->getPositionZ() - cfg::playerHeightHalf;
+        const double playerSideRight  = player->getPositionX() + cfg::playerWidthHalf;
+        const double playerSideLeft   = player->getPositionX() - cfg::playerWidthHalf;
+        const double playerSideTop    = player->getPositionZ() + cfg::playerHeightHalf;
+        const double playerSideBottom = player->getPositionZ() - cfg::playerHeightHalf;
 
         if((playerSideLeft <= ballPotentialHitSide) && (ballPotentialHitSide <= playerSideRight))
         {
@@ -95,7 +99,7 @@ void BallUpdateCallback::operator()(pcs::framenum_t /*frameNum*/)
                 // The ball has hit the player.
                 double centerOffset = (player->getPositionZ() - m_ball->getPositionZ()) / cfg::playerHeightHalf;
 
-                if(m_ball->getAngle() > cfg::pi)
+                if(ballIsMovingTowardLeft)
                 {
                     // Ball is moving towards left
                     m_ball->setAngle(cfg::pi2 - (centerOffset * -cfg::maxAngle - cfg::pi_2));

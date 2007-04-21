@@ -41,6 +41,7 @@ public:
         : pcs::Host()
         , m_dbBalls(new pcs::GameObjectDB())
         , m_players()
+        , m_gameState()
     {
         startListening(2222);
 
@@ -50,7 +51,7 @@ public:
         pcs::ReferencePointer<Ball> ball = new Ball(idBall);
         m_dbBalls->insert(idBall, ball.get());
 
-        pcs::ReferencePointer<BallUpdateCallback> ballUpd = new BallUpdateCallback(ball.get(), &m_players);
+        pcs::ReferencePointer<BallUpdateCallback> ballUpd = new BallUpdateCallback(ball.get(), &m_gameState, &m_players);
         ball->setAction(ACTION_UPDATE, ballUpd.get());
 
         sendCreateObject(idBall, TYPE_BALL);
@@ -66,6 +67,9 @@ protected:
     virtual void handle(pcs::TimerEvent*)
     {
         pcs::framenum_t frameNum = sender()->getFrameNumber();
+
+        // Game state has to be initialized each frame.
+        m_gameState.init();
         
         // Execute callback for ball(s)
         m_dbBalls->applyAction(ACTION_UPDATE, frameNum);
@@ -75,12 +79,11 @@ protected:
         {
             (*it)->applyAction(ACTION_UPDATE, frameNum);
         }
-        
 
-        // Get the new update data for ball(s) and players.
-        // and store in frame data.
+        // Collect and store (in frameData) the data that should be sent for all game objects.
         pcs::FrameData frameData;
         m_dbBalls->updateFrameData(frameData);
+
         for(PlayerList_t::iterator it = m_players.begin(); it != m_players.end(); ++it)
         {
             (*it)->updateFrameData(frameData);
@@ -127,9 +130,11 @@ protected:
                     {
                     case 0:
                         player->setPositionX(cfg::player1XPos);
+                        player->setLocation(Player::LEFT);
                         break;
                     case 1:
                         player->setPositionX(cfg::player2XPos);
+                        player->setLocation(Player::RIGHT);
                         break;
                     }
 
@@ -138,7 +143,7 @@ protected:
                     player->setPeerAddress(event->getSenderAddress());
 
                     // Add callback
-                    player->setAction(ACTION_UPDATE, new PlayerHostCallback(player.get()));
+                    player->setAction(ACTION_UPDATE, new PlayerHostCallback(player.get(), &m_gameState));
 
                     // Send Create message to peers.
                     sendCreateObject(id, TYPE_PLAYER);
@@ -229,6 +234,7 @@ private:
     pcs::AutoPointer<pcs::Timer> m_timer;
     pcs::AutoPointer<pcs::GameObjectDB> m_dbBalls;
     PlayerList_t m_players;
+    GameState m_gameState;
 };
 
 

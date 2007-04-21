@@ -32,6 +32,24 @@ enum ActionTypes
     ACTION_DRAW
 };
 
+class GameState
+{
+public:
+    GameState()
+        : ballIsLostForPlayerLeft(false)
+        , ballIsLostForPlayerRight(false)
+    {
+    }
 
+    void init()
+    {
+        ballIsLostForPlayerLeft = false;
+        ballIsLostForPlayerRight = false;
+    }
+
+    bool ballIsLostForPlayerLeft;
+    bool ballIsLostForPlayerRight;
+
+};
 
 #endif //PONG_DEFINES_H

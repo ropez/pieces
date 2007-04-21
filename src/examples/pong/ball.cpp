@@ -44,12 +44,12 @@ void Ball::addRelativeZ(double zOffset)
     m_posZ += zOffset;
 }
 
-double Ball::getPositionX()
+double Ball::getPositionX() const
 {
     return m_posX;
 }
 
-double Ball::getPositionZ()
+double Ball::getPositionZ() const
 {
     return m_posZ;
 }

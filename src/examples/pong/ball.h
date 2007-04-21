@@ -18,12 +18,12 @@ public:
     void addRelativeX(double xOffset);
     void addRelativeZ(double zOffset);
     
-    double getPositionZ();
-    double getPositionX();
+    double getPositionZ() const;
+    double getPositionX() const;
 
     void setAngle(double angle) {m_angle = angle;}
-    double getAngle() { return m_angle;}
-    double getVelocity() { return m_speed;}
+    double getAngle() const { return m_angle;}
+    double getVelocity() const { return m_speed;}
 
 private:
     double m_posX;

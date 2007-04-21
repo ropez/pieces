@@ -14,6 +14,12 @@ public:
         STATE_DOWN
     };
 
+    enum Location
+    {
+        LEFT,
+        RIGHT
+    };
+
     Player(pcs::objectid_t objectId);
 
     virtual void encode(pcs::DataStream& ds) const;
@@ -41,15 +47,23 @@ public:
     void setUpPressed(bool pressed);
     bool isUpPressed() const;
 
+    void setLocation(Location location);
+    Location getLocation() const;
+
+    void increaseScore();
+    int getScore() const;
 
 private:
     pcs::SocketAddress m_peerAddress; // Host Specific
+    Location m_location;
     MovingState m_movingState;
+    int m_score;
     double m_posX;
     double m_posZ;
 
     bool m_downIsPressed;
     bool m_upIsPressed;
+    
 };
 
 #endif //PLAYER_H
