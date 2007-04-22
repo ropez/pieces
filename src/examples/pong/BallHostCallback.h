@@ -3,6 +3,8 @@
 
 #include "ball.h"
 
+#include "Pieces/Host"
+#include "Pieces/AutoPointer"
 #include "Pieces/GameObject"
 #include "Pieces/GameObjectAction"
 
@@ -11,7 +13,7 @@
 class BallUpdateCallback : public pcs::GameObjectAction
 {
 public:
-    BallUpdateCallback(Ball* ball, GameState* gameState, PlayerList_t* playerList);
+    BallUpdateCallback(pcs::AutoPointer<pcs::Host> host, Ball* ball, GameState* gameState, PlayerList_t* playerList);
 
     virtual void operator()(pcs::framenum_t);
 
@@ -19,6 +21,7 @@ public:
 
 private:
     GameState* m_gameState;
+    pcs::AutoPointer<pcs::Host> m_host;
     Ball* m_ball;
     PlayerList_t* m_playerList;
     bool m_wallHitRight;

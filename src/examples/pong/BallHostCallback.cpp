@@ -7,8 +7,9 @@
 #include <math.h>
 
 
-BallUpdateCallback::BallUpdateCallback(Ball* ball, GameState* gameState, PlayerList_t* playerList)
+BallUpdateCallback::BallUpdateCallback(pcs::AutoPointer<pcs::Host> host, Ball* ball, GameState* gameState, PlayerList_t* playerList)
 : pcs::GameObjectAction()
+, m_host(host)
 , m_gameState(gameState)
 , m_ball(ball)
 , m_playerList(playerList)
@@ -33,6 +34,7 @@ void BallUpdateCallback::operator()(pcs::framenum_t /*frameNum*/)
     {
         m_ball->setAngle(cfg::pi * 2 - m_ball->getAngle());
         m_gameState->ballIsLostForPlayerRight = true;
+        
     }
 
     // Check left wall
