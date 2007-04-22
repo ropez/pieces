@@ -6,6 +6,8 @@
 
 #include <math.h>
 
+#include "Pieces/Host"
+#include "Pieces/Message"
 
 BallUpdateCallback::BallUpdateCallback(pcs::AutoPointer<pcs::Host> host, Ball* ball, GameState* gameState, PlayerList_t* playerList)
 : pcs::GameObjectAction()
@@ -35,6 +37,8 @@ void BallUpdateCallback::operator()(pcs::framenum_t /*frameNum*/)
         m_ball->setAngle(cfg::pi * 2 - m_ball->getAngle());
         m_gameState->ballIsLostForPlayerRight = true;
         
+        pcs::Message msg(MSG_SCORE_UPDATED);
+        m_host->sendMessage(msg);
     }
 
     // Check left wall
@@ -42,6 +46,9 @@ void BallUpdateCallback::operator()(pcs::framenum_t /*frameNum*/)
     {
         m_ball->setAngle(cfg::pi * 2 - m_ball->getAngle());
         m_gameState->ballIsLostForPlayerLeft = true;
+
+        pcs::Message msg(MSG_SCORE_UPDATED);
+        m_host->sendMessage(msg);
     }
 
     // Check top wall
