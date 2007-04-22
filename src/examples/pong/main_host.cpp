@@ -52,6 +52,7 @@ public:
         m_dbBalls->insert(idBall, ball.get());
 
         pcs::ReferencePointer<BallUpdateCallback> ballUpd = new BallUpdateCallback(ball.get(), &m_gameState, &m_players);
+
         ball->setAction(ACTION_UPDATE, ballUpd.get());
 
         sendCreateObject(idBall, TYPE_BALL);
@@ -79,6 +80,8 @@ protected:
         {
             (*it)->applyAction(ACTION_UPDATE, frameNum);
         }
+
+
 
         // Collect and store (in frameData) the data that should be sent for all game objects.
         pcs::FrameData frameData;

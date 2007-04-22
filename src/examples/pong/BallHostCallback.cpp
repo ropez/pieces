@@ -66,7 +66,6 @@ void BallUpdateCallback::operator()(pcs::framenum_t /*frameNum*/)
         pcs::ReferencePointer<Player> player = (*it);
         
         double ballPotentialHitSide = 0.0;
-        double playerPotentialHitSide = 0.0;
 
         const bool ballIsMovingTowardLeft = m_ball->getAngle() > cfg::pi ? true : false;
         
@@ -74,17 +73,14 @@ void BallUpdateCallback::operator()(pcs::framenum_t /*frameNum*/)
         {
             // Ball is moving towards left
             ballPotentialHitSide = -cfg::ballSizeHalf;
-            playerPotentialHitSide = cfg::playerWidth;
         }
         else
         {
             // Ball is moving towards right
             ballPotentialHitSide = cfg::ballSizeHalf;
-            playerPotentialHitSide = -cfg::playerWidth;
         }
 
         ballPotentialHitSide += m_ball->getPositionX();
-        playerPotentialHitSide += player->getPositionX();
 
         // Constants that makes the tests more understandable for humans.
         const double playerSideRight  = player->getPositionX() + cfg::playerWidthHalf;

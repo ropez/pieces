@@ -23,7 +23,8 @@ enum MessageTypes
     MSG_UP_PRESSED,
     MSG_UP_RELEASED,
     MSG_DOWN_PRESSED,
-    MSG_DOWN_RELEASED
+    MSG_DOWN_RELEASED,
+    MSG_SCORE_UPDATED
 };
 
 enum ActionTypes

@@ -83,6 +83,7 @@ protected:
         m_db->applyFrameData(event->getFrameNumber(), event->getFrameData());
 
         m_db->applyAction(ACTION_DRAW, event->getFrameNumber());
+
     }
 
     virtual void handle(pcs::MessageReceivedEvent* event)
@@ -138,7 +139,10 @@ protected:
                 m_db->remove(objectId);
             }
             break;
+        case MSG_SCORE_UPDATED:
+            std::cout << "Score is updated" << std::endl;
         }
+
     }
 
 private:

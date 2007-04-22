@@ -18,12 +18,12 @@ Player::Player(objectid_t objectId)
 
 void Player::encode(DataStream& ds) const
 {
-    ds << m_posX << m_posZ;
+    ds << m_posX << m_posZ << m_score;
 }
 
 void Player::decode(DataStream& ds)
 {
-    ds >> m_posX >> m_posZ;
+    ds >> m_posX >> m_posZ >> m_score;
 }
 
 const pcs::SocketAddress& Player::getPeerAddress()
