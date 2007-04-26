@@ -44,6 +44,7 @@ ChatWidget::ChatWidget(ChatPeer* peer, QWidget* parent)
     layout->addWidget(d->button);
 
     connect(d->button, SIGNAL(clicked()), this, SLOT(send()));
+    connect(d->line, SIGNAL(returnPressed()), this, SLOT(send()));
 }
 
 
