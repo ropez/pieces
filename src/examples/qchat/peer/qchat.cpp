@@ -2,6 +2,7 @@
 #include <Pieces/SocketAddress>
 #include <Pieces/AutoPointer>
 #include <OpenThreads/Thread>
+#include <Pieces/Debug>
 
 #include <QtGui>
 
@@ -45,7 +46,25 @@ int main(int argc, char** argv)
 
     AutoPointer<ChatPeer> peer(new ChatPeer());
 
-    peer->connectTo(SocketAddress(InetAddress::getHostByName("localhost"), 2222));
+    std::string host = "localhost";
+    pcs::port_t listenPort = 3333;
+
+    if(pcs::app->argc() > 1)
+    {
+      host = pcs::app->arg(1);
+    }
+
+    if(pcs::app->argc() > 2)
+    {
+      std::stringstream ss(pcs::app->arg(2));
+      ss >> listenPort;
+    }
+
+    pcs::SocketAddress sa(pcs::InetAddress::getHostByName(host), 2222);
+
+    PDEBUG << "Connecting to " << sa;
+
+    peer->connectTo(sa);
 
     AutoPointer<ChatWidget> widget(new ChatWidget(peer.get()));
 
