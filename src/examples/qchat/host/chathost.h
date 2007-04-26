@@ -4,13 +4,13 @@
 #include <Pieces/Host>
 
 
-class ChatHost : public Pieces::Host
+class ChatHost : public pcs::Host
 {
 public:
     ChatHost();
 
 protected:
-    virtual void handle(Pieces::MessageReceivedEvent* event);
+    virtual void handle(pcs::MessageReceivedEvent* event);
 };
 
 #endif

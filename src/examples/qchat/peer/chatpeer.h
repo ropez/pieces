@@ -6,7 +6,7 @@
 #include <QtCore/QString>
 
 
-class ChatPeer : public QObject, public Pieces::Peer
+class ChatPeer : public QObject, public pcs::Peer
 {
     Q_OBJECT
 
@@ -21,7 +21,7 @@ signals:
     void message(const QString& msg);
 
 protected:
-    virtual void handle(Pieces::MessageReceivedEvent* event);
+    virtual void handle(pcs::MessageReceivedEvent* event);
 
 private:
     std::string m_nick;

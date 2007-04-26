@@ -9,7 +9,7 @@
 #include "chatwidget.h"
 #include "chatpeer.h"
 
-using namespace Pieces;
+using namespace pcs;
 
 
 class ThreadRunningPeer : public OpenThreads::Thread

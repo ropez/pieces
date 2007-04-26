@@ -5,7 +5,7 @@
 #include <Pieces/MessageReceivedEvent>
 #include <Pieces/Debug>
 
-using namespace Pieces;
+using namespace pcs;
 
 ChatWidget* widget;
 

@@ -1,10 +1,10 @@
-#include "../src/global.h"
+#include "../peer/global.h"
 #include "chathost.h"
 
 #include <Pieces/MessageReceivedEvent>
 #include <Pieces/Debug>
 
-using namespace Pieces;
+using namespace pcs;
 
 
 ChatHost::ChatHost()
