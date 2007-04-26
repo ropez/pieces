@@ -13,12 +13,12 @@
 #include <netinet/in.h>
 
 
-namespace Pieces
+namespace pcs
 {
 
 class TCPSocketPrivate
 {
-public:// namespace Pieces
+public:
 
     // Default constructor.
     TCPSocketPrivate();
@@ -364,4 +364,4 @@ AutoPointer<TCPSocket> TCPServer::accept()
 }
 
 
-} // namespace Pieces
+} // namespace pcs

@@ -5,7 +5,7 @@
 #include "Pieces/StreamTarget"
 
 
-namespace Pieces
+namespace pcs
 {
 class FilePrivate;
 

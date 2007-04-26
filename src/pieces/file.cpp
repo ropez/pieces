@@ -11,7 +11,7 @@
 #include <fcntl.h>
 
 
-namespace Pieces
+namespace pcs
 {
 
 class FilePrivate

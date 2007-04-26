@@ -14,6 +14,9 @@
 #include "Pieces/Debug"
 
 #include "OpenThreads/Thread"
+#include "OpenThreads/Mutex"
+#include "OpenThreads/ScopedLock"
+
 #include <map>
 #include <algorithm>
 
@@ -21,10 +24,14 @@
 namespace pcs
 {
 
+using namespace OpenThreads;
+
 class TCPConnectionManagerPrivate
 {
 public:
     TCPConnectionManagerPrivate();
+
+    Mutex mutex;
 
     std::deque<msgpair_t>::iterator findId(msgid_t id);
 
@@ -45,7 +52,8 @@ public:
 
 
 TCPConnectionManagerPrivate::TCPConnectionManagerPrivate()
-: eventLoop(0)
+: mutex()
+, eventLoop(0)
 , connections()
 , messages()
 , countId(0)
@@ -98,6 +106,8 @@ TCPConnectionManager::~TCPConnectionManager()
 
 void TCPConnectionManager::startListening(port_t port)
 {
+    ScopedLock<Mutex> lock(d->mutex);
+
     d->listener = new TCPListenerThread(port, this);
     d->listener->start();
 }
@@ -105,6 +115,8 @@ void TCPConnectionManager::startListening(port_t port)
 
 void TCPConnectionManager::stopListening()
 {
+    ScopedLock<Mutex> lock(d->mutex);
+
     // Stop and delete listener thread by replacing auto-pointer
     d->listener = 0;
 }
@@ -140,6 +152,8 @@ msgid_t TCPConnectionManager::sendMessage(const Message& message, msgid_t origin
 {
     typedef TCPConnectionManagerPrivate::map_t::iterator iterator_t;
 
+    ScopedLock<Mutex> lock(d->mutex);
+
     msgpair_t msg(++d->countId, message);
 
     for (iterator_t it = d->connections.begin(); it != d->connections.end(); ++it)
@@ -174,6 +188,8 @@ void TCPConnectionManager::add(TCPConnection* connection)
     // Make sure we take ownership, in case the connection is refused
     AutoPointer<TCPConnection> conn(connection);
 
+    ScopedLock<Mutex> lock(d->mutex);
+
     // Test address
     SocketAddress address = conn->getPeerAddress();
     if (address.isNull())
@@ -199,6 +215,8 @@ void TCPConnectionManager::add(TCPConnection* connection)
 void TCPConnectionManager::remove(const SocketAddress& address)
 {
     typedef TCPConnectionManagerPrivate::map_t::iterator iterator_t;
+
+    ScopedLock<Mutex> lock(d->mutex);
 
     iterator_t it = d->connections.find(address);
 

@@ -9,7 +9,7 @@
 #include "OpenThreads/Thread"
 
 
-using namespace Pieces;
+using namespace pcs;
 
 class Session : public OpenThreads::Thread
 {
@@ -58,7 +58,7 @@ private:
 };
 
 
-using namespace Pieces;
+using namespace pcs;
 
 int main(int argc, char** argv)
 {

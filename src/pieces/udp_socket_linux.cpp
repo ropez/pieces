@@ -12,7 +12,7 @@
 #include <netinet/in.h>
 
 
-namespace Pieces
+namespace pcs
 {
 
 class UDPSocketPrivate
@@ -121,4 +121,4 @@ void UDPSocket::send(const Datagram& packet)
 }
 
 
-} // namespace Pieces
+} // namespace pcs

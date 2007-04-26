@@ -16,7 +16,7 @@
 #include <iostream>
 #include <sstream>
 
-using namespace Pieces;
+using namespace pcs;
 
 
 int main(int argc, char** argv)
@@ -55,7 +55,7 @@ int main(int argc, char** argv)
     //close socket
         us.close();
     }
-    catch(Pieces::Exception e)
+    catch(pcs::Exception e)
     {
         PERROR << e;
     }
