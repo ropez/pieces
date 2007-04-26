@@ -7,6 +7,12 @@
 #define DISABLE_COPY(c) c(const c&); c& operator=(const c&);
 
 
+/**
+ * \namespace pcs
+ * \brief Pieces framework namespace.
+ *
+ * The pcs namespace contains all the classes of the Pieces framework.
+ */
 namespace pcs
 {
 
@@ -54,5 +60,14 @@ enum MessageProperty
 };
 
 } // namespace pcs
+
+
+/**
+ * \mainpage
+ *
+ * \section Introduction
+ * This is the user documentation for the Pieces framework.
+ */
+
 
 #endif // PIECES_GLOBAL_H

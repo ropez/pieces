@@ -112,6 +112,9 @@ public:
 
 protected:
 
+    /**
+     * Returns a pointer to a connection manager interface.
+     */
     ConnectionManager* connectionManager() const;
 
     GameDataSender* sender();
