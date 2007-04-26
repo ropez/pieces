@@ -11,7 +11,6 @@ namespace pcs
 class EventLoop;
 class ConnectionManager;
 class GameDataSender;
-class PeerInfo;
 class HostPrivate;
 
 /**
@@ -116,10 +115,6 @@ protected:
     ConnectionManager* connectionManager() const;
 
     GameDataSender* sender();
-
-    virtual void peerConnected(PeerInfo* info);
-
-    virtual void peerDisconnected(PeerInfo* info);
 
 private:
     DISABLE_COPY(Host);

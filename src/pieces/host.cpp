@@ -147,16 +147,4 @@ GameDataSender* Host::sender()
     return d->sender.get();
 }
 
-
-void Host::peerConnected(PeerInfo* /*info*/)
-{
-    // TODO: Anything to do if user haven't implemented this?
-}
-
-
-void Host::peerDisconnected(PeerInfo* /*info*/)
-{
-    // TODO: Anything to do if user haven't implemented this?
-}
-
 } // namespace pcs
