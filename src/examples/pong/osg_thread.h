@@ -4,6 +4,7 @@
 #include "OpenThreads/Thread"
 
 #include "playerosg.h"
+#include "pong_peer.h"
 
 #include "Pieces/Peer"
 
@@ -25,7 +26,7 @@ public:
     /**
      * 
      */
-    OSGThread(osg::ref_ptr<osg::Group> root, pcs::Peer& peer);
+    OSGThread(osg::ref_ptr<osg::Group> root, PongPeer& peer);
 
     /**
      * 

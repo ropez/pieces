@@ -1,6 +1,7 @@
 #if !defined CONFIG_H
 #define CONFIG_H
 
+#include <string>
 
 namespace cfg
 {
@@ -40,6 +41,18 @@ namespace cfg
     const double ballVelocity = 10.0;
 
     const double playerVelocity = 7.0;
+
+    // Score board
+#ifdef WIN32
+    const std::string font = "ARIAL.TTF";
+#else
+    const std::string font = "TYPICAL_LINUX_FONT.TTF";
+#endif
+
+    const double score1PosX = -550;
+    const double score1PosZ =  530;
+    const double score2PosX =  550;
+    const double score2PosZ =  530;
 
     
 }

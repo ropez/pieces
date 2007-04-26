@@ -1,6 +1,5 @@
 #include "pong_peer.h"
 
-#include "pong_defines.h"
 #include "config.h"
 
 // Osg subclasses
@@ -28,7 +27,7 @@ PongPeer::PongPeer(osg::ref_ptr<osg::Group> rootOSG)
 : pcs::Peer()
 , m_db(new pcs::GameObjectDB())
 , m_rootOSG(rootOSG)
-, m_numPlayers(0)
+, m_playerList(0)
 {
     std::string host = "localhost";
     pcs::port_t listenPort = 3333;
@@ -105,7 +104,7 @@ void PongPeer::handle(pcs::MessageReceivedEvent* event)
                 break;
             case TYPE_PLAYER:
                 {
-                    PDEBUG << "Creating player " << m_numPlayers + 1;
+                    PDEBUG << "Creating player " << m_playerList.size() + 1;
 
                     pcs::ReferencePointer<Player> player = new Player(objectId);
                     player->setAction(ACTION_DRAW, new PlayerPeerCallback(player.get()));
@@ -114,8 +113,8 @@ void PongPeer::handle(pcs::MessageReceivedEvent* event)
                     m_rootOSG->addChild(playerOSG.get());
 
                     m_db->insert(objectId, player.get());
-
-                    ++m_numPlayers;
+                    m_playerList.push_back(player);
+                    
                 }
                 break;
             default:
@@ -134,6 +133,11 @@ void PongPeer::handle(pcs::MessageReceivedEvent* event)
         std::cout << "Score is updated" << std::endl;
     }
 
+}
+
+PlayerList_t* PongPeer::getPlayerList()
+{
+    return &m_playerList;
 }
 
 //

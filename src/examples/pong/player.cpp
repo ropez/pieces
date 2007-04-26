@@ -3,9 +3,7 @@
 
 #include "Pieces/Debug"
 
-using namespace pcs;
-
-Player::Player(objectid_t objectId)
+Player::Player(pcs::objectid_t objectId)
 : GameObject(objectId)
 , m_peerAddress()
 , m_location(Player::LEFT)
@@ -16,12 +14,12 @@ Player::Player(objectid_t objectId)
 {
 }
 
-void Player::encode(DataStream& ds) const
+void Player::encode(pcs::DataStream& ds) const
 {
     ds << m_posX << m_posZ << m_score;
 }
 
-void Player::decode(DataStream& ds)
+void Player::decode(pcs::DataStream& ds)
 {
     ds >> m_posX >> m_posZ >> m_score;
 }

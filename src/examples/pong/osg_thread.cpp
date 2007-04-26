@@ -4,8 +4,9 @@
 #include "config.h"
 #include "event_handler.h"
 #include "frame.h"
+#include "score_board.h"
 
-OSGThread::OSGThread(osg::ref_ptr<osg::Group> root, pcs::Peer& peer)
+OSGThread::OSGThread(osg::ref_ptr<osg::Group> root, PongPeer& peer)
 : OpenThreads::Thread()
 , m_viewer()
 , m_root(root)
@@ -21,22 +22,23 @@ OSGThread::OSGThread(osg::ref_ptr<osg::Group> root, pcs::Peer& peer)
 
     m_viewer.setClearColor(osg::Vec4(0.0, 0.0, 0.0, 1.0));
 
-    osg::ref_ptr<osg::Group> world = setUpWorld();
     
-    m_root->addChild(world.get());    
+    m_root->addChild(setUpWorld().get());
+    m_root->addChild(new ScoreBoard(peer.getPlayerList()));
 
+    // Create an event handler that catches events from keyboard.
     PongEventHandler* peh = new PongEventHandler(peer);
     m_viewer.getEventHandlerList().push_back(peh);
 
-    //osg::ref_ptr<osg::DisplaySettings> ds = new osg::DisplaySettings();
     Producer::Camera* camera = m_viewer.getCamera(0);
 
+    // Set up view frustum
     Producer::Camera::Lens* lens = new Producer::Camera::Lens();
     lens->setFrustum(-640, 640, -512, 512, 2048, 10000);
     lens->setAutoAspect(true);
     camera->setLens(lens);
 
-
+    // Define the root node of the scene graph.
     m_viewer.setSceneData(m_root.get());
 }
 
