@@ -4,6 +4,8 @@
 #include "Pieces/Timer"
 #include "Pieces/Host"
 #include "Pieces/Peer"
+#include "Pieces/HostThread"
+#include "Pieces/PeerThread"
 #include "Pieces/Event"
 #include "Pieces/TimerEvent"
 #include "Pieces/GameEvent"
@@ -164,26 +166,6 @@ private:
 };
 
 
-class ThreadRunningPeer : public OpenThreads::Thread
-{
-protected:
-    virtual void run()
-    {
-        peer->exec();
-    }
-};
-
-
-class ThreadRunningHost : public OpenThreads::Thread
-{
-protected:
-    virtual void run()
-    {
-        host->exec();
-    }
-};
-
-
 int main(int argc, char** argv)
 {
     Application application(argc, argv);
@@ -191,9 +173,9 @@ int main(int argc, char** argv)
     host = new MyHost;
     peer = new MyPeer;
 
-    ThreadRunningHost th;
+    HostThread th(host.get());
     th.start();
-    ThreadRunningPeer tp;
+    PeerThread tp(peer.get());
     tp.start();
     Listener l;
     l.start();
