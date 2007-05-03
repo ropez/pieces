@@ -1,5 +1,6 @@
 #include <Pieces/Application>
 #include <Pieces/SocketAddress>
+#include <Pieces/PeerThread>
 #include <Pieces/AutoPointer>
 #include <OpenThreads/Thread>
 #include <Pieces/Debug>
@@ -11,31 +12,6 @@
 #include "chatpeer.h"
 
 using namespace pcs;
-
-
-class ThreadRunningPeer : public OpenThreads::Thread
-{
-public:
-    ThreadRunningPeer(Peer* peer)
-    : m_peer(peer)
-    {
-    }
-
-    ~ThreadRunningPeer()
-    {
-        m_peer->quit();
-        join();
-    }
-
-protected:
-    virtual void run()
-    {
-        m_peer->exec();
-    }
-
-private:
-    Peer* m_peer;
-};
 
 
 int main(int argc, char** argv)
@@ -71,7 +47,7 @@ int main(int argc, char** argv)
     QObject::connect(peer.get(), SIGNAL(message(const QString&)), widget.get(), SLOT(showMessage(const QString&)));
 
 
-    ThreadRunningPeer th(peer.get());
+    PeerThread th(peer.get());
     th.start();
 
     widget->show();
