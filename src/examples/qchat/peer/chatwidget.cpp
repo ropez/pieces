@@ -1,6 +1,13 @@
 #include <QtGui>
 
+#include <Pieces/AutoPointer>
+#include <Pieces/HostThread>
+#include <Pieces/PeerThread>
+#include <Pieces/SocketAddress>
+#include <Pieces/Debug>
+
 #include "chatwidget.h"
+#include "chathost.h"
 #include "chatpeer.h"
 
 
@@ -9,7 +16,11 @@ class ChatWidgetPrivate
 public:
     ChatWidgetPrivate();
 
-    ChatPeer* peer;
+    pcs::AutoPointer<ChatHost> host;
+    pcs::AutoPointer<ChatPeer> peer;
+
+    pcs::AutoPointer<pcs::HostThread> thHost;
+    pcs::AutoPointer<pcs::PeerThread> thPeer;
 
     QListWidget* list;
     QLineEdit* line;
@@ -18,7 +29,8 @@ public:
 
 
 ChatWidgetPrivate::ChatWidgetPrivate()
-: peer(0)
+: host(0)
+, peer(0)
 , list(0)
 , line(0)
 , button(0)
@@ -26,12 +38,10 @@ ChatWidgetPrivate::ChatWidgetPrivate()
 }
 
 
-ChatWidget::ChatWidget(ChatPeer* peer, QWidget* parent)
+ChatWidget::ChatWidget(QWidget* parent)
 : QWidget(parent)
 , d(new ChatWidgetPrivate())
 {
-    d->peer = peer;
-
     QVBoxLayout* layout = new QVBoxLayout(this);
 
     d->list = new QListWidget();
@@ -50,6 +60,43 @@ ChatWidget::ChatWidget(ChatPeer* peer, QWidget* parent)
 
 ChatWidget::~ChatWidget()
 {
+}
+
+
+void ChatWidget::startChat(const QString& host, quint16 port)
+{
+    d->peer = new ChatPeer();
+
+    if (host.isEmpty())
+    {
+        // Start host
+        d->host = new ChatHost();
+        d->host->startListening(port);
+
+        d->thHost = new pcs::HostThread(d->host.get());
+        d->thHost->start();
+
+        // Connect to localhost
+        pcs::SocketAddress address(pcs::InetAddress::getHostByName("localhost"), port);
+
+        d->peer->connectTo(address);
+    }
+    else
+    {
+        // Connect to a different host
+        pcs::SocketAddress address(pcs::InetAddress::getHostByName(host.toStdString()), port);
+
+        PDEBUG << "Connecting to " << address;
+
+        d->peer->connectTo(address);
+    }
+
+    connect(d->peer.get(), SIGNAL(message(const QString&)), this, SLOT(showMessage(const QString&)));
+
+    d->thPeer = new pcs::PeerThread(d->peer.get());
+    d->thPeer->start();
+
+    show();
 }
 
 

@@ -3,7 +3,6 @@
 
 #include <QtGui/QWidget>
 
-class ChatPeer;
 class ChatWidgetPrivate;
 
 class ChatWidget : public QWidget
@@ -11,10 +10,11 @@ class ChatWidget : public QWidget
     Q_OBJECT;
 
 public:
-    ChatWidget(ChatPeer* peer, QWidget* parent = 0);
+    ChatWidget(QWidget* parent = 0);
     ~ChatWidget();
 
 public slots:
+    void startChat(const QString& host, quint16 port);
     void showMessage(const QString& msg);
 
 protected slots:

@@ -8,6 +8,7 @@
 #include <QtGui>
 
 #include "global.h"
+#include "startwidget.h"
 #include "chatwidget.h"
 #include "chatpeer.h"
 
@@ -20,37 +21,12 @@ int main(int argc, char** argv)
 
     QApplication app(argc, argv);
 
-    AutoPointer<ChatPeer> peer(new ChatPeer());
+    AutoPointer<StartWidget> startup(new StartWidget());
+    AutoPointer<ChatWidget> widget(new ChatWidget());
 
-    std::string host = "localhost";
-    pcs::port_t listenPort = 3333;
+    QObject::connect(startup.get(), SIGNAL(startChat(const QString&, quint16)), widget.get(), SLOT(startChat(const QString&, quint16)));
 
-    if(pcs::app->argc() > 1)
-    {
-      host = pcs::app->arg(1);
-    }
-
-    if(pcs::app->argc() > 2)
-    {
-      std::stringstream ss(pcs::app->arg(2));
-      ss >> listenPort;
-    }
-
-    pcs::SocketAddress sa(pcs::InetAddress::getHostByName(host), 2222);
-
-    PDEBUG << "Connecting to " << sa;
-
-    peer->connectTo(sa);
-
-    AutoPointer<ChatWidget> widget(new ChatWidget(peer.get()));
-
-    QObject::connect(peer.get(), SIGNAL(message(const QString&)), widget.get(), SLOT(showMessage(const QString&)));
-
-
-    PeerThread th(peer.get());
-    th.start();
-
-    widget->show();
+    startup->show();
 
     return app.exec();
 }

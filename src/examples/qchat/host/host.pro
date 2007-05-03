@@ -4,11 +4,8 @@
 # Target is an application:  ../bin/qhost
 
 LIBS += -lpieces \
-        -lOpenThreads 
-TARGET = ../bin/qhost 
+-lOpenThreads
+TARGET = ../bin/qhost
 CONFIG += release \
-          warn_on 
-TEMPLATE = app 
-HEADERS += chathost.h 
-SOURCES += chathost.cpp \
-           qhost.cpp 
+warn_on
+TEMPLATE = app
