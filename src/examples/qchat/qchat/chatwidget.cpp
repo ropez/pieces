@@ -63,9 +63,10 @@ ChatWidget::~ChatWidget()
 }
 
 
-void ChatWidget::startChat(const QString& host, quint16 port)
+void ChatWidget::startChat(const QString& nick, const QString& host, quint16 port)
 {
     d->peer = new ChatPeer();
+    d->peer->setNickName(nick);
 
     if (host.isEmpty())
     {
@@ -91,7 +92,7 @@ void ChatWidget::startChat(const QString& host, quint16 port)
         d->peer->connectTo(address);
     }
 
-    connect(d->peer.get(), SIGNAL(message(const QString&)), this, SLOT(showMessage(const QString&)));
+    connect(d->peer.get(), SIGNAL(message(const QString&, const QString&)), this, SLOT(showMessage(const QString&, const QString&)));
 
     d->thPeer = new pcs::PeerThread(d->peer.get());
     d->thPeer->start();
@@ -100,9 +101,9 @@ void ChatWidget::startChat(const QString& host, quint16 port)
 }
 
 
-void ChatWidget::showMessage(const QString& msg)
+void ChatWidget::showMessage(const QString& nick, const QString& msg)
 {
-    d->list->addItem(msg);
+    d->list->addItem(nick + ": " + msg);
 }
 
 

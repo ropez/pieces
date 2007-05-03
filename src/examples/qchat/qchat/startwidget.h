@@ -14,9 +14,10 @@ public:
     ~StartWidget();
 
 signals:
-    void startChat(const QString& host, quint16 port);
+    void startChat(const QString& nick, const QString& host, quint16 port);
 
 protected slots:
+    void onIdle();
     void onStartClicked();
 
 private:

@@ -18,7 +18,7 @@ public:
     void sendChatMessage(const QString& msg);
 
 signals:
-    void message(const QString& msg);
+    void message(const QString& nick, const QString& msg);
 
 protected:
     virtual void handle(pcs::MessageReceivedEvent* event);

@@ -14,8 +14,8 @@ public:
     ~ChatWidget();
 
 public slots:
-    void startChat(const QString& host, quint16 port);
-    void showMessage(const QString& msg);
+    void startChat(const QString& nick, const QString& host, quint16 port);
+    void showMessage(const QString& nick, const QString& msg);
 
 protected slots:
     void send();

@@ -24,7 +24,8 @@ int main(int argc, char** argv)
     AutoPointer<StartWidget> startup(new StartWidget());
     AutoPointer<ChatWidget> widget(new ChatWidget());
 
-    QObject::connect(startup.get(), SIGNAL(startChat(const QString&, quint16)), widget.get(), SLOT(startChat(const QString&, quint16)));
+    QObject::connect(startup.get(), SIGNAL(startChat(const QString&, const QString&, quint16)),
+                     widget.get(), SLOT(startChat(const QString&, const QString&, quint16)));
 
     startup->show();
 
