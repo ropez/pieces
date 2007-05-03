@@ -1,4 +1,4 @@
-#include "../peer/global.h"
+#include "global.h"
 #include "chathost.h"
 
 #include <Pieces/MessageReceivedEvent>
