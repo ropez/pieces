@@ -1,16 +1,17 @@
 #include "ball.h"
 
+#include "config.h"
+
 #include "Pieces/DataStream"
 
 #include "Pieces/Debug"
-
 
 Ball::Ball(pcs::objectid_t objectId)
 : GameObject(objectId)
 , m_posX(0.0)
 , m_posZ(0.0)
 , m_angle(1.0127623)
-, m_speed(10.0)
+, m_speed(cfg::ballVelocity)
 {
 }
 

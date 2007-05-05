@@ -9,6 +9,8 @@
 
 #include "pong_defines.h"
 
+#include "timer.h"
+
 class BallUpdateCallback : public pcs::GameObjectAction
 {
 public:
@@ -19,6 +21,7 @@ public:
 
 
 private:
+    Timer_t m_lastTick;
     GameState* m_gameState;
     pcs::Host* m_host;
     Ball* m_ball;

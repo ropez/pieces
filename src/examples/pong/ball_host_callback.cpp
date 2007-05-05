@@ -11,6 +11,7 @@
 
 BallUpdateCallback::BallUpdateCallback(pcs::Host* host, Ball* ball, GameState* gameState, PlayerList_t* playerList)
 : pcs::GameObjectAction()
+, m_lastTick(0)
 , m_host(host)
 , m_gameState(gameState)
 , m_ball(ball)
@@ -18,16 +19,22 @@ BallUpdateCallback::BallUpdateCallback(pcs::Host* host, Ball* ball, GameState* g
 , m_wallHitRight(false)
 , m_wallHitLeft(false)
 {
+    m_lastTick = Timer::instance()->tick();
 }
 
 void BallUpdateCallback::operator()(pcs::framenum_t /*frameNum*/)
 {
+    Timer_t currentTick = Timer::instance()->tick();
+    double deltaTime = Timer::instance()->delta_s(m_lastTick, currentTick);
+
+    m_lastTick = currentTick;
+
     double angle = m_ball->getAngle();
     double velocity = m_ball->getVelocity();
     
     // Update balls position w.r.t velocity and angle.
-    m_ball->addRelativeX(velocity * sin(angle));
-    m_ball->addRelativeZ(velocity * cos(angle));
+    m_ball->addRelativeX(deltaTime * velocity * sin(angle));
+    m_ball->addRelativeZ(deltaTime * velocity * cos(angle));
 
     // Check if ball hits walls
     

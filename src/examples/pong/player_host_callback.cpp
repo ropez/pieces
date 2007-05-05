@@ -8,7 +8,9 @@ PlayerHostCallback::PlayerHostCallback(pcs::ReferencePointer<Player> player, Gam
 : pcs::GameObjectAction()
 , m_gameState(gameState)
 , m_player(player)
+, m_lastTick(0)
 {
+    m_lastTick = Timer::instance()->tick();
 }
 
 void PlayerHostCallback::operator()(pcs::framenum_t)
@@ -25,6 +27,11 @@ void PlayerHostCallback::operator()(pcs::framenum_t)
         PINFO << "Score Player Left: " << m_player->getScore();
     }
 
+    Timer_t currentTick = Timer::instance()->tick();
+    double deltaTime = Timer::instance()->delta_s(m_lastTick, currentTick);
+
+    m_lastTick = currentTick;
+
 
     // 
     // Move player
@@ -32,7 +39,7 @@ void PlayerHostCallback::operator()(pcs::framenum_t)
     {
     case Player::STATE_UP:
         {
-            m_player->addRelativeZ(cfg::playerVelocity);
+            m_player->addRelativeZ(deltaTime * cfg::playerVelocity);
             if(m_player->getPositionZ() + cfg::playerHeightHalf > cfg::frameInsideTop)
             {
                 m_player->setPositionZ(cfg::frameInsideTop - cfg::playerHeightHalf);
@@ -41,7 +48,7 @@ void PlayerHostCallback::operator()(pcs::framenum_t)
         break;
     case Player::STATE_DOWN:
         {
-            m_player->addRelativeZ(-cfg::playerVelocity);
+            m_player->addRelativeZ(deltaTime * -cfg::playerVelocity);
             if(m_player->getPositionZ() - cfg::playerHeightHalf < cfg::frameInsideBottom)
             {
                 m_player->setPositionZ(cfg::frameInsideBottom + cfg::playerHeightHalf);

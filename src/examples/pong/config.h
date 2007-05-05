@@ -38,9 +38,9 @@ namespace cfg
 
     const double maxAngle = degreesToRadians(70.0);
 
-    const double ballVelocity = 10.0;
+    const double ballVelocity = 500; // units/sec
 
-    const double playerVelocity = 7.0;
+    const double playerVelocity = 350; // units/sec
 
     // Score board
 #ifdef WIN32

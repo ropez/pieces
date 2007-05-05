@@ -7,7 +7,7 @@
 #include "pong_defines.h"
 
 #include "Pieces/ReferencePointer"
-
+#include "timer.h"
 
 class PlayerHostCallback : public pcs::GameObjectAction
 {
@@ -19,6 +19,7 @@ public:
 private:
     pcs::ReferencePointer<Player> m_player;
     GameState* m_gameState;
+    Timer_t m_lastTick;
 };
 
 #endif // PLAYER_HOST_CALLBACK_H
