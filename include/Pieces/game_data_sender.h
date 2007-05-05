@@ -29,8 +29,6 @@ public:
     void addReceiver(const SocketAddress& socket);
     void removeReceiver(const SocketAddress& socket);
 
-    FrameData getFrameData(framenum_t frameNum) const;
-
     void sendFrameData(const FrameData& frameData);
 
 private:

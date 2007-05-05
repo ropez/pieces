@@ -28,6 +28,9 @@ public:
      */
     NetworkEvent(const SocketAddress& sender);
 
+    /**
+     * Returns a deep copy of this event.
+     */
     virtual AutoPointer<Event> clone() const;
     virtual void dispatch(EventHandler* h);
 

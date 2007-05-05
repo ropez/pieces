@@ -26,6 +26,9 @@ public:
      */
     MessageReceivedEvent(const SocketAddress& sender, const msgpair_t& msg);
 
+    /**
+     * Returns a deep copy of this event.
+     */
     virtual AutoPointer<Event> clone() const;
     virtual void dispatch(EventHandler* h);
 

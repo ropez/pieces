@@ -7,9 +7,14 @@ namespace pcs
 
 
 /**
- * Smart pointer that automatically handles implicit sharing.
+ * \class SharedDataPointer shared_data_pointer.h <Pieces/SharedDataPointer>
+ * \brief Smart pointer that automatically handles implicit sharing.
  *
  * T must be a class derived from pcs::SharedData.
+ *
+ * \see \ref implicit_sharing
+ *
+ * \author Robin Pedersen
  */
 template<class T>
 class SharedDataPointer

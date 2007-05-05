@@ -25,8 +25,9 @@ public:
      */
     ConnectedEvent(const SocketAddress& sender);
 
-public:
-
+    /**
+     * Returns a deep copy of this event.
+     */
     virtual AutoPointer<Event> clone() const;
     virtual void dispatch(EventHandler* h);
 

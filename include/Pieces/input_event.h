@@ -28,12 +28,9 @@ public:
      */
     explicit InputEvent(int type = 0);
 
-protected:
-
-    virtual ~InputEvent();
-
-public:
-
+    /**
+     * Returns a deep copy of this event.
+     */
     virtual AutoPointer<Event> clone() const;
     virtual void dispatch(EventHandler* h);
 
@@ -46,6 +43,10 @@ public:
      * Set or change the event type.
      */
     void setType(int type);
+
+protected:
+
+    virtual ~InputEvent();
 
 private:
     DISABLE_COPY(InputEvent);

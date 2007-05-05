@@ -12,18 +12,26 @@ namespace pcs
 {
 
 /**
- * \class ByteArray
+ * \class ByteArray byte_array.h <Pieces/ByteArray>
  * \brief Represents a generic array of bytes.
  *
  * This class preferred to represent binary data instead of the classical pure
  * char pointer. It automatically handles memory allocation and is optimized
  * for passing parameters by value using implicit sharing.
  *
+ * Internally, the byte-array preallocates memory to optimize resizing when
+ * appending something to the end. In most cases this operation is constant
+ * time.
+ *
  * \author Robin Pedersen
  */
 class ByteArray
 {
 public:
+
+    /**
+     * Type of element, a \em byte is defined as an unsigned char.
+     */
     typedef unsigned char byte_t;
 
     /**
@@ -45,12 +53,14 @@ public:
     ByteArray(const void* data, size_t size);
 
     /**
-     * Returns the size of the byte-array.
+     * Returns the size of the byte-array, in number of bytes.
      */
     size_t size() const;
 
     /**
-     * Returns the number of bytes allocated.
+     * Returns the number of bytes allocated. This is always greater or equal
+     * to size(). If greates, some memory has been preallocated to optimize
+     * insertion at the end.
      */
     size_t allocated() const;
 
@@ -224,6 +234,7 @@ public:
 
 private:
 
+    /** \internal */
     class Data : public SharedData
     {
     public:

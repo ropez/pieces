@@ -24,6 +24,9 @@ public:
 
     GameDataEvent(framenum_t frameNum, const FrameData& frameData);
 
+    /**
+     * Returns a deep copy of this event.
+     */
     virtual AutoPointer<Event> clone() const;
     virtual void dispatch(EventHandler* h);
 

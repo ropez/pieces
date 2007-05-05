@@ -7,6 +7,20 @@
 namespace pcs
 {
 
+/**
+ * \class SharedData shared_data.h <Pieces/SharedData>
+ * \brief Reference counted data.
+ *
+ * This is a base class that provides thread-safe reference counting. Data
+ * classes used with implicit sharing derives from this class.
+ *
+ * Both the SharadDataPointer and ReferencePointer templates assumes that the
+ * type parameter is a subclass of SharedData.
+ *
+ * \see \ref implicit_sharing
+ *
+ * \author Robin Pedersen
+ */
 class SharedData
 {
 public:

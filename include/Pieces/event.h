@@ -19,6 +19,9 @@ public:
 
     Event();
 
+    /**
+     * Returns a deep copy of this event.
+     */
     virtual AutoPointer<Event> clone() const = 0;
     virtual void dispatch(EventHandler* h) = 0;
 

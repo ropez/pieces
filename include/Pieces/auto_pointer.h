@@ -20,7 +20,7 @@ public:
 
 
 /**
- * \class AutoPointer
+ * \class AutoPointer auto_pointer.h <Pieces/AutoPointer>
  * \brief Smart pointer that takes ownership of the object it points to.
  *
  * An auto-pointer \em owns the object it points to, and is responsible for
@@ -31,19 +31,6 @@ public:
  *
  * This class is identcal to the standard std::auto_ptr, except that it has
  * assignment operator that assigns from T* and some additional functions.
- *
- * \code
- * // This is possible if ptr is an AutoPointer
- * ptr = 0;
- * if (ptr == 0) ...
- * if (ptr.isValid()) ...
- *
- * // Need to do this with std::auto_ptr:
- * ptr.reset();
- * if (ptr.get() == 0)
- * if (ptr.get() != 0)
- * \endcode
- *
  *
  * All functions involving the _AutoPointerRef class is kind of a C++ hack.
  * It allows thing like creating an auto-pointer from the return value of a
@@ -58,13 +45,17 @@ public:
  *
  * This hack was copied from std::auto_ptr.
  *
- * \see ReferencePointer
+ * \see \ref smart_pointers ReferencePointer
  * \author Robin Pedersen
  */
 template<typename T>
 class AutoPointer
 {
 public:
+
+    /**
+     * Typedef for the type pointed to.
+     */
     typedef T element_type;
 
     /**
@@ -74,6 +65,8 @@ public:
 
     /**
      * Destructor.
+     *
+     * Deletes the object pointed to, if valid.
      */
     ~AutoPointer();
 

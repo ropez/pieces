@@ -15,16 +15,17 @@ class TimerEvent : public Event
 public:
     TimerEvent(int timerId = 0);
 
-protected:
-
-    virtual ~TimerEvent();
-
-public:
-
+    /**
+     * Returns a deep copy of this event.
+     */
     virtual AutoPointer<Event> clone() const;
     virtual void dispatch(EventHandler* h);
 
     int getTimerId() const;
+
+protected:
+
+    virtual ~TimerEvent();
 
 private:
     DISABLE_COPY(TimerEvent);

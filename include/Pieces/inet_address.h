@@ -10,6 +10,18 @@
 namespace pcs
 {
 
+
+/**
+ * \class InetAddress inet_address.h <Pieces/InetAddress>
+ * \brief Represents an internet (IPv4) address.
+ *
+ * This class represents an IPv4 address in an operating system independant
+ * manner, and is used by TCPSocket and UDPSocket.
+ *
+ * \see SocketAddress
+ *
+ * \author Thomas Bakken, Robin Pedersen
+ */
 class InetAddress
 {
 public:
@@ -60,18 +72,86 @@ private:
 
 };
 
+
+/**
+ * Compare two addresses by their numerical value.
+ *
+ * This provides a sorting of addresses so that it is possible to use binary
+ * searching algorithms.
+ *
+ * \retval -1 if \a op1 is less than \a op2.
+ * \retval 0 if \a op1 is equal to \a op2.
+ * \retval 1 if \a op1 is greater them \a op2.
+ *
+ * \relates InetAddress
+ */
 int compare(const InetAddress& op1, const InetAddress& op2);
 
+/**
+ * Returns true if \link compare compare(op1, op2) \endlink == 0.
+ *
+ * \relates InetAddress
+ */
 bool operator==(const InetAddress& op1, const InetAddress& op2);
+
+/**
+ * Returns true if \link compare compare(op1, op2) \endlink != 0.
+ *
+ * \relates InetAddress
+ */
 bool operator!=(const InetAddress& op1, const InetAddress& op2);
+
+/**
+ * Returns true if \link compare compare(op1, op2) \endlink < 0.
+ *
+ * \relates InetAddress
+ */
 bool operator<(const InetAddress& op1, const InetAddress& op2);
+
+/**
+ * Returns true if \link compare compare(op1, op2) \endlink > 0.
+ *
+ * \relates InetAddress
+ */
 bool operator>(const InetAddress& op1, const InetAddress& op2);
+
+/**
+ * Returns true if \link compare compare(op1, op2) \endlink <= 0.
+ *
+ * \relates InetAddress
+ */
 bool operator<=(const InetAddress& op1, const InetAddress& op2);
+
+/**
+ * Returns true if \link compare compare(op1, op2) \endlink >= 0.
+ *
+ * \relates InetAddress
+ */
 bool operator>=(const InetAddress& op1, const InetAddress& op2);
 
+/**
+ * Write the internet address \a ia to the data stream \a ds.
+ *
+ * \relates InetAddress
+ */
 DataStream& operator<<(DataStream& ds, const InetAddress& ia);
+
+/**
+ * Read the internet address \a ia from the data stream \a ds.
+ *
+ * \relates InetAddress
+ */
 DataStream& operator>>(DataStream& ds, InetAddress& ia);
 
+/**
+ * Write the internet address \a ia to the output stream \a os,
+ * in text format (xxx.xxx.xxx.xxx).
+ *
+ * This is used for debugging.
+ *
+ * \see DebugStream
+ * \relates InetAddress
+ */
 std::ostream& operator<<(std::ostream& os, const InetAddress& ia);
 
 } // namespace pcs

@@ -12,7 +12,7 @@ namespace pcs
 
 
 /**
- * \class DebugStream
+ * \class DebugStream debug_stream <Pieces/DebugStream>
  * \brief Debug output stream.
  *
  * This class provides a standard debug output stream with automatic
