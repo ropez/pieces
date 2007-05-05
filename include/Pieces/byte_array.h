@@ -144,7 +144,7 @@ public:
      * way to avoid this is to never use this pointer for anything other than a
      * function parameter.
      *
-     * \warning This is not '\0'-terminated, so it must not be used as a
+     * \warning This is not '\\0'-terminated, so it must not be used as a
      * string, decode the byte-array to an std::string instead.
      */
     const byte_t* constData() const;

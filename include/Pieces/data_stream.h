@@ -10,7 +10,7 @@ class StreamTarget;
 
 
 /**
- * \class DataStream
+ * \class DataStream data_stream.h <Pieces/DataStream>
  * \brief Binary data stream.
  *
  * The DataStream class is used to stream binary data into a StreamTarget and to

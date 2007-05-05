@@ -8,6 +8,16 @@
 namespace pcs
 {
 
+
+/**
+ * \class StreamTarget stream_target.h <Pieces/StreamTarget>
+ * \brief Base class for stream targets.
+ *
+ * This is a pure abstract interface that is common for classes used by
+ * DataStream to read and write data.
+ *
+ * \author Robin Pedersen
+ */
 class StreamTarget
 {
 public:

@@ -8,7 +8,7 @@ namespace pcs
 
 
 /**
- * \class ReferencePointer
+ * \class ReferencePointer reference_pointer.h <Pieces/ReferencePointer>
  * \brief Smart pointer for handling referenced counted objects.
  *
  * A reference pointer acts like a normal pointer, but it increases a reference
@@ -18,14 +18,18 @@ namespace pcs
  *
  * The class T that the pointer points to must be a subclass of SharedData.
  *
+ * \see \ref smart_pointers AutoPointer
  * \author Robin Pedersen
  */
 template<class T>
 class ReferencePointer
 {
 public:
-    typedef T element_type;
 
+    /**
+     * Typedef for the type pointed to.
+     */
+    typedef T element_type;
 
     /**
      * Creates a null (invalid) pointer.

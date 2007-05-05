@@ -9,18 +9,33 @@ namespace pcs
 
 
 /**
- * \class IOException
- * \brief Input/output exception class
+ * \class IOException io_exception.h <Pieces/IOException>
+ * \brief Input/output exception class.
  *
- * \author Thomas and Tord
+ * \author Thomas Bakken, Tord Heimdal
  */
 class IOException : public Exception
 {
 public:
+
+    /**
+     * Default constructor.
+     */
     IOException();
+
+    /**
+     * Constructor that takes a message.
+     */
     IOException(const std::string& message);
+
+    /**
+     * Constructor that takes a function name and a message.
+     */
     IOException(const std::string& where, const std::string& message);
 
+    /**
+     * Returns the name of the class.
+     */
     virtual std::string getClassName() const;
 };
 

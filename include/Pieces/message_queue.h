@@ -13,8 +13,13 @@ class MessageQueuePrivate;
 
 
 /**
- * \class MessageQueue
+ * \class MessageQueue message_queue.h <Pieces/MessageQueue>
  * \brief Thread safe message queue.
+ *
+ * This class is used internally to send messages in background threads
+ * per connection.
+ *
+ * It's unlikely that users of Pieces will ever have to use this class directly.
  *
  * \author Robin Pedersen
  */
@@ -23,12 +28,12 @@ class MessageQueue
 public:
 
     /**
-     * Create an empty message queue
+     * Create an empty message queue.
      */
     MessageQueue();
 
     /**
-     * Create a queue initialized width the given messages.
+     * Create a queue initialized with the given messages.
      */
     MessageQueue(const std::deque<msgpair_t>& messages);
 
@@ -39,7 +44,18 @@ public:
      */
     ~MessageQueue();
 
+    /**
+     * Add the message to the message queue.
+     *
+     * Signal to wake up a thread blocked in pop().
+     */
     void push(const msgpair_t& message);
+
+    /**
+     * Returns the first element in the queue.
+     *
+     * Block if the queue is empty.
+     */
     msgpair_t pop();
 
 private:

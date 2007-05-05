@@ -59,7 +59,14 @@ public:
      */
     void setRepeating(bool on);
 
+    /**
+     * Returns the timer id.
+     */
     int getTimerId() const;
+
+    /**
+     * Set the timer id.
+     */
     void setTimerId(int id);
 
     /**

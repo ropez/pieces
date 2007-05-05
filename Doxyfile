@@ -80,7 +80,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = include/Pieces src/pieces
+INPUT                  = include/Pieces
 FILE_PATTERNS          = *.c \
                          *.cc \
                          *.cxx \
