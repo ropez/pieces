@@ -11,7 +11,7 @@ namespace pcs
 
 
 /**
- * \class Object
+ * \class Object object.h <Pieces/Object>
  * \brief Base class for all objects.
  *
  * Has an object id.
@@ -24,9 +24,20 @@ namespace pcs
 class Object : public SharedData
 {
 public:
+
+    /**
+     * Create an object with the given id.
+     */
     Object(objectid_t objectId);
+
+    /**
+     * Destructor.
+     */
     virtual ~Object();
 
+    /**
+     * Returns the object id.
+     */
     objectid_t getObjectId() const;
 
 private:

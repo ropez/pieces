@@ -212,7 +212,7 @@ DataStream& operator>>(DataStream& ds, ByteArray& ba);
 DataStream& operator<<(DataStream& ds, const std::string& str);
 
 /**
- * Write a '\0'-terminated dtring to the stream.
+ * Write a '\\0'-terminated dtring to the stream.
  *
  * The terminator is not stored, but the length of the string is appended to
  * it. This is the same way as std::strings are stored.

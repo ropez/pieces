@@ -13,7 +13,7 @@ class EventHandler;
 
 
 /**
- * \class EventLoopThread
+ * \class EventLoopThread event_loop_thread.h <Pieces/EventLoopThread>
  * \brief A thread that runs an event loop.
  *
  * EventLoop::exec() blocks the calling thread, and the event handler
@@ -21,6 +21,7 @@ class EventHandler;
  * eventloop in a background thread, and calls the event handler in this
  * thread.
  *
+ * \see HostThread, PeerThread
  * \author Robin Pedersen
  */
 class EventLoopThread : public OpenThreads::Thread
@@ -45,6 +46,10 @@ public:
     EventLoop* eventLoop() const;
 
 protected:
+
+    /**
+     * Thread main function, calls \link EventLoop::exec eventLoop()->exec() \endlink.
+     */
     virtual void run();
 
 private:

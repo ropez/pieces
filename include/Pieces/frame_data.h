@@ -24,7 +24,7 @@ class DataStream;
  * GameDataReceiver) as the basic data container.
  *
  * Data is represented as a ByteArray for each game object, indexed by
- * \link GameObject::getObjectId() object id \endlink.
+ * \link Object::getObjectId() object id \endlink.
  *
  * Frame data is usually created in the host user application. It starts with a
  * FrameData object that is either empty or contains data from the previous

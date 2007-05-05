@@ -95,42 +95,42 @@ private:
 int compare(const SocketAddress& op1, const SocketAddress& op2);
 
 /**
- * Returns true if \link compare compare(op1, op2) \endlink == 0.
+ * Returns true if \link compare(const SocketAddress&, const SocketAddress&) compare(op1, op2) \endlink == 0.
  *
  * \relates SocketAddress
  */
 bool operator==(const SocketAddress& op1, const SocketAddress& op2);
 
 /**
- * Returns true if \link compare compare(op1, op2) \endlink != 0.
+ * Returns true if \link compare(const SocketAddress&, const SocketAddress&) compare(op1, op2) \endlink != 0.
  *
  * \relates SocketAddress
  */
 bool operator!=(const SocketAddress& op1, const SocketAddress& op2);
 
 /**
- * Returns true if \link compare compare(op1, op2) \endlink < 0.
+ * Returns true if \link compare(const SocketAddress&, const SocketAddress&) compare(op1, op2) \endlink < 0.
  *
  * \relates SocketAddress
  */
 bool operator<(const SocketAddress& op1, const SocketAddress& op2);
 
 /**
- * Returns true if \link compare compare(op1, op2) \endlink > 0.
+ * Returns true if \link compare(const SocketAddress&, const SocketAddress&) compare(op1, op2) \endlink > 0.
  *
  * \relates SocketAddress
  */
 bool operator>(const SocketAddress& op1, const SocketAddress& op2);
 
 /**
- * Returns true if \link compare compare(op1, op2) \endlink <= 0.
+ * Returns true if \link compare(const SocketAddress&, const SocketAddress&) compare(op1, op2) \endlink <= 0.
  *
  * \relates SocketAddress
  */
 bool operator<=(const SocketAddress& op1, const SocketAddress& op2);
 
 /**
- * Returns true if \link compare compare(op1, op2) \endlink >= 0.
+ * Returns true if \link compare(const SocketAddress&, const SocketAddress&) compare(op1, op2) \endlink >= 0.
  *
  * \relates SocketAddress
  */

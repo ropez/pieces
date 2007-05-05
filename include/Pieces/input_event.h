@@ -9,8 +9,10 @@ namespace pcs
 
 
 /**
- * \class InputEvent
+ * \class InputEvent input_event.h <Pieces/InputEvent>
  * \brief Game-specific input event.
+ *
+ * \deprecated Use MessageReceivedEvent instead.
  *
  * This kind of event is created by peers as result of user input, and
  * propagated to the host by the framework.
@@ -32,6 +34,10 @@ public:
      * Returns a deep copy of this event.
      */
     virtual AutoPointer<Event> clone() const;
+
+    /**
+     * Calls h->handle(this).
+     */
     virtual void dispatch(EventHandler* h);
 
     /**
@@ -46,6 +52,9 @@ public:
 
 protected:
 
+    /**
+     * Protected destructor prevents stack allocation.
+     */
     virtual ~InputEvent();
 
 private:

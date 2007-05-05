@@ -10,12 +10,6 @@ namespace pcs
 class FilePrivate;
 
 
-/**
- * \class File
- * \brief OS independant file IO.
- *
- * \author Robin Pedersen
- */
 class File : public StreamTarget
 {
 public:

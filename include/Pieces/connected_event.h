@@ -9,8 +9,13 @@ namespace pcs
 {
 
 /**
- * \class ConnectedEvent
+ * \class ConnectedEvent connected_event.h <Pieces/ConnectedEvent>
  * \brief A network-connect event.
+ *
+ * Both the Host and the Peer receives a ConnectedEvent after a new connection
+ * is added to the ConnectionManager.
+ *
+ * \todo This is not implemented.
  *
  * \author Tord Heimdal
  */
@@ -29,10 +34,17 @@ public:
      * Returns a deep copy of this event.
      */
     virtual AutoPointer<Event> clone() const;
+
+    /**
+     * Calls h->handle(this).
+     */
     virtual void dispatch(EventHandler* h);
 
 protected:
 
+    /**
+     * Protected destructor prevents stack allocation.
+     */
     virtual ~ConnectedEvent();
 
 

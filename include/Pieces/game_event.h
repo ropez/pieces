@@ -9,8 +9,10 @@ namespace pcs
 
 
 /**
- * \class GameEvent
+ * \class GameEvent game_event.h <Pieces/GameEvent>
  * \brief A game-specific event.
+ *
+ * \deprecated Use MessageReceivedEvent instead.
  *
  * This class is meant to be used as base class for game-specific events.
  * Game-events are created by the user host application, and propagated to the
@@ -36,6 +38,10 @@ public:
      * Returns a deep copy of this event.
      */
     virtual AutoPointer<Event> clone() const;
+
+    /**
+     * Calls h->handle(this).
+     */
     virtual void dispatch(EventHandler* h);
 
     /**
@@ -49,6 +55,10 @@ public:
     void setType(int type);
 
 protected:
+
+    /**
+     * Protected destructor prevents stack allocation.
+     */
     virtual ~GameEvent();
 
 private:

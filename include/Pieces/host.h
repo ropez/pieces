@@ -106,8 +106,18 @@ public:
      */
     void sendRemoveObject(objectid_t objectId);
 
+    /**
+     * Executes the host's event loop.
+     *
+     * Same as \link EventLoop::exec eventLoop()->exec() \endlink.
+     */
     void exec();
 
+    /**
+     * Quits the host's event loop.
+     *
+     * Same as \link EventLoop::quit eventLoop()->quit() \endlink.
+     */
     void quit();
 
 protected:

@@ -88,42 +88,42 @@ private:
 int compare(const InetAddress& op1, const InetAddress& op2);
 
 /**
- * Returns true if \link compare compare(op1, op2) \endlink == 0.
+ * Returns true if \link compare(const InetAddress&, const InetAddress&) compare(op1, op2) \endlink == 0.
  *
  * \relates InetAddress
  */
 bool operator==(const InetAddress& op1, const InetAddress& op2);
 
 /**
- * Returns true if \link compare compare(op1, op2) \endlink != 0.
+ * Returns true if \link compare(const InetAddress&, const InetAddress&) compare(op1, op2) \endlink != 0.
  *
  * \relates InetAddress
  */
 bool operator!=(const InetAddress& op1, const InetAddress& op2);
 
 /**
- * Returns true if \link compare compare(op1, op2) \endlink < 0.
+ * Returns true if \link compare(const InetAddress&, const InetAddress&) compare(op1, op2) \endlink < 0.
  *
  * \relates InetAddress
  */
 bool operator<(const InetAddress& op1, const InetAddress& op2);
 
 /**
- * Returns true if \link compare compare(op1, op2) \endlink > 0.
+ * Returns true if \link compare(const InetAddress&, const InetAddress&) compare(op1, op2) \endlink > 0.
  *
  * \relates InetAddress
  */
 bool operator>(const InetAddress& op1, const InetAddress& op2);
 
 /**
- * Returns true if \link compare compare(op1, op2) \endlink <= 0.
+ * Returns true if \link compare(const InetAddress&, const InetAddress&) compare(op1, op2) \endlink <= 0.
  *
  * \relates InetAddress
  */
 bool operator<=(const InetAddress& op1, const InetAddress& op2);
 
 /**
- * Returns true if \link compare compare(op1, op2) \endlink >= 0.
+ * Returns true if \link compare(const InetAddress&, const InetAddress&) compare(op1, op2) \endlink >= 0.
  *
  * \relates InetAddress
  */

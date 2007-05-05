@@ -12,8 +12,11 @@ namespace pcs
 
 
 /**
- * \class NetworkEvent
+ * \class NetworkEvent network_event.h <Pieces/NetworkEvent>
  * \brief A network-specific event.
+ *
+ * This is a base class for network-related events. They all have the common
+ * property that they contain the address that identifies the socket.
  *
  * \author Tord Heimdal
  */
@@ -32,6 +35,10 @@ public:
      * Returns a deep copy of this event.
      */
     virtual AutoPointer<Event> clone() const;
+
+    /**
+     * Calls h->handle(this).
+     */
     virtual void dispatch(EventHandler* h);
 
     /**
@@ -40,6 +47,10 @@ public:
     SocketAddress getSenderAddress() const;
 
 protected:
+
+    /**
+     * Protected destructor prevents stack allocation.
+     */
     virtual ~NetworkEvent();
 
 private:

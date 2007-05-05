@@ -9,21 +9,38 @@ namespace pcs
 
 
 /**
- * \class DisconnectedException
- * \brief Input/output exception class
+ * \class DisconnectedException disconnected_exception.h <Pieces/DisconnectedException>
+ * \brief Input/output exception class.
  *
- * \author Thomas and Tord
+ * This type of exception is thrown when a TCPSocket is disconnected while
+ * operation is performed on it.
+ *
+ * \author Thomas Bakken, Tord Heimdal
  */
 class DisconnectedException : public Exception
 {
 public:
+
+    /**
+     * Default constructor.
+     */
     DisconnectedException();
+
+    /**
+     * Constructor that takes a message.
+     */
     DisconnectedException(const std::string& message);
+
+    /**
+     * Constructor that takes a function name and a message.
+     */
     DisconnectedException(const std::string& where, const std::string& message);
 
+    /**
+     * Returns the name of the class.
+     */
     virtual std::string getClassName() const;
 };
-
 
 } // namespace pcs
 

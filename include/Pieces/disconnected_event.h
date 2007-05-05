@@ -9,7 +9,7 @@ namespace pcs
 {
 
 /**
- * \class DisconnectedEvent
+ * \class DisconnectedEvent disconnected_event.h <Pieces/DisconnectedEvent>
  * \brief A network-disconnect event.
  *
  * A Host or Peer receives this event when a network connection is removed
@@ -32,9 +32,17 @@ public:
      * Returns a deep copy of this event.
      */
     virtual AutoPointer<Event> clone() const;
+
+    /**
+     * Calls h->handle(this).
+     */
     virtual void dispatch(EventHandler* h);
 
 protected:
+
+    /**
+     * Protected destructor prevents stack allocation.
+     */
     virtual ~DisconnectedEvent();
 
 private:

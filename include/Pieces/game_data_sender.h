@@ -13,7 +13,7 @@ class GameDataSenderPrivate;
 
 
 /**
- * \class GameDataSender
+ * \class GameDataSender game_data_sender.h <Pieces/GameDataSender>
  * \brief Sends game world data to peers.
  *
  * \author Borge Jakobsen
@@ -29,6 +29,14 @@ public:
     void addReceiver(const SocketAddress& socket);
     void removeReceiver(const SocketAddress& socket);
 
+    /**
+     * Sends the given frame data to all receivers, and increases the
+     * frame number by one.
+     *
+     * \todo This should be done in a background thread, but currently blocks until all data is sent.
+     * \todo Data should be sent in multiple datagrams, if it exceeds the minimum datagram size.
+     * \todo This should be using multicast, but currently sends the data individually to all receivers.
+     */
     void sendFrameData(const FrameData& frameData);
 
 private:
