@@ -6,7 +6,7 @@
 #include "Pieces/Timer"
 #include "Pieces/AutoPointer"
 
-#include "Player.h"
+#include "player.h"
 #include "pong_defines.h"
 
 /**
