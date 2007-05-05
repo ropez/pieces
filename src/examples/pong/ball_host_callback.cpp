@@ -9,7 +9,7 @@
 #include "Pieces/Host"
 #include "Pieces/Message"
 
-BallUpdateCallback::BallUpdateCallback(pcs::AutoPointer<pcs::Host> host, Ball* ball, GameState* gameState, PlayerList_t* playerList)
+BallUpdateCallback::BallUpdateCallback(pcs::Host* host, Ball* ball, GameState* gameState, PlayerList_t* playerList)
 : pcs::GameObjectAction()
 , m_host(host)
 , m_gameState(gameState)
