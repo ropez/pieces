@@ -67,9 +67,6 @@ PongPeer::PongPeer(osg::ref_ptr<osg::Group> rootOSG)
 void PongPeer::handle(pcs::GameDataEvent* event)
 {
     m_db->applyFrameData(event->getFrameNumber(), event->getFrameData());
-
-    m_db->applyAction(ACTION_DRAW, event->getFrameNumber());
-
 }
 
 void PongPeer::handle(pcs::MessageReceivedEvent* event)
@@ -123,7 +120,8 @@ void PongPeer::handle(pcs::MessageReceivedEvent* event)
         }
         break;
     case MSG_SCORE_UPDATED:
-        std::cout << "Score is updated" << std::endl;
+        //std::cout << "Score is updated" << std::endl;
+        break;
     }
 
 }
