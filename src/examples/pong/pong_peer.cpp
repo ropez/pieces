@@ -10,10 +10,7 @@
 
 // Pieces subclasses
 #include "ball.h"
-#include "ball_peer_callback.h"
 #include "player.h"
-#include "player_peer_callback.h"
-
 
 #include "Pieces/Application"
 #include "Pieces/Debug"
@@ -92,8 +89,6 @@ void PongPeer::handle(pcs::MessageReceivedEvent* event)
                 {
                     PDEBUG << "Creating ball";
                     pcs::ReferencePointer<Ball> ball = new Ball(objectId);
-                    pcs::ReferencePointer<BallPeerCallback> ballPeerCallback = new BallPeerCallback(ball.get());
-                    ball->setAction(ACTION_DRAW, ballPeerCallback.get());
 
                     osg::ref_ptr<BallOSG> ballOSG = new BallOSG(ball);
                     m_rootOSG->addChild(ballOSG.get());
@@ -106,7 +101,6 @@ void PongPeer::handle(pcs::MessageReceivedEvent* event)
                     PDEBUG << "Creating player " << m_playerList.size() + 1;
 
                     pcs::ReferencePointer<Player> player = new Player(objectId);
-                    player->setAction(ACTION_DRAW, new PlayerPeerCallback(player.get()));
 
                     osg::ref_ptr<PlayerOSG> playerOSG = new PlayerOSG(player);
                     m_rootOSG->addChild(playerOSG.get());
