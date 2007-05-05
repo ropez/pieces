@@ -6,10 +6,8 @@
 #include "playerosg.h"
 #include "pong_peer.h"
 
-#include "Pieces/Peer"
 
 #include <osgProducer/Viewer>
-
 
 /**
  * \class OSGThread
@@ -26,7 +24,7 @@ public:
     /**
      * 
      */
-    OSGThread(osg::ref_ptr<osg::Group> root, PongPeer& peer);
+    OSGThread(osg::ref_ptr<osg::Group> root, PongPeer* peer);
 
     /**
      * 

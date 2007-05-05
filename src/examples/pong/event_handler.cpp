@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-PongEventHandler::PongEventHandler(pcs::Peer& peer)
+PongEventHandler::PongEventHandler(pcs::Peer* peer)
 : osgGA::GUIEventHandler()
 , m_peer(peer)
 , m_player1(0)
@@ -51,7 +51,7 @@ bool PongEventHandler::handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionA
                         m_player2Up = true;
 
                         pcs::Message msg(MSG_UP_PRESSED);
-                        m_peer.sendMessage(msg);
+                        m_peer->sendMessage(msg);
                     }
                     break;
                 }
@@ -62,7 +62,7 @@ bool PongEventHandler::handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionA
                         m_player2Down = true;
 
                         pcs::Message msg(MSG_DOWN_PRESSED);
-                        m_peer.sendMessage(msg);
+                        m_peer->sendMessage(msg);
                     }
                     break;
                 }
@@ -84,7 +84,7 @@ bool PongEventHandler::handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionA
                 {
                     m_player2Up = false;
                     pcs::Message msg(MSG_UP_RELEASED);
-                    m_peer.sendMessage(msg);
+                    m_peer->sendMessage(msg);
 
                     break;
                 }
@@ -93,7 +93,7 @@ bool PongEventHandler::handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionA
                     m_player2Down = false;
 
                     pcs::Message msg(MSG_DOWN_RELEASED);
-                    m_peer.sendMessage(msg);
+                    m_peer->sendMessage(msg);
 
                     break;
                 }

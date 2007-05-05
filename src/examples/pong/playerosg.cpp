@@ -22,6 +22,7 @@ public:
         
         if(playerOSG)
         {
+            // TODO: m_player->getPosition() must be thread safe.
             playerOSG->setMatrix(osg::Matrix::translate(osg::Vec3(m_player->getPositionX(), 0.0, m_player->getPositionZ())));
         }
 
@@ -36,8 +37,6 @@ private:
 PlayerOSG::PlayerOSG(pcs::ReferencePointer<Player> player)
 : osg::MatrixTransform()
 , m_player(player)
-, m_xPos(0.0)
-, m_zPos(0.0)
 {
     addChild(createGeode().get());
     setUpdateCallback(new PlayerOSGUpdateCallback(player));
@@ -93,27 +92,4 @@ osg::ref_ptr<osg::Geode> PlayerOSG::createGeode()
 
     return geode;
 
-}
-
-void PlayerOSG::setPositionX(double xPos)
-{
-    m_xPos = xPos;
-    setMatrix(osg::Matrix::translate(osg::Vec3(m_xPos, 0.0, m_zPos)));
-}
-
-void PlayerOSG::setPositionZ(double zPos)
-{
-    m_zPos = zPos;
-    setMatrix(osg::Matrix::translate(osg::Vec3(m_xPos, 0.0, m_zPos)));
-}
-
-double PlayerOSG::getPositionZ()
-{
-    return m_zPos;
-}
-
-void PlayerOSG::addRelativeZ(double zOffset)
-{
-    m_zPos += zOffset;
-    setPositionZ(m_zPos);
 }

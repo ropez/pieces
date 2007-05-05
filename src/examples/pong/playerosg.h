@@ -13,18 +13,10 @@ public:
     PlayerOSG(pcs::ReferencePointer<Player> player);
     ~PlayerOSG();
 
-    double getPositionZ();
-    void addRelativeZ(double zOffset);
-    void setPositionX(double xPos);
-    void setPositionZ(double zPos);
-
 private:
     osg::ref_ptr<osg::Geode> createGeode();
 
     pcs::ReferencePointer<Player> m_player;
-    
-    double m_xPos;
-    double m_zPos;
 
 };
 

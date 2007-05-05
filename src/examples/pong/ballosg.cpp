@@ -33,10 +33,6 @@ private:
 BallOSG::BallOSG(pcs::ReferencePointer<Ball> ball)
 : osg::MatrixTransform()
 , m_ball(ball)
-, m_xPos(0.0)
-, m_zPos(0.0)
-, m_velocity(0.0)
-, m_angle(0.0)
 {
     addChild(createGeode().get());
     setUpdateCallback(new BallOSGUpdateCallback(ball));
@@ -44,16 +40,6 @@ BallOSG::BallOSG(pcs::ReferencePointer<Ball> ball)
 
 BallOSG::~BallOSG()
 {
-}
-
-void BallOSG::update()
-{
-    osg::Vec3 currPos = getMatrix().getTrans();
-    currPos.x() += m_velocity * sin(m_angle);
-    currPos.z() += m_velocity * cos(m_angle);
-    
-    setMatrix(osg::Matrix::translate(currPos.x(), currPos.y(), currPos.z()));
-    
 }
 
 osg::ref_ptr<osg::Geode> BallOSG::createGeode()
@@ -101,45 +87,3 @@ osg::ref_ptr<osg::Geode> BallOSG::createGeode()
 
 }
 
-void BallOSG::setPositionX(double xPos)
-{
-    m_xPos = xPos;
-    setMatrix(osg::Matrix::translate(osg::Vec3(m_xPos, 0.0, m_zPos)));
-}
-
-void BallOSG::setPositionZ(double zPos)
-{
-    m_zPos = zPos;
-    setMatrix(osg::Matrix::translate(osg::Vec3(m_xPos, 0.0, m_zPos)));
-}
-
-void BallOSG::addRelativeZ(double zOffset)
-{
-    m_zPos += zOffset;
-    setPositionZ(m_zPos);
-}
-
-void BallOSG::setVelocity(double velocity)
-{
-    m_velocity = velocity;
-}
-
-void BallOSG::setAngle(double angle)
-{
-    m_angle = angle;
-}
-
-double BallOSG::getAngle()
-{
-    return m_angle;
-}
-
-double BallOSG::getPositionX()
-{
-    return getMatrix().getTrans().x();
-}
-
-double BallOSG::getPositionZ()
-{
-    return getMatrix().getTrans().z();
-}

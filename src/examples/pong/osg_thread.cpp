@@ -6,7 +6,10 @@
 #include "frame.h"
 #include "score_board.h"
 
-OSGThread::OSGThread(osg::ref_ptr<osg::Group> root, PongPeer& peer)
+#include "Pieces/TimerEvent"
+
+
+OSGThread::OSGThread(osg::ref_ptr<osg::Group> root, PongPeer* peer)
 : OpenThreads::Thread()
 , m_viewer()
 , m_root(root)
@@ -24,7 +27,7 @@ OSGThread::OSGThread(osg::ref_ptr<osg::Group> root, PongPeer& peer)
 
     
     m_root->addChild(setUpWorld().get());
-    m_root->addChild(new ScoreBoard(peer.getPlayerList()));
+    m_root->addChild(new ScoreBoard(peer->getPlayerList()));
 
     // Create an event handler that catches events from keyboard.
     PongEventHandler* peh = new PongEventHandler(peer);
@@ -63,7 +66,7 @@ void OSGThread::run()
     m_viewer.realize();
 
 
-    while(!m_viewer.done())
+    for(;;)
     {
         m_viewer.sync();
         m_viewer.update();

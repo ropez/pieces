@@ -22,6 +22,7 @@
 #include "Pieces/FrameData"
 #include "Pieces/Global"
 #include "Pieces/ReferencePointer"
+#include "Pieces/Exception"
 
 PongPeer::PongPeer(osg::ref_ptr<osg::Group> rootOSG)
 : pcs::Peer()
@@ -60,16 +61,14 @@ PongPeer::PongPeer(osg::ref_ptr<osg::Group> rootOSG)
     {
         receiver()->listen(listenPort);
     }
-    catch(...)
+    catch(const pcs::Exception& e)
     {
-        PERROR << "Network error";
+        PERROR << e;
     }
 }
 
 void PongPeer::handle(pcs::GameDataEvent* event)
 {
-    pcs::FrameData frameData = event->getFrameData();
-
     m_db->applyFrameData(event->getFrameNumber(), event->getFrameData());
 
     m_db->applyAction(ACTION_DRAW, event->getFrameNumber());

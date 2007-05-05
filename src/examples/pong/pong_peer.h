@@ -1,5 +1,6 @@
 #if !defined PONG_PEER_H
 #define PONG_PEER_H
+
 #include "Pieces/Peer"
 
 #include "Pieces/GameDataEvent"
@@ -21,8 +22,6 @@ protected:
     virtual void handle(pcs::GameDataEvent* event);
 
     virtual void handle(pcs::MessageReceivedEvent* event);
-
-
 
 private:
     pcs::AutoPointer<pcs::GameObjectDB> m_db;

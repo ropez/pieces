@@ -21,7 +21,6 @@ public:
 
     virtual void operator () (osg::Node* node, osg::NodeVisitor* nv)
     {
-
         int counter = 0;
 
         for(PlayerList_t::iterator it = m_playerList->begin(); it != m_playerList->end(); ++it)
