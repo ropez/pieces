@@ -14,7 +14,7 @@ class GameDataReceiverThreadPrivate;
 
 
 /**
- * \class GameDataReceiverThread
+ * \class GameDataReceiverThread game_data_receiver_thread.h <Pieces/GameDataReceiverThread>
  * \brief Background thread used by GameDataReceiver
  *
  * It's unlikely that users of pieces will ever need to use this class directly.
@@ -24,12 +24,31 @@ class GameDataReceiverThreadPrivate;
 class GameDataReceiverThread : public OpenThreads::Thread
 {
 public:
+
+    /**
+     * Constructor.
+     */
     GameDataReceiverThread(EventLoop* eventLoop, port_t port);
+
+    /**
+     * Destructor.
+     *
+     * Calls abort().
+     */
     ~GameDataReceiverThread();
 
+    /**
+     * Stops the thread.
+     */
     void abort();
 
 protected:
+
+    /**
+     * Thread main loop.
+     *
+     * Waits for incoming datagrams, and posts a GameDataEvent when data arrives.
+     */
     virtual void run();
 
 private:

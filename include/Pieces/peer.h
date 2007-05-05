@@ -16,18 +16,53 @@ class PeerPrivate;
 
 
 /**
- * \class Peer
+ * \class Peer peer.h <Pieces/Peer>
  * \brief Base class for peer application.
  *
+ * This is a base class that should be used by all applications acting as a peer
+ * in a Pieces system.
+ *
+ * The peer contains an EventLoop that is started using exec(), and stopped
+ * using quit(). The thread calling exec() will block until events are posted
+ * to the host, and only wake up to call the appropriate event handler, until
+ * quit() is called.
+ *
+ * The default peer implementation only provides default event handling functions
+ * without any functionality. The user must create a subclass and implement all
+ * needed event handlers.
+ *
+ * The peer provides an intarface connecting to a host, for using the Pieces
+ * message system. Call connectTo() to set up a connection to a host. When
+ * messages are received, the peer will receive a MessageReceivedEvent.
+ *
+ * The peer provides a GameDataReceiver for receiving game data from a host. This is
+ * available through the receiver() function. When frame data arrives, the peer
+ * will receive a GameDataEvent.
+ *
+ * \see Host
  * \author Robin Pedersen
  */
 class Peer : public EventHandler
 {
 public:
+
+    /**
+     * Constructor.
+     *
+     * Initializes the peer.
+     */
     Peer();
 
+    /**
+     * Destructor.
+     *
+     * Disconnects cleanly from the host, and releases all resources.
+     */
     ~Peer();
 
+    /**
+     * Returns a pointer to the event loop.
+     */
     EventLoop* eventLoop();
 
     /**
@@ -78,8 +113,17 @@ public:
 
 protected:
 
+    /**
+     * Returns a pointer to a connection manager interface.
+     */
     ConnectionManager* connectionManager() const;
 
+    /**
+     * Returns a pointer to the game data receiver.
+     *
+     * Use this in subclasses to call listen(). Incoming data will be given
+     * as GameDataEvent.
+     */
     GameDataReceiver* receiver();
 
 private:

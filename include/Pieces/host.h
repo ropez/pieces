@@ -14,18 +14,53 @@ class GameDataSender;
 class HostPrivate;
 
 /**
- * \class Host
+ * \class Host host.h <Pieces/Host>
  * \brief Base class for host application.
  *
+ * This is a base class that should be used by all applications acting as a host
+ * in a Pieces system.
+ *
+ * The host contains an EventLoop that is started using exec(), and stopped
+ * using quit(). The thread calling exec() will block until events are posted
+ * to the host, and only wake up to call the appropriate event handler, until
+ * quit() is called.
+ *
+ * The default host implementation only provides default event handling functions
+ * without any functionality. The user must create a subclass and implement all
+ * needed event handlers.
+ *
+ * The host provides an intarface for listening for incoming connections, for using
+ * the Pieces message system. Call startListening() to start the server of a
+ * given port, and stopListening() to stop it. When messages are received, the
+ * host will receive a MessageReceivedEvent.
+ *
+ * The host provides a GameDataSender for transfering game data to peers. This is
+ * available through the sender() function.
+ *
+ * \see Peer
  * \author Robin Pedersen
  */
 class Host : public EventHandler
 {
 public:
+
+    /**
+     * Constructor.
+     *
+     * Initializes the host.
+     */
     Host();
 
+    /**
+     * Destructor.
+     *
+     * Disconnects cleanly from all peers, and releases all resources.
+     */
     ~Host();
 
+    /**
+     * Returns a pointer to the event loop.
+     */
     EventLoop* eventLoop() const;
 
     /**
@@ -127,6 +162,11 @@ protected:
      */
     ConnectionManager* connectionManager() const;
 
+    /**
+     * Returns a pointer to the game data sender.
+     *
+     * Use this in subclasses to call sendFrameData().
+     */
     GameDataSender* sender();
 
 private:

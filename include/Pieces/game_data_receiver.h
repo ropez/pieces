@@ -13,17 +13,36 @@ class GameDataReceiverPrivate;
 
 
 /**
- * \class GameDataReceiver
- * \brief Receives game data at a peer.
+ * \class GameDataReceiver game_data_receiver.h <Pieces/GameDataReceiver>
+ * \brief Receives game data from a host.
  *
+ * This class is meant to be used in peers.
+ *
+ * This class runs an internal thread that listens for incoming frame data,
+ * and posts a GameDataEvent to the given EventLoop when data arrives.
+ *
+ * \see GameDataSender
  * \author Robin Pedersen
  */
 class GameDataReceiver
 {
 public:
+
+    /**
+     * Create a receiver that will post events to the given \a eventLoop.
+     *
+     * Must call listen to start the receiver.
+     */
     GameDataReceiver(EventLoop* eventLoop);
+
+    /**
+     * Stop the receiver, and release resources.
+     */
     ~GameDataReceiver();
 
+    /**
+     * Start listening for game data on the given UDP port.
+     */
     void listen(port_t port);
 
 private:
