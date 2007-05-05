@@ -8,8 +8,8 @@
 #include "Pieces/Debug"
 
 #include "ball.h"
-#include "BallHostCallback.h"
-#include "PlayerHostCallback.h"
+#include "ball_host_callback.h"
+#include "player_host_callback.h"
 
 #include "config.h"
 
