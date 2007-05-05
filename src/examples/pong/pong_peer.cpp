@@ -10,9 +10,9 @@
 
 // Pieces subclasses
 #include "ball.h"
-#include "BallPeerCallback.h"
+#include "ball_peer_callback.h"
 #include "player.h"
-#include "PlayerPeerCallback.h"
+#include "player_peer_callback.h"
 
 
 #include "Pieces/Application"
