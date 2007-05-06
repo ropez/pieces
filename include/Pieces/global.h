@@ -106,7 +106,7 @@ enum MessageProperty
 
 
 /**
- * \mainpage An introduction to Pieces
+ * \mainpage Pieces User Manual
  *
  * \section preface Preface
  * This is the user documentation for the Pieces framework.
@@ -114,6 +114,26 @@ enum MessageProperty
  * \section getting_started Getting started
  *
  * \section installation Installation
+ * Extract the package:
+ * \code
+ * $ tar xvzf pieces-<version>.tar.gz
+ * $ cd pieces-<version>
+ * \endcode
+ *
+ * Configure Pieces:
+ * \code
+ * $ ./configure [options]
+ * \endcode
+ *
+ * Build:
+ * \code
+ * $ make
+ * \endcode
+ *
+ * Install (needs root privileges):
+ * \code
+ * $ make install
+ * \endcode
  *
  * \section tutorial Tutorial
  *
