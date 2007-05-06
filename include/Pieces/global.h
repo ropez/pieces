@@ -136,7 +136,55 @@ enum MessageProperty
  * \endcode
  *
  * \section tutorial Tutorial
+ * This section describes some simple examples of how to utilize the Pieces framework in an application. 
+ * 
+ * \subsection tutorial_setup Setup
+ * A pcs::Application must be created first in the main function for every Pieces application. Pieces functionality will not
+ * work properly if this is not made. 
+ * 
+ * \code
+ * int main(int argc, char** argv)                     
+ * {                                                   
+ *     pcs::Application application(argc, argv);       
+ *     ...
+ * \endcode
  *
+ * The programmer has to 
+ * 
+ * 
+ * ihow a simple game is made using Pieces. The game that will be made is the classic game Pong. It is assumed 
+ * that the programmer has compiled Pieces and have set up necessary project settings that will able an application to link
+ * the Pieces library files.
+ * 
+ * Two applications will be made, one that will serve as a host and the other as a peer. An alternative approach is to integrate
+ * the host and peer into one single application. This approach is not described here, but the idea is the same.
+ *  
+ * \subsection tutorial_host The host
+ * A pcs::Application must be created first in the main function for every Pieces application. The pcs::Host and pcs::Peer will not
+ * work properly if this is not made.
+ * 
+ * \code
+ * int main(int argc, char** argv)                     
+ * {                                                   
+ *     pcs::Application application(argc, argv);       
+ *                                                     
+ *     pcs::AutoPointer<PongHost> host(new PongHost());
+ *                                                     
+ *     host->exec();                                   
+ * }                                                   
+ * \endcode
+ * 
+ * Every Pieces host application has to derive from the pcs::Host class. PongHost is a subclass of pcs::Host, it is here that all network
+ * events are handled.
+ * 
+ * 
+ * \subsubsection tutorial_host_pcshost pcs::Host
+ * 
+ * 
+ * 
+ * 
+ *  
+
  * \section smart_pointers Smart pointers
  *
  * In Pieces, a smart pointer is an abstract data type that simulates a pointer
