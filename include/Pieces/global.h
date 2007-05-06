@@ -189,6 +189,29 @@ enum MessageProperty
  * `configure --help' for a list of the directories you can set and what kinds of
  * files go in them.
  *
+ * Once installed, you can compile and link programs that uses Pieces. These
+ * instructions show how to do this with the GNU C++ compiler. If you are using a
+ * different compiler, these steps should be quite similar.
+ *
+ * To compile your code, you must make sure the preprocessor finds the Pieces header
+ * files. This would normally work automatically, but if your compiler is not set up
+ * to look for include files where you installed Pieces, you have to tell it where
+ * to find them with a '-I' option, like this:
+ * \code
+ * g++ -c -I/usr/local/include -o file.o file.cpp
+ * \endcode
+ *
+ * Once your code files are compiled, you need to link your executable. In this step
+ * you need to explicitly include the Pieces libraries. In addition to Pieces itself,
+ * you need to link against OpenThreads and the posix threads library. Just like when
+ * compiling, you need to specify where to look for the library files if they are not
+ * in a location that the linker searches by default:
+ * \code
+ * g++ -L/usr/local/lib -o myapp myfile.o -lpieces -lOpenThreads -lpthread
+ * \endcode
+ *
+ * That's it. If you have other problems, please consult your compiler documentation.
+ *
  *
  * \section tutorial Tutorial
  * This section describes some simple examples of how to utilize the Pieces framework in an application.
