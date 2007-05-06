@@ -15,7 +15,7 @@ class TCPReceiverThreadPrivate;
  * \class TCPReceiverThread tcp_receiver_thread.h <Pieces/TCPReceiverThread>
  * \brief Thread that receives messages.
  *
- * \internal
+ * This class is meant for internal use.
  * It is unlikely that users of Pieces will have to use this class directly.
  *
  * Messages are received on a background thread reading from a TCP socket.

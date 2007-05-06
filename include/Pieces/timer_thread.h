@@ -17,7 +17,7 @@ class EventLoop;
  * \class TimerThread timer_thread.h <Pieces/TimerThread>
  * \brief A thread that posts an event after a given delay.
  *
- * \internal
+ * This class is meant for internal use.
  * It is unlikely that users of Pieces will have to use this class directly.
  *
  * This class is used by Timer.

@@ -234,7 +234,6 @@ public:
 
 private:
 
-    /** \internal */
     class Data : public SharedData
     {
     public:

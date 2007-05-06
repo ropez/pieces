@@ -222,6 +222,12 @@ typedef unsigned long msgid_t;
 typedef std::pair<msgid_t, Message> msgpair_t;
 
 /**
+ * \class MessageIdLess message.h <Pieces/Message>
+ * \brief Compares message ids.
+ *
+ * This class is meant for internal use.
+ * It is unlikely that users of Pieces will have to use this class directly.
+ *
  * Comparison operator used to find a given message id in a sorted list.
  *
  * \relates Message

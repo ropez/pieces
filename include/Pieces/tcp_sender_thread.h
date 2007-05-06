@@ -16,7 +16,7 @@ class TCPSenderThreadPrivate;
  * \class TCPSenderThread tcp_sender_thread.h <Pieces/TCPSenderThread>
  * \brief Thread that sends messages.
  *
- * \internal
+ * This class is meant for internal use.
  * It is unlikely that users of Pieces will have to use this class directly.
  *
  * Messages are send by a background thread that pops messages from a queue.

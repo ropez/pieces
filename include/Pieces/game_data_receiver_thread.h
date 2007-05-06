@@ -17,7 +17,7 @@ class GameDataReceiverThreadPrivate;
  * \class GameDataReceiverThread game_data_receiver_thread.h <Pieces/GameDataReceiverThread>
  * \brief Background thread used by GameDataReceiver
  *
- * \internal
+ * This class is meant for internal use.
  * It is unlikely that users of Pieces will have to use this class directly.
  *
  * The game data reveiver runs in a background thread, listening for incoming

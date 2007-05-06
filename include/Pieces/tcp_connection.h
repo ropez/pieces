@@ -19,7 +19,7 @@ class TCPConnectionPrivate;
  * \class TCPConnection tcp_connection.h <Pieces/TCPConnection>
  * \brief A TCP connection.
  *
- * \internal
+ * This class is meant for internal use.
  * It is unlikely that users of Pieces will have to use this class directly.
  *
  * This class is used internally by the TCPConnectionManager to represent a

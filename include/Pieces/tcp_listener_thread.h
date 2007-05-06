@@ -16,7 +16,7 @@ class TCPListenerThreadPrivate;
  * \class TCPListenerThread tcp_listener_thread.h <Pieces/TCPListenerThread>
  * \brief Thread that listens for incoming TCP connections.
  *
- * \internal
+ * This class is meant for internal use.
  * It is unlikely that users of Pieces will have to use this class directly.
  *
  * Background thread that listens for incoming TCP connections, and adds
