@@ -14,7 +14,7 @@ class EventLoop;
 
 
 /**
- * \class TimerThread
+ * \class TimerThread timer_thread.h <Pieces/TimerThread>
  * \brief A thread that posts an event after a given delay.
  *
  * \internal

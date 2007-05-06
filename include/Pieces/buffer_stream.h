@@ -11,8 +11,11 @@ class DataBuffer;
 
 
 /**
- * \class BufferStream
+ * \class BufferStream buffer_stream.h <Pieces/BufferStream>
  * \brief Data stream using an internal buffer.
+ *
+ * This class provides a DataStream with a DataBuffer as it's target. The
+ * buffer stream owns the buffer, and is responsible for releasing resources.
  *
  * An example of how to write data to a buffer stream:
  * \code
@@ -33,6 +36,21 @@ class DataBuffer;
  * // Also possible to do 'ds >> b >> n >> d' in one line.
  * \endcode
  *
+ * Using a buffer stream is equivalent to using a DataStream with a DataBuffer:
+ *
+ * \code
+ * // This code using BufferStream:
+ * BufferStream bs;
+ * bs << values;
+ * return bs.data();
+ * // is equivalent to this:
+ * DataBuffer b;
+ * DataStream ds(&b);
+ * ds << values;
+ * return d.data();
+ * \endcode
+ *
+ * \see DataBuffer, DataStream
  * \author Robin Pedersem
  */
 class BufferStream : public DataStream
@@ -63,6 +81,11 @@ public:
      */
     explicit BufferStream(const ByteArray& data);
 
+    /**
+     * Destructor.
+     *
+     * Deletes the buffer.
+     */
     ~BufferStream();
 
     /**

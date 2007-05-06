@@ -12,8 +12,11 @@ class UDPSocketPrivate;
 
 
 /**
- * \class UDPSocket
+ * \class UDPSocket udp_socket.h <Pieces/UDPSocket>
  * \brief OS independant UDP network socket.
+ *
+ * This class provides a simple OS indepenent interface for sending and
+ * receiving datagrams over UDP.
  *
  * \author Robin Pedersen, Tord Heimdal, Thomas Bakken, Joakim Simonsson, Borge Jacobsen
  */

@@ -30,15 +30,30 @@ class TCPReceiverThread : public OpenThreads::Thread
 public:
 
     /**
-     * TODO: write stuff here.
+     * Create a receiver thread that reads messages from the given socket,
+     * and posts events to the given event loop.
      */
     TCPReceiverThread(TCPSocket* socket, EventLoop* eventLoop);
 
+    /**
+     * Destructor.
+     *
+     * Calls abort().
+     */
     ~TCPReceiverThread();
 
+    /**
+     * Stops the thread.
+     *
+     * The thread is not running anymore when this function returns.
+     */
     void abort();
 
 protected:
+
+    /**
+     * Thread main function.
+     */
     virtual void run();
 
 private:

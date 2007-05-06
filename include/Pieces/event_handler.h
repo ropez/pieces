@@ -19,7 +19,7 @@ class GameDataEvent;
 
 
 /**
- * \class EventHandler
+ * \class EventHandler event_handler.h <Pieces/EventHandler>
  * \brief Base class for event handlers.
  *
  * This is a base class that event-handling classes must derive from to be

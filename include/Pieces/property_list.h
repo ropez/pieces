@@ -15,7 +15,7 @@ class DataStream;
 
 
 /**
- * \class PropertyList
+ * \class PropertyList property_list.h <Pieces/PropertyList>
  * \brief A collection of key/value pairs.
  *
  * A property list contains a collection of key/value pairs where the keys are

@@ -10,7 +10,7 @@ namespace pcs
 
 
 /**
- * \class EventFilter
+ * \class EventFilter event_filter.h <Pieces/EventFilter>
  * \brief Base class for event filters.
  *
  * An event filter can be used to handle some event before they are sent to the

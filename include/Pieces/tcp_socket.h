@@ -12,9 +12,13 @@ class TCPSocketPrivate;
 
 
 /**
- * \class TCPSocket
+ * \class TCPSocket tcp_socket.h <Pieces/TCPSocket>
  * \brief OS independant TCP network socket.
  *
+ * This class provides a simple OS indepenent interface for connection to TCP
+ * servers, and sending and receiving data over TCP.
+ *
+ * \see TCPServer
  * \author Robin Pedersen, Tord Heimdal, Thomas Bakken, Joakim Simonsson, Borge Jacobsen
  */
 class TCPSocket : public StreamTarget
@@ -83,11 +87,30 @@ public:
      */
     void flush();
 
+    /**
+     * Returns the current read timeout.
+     */
     unsigned long getReadTimeout() const;
+
+    /**
+     * Set read timeout to \a msec milliseconds.
+     *
+     * If set, read calls will throw a TimeoutException if this number of
+     * milliseconds elapses before data is received by the socket.
+     */
     void setReadTimeout(unsigned long msec);
 
-
+    /**
+     * Returns the current write timeout.
+     */
     unsigned long getWriteTimeout() const;
+
+    /**
+     * Set write timeout to \a msec milliseconds.
+     *
+     * If set, write calls will throw a TimeoutException if this number of
+     * milliseconds elapses before data can be written to the socket.
+     */
     void setWriteTimeout(unsigned long msec);
 
 

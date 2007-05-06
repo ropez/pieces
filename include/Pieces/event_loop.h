@@ -12,7 +12,7 @@ class EventQueue;
 
 
 /**
- * \class EventLoop
+ * \class EventLoop event_loop.h <Pieces/EventLoop>
  * \brief Basic interface for building event-loops.
  *
  * This class provides an event loop. All events must be handled by an

@@ -14,7 +14,7 @@ class FrameData;
 
 
 /**
- * \class GameObjectDB
+ * \class GameObjectDB game_object_db.h <Pieces/GameObjectDB>
  * \brief Collection of game objects.
  *
  * This class holds a collection of pointers to game objects, indexed by object

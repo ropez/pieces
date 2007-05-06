@@ -14,7 +14,7 @@ class DataStream;
 
 
 /**
- * \class ValueList
+ * \class ValueList valuelist.h <Pieces/ValueList>
  * \brief An indexed-based list of values.
  *
  * A value-list contains an index-based list of values, stored as generic

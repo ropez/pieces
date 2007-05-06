@@ -14,7 +14,7 @@ class ByteArray;
 
 
 /**
- * \class ConnectionManager
+ * \class ConnectionManager connection_manager.h <Pieces/ConnectionManager>
  * \brief Interface for connection manager.
  *
  * Both a Host and a Peer have a connection manager.

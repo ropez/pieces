@@ -12,7 +12,7 @@ class TCPConnectionManagerPrivate;
 
 
 /**
- * \class TCPConnectionManager
+ * \class TCPConnectionManager tcp_connection_manager.h <Pieces/TCPConnectionManager>
  * \brief Manages TCP connections.
  *
  * Connection manager implementation using TCP connections.
@@ -26,8 +26,7 @@ public:
     /**
      * Constructor.
      *
-     * TODO: eventloop parameter should probably be removed later, and add some
-     * function to start receiving data after connected.
+     * All events will be posted to the given event loop.
      */
     TCPConnectionManager(EventLoop* eventLoop);
 

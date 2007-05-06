@@ -11,7 +11,7 @@ class EventQueuePrivate;
 
 
 /**
- * \class EventQueue
+ * \class EventQueue event_queue.h <Pieces/EventQueue>
  * \brief Thread-safe event queue.
  *
  * This class provides an event queue where events (pointers) can be pushed and popped

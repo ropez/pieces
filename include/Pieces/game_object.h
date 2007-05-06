@@ -15,7 +15,7 @@ class GameObjectPrivate;
 
 
 /**
- * \class GameObject
+ * \class GameObject game_object.h <Pieces/GameObject>
  * \brief Base class for objects defined for both host and peer.
  *
  * This is a base class that game programmers can subclass to create game

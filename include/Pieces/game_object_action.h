@@ -10,11 +10,18 @@ namespace pcs
 
 
 /**
- * \class GameObjectAction
+ * \class GameObjectAction game_object_action.h <Pieces/GameObjectAction>
  * \brief Action function interface.
  *
  * This is an abstract interface that can be used to implement action functions
- * that can be applied systematically to game objects.
+ * that can be applied systematically to game objects. This is a generic callback
+ * functionality supported by Pieces that the user can utilize to implement
+ * customizable and flexible functionality to his game objects.
+ *
+ * An example is if a user wants to use the same classes for game objects in
+ * the host and the peers, but with some functionality specific for either the
+ * host or the peers. He can use a common object class, but specific actions for
+ * each process.
  *
  * An implementation will typically need to store a pointer to the game object
  * it is operating on. This is not implemented in this class, because it's more
@@ -25,6 +32,7 @@ namespace pcs
  * because the game object use a reference pointer to the action function, and
  * it would result in a circular reference.
  *
+ * \see GameObject, GameObjectDB
  * \author Robin Pedersen
  */
 class GameObjectAction : public SharedData

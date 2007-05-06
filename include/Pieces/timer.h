@@ -12,7 +12,7 @@ class EventLoop;
 
 
 /**
- * \class Timer
+ * \class Timer timer.h <Pieces/Timer>
  * \brief Triggers an event on an event-loop after a given delay.
  *
  * A timer can be used to trigger an event on an event-loop after a given

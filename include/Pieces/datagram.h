@@ -13,7 +13,7 @@ namespace pcs
 
 
 /**
- * \class Datagram
+ * \class Datagram datagram.h <Pieces/Datagram>
  * \brief A packet in the UDP protocol.
  *
  * A datagram conatains an address of a remote computer, and the payload.
