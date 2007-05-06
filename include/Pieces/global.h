@@ -307,17 +307,122 @@ enum MessageProperty
  * data is represented as generic \link pcs::ByteArray byte-arrays \endlink.
  *
  * There are two ways to encode data; as a continous stream, or as a single
- * object at a time.
+ * object at a time. Pieces has built in support for all basic integer and
+ * real number types, as well as strings using std::string and Pieces classes
+ * like pcs::PropertyList, pcs::Message and pcs::SocketAddress. All these types
+ * can be encoded and decoded in both ways. It is also possible to add support
+ * for custom types as described below.
  *
- * \section stream Stream encoding
+ * \section stream Stream encoding and decoding
  * Encoding into and decoding from a continous stream is handled by
- * pcs::DataStream. Pieces has built-in operators for all basic integer and
- * real number types, and strings using std::string.
+ * pcs::DataStream. Writing to a data stream is done using the C++ output stream
+ * operator '<<'. Reading is done using the input operator '>>'. Example:
+ *
+ * \code
+ * pcs::DataStream ds;
+ * // Writing
+ * ds << -100 << 3.14 << "Hello world";
+ * // Reading
+ * int n; double d; std::string str;
+ * ds >> n >> d >> str;
+ * \endcode
  *
  * Custom game objects used to transfer data from a host to peers must
  * implement stream encoding and decoding in the functions
  * \link pcs::GameObject::encode encode \endlink and
- * \link pcs::GameObject::decode decode \endlink.
+ * \link pcs::GameObject::decode decode \endlink. In most cases, these functions
+ * can be implemented by simply streaming all member variables to or from the
+ * data stream object given as an argument, assuming that the type of all the
+ * member variables are supported by Pieces.
+ *
+ * It is possible to extend the streaming encoding and decoding system for
+ * use with custom data types (classes), by implementing data stream operators.
+ * Here is a simple example, adding stream operators for a hypothetical Person
+ * class:
+ *
+ * \code
+ * class Person
+ * {
+ * public:
+ *     std::string name;
+ *     std::string address;
+ * };
+ *
+ * // Output stream (encode) operator
+ * pcs::DataStream& operator<<(pcs::DataStream& ds, const Person& person)
+ * {
+ *     ds << person.name << person.address;
+ *     return ds;
+ * }
+ *
+ * // Input stream (decode) operator
+ * pcs::DataStream& operator>>(pcs::DataStream& ds, const Person& person)
+ * {
+ *     ds >> person.name >> person.address;
+ *     return ds;
+ * }
+ *
+ * // Using the operators:
+ * DataStream ds;
+ * Person p;
+ * ds << p;
+ * ds >> p;
+ * \endcode
+ *
+ * \section single_object Single object encoding and decoding
+ * Encoding and decoding single object from and to byte arrays is handled by
+ * global functions called \em encode and \em decode. The pcs namespace
+ * contains functions for the predefined types. Example:
+ *
+ * \code
+ * // Encoding
+ * double d = 3.14;
+ * pcs::ByteArray ba;
+ * pcs::encode(ba, d);
+ *
+ * // Decoding
+ * double dd;
+ * pcs::decode(ba, dd);
+ * \endcode
+ *
+ * Normally, the user won't need to use the %encode and %decode functions directly,
+ * but they are needed by the classes pcs::PropertyList and pcs::Message. In other
+ * words, this is now message parameters are encoded. Here is an example of how to
+ * encode and decode parameters in a message object:
+ *
+ * \code
+ * Message msg;
+ *
+ * // Encode a double value
+ * msg.set<double>(FIRST_PARAM, 3.14);
+ * // Can also do this implicitly, because the compiler knows that 3.14 is a double:
+ * msg.set(FIRST_PARAM, 3.14);
+ *
+ * // Decode a double value
+ * double d = msg.get<double>(FIRST_PARAM);
+ * // This can't be done implicitly
+ * double dd = msg.get(FIRST_PARAM); // Compiler error
+ * \endcode
+ *
+ * It is also possible to add \em encode and \em decode functions for custom types,
+ * so that the message system can use them. There are many possible ways to write
+ * encode and decode functions for the Person class above. One way is to use the
+ * stream operators already defined:
+ *
+ * \code
+ * void encode(pcs::ByteArray& ba, const Person& person)
+ * {
+ *     pcs::BufferStream bs;
+ *     bs << person;
+ *     ba = bs.data();
+ * }
+ *
+ * void decode(const pcs::ByteArray& ba, Person& person)
+ * {
+ *     pcs::BufferStream bs(ba);
+ *     bs >> person;
+ * }
+ * \endcode
  */
 
 #endif // PIECES_GLOBAL_H
