@@ -17,8 +17,10 @@ class EventLoop;
  * \class TimerThread
  * \brief A thread that posts an event after a given delay.
  *
- * This class is used internally by Timer. It's unlikely that users will need
- * to use this class directly.
+ * \internal
+ * It is unlikely that users of Pieces will have to use this class directly.
+ *
+ * This class is used by Timer.
  *
  * The tread sleeps until the given delay has elapsed, then wakes up to post
  * an event on the event-loop passed to the contructor.

@@ -16,11 +16,13 @@ class MessageQueuePrivate;
  * \class MessageQueue message_queue.h <Pieces/MessageQueue>
  * \brief Thread safe message queue.
  *
+ * \internal
+ * It is unlikely that users of Pieces will have to use this class directly.
+ *
  * This class is used internally to send messages in background threads
  * per connection.
  *
- * It's unlikely that users of Pieces will ever have to use this class directly.
- *
+ * \see TCPConnection, ConnectionManager
  * \author Robin Pedersen
  */
 class MessageQueue

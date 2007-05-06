@@ -108,8 +108,14 @@ enum MessageProperty
 /**
  * \mainpage An introduction to Pieces
  *
- * \section Introduction
+ * \section preface Preface
  * This is the user documentation for the Pieces framework.
+ *
+ * \section getting_started Getting started
+ *
+ * \section installation Installation
+ *
+ * \section tutorial Tutorial
  *
  * \section other_pages Other pages in this manual
  * \subpage smart_pointers

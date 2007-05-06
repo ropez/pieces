@@ -10,7 +10,7 @@ namespace pcs
 
 
 /**
- * \class DataBuffer
+ * \class DataBuffer data_buffer.h <Pieces/DataBuffer>
  * \brief An internal data buffer.
  *
  * A data-buffer is a stream target that operates on an internal byte-array.
@@ -25,22 +25,45 @@ namespace pcs
  * same data stream, it will keep growing forever. The read operations doesn't
  * remove any data from the beginning of the byte-array.
  *
+ * \see BufferStream
  * \author Robin Pedersen
  */
 class DataBuffer : public StreamTarget
 {
 public:
 
+    /**
+     * Create an empty buffer.
+     */
     DataBuffer();
+
+    /**
+     * Create a buffer starting with the contents of \a data.
+     */
     DataBuffer(const ByteArray& data);
 
+    /**
+     * Returns the data currently in the buffer.
+     *
+     * This also includes data previously returned by read().
+     */
     ByteArray data() const;
 
-    ByteArray read(size_t maxSize);
+    /**
+     * Returns at most \a maxSize bytes from the internal buffer, and increments
+     * the internal read pointer accordingly.
+     */
+    virtual ByteArray read(size_t maxSize);
 
-    void write(const ByteArray& data);
+    /**
+     * Appends \a data to the end of the internal buffer.
+     */
+    virtual void write(const ByteArray& data);
 
-    void flush();
+    /**
+     * Does nothing.
+     */
+    virtual void flush();
 
 private:
     DISABLE_COPY(DataBuffer);

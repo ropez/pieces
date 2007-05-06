@@ -17,7 +17,12 @@ class GameDataReceiverThreadPrivate;
  * \class GameDataReceiverThread game_data_receiver_thread.h <Pieces/GameDataReceiverThread>
  * \brief Background thread used by GameDataReceiver
  *
- * It's unlikely that users of pieces will ever need to use this class directly.
+ * \internal
+ * It is unlikely that users of Pieces will have to use this class directly.
+ *
+ * The game data reveiver runs in a background thread, listening for incoming
+ * UDP datagrams. When data arrives, it posts a GameDataEvent to the given
+ * event loop.
  *
  * \author Robin Pedersen
  */
