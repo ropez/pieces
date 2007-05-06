@@ -109,81 +109,136 @@ enum MessageProperty
  * \mainpage Pieces User Manual
  *
  * \section preface Preface
- * This is the user documentation for the Pieces framework.
+ * This is the user documentation for the Pieces framework. It should provide
+ * the instructions needed to get started programming in Pieces. The reader is
+ * expected to know basic C++ programming, and know how to compile, link and
+ * run programs on the platform he is using.
+ *
+ * Cplusplus.com is a very good place to start learning about C++ programming,
+ * as well as an excellent reference to the standard library, including the
+ * standart C library and the standard tamplate library.
  *
  * \section getting_started Getting started
+ * Pieces is an application framework designed to assist programmers creating games
+ * with network multiplayer functionality.
  *
  * \section installation Installation
- * Extract the package:
+ * This section describes the steps needed to install Pieces, and how to set up
+ * your project to use Pieces.
+ *
+ * \subsection install_linux Using linux
+ * These are generic installation instructions under linux.
+ *
+ * After obtaining the latest version of the Pieces source code, extract the package
+ * and `cd' to the directory containing the package's source code, like this:
  * \code
  * $ tar xvzf pieces-<version>.tar.gz
  * $ cd pieces-<version>
  * \endcode
  *
- * Configure Pieces:
+ * Then you need to configure the package for your system, by running
+ * the 'configure' script, like this:
  * \code
  * $ ./configure [options]
  * \endcode
+ * Running `configure' takes awhile.  While running, it prints some messages
+ * telling which features it is checking for.
  *
- * Build:
+ * Some systems require unusual options for compilation or linking that
+ * the `configure' script does not know about.  You can give `configure'
+ * initial values for variables by setting them in the environment.  Using
+ * a Bourne-compatible shell, you can do that on the command line like
+ * this:
+ * \code
+ * CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
+ * \endcode
+ *
+ * Or on systems that have the `env' program, you can do it like this:
+ * \code
+ * env CPPFLAGS=-I/usr/local/include LDFLAGS=-s ./configure
+ * \endcode
+ *
+ * Once configured, run 'make' to build the pieces binary:
  * \code
  * $ make
  * \endcode
  *
- * Install (needs root privileges):
+ * Watch the messages written by the compiler. If you see an error message,
+ * your system might be missing a package required by Pieces, or it might
+ * have been configured incorrectly. If the problem does not go away, please
+ * contact the Pieces authors.
+ *
+ * If 'make' succeeded, run `make install' to install Pieces on your system,
+ * you might need root privileges to do this:
  * \code
  * $ make install
  * \endcode
  *
+ * You can remove the program binaries and object files from the source code
+ * directory by typing `make clean'.  To also remove the files that `configure'
+ * created (so you can compile the package for a different kind of computer),
+ * type `make distclean'. If you want to uninstall Pieces from your system,
+ * type 'make uninstall'.
+ *
+ * By default, `make install' will install Pieces files in '/usr/local/lib',
+ * `/usr/local/include', etc. You can specify an installation prefix other than
+ * `/usr/local' by giving `configure' the option `--prefix=PATH'.
+ *
+ * In addition, if you use an unusual directory layout you can give options like
+ * `--libdir=PATH' to specify different values for particular kinds of files. Run
+ * `configure --help' for a list of the directories you can set and what kinds of
+ * files go in them.
+ *
+ *
  * \section tutorial Tutorial
- * This section describes some simple examples of how to utilize the Pieces framework in an application. 
- * 
+ * This section describes some simple examples of how to utilize the Pieces framework in an application.
+ *
  * \subsection tutorial_setup Setup
  * A pcs::Application must be created first in the main function for every Pieces application. Pieces functionality will not
- * work properly if this is not made. 
- * 
+ * work properly if this is not made.
+ *
  * \code
- * int main(int argc, char** argv)                     
- * {                                                   
- *     pcs::Application application(argc, argv);       
+ * int main(int argc, char** argv)
+ * {
+ *     pcs::Application application(argc, argv);
  *     ...
  * \endcode
  *
- * The programmer has to 
- * 
- * 
- * ihow a simple game is made using Pieces. The game that will be made is the classic game Pong. It is assumed 
+ * The programmer has to
+ *
+ *
+ * ihow a simple game is made using Pieces. The game that will be made is the classic game Pong. It is assumed
  * that the programmer has compiled Pieces and have set up necessary project settings that will able an application to link
  * the Pieces library files.
- * 
+ *
  * Two applications will be made, one that will serve as a host and the other as a peer. An alternative approach is to integrate
  * the host and peer into one single application. This approach is not described here, but the idea is the same.
- *  
+ *
  * \subsection tutorial_host The host
  * A pcs::Application must be created first in the main function for every Pieces application. The pcs::Host and pcs::Peer will not
  * work properly if this is not made.
- * 
+ *
  * \code
- * int main(int argc, char** argv)                     
- * {                                                   
- *     pcs::Application application(argc, argv);       
- *                                                     
+ * int main(int argc, char** argv)
+ * {
+ *     pcs::Application application(argc, argv);
+ *
  *     pcs::AutoPointer<PongHost> host(new PongHost());
- *                                                     
- *     host->exec();                                   
- * }                                                   
+ *
+ *     host->exec();
+ * }
  * \endcode
- * 
+ *
  * Every Pieces host application has to derive from the pcs::Host class. PongHost is a subclass of pcs::Host, it is here that all network
  * events are handled.
- * 
- * 
+ *
+ *
  * \subsubsection tutorial_host_pcshost pcs::Host
- * 
- * 
- * 
- * 
- *  
+ *
+ *
+ *
+ *
+ *
 
  * \section smart_pointers Smart pointers
  *
