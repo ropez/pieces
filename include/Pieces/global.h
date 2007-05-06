@@ -137,13 +137,7 @@ enum MessageProperty
  *
  * \section tutorial Tutorial
  *
- * \section other_pages Other pages in this manual
- * \subpage smart_pointers
- * \subpage implicit_sharing
- */
-
-/**
- * \page smart_pointers Smart pointers
+ * \section smart_pointers Smart pointers
  *
  * In Pieces, a smart pointer is an abstract data type that simulates a pointer
  * while providing additional features, such as automatic garbage collection.
@@ -226,10 +220,8 @@ enum MessageProperty
  *
  * pcs::SharedDataPointer provides a specialized pointer for use with implicitly
  * shared objects (See \ref implicit_sharing).
- */
-
-/**
- * \page implicit_sharing Implicit sharing
+ *
+ * \section implicit_sharing Implicit sharing
  *
  * Pieces uses a technique called implicit sharing to maximize resource usage
  * and minimize copying of data, while providing simple value-based semantics
@@ -263,7 +255,7 @@ enum MessageProperty
  * about it. Even in multithreaded applications, implicit sharing takes place, as
  * explained in Threads and Implicit Sharing.
  *
- * \section custom_shared_classes Using implicit sharing in custom classes
+ * \subsection custom_shared_classes Using implicit sharing in custom classes
  *
  * Pieces contains two classes that makes it very easy to implement implicit sharing
  * in user-defined classes: pcs::SharedData and pcs::SharedDataPointer.
@@ -318,10 +310,8 @@ enum MessageProperty
  *     pcs::SharedDataPointer<PersonData> d;
  * };
  * \endcode
- */
-
-/**
- * \page data_encoding Data encoding
+ *
+ * \section data_encoding Data encoding
  *
  * Pieces uses a binary format for all network traffic. Internally, all user
  * data is represented as generic \link pcs::ByteArray byte-arrays \endlink.
@@ -333,7 +323,7 @@ enum MessageProperty
  * can be encoded and decoded in both ways. It is also possible to add support
  * for custom types as described below.
  *
- * \section stream Stream encoding and decoding
+ * \subsection stream Stream encoding and decoding
  * Encoding into and decoding from a continous stream is handled by
  * pcs::DataStream. Writing to a data stream is done using the C++ output stream
  * operator '<<'. Reading is done using the input operator '>>'. Example:
@@ -389,7 +379,7 @@ enum MessageProperty
  * ds >> p;
  * \endcode
  *
- * \section single_object Single object encoding and decoding
+ * \subsection single_object Single object encoding and decoding
  * Encoding and decoding single object from and to byte arrays is handled by
  * global functions called \em encode and \em decode. The pcs namespace
  * contains functions for the predefined types. Example:
