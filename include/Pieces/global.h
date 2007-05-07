@@ -227,8 +227,7 @@ enum MessageProperty
  *     ...
  * \endcode
  *
- * The programmer has to
- *
+ * The programmer has to.
  *
  * ihow a simple game is made using Pieces. The game that will be made is the classic game Pong. It is assumed
  * that the programmer has compiled Pieces and have set up necessary project settings that will able an application to link
@@ -262,7 +261,7 @@ enum MessageProperty
  *
  *
  *
-
+ *
  * \section smart_pointers Smart pointers
  *
  * In Pieces, a smart pointer is an abstract data type that simulates a pointer
