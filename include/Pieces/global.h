@@ -213,52 +213,129 @@ enum MessageProperty
  * That's it. If you have other problems, please consult your compiler documentation.
  *
  *
- * \section tutorial Tutorial
- * This section describes some simple examples of how to utilize the Pieces framework in an application.
+ * \section examples Examples
+ * This section describes some simple examples of how to utilize the Pieces framework in an application. It is assumed
+ * that the programmer has compiled Pieces and have set up necessary project settings that will able an application to link
+ * the Pieces library files.
+ *
+ * The examples describe how two different applications communicate wich eachother, where one acts as host and the other as peer. An alternative approach is to integrate
+ * the host and peer into one single application. This approach is not described here, but the idea is the same.
  *
  * \subsection tutorial_setup Setup
  * A pcs::Application must be created first in the main function for every Pieces application. Pieces functionality will not
  * work properly if this is not made.
  *
  * \code
+ * // main_host.cpp and main_peer.cpp
  * int main(int argc, char** argv)
  * {
  *     pcs::Application application(argc, argv);
  *     ...
  * \endcode
  *
- * The programmer has to.
+ * \subsection tutorial_connect Create a connection
+ * The host application must have a class that is derived from pcs::Host. In this example it is called ExampleHost. It is in this class that all network events will be handled.
  *
- * ihow a simple game is made using Pieces. The game that will be made is the classic game Pong. It is assumed
- * that the programmer has compiled Pieces and have set up necessary project settings that will able an application to link
- * the Pieces library files.
+ * \code
+ * // example_host.h
+ * class ExampleHost : public pcs::Host
+ * {
+ * public:
+ *     ExampleHost();
+ *     ...
+ * };
+ * \endcode
  *
- * Two applications will be made, one that will serve as a host and the other as a peer. An alternative approach is to integrate
- * the host and peer into one single application. This approach is not described here, but the idea is the same.
+ * Create an instance of the ExampleHost class in the main function after the creation of a pcs::Application. Then call ExampleHost's exec function. This will
+ * start the event loop of the Host.
  *
- * \subsection tutorial_host The host
- * A pcs::Application must be created first in the main function for every Pieces application. The pcs::Host and pcs::Peer will not
- * work properly if this is not made.
+ * \code
+ * // main_host.cpp
+ * int main(int argc, char** argv)
+ * {
+ *     pcs::Application application(argc, argv);
+ *     pcs::AutoPointer<ExampleHost> host(new ExampleHost());
+ *     host->exec();
+ * }
+ * \endcode
+ *
+ * In the host's constructor we start to listen on a port, in our case 2222. Incomming connections from peers are now possible on port 2222.
+ *
+ * \code
+ * // example_host.cpp
+ * ExampleHost::ExampleHost()
+ * : pcs::Host()
+ * {
+ *     startListening(2222);
+ *     ...
+ * \endcode
+ *
+ * To create a Peer that connects to the host you have to create subclass of pcs::Peer. The subclass is here called ExamplePeer.
+ *
+ * \code
+ * // example_peer.h
+ * class ExamplePeer : public pcs::Peer
+ * {
+ * public:
+ *     ExamplePeer();
+ *     ...
+ * };
+ * \endcode
+ *
+ * The creation of an ExamplePeer is done in the same manner as the creation of the ExampleHost.
+ *
+ * \code
+ * // main_peer.cpp
+ * int main(int argc, char** argv)
+ * {
+ *     pcs::Application application(argc, argv);
+ *     pcs::AutoPointer<ExamplePeer> peer(new ExamplePeer());
+ *     peer->exec();
+ * }
+ * \endcode
+ *
+ * In the constructor of the Example peer command line arguments are read. The first argument is the host address and the second one is the peer's listen port. The default values of the
+ * arguments are set to "localhost" and 3333. A pcs::SocketAddress is created based on the host address and the host port (in our case 2222). The connectTo function tries to creates a connection
+ * to the specified host. receiver()->listen(listenPort) ables us to listen on data comming from the host.
+ *
+ * \code
+ * ExamplePeer::ExamplePeer(osg::ref_ptr<osg::Group> rootOSG)
+ * : pcs::Peer()
+ * {
+ *     std::string host = "localhost";
+ *     pcs::port_t listenPort = 3333;
+ *
+ *     if(pcs::app->argc() > 1)
+ *     {
+ *         host = pcs::app->arg(1);
+ *     }
+ *
+ *     if(pcs::app->argc() > 2)
+ *     {
+ *         std::stringstream ss(pcs::app->arg(2));
+ *         ss >> listenPort;
+ *     }
+ *
+ *     pcs::SocketAddress sa(pcs::InetAddress::getHostByName(host), 2222);
+ *     connectTo(sa);
+ *     try
+ *     {
+ *         receiver()->listen(listenPort);
+ *     }
+ *     catch(const pcs::Exception& e)
+ *     {
+ *         PERROR << e;
+ *     }
+ * \endcode
  *
  * \code
  * int main(int argc, char** argv)
  * {
  *     pcs::Application application(argc, argv);
- *
- *     pcs::AutoPointer<PongHost> host(new PongHost());
- *
+ *     pcs::AutoPointer<ExampleHost> host(new ExampleHost());
  *     host->exec();
  * }
  * \endcode
- *
- * Every Pieces host application has to derive from the pcs::Host class. PongHost is a subclass of pcs::Host, it is here that all network
- * events are handled.
- *
- *
- * \subsubsection tutorial_host_pcshost pcs::Host
- *
- *
- *
  *
  *
  *
@@ -312,8 +389,7 @@ enum MessageProperty
  *
  * pcs::ReferencePointer provides \em reference \em counting pointer. This is
  * more advanced than auto-pointer, because it makes it possible to have
- * multiple pointers to the same object. A reference counter stored with the
- * object is increased for every pointer that is assigned to it, and descreased
+ * multiple pointers to the same object. A reference counter stored with the * object is increased for every pointer that is assigned to it, and descreased
  * when a pointer is not pointing to it anymore. The object is automatically
  * deleted when the reference count reaches zero. A reference pointer can be used
  * in all cases when an auto-pointer can be used, but the object type must be
