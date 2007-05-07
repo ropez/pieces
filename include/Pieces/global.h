@@ -116,7 +116,7 @@ enum MessageProperty
  *
  * Cplusplus.com is a very good place to start learning about C++ programming,
  * as well as an excellent reference to the standard library, including the
- * standart C library and the standard tamplate library.
+ * standart C library and the standard template library.
  *
  * \section getting_started Getting started
  * Pieces is an application framework designed to assist programmers creating games
