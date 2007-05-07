@@ -282,7 +282,7 @@ enum MessageProperty
  * null-pointer. An auto-pointer can be used with any type of object, except
  * arrays. Typical usage of auto-pointer is when you have a function that creates
  * an object, and returns a pointer to it. The only way to make sure the caller
- * takes responsibylity for the object is to return it as an auto-pointer. The
+ * takes responsibility for the object is to return it as an auto-pointer. The
  * returned value can be stored as a local variable in a function, or as a member
  * variable in a class.
  *
@@ -293,7 +293,7 @@ enum MessageProperty
  *     if (error)
  *         return 0;
  *     else
- *         AutoPointer<File>(new File());
+ *         return AutoPointer<File>(new File());
  * }
  *
  * void foo()
