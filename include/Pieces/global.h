@@ -350,7 +350,7 @@ enum MessageProperty
  *
  * Pieces uses a technique called implicit sharing to maximize resource usage
  * and minimize copying of data, while providing simple value-based semantics
- * it's data types.
+ * in it's data types.
  *
  * The use of implicit sharing was inspired by the Qt toolkit from Trolltech.
  *
