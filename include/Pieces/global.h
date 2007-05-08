@@ -294,12 +294,13 @@ enum MessageProperty
  * }
  * \endcode
  *
- * In the constructor of the Example peer command line arguments are read. The first argument is the host address and the second one is the peer's listen port. The default values of the
- * arguments are set to "localhost" and 3333. A pcs::SocketAddress is created based on the host address and the host port (in our case 2222). The connectTo function tries to creates a connection
- * to the specified host. receiver()->listen(listenPort) ables us to listen on data comming from the host.
+ * In the constructor of the ExamplePeer command line arguments are read. This is done with the global pcs::app object.
+ * The first argument is the host address and the second one is the peer's listen port. The default values of the
+ * arguments are set to "localhost" and 3333.
  *
  * \code
- * ExamplePeer::ExamplePeer(osg::ref_ptr<osg::Group> rootOSG)
+ * // example_peer.cpp
+ * ExamplePeer::ExamplePeer()
  * : pcs::Peer()
  * {
  *     std::string host = "localhost";
@@ -315,9 +316,76 @@ enum MessageProperty
  *         std::stringstream ss(pcs::app->arg(2));
  *         ss >> listenPort;
  *     }
+ *     ...
+ * \endcode
  *
+ * Now a pcs::SocketAddress is created based on the host address and the host port (in our case 2222). The connectTo function is then trying to create a connection
+ * to this pcs::SocketAddress.
+ *
+ * \code
+ *     ...
+ *     // Connect to host
  *     pcs::SocketAddress sa(pcs::InetAddress::getHostByName(host), 2222);
  *     connectTo(sa);
+ *     ...
+ * \endcode
+ *
+ * The peer is now able to send and receive \link pcs::Message messages \endlink
+ * to and from the host. But the peer is not yet able to receive \link
+ * pcs::GameDataEvent game data events \endlink from the host. The way to do
+ * this is to send a message from the peer to the host, telling the host that
+ * this peer wants to listen for \link pcs::GameDataEvent game data events
+ * \endlink on a specified port.
+ *
+ * A pcs::Message is created with a user specified type that will represent an join request. The type is simply an
+ * integer, in our case it is set to MSG_GAME_EVENT_JOIN. We wish to send the peer's port
+ * number in this message, so we add a paramemeter to the message, with the
+ * built-in property pcs::PR_PORT and the value 3333.
+ *
+ * \code
+ *     ...
+ *     // Send join message (so the host will send us GameDataEvents on port 3333)
+ *     pcs::Message message(MSG_GAME_EVENT_JOIN);
+ *     message.set<pcs::port_t>(pcs::PR_PORT, listenPort);
+ *     sendMessage(message);
+ *
+ *     // Start to listen for game data events.
+ *     receiver()->listen(listenPort);
+ * }
+ * \endcode
+ *
+ * When the this join request message is received by the host it is your responsibility to handle it. The virtual function pcs::Host::handle(pcs::MessageReceivedEvent* event) has to be implemented
+ * in the ExampleHost to handle all types of messages. This function is called by Pieces each time a message is received. To obtain the original message sent from the peer event->getMessage() is used.
+ * First we must check if this really is a join request. This is done by obtaining the the message type by calling the message.getMessageType() function. To get the peer's address, we use event->getSenderAddress().
+ * The port of the peer is extracted from the message by message.get<pcs::port_t>(pcs::PR_PORT). 
+ *
+ * \code
+ * // example_host.cpp
+ * void ExampleHost::handle(pcs::MessageReceivedEvent* event)
+ * {
+ *     pcs::Message message = event->getMessage();
+ *
+ *     switch(message.getMessageType())
+ *     {
+ *     case MSG_GAME_EVENT_JOIN:
+ *         {
+ *             pcs::port_t port = message.get<pcs::port_t>(pcs::PR_PORT);
+ *
+ *             pcs::SocketAddress peer = event->getSenderAddress();
+ *             peer.setPort(port);
+ *             sender()->addReceiver(peer);
+ * 	    ...
+ * \endcode
+ *
+ *
+ *
+ *
+ * \subsection examples_transmit_data
+ * It is now time to transmit some data from the peer to the host. This can be done using messages. Messages are guaranteed to be received by the receiver. Each message that
+ * is sent requires a message property. There are some built-in message types in Pieces that can be used, see pcs::MessageProperty. But you can define your own types. A message type is
+ * simply an unsigned integer. The custom value types range begins at 1000.
+ *
+ *
  *     try
  *     {
  *         receiver()->listen(listenPort);
@@ -326,18 +394,7 @@ enum MessageProperty
  *     {
  *         PERROR << e;
  *     }
- * \endcode
- *
- * \code
- * int main(int argc, char** argv)
- * {
- *     pcs::Application application(argc, argv);
- *     pcs::AutoPointer<ExampleHost> host(new ExampleHost());
- *     host->exec();
- * }
- * \endcode
- *
- *
+ * receiver()->listen(listenPort) ables us to listen on data comming from the host.
  *
  * \section smart_pointers Smart pointers
  *
@@ -362,6 +419,7 @@ enum MessageProperty
  * takes responsibility for the object is to return it as an auto-pointer. The
  * returned value can be stored as a local variable in a function, or as a member
  * variable in a class.
+ *
  *
  * Example:
  * \code
