@@ -120,7 +120,9 @@ enum MessageProperty
  *
  * \section getting_started Getting started
  * Pieces is an application framework designed to assist programmers creating games
- * with network multiplayer functionality.
+ * with network multiplayer functionality. The following sections will give you an
+ * introduction to Pieces.How to install, tutorial and explanation of some core
+ * features in Pieces.
  *
  * \section installation Installation
  * This section describes the steps needed to install Pieces, and how to set up
@@ -356,15 +358,15 @@ enum MessageProperty
  *
  * When the this join request message is received by the host it is your responsibility to handle it. The virtual function pcs::Host::handle(pcs::MessageReceivedEvent* event) has to be implemented
  * in the ExampleHost to handle all types of messages. This function is called by Pieces each time a message is received.
- * 
+ *
  * What we want now is to set up the host so it adds the peer to one of its receivers. The host needs to know the address and port of the peer to do this.
  * The peer address is stored in the incoming message event and the port is stored in the message itself.
- * 
+ *
  * The original message sent from the peer is obtained by calling event->getMessage().
  * First we must check if this really is a join request. This is done by checking the message type by calling the message.getMessageType() function. To get the peer's address, we use event->getSenderAddress().
  * The port of the peer is extracted from the message by message.get<pcs::port_t>(pcs::PR_PORT).
- * 
- * The sender()->addReceiver(pcs::SocketAddress) function adds the peer to the host's receiver list. A pcs::SocketAddress is used as parameter to the addReceiver function, it shall contain the peer's address and port. 
+ *
+ * The sender()->addReceiver(pcs::SocketAddress) function adds the peer to the host's receiver list. A pcs::SocketAddress is used as parameter to the addReceiver function, it shall contain the peer's address and port.
  *
  * \code
  * // example_host.cpp
