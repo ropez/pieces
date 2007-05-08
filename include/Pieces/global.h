@@ -472,7 +472,6 @@ enum MessageProperty
  * If the object type was TYPE_EXAMPLE, we create a new ExampleGameObject with the id obtained from the message. As with ExampleHost, we also have to add a pcs::GameObjectDB (called m_objDB) as a member of the ExamplePeer
  * and insert our newly created game object into this one.
  * 
- *
  * \code
  * // example_peer.h
  * void ExamplePeer::handle(pcs::MessageReceivedEvent* event)
@@ -501,6 +500,8 @@ enum MessageProperty
  *             ...
  * \endcode
  *
+ * TODO: Describe how a timer event is handled by the host.
+ * TODO: Describe how callbacks are utilized.
  *
  * \section smart_pointers Smart pointers
  *
