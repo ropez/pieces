@@ -356,7 +356,7 @@ enum MessageProperty
  * }
  * \endcode
  *
- * When the this join request message is received by the host it is your responsibility to handle it. The virtual function pcs::Host::handle(pcs::MessageReceivedEvent* event) has to be implemented
+ * When this join request message is received by the host it is your responsibility to handle it. The virtual function pcs::Host::handle(pcs::MessageReceivedEvent* event) has to be implemented
  * in the ExampleHost to handle all types of messages. This function is called by Pieces each time a message is received.
  *
  * What we want now is to set up the host so it adds the peer to one of its receivers. The host needs to know the address and port of the peer to do this.
@@ -366,7 +366,8 @@ enum MessageProperty
  * First we must check if this really is a join request. This is done by checking the message type by calling the message.getMessageType() function. To get the peer's address, we use event->getSenderAddress().
  * The port of the peer is extracted from the message by message.get<pcs::port_t>(pcs::PR_PORT).
  *
- * The sender()->addReceiver(pcs::SocketAddress) function adds the peer to the host's receiver list. A pcs::SocketAddress is used as parameter to the addReceiver function, it shall contain the peer's address and port.
+ * Finally, the sender()->addReceiver(pcs::SocketAddress) function adds the peer to the host's receiver list.
+ * A pcs::SocketAddress is used as parameter to the addReceiver function, it shall contain the peer's address and port.
  *
  * \code
  * // example_host.cpp
@@ -386,6 +387,119 @@ enum MessageProperty
  * 	    ...
  * \endcode
  *
+ * We have now achieved two things, the possibility to send messages between the host and peer and the possibility for the peer receive game data events that are sent from the host. The next section will describe how game data events
+ * are sent and received.
+ *
+ * \subsection tutorial_gde Game Data Events
+ *
+ * A pcs::GameObject ables us to send and receive game data events. You have to create a class that is derived from pcs::GameObject. 
+ * In this example we call it ExampleGameObject. The same ExampleGameObject class is used both by the host
+ * and the peer. Its purpose is to contain game object specific data, and to specify what of these data should be sent over the network. 
+ * For example, a bicycle game object could contain position, orientation, velocity, and gear.
+ * It could be assumed that the peer only needs to know about the position and the orientation of the bicycle.
+ * In this case, only the position and the orientation data had to be sent over the network.
+ *
+ * The ExampleGameObject will contain two values, x and y, that will be sent to the peer.
+ *
+ * \code
+ * // example_game_object.h
+ * class ExampleGameObject : public pcs::GameObject
+ * {
+ * public:
+ *     ExampleGameObject(pcs::objectid_t objectId);
+ *
+ *     void encode(pcs::DataStream& ds) const;
+ *     void decode(pcs::DataStream& ds);
+ * private:
+ *     double m_x;
+ *     double m_y;
+ * };
+ * \endcode
+ *
+ * The encode function is used by the host only. It adds the member variables m_x and m_y to a pcs::DataStream. The decode function is used by the peer only. It extracts the x and y value from the data
+ * stream and stores them in the members m_x and m_y. For more infomation on this topic, see \ref data_encoding.
+ *
+ * \code
+ * // example_game_object.cpp
+ * ExampleGameObject::ExampleGameObject(pcs::objectid_t objectId)
+ * : GameObject(objectId)
+ * , m_x(0.0)
+ * , m_y(0.0)
+ * {
+ * }
+ *
+ * void ExampleGameObject::encode(pcs::DataStream& ds) const
+ * {
+ *     ds << m_x << m_y;
+ * }
+ *
+ * void ExampleGameObject::decode(pcs::DataStream& ds)
+ * {
+ *     ds >> m_x >> m_y;
+ * }
+ * \endcode
+ *
+ * The next step is to create an ExampleGameObject on both the host and the peer. The host has different approaches that decides when a GameObject should be created. For example a game object can be
+ * created in the constructor of the host, when it receives a message from one of its peers, or when an internal condition is satisfied. The host is always telling the peer when it should create its game objects by sending a message.
+ *
+ * In this example we will create an ExampleGameObject each time a new peer is connected to the host. Do you remember when the host is notified when a new peer is connecting? That's right, when the host is receiving
+ * a message of type MSG_GAME_EVENT_JOIN. It is here we create our ExampleGameObject. To handle multiple game objects we will use a pcs::GameObjectDB. We have to add this database as a member to the ExampleHost, we call it m_objDB.
+ *
+ * Every game object has to have a unique pcs::objectid_t value. Ideally a function generating such id:s can be used, but in this example we simply use the id 999. Every game object also has to be categorized with a type. A type
+ * is simply an integer, we set it to TYPE_EXAMPLE.
+ *
+ * To notify all peers about the new game object the sendCreateObject is called with the id and the type as parameters.
+ *
+ * \code
+ * // example_host.cpp
+ * void ExampleHost::handle(pcs::MessageReceivedEvent* event)
+ * ...
+ *     case MSG_GAME_EVENT_JOIN:
+ *     ...
+ *     pcs::objectid_t uniqueID = 999; // In a real application, a function generating id:s should be used.
+ *     pcs::ReferencePointer<ExampleGameObject> ego = new ExampleGameObject(uniqueID);
+ *     // The ExampleGameObject is added to the game object database.
+ *     m_objDB->insert(uniqueID, ego.get());
+ *     // Send Create message to peers.
+ *     sendCreateObject(id, TYPE_EXAMPLE);
+ *     ...
+ * \endcode
+ *
+ * The sendCreateObject function generates and sends a message of the built-in type pcs::OBJECT_CREATE. The peer also has a virtual function that is called each time a message is received from the host. In this function
+ * we need to check the message type, if it is of OBJECT_CREATE type, then we have to check the object type. The object type is stored inside the message and is obtained asking for the pcs::PR_OBJECT_TYPE property. The id of the object
+ * that was set by the host is also contained in the message. In this case we ask for the pcs::objectid_t property.
+ * 
+ * If the object type was TYPE_EXAMPLE, we create a new ExampleGameObject with the id obtained from the message. As with ExampleHost, we also have to add a pcs::GameObjectDB (called m_objDB) as a member of the ExamplePeer
+ * and insert our newly created game object into this one.
+ * 
+ *
+ * \code
+ * // example_peer.h
+ * void ExamplePeer::handle(pcs::MessageReceivedEvent* event)
+ * {
+ *     pcs::Message message = event->getMessage();
+ *
+ *     switch(message.getMessageType())
+ *     {
+ *     case pcs::OBJECT_CREATE:
+ *         {
+ *             // Get object type
+ *             int objectType = message.get<int>(pcs::PR_OBJECT_TYPE);
+ *             // Get object id
+ *             pcs::objectid_t objectId = message.get<pcs::objectid_t>(pcs::PR_OBJECT_ID);
+ *
+ *             switch (objectType)
+ *             {
+ *             case TYPE_EXAMPLE:
+ *                 {
+ *                     // Create new game object
+ *                     pcs::ReferencePointer<ExampleGameObject> ego = new ExampleGameObject(objectId);
+ *                     // Insert the game object into the database
+ *                     m_objDB->insert(objectId, ball.get());
+ *                 }
+ *                 break;
+ *             ...
+ * \endcode
  *
  *
  * \section smart_pointers Smart pointers
