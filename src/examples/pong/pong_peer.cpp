@@ -41,26 +41,25 @@ PongPeer::PongPeer(osg::ref_ptr<osg::Group> rootOSG)
         ss >> listenPort;
     }
 
-    pcs::SocketAddress sa(pcs::InetAddress::getHostByName(host), 2222);
-
-    PDEBUG << "Connecting to " << sa;
-
-    connectTo(sa);
-
-    // Join game
+    try
     {
+        // Connect to host
+        pcs::SocketAddress sa(pcs::InetAddress::getHostByName(host), 2222);
+        PDEBUG << "Connecting to " << sa;
+        connectTo(sa);
+
+        // Send join message (so the host will send us GameDataEvents on port 3333)
         pcs::Message message(MSG_GAME_EVENT_JOIN);
         message.set<pcs::port_t>(pcs::PR_PORT, listenPort);
         sendMessage(message);
-    }
 
-    try
-    {
+        // Start to listen for GameDataEvents
         receiver()->listen(listenPort);
     }
     catch(const pcs::Exception& e)
     {
         PERROR << e;
+        throw;
     }
 }
 
