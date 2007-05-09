@@ -272,7 +272,7 @@ enum MessageProperty
  *     ...
  * \endcode
  *
- * To create a Peer that connects to the host you have to create subclass of pcs::Peer. The subclass is here called ExamplePeer.
+ * To create a Peer that connects to the host you have to create a subclass of pcs::Peer. The subclass is here called ExamplePeer.
  *
  * \code
  * // example_peer.h
@@ -339,7 +339,7 @@ enum MessageProperty
  * this peer wants to listen for \link pcs::GameDataEvent game data events
  * \endlink on a specified port.
  *
- * A pcs::Message is created with a user specified type that will represent an join request. The type is simply an
+ * A pcs::Message is created with a user defined type that will represent a join request. The type is simply an
  * integer, in our case it is set to MSG_GAME_EVENT_JOIN. We wish to send the peer's port
  * number in this message, so we add a paramemeter to the message, with the
  * built-in property pcs::PR_PORT and the value 3333.
@@ -465,15 +465,15 @@ enum MessageProperty
  *     ...
  * \endcode
  *
- * The sendCreateObject function generates and sends a message of the built-in type pcs::OBJECT_CREATE. The peer also has a virtual function that is called each time a message is received from the host. In this function
- * we need to check the message type, if it is of OBJECT_CREATE type, then we have to check the object type. The object type is stored inside the message and is obtained asking for the pcs::PR_OBJECT_TYPE property. The id of the object
+ * The sendCreateObject function generates and sends a message of the built-in type pcs::OBJECT_CREATE. The peer also has a virtual function that is called each time a message is received. In this function
+ * we need to check the message type, if it is of pcs::OBJECT_CREATE type, then we have to check the object type. The object type is stored inside the message and is obtained asking for the pcs::PR_OBJECT_TYPE property. The id of the object
  * that was set by the host is also contained in the message. In this case we ask for the pcs::objectid_t property.
  *
  * If the object type was TYPE_EXAMPLE, we create a new ExampleGameObject with the id obtained from the message. As with ExampleHost, we also have to add a pcs::GameObjectDB (called m_objDB) as a member of the ExamplePeer
  * and insert our newly created game object into this one.
  *
  * \code
- * // example_peer.h
+ * // example_peer.cpp
  * void ExamplePeer::handle(pcs::MessageReceivedEvent* event)
  * {
  *     pcs::Message message = event->getMessage();
@@ -494,11 +494,18 @@ enum MessageProperty
  *                     // Create new game object
  *                     pcs::ReferencePointer<ExampleGameObject> ego = new ExampleGameObject(objectId);
  *                     // Insert the game object into the database
- *                     m_objDB->insert(objectId, ball.get());
+ *                     m_objDB->insert(objectId, ego.get());
  *                 }
  *                 break;
  *             ...
  * \endcode
+ * 
+ * The host and peer now have one instance of the ExampleGameObject each. The data of the peer's ExampleGameObject will be updated every time the host updates the data of its ExampleGameObject. We are now ready to let the
+ * host update the data of its ExampleGameObject.
+ * 
+ * \subsection example_timer_events Timer Events
+ * 
+ * The data of our ExampleGameObject will be updated 
  *
  * TODO: Describe how a timer event is handled by the host.
  * TODO: Describe how callbacks are utilized.
