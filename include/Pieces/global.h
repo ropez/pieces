@@ -234,13 +234,38 @@ enum MessageProperty
  * 
  * 
  * \subsection int_host Host
- * All centralized network applications need a host for the peers to connect to. In the pieces framework 
- *  - Event driven
- * The host is event driven.
+ * All centralized network applications need a host for the peers to connect to. A host base class has been included in the 
+ * Pieces framework to be used for this purpose. This host base class provides basic functionality usually needed by all hosts. For example,
+ * host functionality to start listening for incoming connections is readily available. Among the other functionality the host base 
+ * class provides we find the possibility to create game objects and send game world data to all peers. 
+ * Further, it is expected that a host will be in charge of all game logic, if only to prevent any peer from cheating.
+ * Thus, the Pieces framework also provides ways for the host to update the properties of all objects in the game.
+ * 
+ * The Pieces host is event driven. By that we mean the host will wake up and do work whenever an event is received. An event can 
+ * emerge locally, but also from the network. A timer event is an example of a local event, while a messaged received is an example of a network
+ * event. But there is something inherently different about the two events, with respect to where they originated.
+ * 
+ * In a real-time game, a timer event can be issued to notify the host that the game world needs to be updated. We shall have 
+ * a closer look at this in section \ref int_game_world_updates . When a peer wants to join a game, it can issue a user specified join 
+ * message which in turn will generate a message received event on the server. This would be an example of a network event. 
+ * It is now time to explore the complimentary part of the host, namely the peer.
+ * 
  * \subsection int_peer Peer
- * - Event driven
- * The peer is event driven.
+ * A peer application in the Pieces framework provides means for a player to interact with a game. 
+ * That is, while the host is responsible for the game world creation and update, the peer will play the interacting part the updates 
+ * would be based on. In the Pieces framework, it is included a peer base class that provides basic peer functionality like initiating a 
+ * connection, send and receive messages as well as a way to handle game world updates.
+ * 
+ * The peer, as the host, is essentially event driven. It can receive external messages and game world updates from the host.
+ * It is up to the programmer to handle a message received event. For example, an incomming message might contain the information that a new
+ * game object should be created. See section \ref tutorial_gde for details. 
+ * 
  * \subsection int_game_world Game world
+ * A game world can be defined as the set of all objects that are present in a game. For instance, in a car game, the car would be part of the 
+ * game world, but surely also the tree it has just crashed into. Pieces provides a way to collectively handle all game objects through
+ * a game object database. This database should be used for updating object properties, like position and velocity. The changes can then 
+ * be replicated in all peers by calling the sender()->sendFrameData() function.
+ * 
  * \subsubsection int_game_obj Game objects
  * - Creating objects
  * \subsection int_game_world_updates Game world updates
