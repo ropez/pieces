@@ -215,53 +215,53 @@ enum MessageProperty
  * That's it. If you have other problems, please consult your compiler documentation.
  *
  * \section introduction Introduction to Pieces
- * 
+ *
  * DISCLAIMER:
- * The authors of this section take no responsebility 
+ * The authors of this section take no responsebility
  * for the tutorial part of this document.
  * If it is very badly written, please send hate-mail to
- * joakimsi@stud.cs.uit.no 
+ * joakimsi@stud.cs.uit.no
  * He is, after all, Swedish.
- * 
- * You are now ready to begin using the Pieces framework. 
+ *
+ * You are now ready to begin using the Pieces framework.
  * In this section we shall explain the basic features of the framework and how these are interconnected.
- * We shall begin by describing the two mandatory participants in a network game, namely the host and the peer. 
+ * We shall begin by describing the two mandatory participants in a network game, namely the host and the peer.
  * Next, we will examine a fictionary game world, and how everything inside it can be described as objects in Pieces.
  * Game world updates naturally follow game world creation, so this will be the 3rd topic we will look into. Since
- * this is where the actual game takes place, it will have several sub topics like how to handle game events and how to 
+ * this is where the actual game takes place, it will have several sub topics like how to handle game events and how to
  * update object data on both the host and peer. In the 5th and last section will explore how the Pieces framework can be used
  * to handle user interaction. 
  * \todo Verify that the sequence listed above corresponds with what we have written 
  * 
  * \subsection int_host Host
- * All centralized network applications need a host for the peers to connect to. A host base class has been included in the 
+ * All centralized network applications need a host for the peers to connect to. A host base class has been included in the
  * Pieces framework to be used for this purpose. This host base class provides basic functionality usually needed by all hosts. For example,
- * host functionality to start listening for incoming connections is readily available. Among the other functionality the host base 
- * class provides we find the possibility to create game objects and send game world data to all peers. 
+ * host functionality to start listening for incoming connections is readily available. Among the other functionality the host base
+ * class provides we find the possibility to create game objects and send game world data to all peers.
  * Further, it is expected that a host will be in charge of all game logic, if only to prevent any peer from cheating.
  * Thus, the Pieces framework also provides ways for the host to update the properties of all objects in the game.
- * 
- * The Pieces host is event driven. By that we mean the host will wake up and do work whenever an event is received. An event can 
+ *
+ * The Pieces host is event driven. By that we mean the host will wake up and do work whenever an event is received. An event can
  * emerge locally, but also from the network. A timer event is an example of a local event, while a messaged received is an example of a network
  * event. But there is something inherently different about the two events, with respect to where they originated.
- * 
- * In a real-time game, a timer event can be issued to notify the host that the game world needs to be updated. We shall have 
- * a closer look at this in section \ref int_game_world_updates . When a peer wants to join a game, it can issue a user specified join 
- * message which in turn will generate a message received event on the server. This would be an example of a network event. 
+ *
+ * In a real-time game, a timer event can be issued to notify the host that the game world needs to be updated. We shall have
+ * a closer look at this in section \ref int_game_world_updates . When a peer wants to join a game, it can issue a user specified join
+ * message which in turn will generate a message received event on the server. This would be an example of a network event.
  * It is now time to explore the complimentary part of the host, namely the peer.
- * 
+ *
  * \subsection int_peer Peer
- * A peer application in the Pieces framework provides means for a player to interact with a game. 
- * That is, while the host is responsible for the game world creation and update, the peer will play the interacting part the updates 
- * would be based on. In the Pieces framework, it is included a peer base class that provides basic peer functionality like initiating a 
+ * A peer application in the Pieces framework provides means for a player to interact with a game.
+ * That is, while the host is responsible for the game world creation and update, the peer will play the interacting part the updates
+ * would be based on. In the Pieces framework, it is included a peer base class that provides basic peer functionality like initiating a
  * connection, send and receive messages as well as a way to handle game world updates.
- * 
+ *
  * The peer, as the host, is essentially event driven. It can receive external messages and game world updates from the host.
  * It is up to the programmer to handle a message received event. For example, an incomming message might contain the information that a new
- * game object should be created. See section \ref tutorial_gde for details. 
- * 
+ * game object should be created. See section \ref tutorial_gde for details.
+ *
  * \subsection int_game_world Game world
- * A game world can be defined as the set of all objects that are present in a game. For instance, in a car game, the car would be part of the 
+ * A game world can be defined as the set of all objects that are present in a game. For instance, in a car game, the car would be part of the
  * game world, but surely also the tree it has just crashed into. Pieces provides a way to collectively handle all game objects through
  * a game object database. This database is to be used for updating object properties, like position and velocity. The changes can then 
  * be replicated in all peers. We shall come back to this later, but first let us consider Pieces game objects.
@@ -269,7 +269,7 @@ enum MessageProperty
  * All game objects are first created on the host, then added to the host's game object database. Next, a create object message is issued
  * to all connected peers. If a peer connects after the create object message was issued, a new create object message will be sent to 
  * this single peer. 
- * 
+ *
  * The purpose of the Pieces game object is to enable the user to specify what data should be sent over the network. All game objects has an 
  * encode and a decode function. In these, the user can decide what properties of a game object should be sent over the network.
  * The host must implement the encoding part, and the peer must implement the decoding part. See \ref  tutorial_gde for more information.
@@ -289,7 +289,7 @@ enum MessageProperty
  * \subsubsection int_events Events
  * \subsubsection int_event_handlers Event handlers
  * \subsubsection int_messages Messages
- * 
+ *
  * \section examples Examples
  * This section describes some simple examples of how to utilize the Pieces framework in an application. It is assumed
  * that the programmer has compiled Pieces and have set up necessary project settings that will enable an application to link
@@ -513,7 +513,7 @@ enum MessageProperty
  *     ds >> m_x >> m_y;
  * }
  * \endcode
- * 
+ *
  * The next step is to create an ExampleGameObject on both the host and the peer. The host decides when a GameObject should be created. For example, a game object can be
  * created in the constructor of the host, when it receives a message from one of its peers, or when an internal condition is satisfied. The host is always telling the peer when it should create its game objects by sending a message.
  *
@@ -586,16 +586,15 @@ enum MessageProperty
  *
  * The pcs::Timer is added as a member to the host as a pcs::AutoPointer, since we want it to be deleted when our host is deleted.
  *
- * 
  * \code
- * class PongHost : public pcs::Host         
- *     ... 
+ * class PongHost : public pcs::Host
+ *     ...
  * private:
  *     ...
- *     pcs::AutoPointer<pcs::Timer> m_timer; 
- *     ...                                   
+ *     pcs::AutoPointer<pcs::Timer> m_timer;
+ *     ...
  * \endcode
- * 
+ *
  * \code
  * // example_peer.cpp
  * ExampleHost::ExampleHost()
@@ -607,48 +606,48 @@ enum MessageProperty
  *     ...
  * \endcode
  *
- * What we have now achieved is that the void ExampleHost::handle(pcs::TimerEvent*) function is called each 20:th millisecond. But have not yet updated the data of our game object. We have to use callbacks to do this. Read on, to 
+ * What we have now achieved is that the void ExampleHost::handle(pcs::TimerEvent*) function is called each 20:th millisecond. But have not yet updated the data of our game object. We have to use callbacks to do this. Read on, to
  * find out how this is done.
- * 
- * \subsection example_callbacks Callbacks
- * 
+ *
+ * \subsection example_callbacks Host Callbacks
+ *
  * A callback is used to add "inteligence" to the game objects. Generally spoken, a game object itself only contains a set of data. But the logic, how a game object interacts with the rest of the world, is described in a callback.
- * 
- * So what we do now is to create a new callback. We must derive from pcs::GameObjectAction to get this working. We call the subclass ExampleCallback. 
- * 
+ *
+ * So what we do now is to create a new callback. We must derive from pcs::GameObjectAction to get this working. We call the subclass ExampleCallback.
+ *
  * \code
  * // example_callback.h
- * class ExampleCallback : public pcs::GameObjectAction  
- * {                                                        
- * public:                                                  
- *     ExampleCallback(ExampleGameObject* ego);          
- *     virtual void operator()(pcs::framenum_t);            
- * private:                                                 
- *     ExampleGameObject* m_ego;                            
+ * class ExampleCallback : public pcs::GameObjectAction
+ * {
+ * public:
+ *     ExampleCallback(ExampleGameObject* ego);
+ *     virtual void operator()(pcs::framenum_t);
+ * private:
+ *     ExampleGameObject* m_ego;
  * };
  * \endcode
- * 
+ *
  * The operator()(pcs::framenum_t) function will be called each time the callback is executed for the ExamplObject. So it here we decide how the ExampleGameObject acts. In this example we will just increase the x value of the ExampleGameObject
  * with 0.1, and the y value with 0.3.
- * 
+ *
  * \code
  * // example_callback.h
  * ExampleCallback::ExampleCallback(ExampleGameObject* ego)
  * : pcs::GameObjectAction()
  * , m_ego(ego)
  * {}
- * 
+ *
  * void Example::operator()(pcs::framenum_t)
  * {
  *     m_ego.x += 0.1;
  *     m_ego.y += 0.3;
- * }    
+ * }
  * \endcode
- * 
+ *
  * The next thing you have to do is to assign the game object with this callback. This is done
  * with the game object's setAction function right after the ExampleGameObject is created. As a game object is able to have multiple callbacks, we have to define a callback type when we assign our ExampleCallback.
  * We choose to use the arbitrary value EXAMPLE_CALLBACK_TYPE as the type.
- * 
+ *
  * \code
  * // example_host.cpp
  * ...
@@ -661,27 +660,67 @@ enum MessageProperty
  *     player->setAction(EXAMPLE_CALLBACK_TYPE, new PlayerHostCallback(ego.get()));
  *     ...
  * \endcode
- * 
+ *
  * When this is done our ExampleGameObject is assigned with a callback. We want this callback to be executed each time we receive a pcs::TimerEvent (in our case, each 20:th millisecond).
- * This dealt with in the host's handle(pcs::TimerEvent*) function. A nice feature with the pcs::GameObjectDB is that it is only necessary to do a single function call, applyAction, that executes
+ * This is dealt with in the host's handle(pcs::TimerEvent*) function. A nice feature with the pcs::GameObjectDB is that it is only necessary to do a single function call, applyAction, that executes
  * all callbacks for all game objects.
- * 
+ *
  * The applyAction needs two parameters, the callback type (EXAMPLE_CALLBACK_TYPE), and a frame number. The latter parameter is obtained from the sender()->getFrameNumber() function.
- * 
+ *
  * \code
- * void ExampleHost::handle(pcs::TimerEvent*)                
- * {                                                         
+ * // example_host.cpp
+ * void ExampleHost::handle(pcs::TimerEvent*)
+ * {
  *     pcs::framenum_t frameNum = sender()->getFrameNumber();
- *                                                           
- *     // Execute callback for all game objects              
- *     m_objDB->applyAction(EXAMPLE_CALLBACK_TYPE, frameNum);      
+ *
+ *     // Execute callback for all game objects
+ *     m_objDB->applyAction(EXAMPLE_CALLBACK_TYPE, frameNum);
  *     ...
  * \endcode
- * 
- * 
- * 
- * 
- *  
+ *
+ * After the applyAction has been called, we have updated the data for our ExampleGameObject (the x and y values have increased). Now it is time to send this data to all peers. The next section will cover this issue.
+ *
+ * \subsection example_srgde Send and Receive Game Data Events
+ *
+ * Network relevat data from all your game objects must be stored in a single pcs::FrameData object. Pieces offers a convenient way to collect all this data for all of your game objects,
+ * the pcs::GameObjectDB::updateFrameData(FrameData&) const function. This function should be called \em after the callbacks are executed.
+ *
+ * \code
+ * // example_host.cpp
+ * void ExampleHost::handle(pcs::TimerEvent*)
+ * {
+ *     ...
+ *     // Collect and store (in frameData) the data that should be sent for all game objects.
+ *     pcs::FrameData frameData;
+ *     m_objDB->updateFrameData(frameData);
+ *     ...
+ * \endcode
+ *
+ * What remains now is to send the frame data to all peers. This is done by calling the sender()->sendFrameData function.
+ *
+ * \code
+ * // example_host.cpp
+ * void ExampleHost::handle(pcs::TimerEvent*)
+ * {
+ *     ...
+ *     // Send the frame data
+ *     sender()->sendFrameData(frameData);
+ * }
+ * \endcode
+ *
+ * The virtual pcs::Host::handle(pcs::GameDataEvent*) function has to be implemented in the ExamplePeer, so it can handle game data events. Each time a game data event is received this function will be called.
+ * To update all game objects in the peer with the frame data sent from the host, the pcs::GameObjectDB::applyFrameData() function has to called. This function will iterate all game objects and set their member variables to the
+ * values that are stored in the received frame data.
+ *
+ * \code
+ * // example_peer.cpp
+ * void ExamplePeer::handle(pcs::GameDataEvent* event)
+ * {
+ *     m_objDB->applyFrameData(event->getFrameNumber(), event->getFrameData());
+ * }
+ * \endcode
+ *
+ * The data of the host's and peer's game objects are now identical. The final step in this tutorial is to print out the ExampleGameObject's x and y values to the console.
  *
  * \section smart_pointers Smart pointers
  *
