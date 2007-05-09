@@ -625,7 +625,7 @@ enum MessageProperty
  * , m_ego(ego)
  * {}
  * 
- * void Example::operator()(pcs::framenum_t /*frameNum*/)
+ * void Example::operator()(pcs::framenum_t)
  * {
  *     m_ego.x += 0.1;
  *     m_ego.y += 0.3;
