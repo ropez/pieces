@@ -18,6 +18,7 @@ const pcs::objectid_t idPlayers = 10100;
 
 PongHost::PongHost()
 : pcs::Host()
+, m_timer(0)
 , m_dbBalls(new pcs::GameObjectDB())
 , m_players()
 , m_gameState()
