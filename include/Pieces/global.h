@@ -231,7 +231,7 @@ enum MessageProperty
  * this is where the actual game takes place, it will have several sub topics like how to handle game events and how to 
  * update object data on both the host and peer. In the 5th and last section will explore how the Pieces framework can be used
  * to handle user interaction. 
- * 
+ * \todo Verify that the sequence listed above corresponds with what we have written 
  * 
  * \subsection int_host Host
  * All centralized network applications need a host for the peers to connect to. A host base class has been included in the 
@@ -263,18 +263,31 @@ enum MessageProperty
  * \subsection int_game_world Game world
  * A game world can be defined as the set of all objects that are present in a game. For instance, in a car game, the car would be part of the 
  * game world, but surely also the tree it has just crashed into. Pieces provides a way to collectively handle all game objects through
- * a game object database. This database should be used for updating object properties, like position and velocity. The changes can then 
- * be replicated in all peers by calling the sender()->sendFrameData() function.
+ * a game object database. This database is to be used for updating object properties, like position and velocity. The changes can then 
+ * be replicated in all peers. We shall come back to this later, but first let us consider Pieces game objects.
+ *  
+ * All game objects are first created on the host, then added to the host's game object database. Next, a create object message is issued
+ * to all connected peers. If a peer connects after the create object message was issued, a new create object message will be sent to 
+ * this single peer. 
  * 
- * \subsubsection int_game_obj Game objects
- * - Creating objects
- * \subsection int_game_world_updates Game world updates
+ * The purpose of the Pieces game object is to enable the user to specify what data should be sent over the network. All game objects has an 
+ * encode and a decode function. In these, the user can decide what properties of a game object should be sent over the network.
+ * The host must implement the encoding part, and the peer must implement the decoding part. See \ref  tutorial_gde for more information.
+ * 
+ * Pieces provides a way for the user to add logic to game objects. This is done with the Pieces callback system. 
+ * The user can create a callback and assign it to a game object. The callback can then be executed when the user decides to do so. 
+ * For example, if you want to update the position of a moving game object every 20 ms, you could implement this in a callback
+ * function, and register the function with the game object.
+ * 
+ * As mentioned earlier, the game world data is first updated on the host and then applied on all peers. The actual update can be accomplished 
+ * with callbacks, and the replication of this updated data on the peer is accomplished by streaming the game data over UDP. Such a set
+ * of updates is called a frame. When the peer receives data, a game data event will be dispatched. The user can then call an apply frame data 
+ * function to refresh the game objects. See \ref tutorial_gde for more information.
+ * 
+ * 
  * \subsubsection int_event_loops Event loops
  * \subsubsection int_events Events
  * \subsubsection int_event_handlers Event handlers
- * \subsubsection int_update_frame Update frame data
- * \subsubsection int_apply_frame Apply frame data
- * \subsection int_user_int User interaction
  * \subsubsection int_messages Messages
  * 
  * \section examples Examples
