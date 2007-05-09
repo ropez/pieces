@@ -536,13 +536,49 @@ enum MessageProperty
  *                 break;
  *             ...
  * \endcode
- * 
+ *
  * The host and peer now have one instance of the ExampleGameObject each. The data of the peer's ExampleGameObject will be updated every time the host updates the data of its ExampleGameObject. We are now ready to let the
  * host update the data of its ExampleGameObject.
- * 
+ *
  * \subsection example_timer_events Timer Events
+ *
+ * We want, on a regurlar basis, to update the data of our ExampleGameObject. The Pieces approach, is to create a pcs::TimerEvent. In our example, the pcs::TimerEvent is created in the constructor
+ * of the host. It is set up to repeat, meaning that a timer event will occour each frame. The interval is also specified for the timer, in our case we set it to 20 milliseconds. The virtual function
+ * void pcs::Host::handle(pcs::TimerEvent*) has to be implement in the ExampleHost. It is this function that will be called each time a timer event occours.
+ *
+ * The pcs::Timer is added as a member to the host as a pcs::AutoPointer, since we want it to be deleted when our host is deleted.
+ *
  * 
- * The data of our ExampleGameObject will be updated 
+ * \code
+ * class PongHost : public pcs::Host         
+ *     ... 
+ * private:
+ *     ...
+ *     pcs::AutoPointer<pcs::Timer> m_timer; 
+ *     ...                                   
+ * \endcode
+ * 
+ * \code
+ * // example_peer.cpp
+ * ExampleHost::ExampleHost()
+ * ...
+ *     // Create timer
+ *     m_timer = new pcs::Timer(eventLoop());
+ *     m_timer->setRepeating(true);
+ *     m_timer->start(20);
+ *     ...
+ * \endcode
+ *
+ * What we have now achieved is that the void ExampleHost::handle(pcs::TimerEvent*) function is called each 20:th millisecond. But have not yet updated the data of our game object. We have to use callbacks to do this. Read on, to 
+ * find out how this is done.
+ * 
+ * \subsection example_callbacks Callbacks
+ * 
+ * A callback is used ot add "inteligence" to the game objects. Generally spoken, a game object itself only contains a set of data. But the logic, how a game object interacts with the rest of the world, is described in a callback.
+ * 
+ *
+ *
+ *
  *
  * TODO: Describe how a timer event is handled by the host.
  * TODO: Describe how callbacks are utilized.
