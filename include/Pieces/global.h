@@ -214,10 +214,47 @@ enum MessageProperty
  *
  * That's it. If you have other problems, please consult your compiler documentation.
  *
- *
+ * \section introduction Introduction to Pieces
+ * 
+ * DISCLAIMER:
+ * The authors of this section take no responsebility 
+ * for the tutorial part of this document.
+ * If it is very badly written, please send hate-mail to
+ * joakimsi@stud.cs.uit.no 
+ * He is, after all, Swedish.
+ * 
+ * You are now ready to begin using the Pieces framework. 
+ * In this section we shall explain the basic features of the framework and how these are interconnected.
+ * We shall begin by describing the two mandatory participants in a network game, namely the host and the peer. 
+ * Next, we will examine a fictionary game world, and how everything inside it can be described as objects in Pieces.
+ * Game world updates naturally follow game world creation, so this will be the 3rd topic we will look into. Since
+ * this is where the actual game takes place, it will have several sub topics like how to handle game events and how to 
+ * update object data on both the host and peer. In the 5th and last section will explore how the Pieces framework can be used
+ * to handle user interaction. 
+ * 
+ * 
+ * \subsection int_host Host
+ * All centralized network applications need a host for the peers to connect to. In the pieces framework 
+ *  - Event driven
+ * The host is event driven.
+ * \subsection int_peer Peer
+ * - Event driven
+ * The peer is event driven.
+ * \subsection int_game_world Game world
+ * \subsubsection int_game_obj Game objects
+ * - Creating objects
+ * \subsection int_game_world_updates Game world updates
+ * \subsubsection int_event_loops Event loops
+ * \subsubsection int_events Events
+ * \subsubsection int_event_handlers Event handlers
+ * \subsubsection int_update_frame Update frame data
+ * \subsubsection int_apply_frame Apply frame data
+ * \subsection int_user_int User interaction
+ * \subsubsection int_messages Messages
+ * 
  * \section examples Examples
  * This section describes some simple examples of how to utilize the Pieces framework in an application. It is assumed
- * that the programmer has compiled Pieces and have set up necessary project settings that will able an application to link
+ * that the programmer has compiled Pieces and have set up necessary project settings that will enable an application to link
  * the Pieces library files.
  *
  * The examples describe how two different applications communicate wich eachother, where one acts as host and the other as peer. An alternative approach is to integrate
@@ -296,9 +333,9 @@ enum MessageProperty
  * }
  * \endcode
  *
- * In the constructor of the ExamplePeer command line arguments are read. This is done with the global pcs::app object.
- * The first argument is the host address and the second one is the peer's listen port. The default values of the
- * arguments are set to "localhost" and 3333.
+ * Command line arguments are read in the constructor of the ExamplePeer . This is done with the global pcs::app object.
+ * The first argument is the host address and the second one is the peer's listen port. The default values of arguments
+ * are set to "localhost" and 3333, respectively.
  *
  * \code
  * // example_peer.cpp
@@ -334,13 +371,13 @@ enum MessageProperty
  *
  * The peer is now able to send and receive \link pcs::Message messages \endlink
  * to and from the host. But the peer is not yet able to receive \link
- * pcs::GameDataEvent game data events \endlink from the host. The way to do
+ * pcs::GameDataEvent game data events \endlink from the host. The way to make this possible
  * this is to send a message from the peer to the host, telling the host that
  * this peer wants to listen for \link pcs::GameDataEvent game data events
  * \endlink on a specified port.
  *
- * A pcs::Message is created with a user defined type that will represent a join request. The type is simply an
- * integer, in our case it is set to MSG_GAME_EVENT_JOIN. We wish to send the peer's port
+ * A pcs::Message is created with a user defined type that represents a join request. The type is simply an
+ * integer. In our case it is set to MSG_GAME_EVENT_JOIN. We wish to send the peer's port
  * number in this message, so we add a paramemeter to the message, with the
  * built-in property pcs::PR_PORT and the value 3333.
  *
@@ -359,7 +396,7 @@ enum MessageProperty
  * When this join request message is received by the host it is your responsibility to handle it. The virtual function pcs::Host::handle(pcs::MessageReceivedEvent* event) has to be implemented
  * in the ExampleHost to handle all types of messages. This function is called by Pieces each time a message is received.
  *
- * What we want now is to set up the host so it adds the peer to one of its receivers. The host needs to know the address and port of the peer to do this.
+ * The next thing to do is to set up the host so it adds the peer to its list of receivers, and thus enable the peer to retrieve game data events. The host needs to know the address and port of the peer to do this.
  * The peer address is stored in the incoming message event and the port is stored in the message itself.
  *
  * The original message sent from the peer is obtained by calling event->getMessage().
@@ -387,12 +424,12 @@ enum MessageProperty
  * 	    ...
  * \endcode
  *
- * We have now achieved two things, the possibility to send messages between the host and peer and the possibility for the peer receive game data events that are sent from the host. The next section will describe how game data events
+ * We have now achieved two things, namely the possibility to send messages between the host and peer and the possibility for the peer to receive game data events that are sent from the host. The next section will describe how game data events
  * are sent and received.
  *
  * \subsection tutorial_gde Game Data Events
  *
- * A pcs::GameObject ables us to send and receive game data events. You have to create a class that is derived from pcs::GameObject.
+ * A pcs::GameObject enables us to send and receive game data events. You have to create a class that is derived from pcs::GameObject.
  * In this example we call it ExampleGameObject. The same ExampleGameObject class is used both by the host
  * and the peer. Its purpose is to contain game object specific data, and to specify what of these data should be sent over the network.
  * For example, a bicycle game object could contain position, orientation, velocity, and gear.
@@ -438,15 +475,15 @@ enum MessageProperty
  *     ds >> m_x >> m_y;
  * }
  * \endcode
- *
- * The next step is to create an ExampleGameObject on both the host and the peer. The host has different approaches that decides when a GameObject should be created. For example a game object can be
+ * 
+ * The next step is to create an ExampleGameObject on both the host and the peer. The host decides when a GameObject should be created. For example, a game object can be
  * created in the constructor of the host, when it receives a message from one of its peers, or when an internal condition is satisfied. The host is always telling the peer when it should create its game objects by sending a message.
  *
  * In this example we will create an ExampleGameObject each time a new peer is connected to the host. Do you remember when the host is notified when a new peer is connecting? That's right, when the host is receiving
  * a message of type MSG_GAME_EVENT_JOIN. It is here we create our ExampleGameObject. To handle multiple game objects we will use a pcs::GameObjectDB. We have to add this database as a member to the ExampleHost, we call it m_objDB.
  *
- * Every game object has to have a unique pcs::objectid_t value. Ideally a function generating such id:s can be used, but in this example we simply use the id 999. Every game object also has to be categorized with a type. A type
- * is simply an integer, we set it to TYPE_EXAMPLE.
+ * Every game object has to have a unique pcs::objectid_t value. Ideally, a function generating such id:s should be used, but in this example we simply use the id 999. Every game object also has to be categorized with a type. A type
+ * is simply an integer. We set it to TYPE_EXAMPLE.
  *
  * To notify all peers about the new game object the sendCreateObject is called with the id and the type as parameters.
  *
