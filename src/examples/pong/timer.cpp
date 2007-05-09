@@ -73,7 +73,7 @@ const Timer* Timer::instance()
     {
         struct timeval tv;
         gettimeofday(&tv, NULL);
-        return ((osg::Timer_t)tv.tv_sec)*1000000+(osg::Timer_t)tv.tv_usec;
+        return ((Timer_t)tv.tv_sec)*1000000+(Timer_t)tv.tv_usec;
     }
 
 #endif

@@ -14,8 +14,6 @@
 #if !defined OSG_TIMER
 #define OSG_TIMER
 
-#include <osg/Export>
-
 #if defined(_MSC_VER)
     typedef __int64 Timer_t;
 #else

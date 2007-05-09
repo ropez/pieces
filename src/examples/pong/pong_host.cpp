@@ -39,7 +39,7 @@ PongHost::PongHost()
     // Create timer
     m_timer = new pcs::Timer(eventLoop());
     m_timer->setRepeating(true);
-    m_timer->start(16);
+    m_timer->start(20);
 }
 
 void PongHost::handle(pcs::TimerEvent*)
