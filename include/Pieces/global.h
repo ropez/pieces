@@ -283,7 +283,7 @@ enum MessageProperty
  * The message system is used, as mentioned, to create objects. Other critical data must also be sent by means of messages. 
  * For example, peer interaction should be sent through the message system to the host, as it is important that such input never gets lost.
  * 
- * \section examples Examples
+ * \section examples Tutorial
  * This section describes some simple examples of how to utilize the Pieces framework in an application. It is assumed
  * that the programmer has compiled Pieces and have set up necessary project settings that will enable an application to link
  * the Pieces library files.
@@ -581,7 +581,7 @@ enum MessageProperty
  * The pcs::Timer is added as a member to the host as a pcs::AutoPointer, since we want it to be deleted when our host is deleted.
  *
  * \code
- * class PongHost : public pcs::Host
+ * class ExampleHost : public pcs::Host
  *     ...
  * private:
  *     ...
@@ -607,31 +607,31 @@ enum MessageProperty
  *
  * A callback is used to add "inteligence" to the game objects. Generally spoken, a game object itself only contains a set of data. But the logic, how a game object interacts with the rest of the world, is described in a callback.
  *
- * So what we do now is to create a new callback. We must derive from pcs::GameObjectAction to get this working. We call the subclass ExampleCallback.
+ * So what we do now is to create a new callback. We must derive from pcs::GameObjectAction to get this working. We call the subclass ExampleHostCallback.
  *
  * \code
- * // example_callback.h
- * class ExampleCallback : public pcs::GameObjectAction
+ * // example_host_callback.h
+ * class ExampleHostCallback : public pcs::GameObjectAction
  * {
  * public:
- *     ExampleCallback(ExampleGameObject* ego);
+ *     ExampleHostCallback(ExampleGameObject* ego);
  *     virtual void operator()(pcs::framenum_t);
  * private:
  *     ExampleGameObject* m_ego;
  * };
  * \endcode
  *
- * The operator()(pcs::framenum_t) function will be called each time the callback is executed for the ExamplObject. So it here we decide how the ExampleGameObject acts. In this example we will just increase the x value of the ExampleGameObject
+ * The operator()(pcs::framenum_t) function will be called each time the callback is executed for the ExampleObject. So it here we decide how the ExampleGameObject acts. In this example we will just increase the x value of the ExampleGameObject
  * with 0.1, and the y value with 0.3.
  *
  * \code
- * // example_callback.h
- * ExampleCallback::ExampleCallback(ExampleGameObject* ego)
+ * // example_host_callback.cpp
+ * ExampleHostCallback::ExampleHostCallback(ExampleGameObject* ego)
  * : pcs::GameObjectAction()
  * , m_ego(ego)
  * {}
  *
- * void Example::operator()(pcs::framenum_t)
+ * void ExampleHostCallback::operator()(pcs::framenum_t)
  * {
  *     m_ego.x += 0.1;
  *     m_ego.y += 0.3;
@@ -639,19 +639,19 @@ enum MessageProperty
  * \endcode
  *
  * The next thing you have to do is to assign the game object with this callback. This is done
- * with the game object's setAction function right after the ExampleGameObject is created. As a game object is able to have multiple callbacks, we have to define a callback type when we assign our ExampleCallback.
+ * with the game object's setAction function right after the ExampleGameObject is created. As a game object is able to have multiple callbacks, we have to define a callback type when we assign our ExampleHostCallback.
  * We choose to use the arbitrary value EXAMPLE_CALLBACK_TYPE as the type.
  *
  * \code
  * // example_host.cpp
  * ...
- * void PongHost::handle(pcs::MessageReceivedEvent* event)
+ * void ExampleHost::handle(pcs::MessageReceivedEvent* event)
  * ...
  *     case MSG_GAME_EVENT_JOIN:
  *     ...
  *     pcs::ReferencePointer<ExampleGameObject> ego = new ExampleGameObject(uniqueID);
  *     // Add callback
- *     player->setAction(EXAMPLE_CALLBACK_TYPE, new PlayerHostCallback(ego.get()));
+ *     ego->setAction(EXAMPLE_CALLBACK_TYPE, new ExampleHostCallback(ego.get()));
  *     ...
  * \endcode
  *
@@ -715,6 +715,69 @@ enum MessageProperty
  * \endcode
  *
  * The data of the host's and peer's game objects are now identical. The final step in this tutorial is to print out the ExampleGameObject's x and y values to the console.
+ * 
+ * \subsection example_callbacks_peer Peer Callbacks
+ * 
+ * The way a callback is set up in the peer is identical to how it is done in the host. That is, when the game object is created, assign it (with setAction) a subclass of pcs::GameObjectAction. We will first
+ * create this subclasscall.
+ * 
+ * \code
+ * // example_peer_callback.h
+ * class ExamplePeerCallback : public pcs::GameObjectAction
+ * {
+ * public:
+ *     ExamplePeerCallback(ExampleGameObject* ego);
+ *     virtual void operator()(pcs::framenum_t);
+ * private:
+ *     ExampleGameObject* m_ego;
+ * };
+ * \endcode
+ * 
+ * As mentioned, we want to print out the data of the ExampleGameObject to the console. This has to be done in the operator()(pcs::framenum_t) function.
+ * 
+ * \code
+ * // example_peer_callback.cpp
+ * ExamplePeerCallback::ExamplePeerCallback(ExampleGameObject* ego)
+ * : pcs::GameObjectAction()
+ * , m_ego(ego)
+ * {}
+ *
+ * void ExamplePeerCallback::operator()(pcs::framenum_t)
+ * {
+ *     std::cout << m_ego.x << "\t" << m_ego.y << std::endl;
+ * }
+ * \endcode
+ *
+ * Now it only remains to set up the callback correctly for the ExampleGameObject.
+ * 
+ * \code
+ * // example_peer.cpp
+ * void ExamlePeer::handle(pcs::MessageReceivedEvent* event)
+ *     ...
+ *     case pcs::OBJECT_CREATE:
+ *             ...
+ *             case TYPE_EXAMPLE:
+ *                 {
+ *                     // Create new game object
+ *                     pcs::ReferencePointer<ExampleGameObject> ego = new ExampleGameObject(objectId);
+ *                     // Add callback
+ *                     ego->setAction(EXAMPLE_CALLBACK_TYPE, new ExamplePeerCallback(ego.get()));
+ *                     ...
+ * \endcode
+ * 
+ * Now the ExampleGameObject is assigned with a callback. We choose to execute this callback each time a game data event occours. Where do we do that? In ExamplePeer's handle(pcs::GameDataEvent*) function, of course!
+ * 
+ * \code
+ * // example_peer.cpp
+ * void ExamplePeer::handle(pcs::GameDataEvent* event)
+ * {
+ *     m_objDB->applyFrameData(event->getFrameNumber(), event->getFrameData());
+ *     // Execute callback for all game objects.
+ *     m_objDB->applyAction(EXAMPLE_CALLBACK_TYPE, sender()->getFrameNumber());
+ * }
+ * \endcode
+ *
+ * Our example application is now finished. You are now ready to go on and write your own network based killer application.
  *
  * \section smart_pointers Smart pointers
  *
