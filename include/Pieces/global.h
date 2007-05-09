@@ -121,7 +121,7 @@ enum MessageProperty
  * \section getting_started Getting started
  * Pieces is an application framework designed to assist programmers creating games
  * with network multiplayer functionality. The following sections will give you an
- * introduction to Pieces.How to install, tutorial and explanation of some core
+ * introduction to Pieces. How to install, tutorial and explanation of some core
  * features in Pieces.
  *
  * \section installation Installation
@@ -392,9 +392,9 @@ enum MessageProperty
  *
  * \subsection tutorial_gde Game Data Events
  *
- * A pcs::GameObject ables us to send and receive game data events. You have to create a class that is derived from pcs::GameObject. 
+ * A pcs::GameObject ables us to send and receive game data events. You have to create a class that is derived from pcs::GameObject.
  * In this example we call it ExampleGameObject. The same ExampleGameObject class is used both by the host
- * and the peer. Its purpose is to contain game object specific data, and to specify what of these data should be sent over the network. 
+ * and the peer. Its purpose is to contain game object specific data, and to specify what of these data should be sent over the network.
  * For example, a bicycle game object could contain position, orientation, velocity, and gear.
  * It could be assumed that the peer only needs to know about the position and the orientation of the bicycle.
  * In this case, only the position and the orientation data had to be sent over the network.
@@ -468,10 +468,10 @@ enum MessageProperty
  * The sendCreateObject function generates and sends a message of the built-in type pcs::OBJECT_CREATE. The peer also has a virtual function that is called each time a message is received from the host. In this function
  * we need to check the message type, if it is of OBJECT_CREATE type, then we have to check the object type. The object type is stored inside the message and is obtained asking for the pcs::PR_OBJECT_TYPE property. The id of the object
  * that was set by the host is also contained in the message. In this case we ask for the pcs::objectid_t property.
- * 
+ *
  * If the object type was TYPE_EXAMPLE, we create a new ExampleGameObject with the id obtained from the message. As with ExampleHost, we also have to add a pcs::GameObjectDB (called m_objDB) as a member of the ExamplePeer
  * and insert our newly created game object into this one.
- * 
+ *
  * \code
  * // example_peer.h
  * void ExamplePeer::handle(pcs::MessageReceivedEvent* event)
