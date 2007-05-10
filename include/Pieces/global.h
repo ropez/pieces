@@ -247,7 +247,8 @@ enum MessageProperty
  * A peer application in the Pieces framework provides means for a player to interact with a game.
  * That is, while the host is responsible for the game world creation and update, the peer will play the interacting part the updates
  * would be based on. In the Pieces framework, it is included a peer base class that provides basic peer functionality like initiating a
- * connection, send and receive messages as well as a way to handle game world updates. See section \ref tutorial_setup for example code.
+ * connection, send and receive messages as well as a way to handle game world updates. See section \ref tutorial_setup for example code 
+ * demonstrating how to create a peer application.
  *
  * The peer, as the host, is essentially event driven. It can receive external messages and game world updates from the host.
  * It is up to the programmer to handle a message received event. For example, an incomming message might contain the information that a new
@@ -259,9 +260,10 @@ enum MessageProperty
  * a game object database. This database is to be used for updating object properties, like position and velocity. The changes can then
  * be replicated in all peers. We shall come back to this later, but first let us consider Pieces game objects.
  *
- * All game objects are first created on the host, then added to the host's game object database. Next, a create object message is issued
- * to all connected peers. If a peer connects after the create object message was issued, a new create object message will be sent to
- * this single peer.
+ * Any new game object is first created on the host and added to the host's game object database. Next, a create object message is issued
+ * to all connected peers. If a peer connects after the create object message was issued, a new create object message will be sent to 
+ * this single peer. If an object is to be removed from the game, the host removes the object from its database and sends a remove 
+ * object message to all peers.
  *
  * The purpose of the Pieces game object is to enable the user to specify what data should be sent over the network. All game objects has an
  * encode and a decode function. In these, the user can decide what properties of a game object should be sent over the network.
@@ -272,13 +274,13 @@ enum MessageProperty
  * The user can create a callback and assign it to a game object. The callback can then be executed when the user decides to do so.
  * For example, if you want to update the position of a moving game object every 20 ms, you could implement this in a callback
  * function, and register the function with the game object. See section \ref example_callbacks for examples on how to use this.
-
+ * 
  * As mentioned earlier, the game world data is first updated on the host and then applied on all peers. The actual update can be accomplished
  * with callbacks, and the replication of this updated data on the peer is accomplished by streaming the game data over UDP. Such a set
  * of updates is called a frame. When the peer receives data, a game data event will be dispatched. The user can then call an apply frame data
  * function to refresh the game objects. See the \ref tutorial_gde section for more information.
  *
- * \subsubsection int_messages Messages
+ * \subsection int_messages Messages
  * In Pieces, messages are used to send critical data. That is, messages are sent over a TCP connection between a host and a peer.
  * The message system is used, as mentioned, to create objects. Other critical data must also be sent by means of messages.
  * For example, peer interaction should be sent through the message system to the host, as it is important that such input never gets lost.
