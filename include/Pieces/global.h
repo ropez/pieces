@@ -247,7 +247,7 @@ enum MessageProperty
  * A peer application in the Pieces framework provides means for a player to interact with a game.
  * That is, while the host is responsible for the game world creation and update, the peer will play the interacting part the updates
  * would be based on. In the Pieces framework, it is included a peer base class that provides basic peer functionality like initiating a
- * connection, send and receive messages as well as a way to handle game world updates. See section \ref tutorial_setup for example code 
+ * connection, send and receive messages as well as a way to handle game world updates. See section \ref tutorial_setup for example code
  * demonstrating how to create a peer application.
  *
  * The peer, as the host, is essentially event driven. It can receive external messages and game world updates from the host.
@@ -261,8 +261,8 @@ enum MessageProperty
  * be replicated in all peers. We shall come back to this later, but first let us consider Pieces game objects.
  *
  * Any new game object is first created on the host and added to the host's game object database. Next, a create object message is issued
- * to all connected peers. If a peer connects after the create object message was issued, a new create object message will be sent to 
- * this single peer. If an object is to be removed from the game, the host removes the object from its database and sends a remove 
+ * to all connected peers. If a peer connects after the create object message was issued, a new create object message will be sent to
+ * this single peer. If an object is to be removed from the game, the host removes the object from its database and sends a remove
  * object message to all peers.
  *
  * The purpose of the Pieces game object is to enable the user to specify what data should be sent over the network. All game objects has an
@@ -274,7 +274,7 @@ enum MessageProperty
  * The user can create a callback and assign it to a game object. The callback can then be executed when the user decides to do so.
  * For example, if you want to update the position of a moving game object every 20 ms, you could implement this in a callback
  * function, and register the function with the game object. See section \ref example_callbacks for examples on how to use this.
- * 
+ *
  * As mentioned earlier, the game world data is first updated on the host and then applied on all peers. The actual update can be accomplished
  * with callbacks, and the replication of this updated data on the peer is accomplished by streaming the game data over UDP. Such a set
  * of updates is called a frame. When the peer receives data, a game data event will be dispatched. The user can then call an apply frame data
@@ -404,11 +404,9 @@ enum MessageProperty
  * \endcode
  *
  * The peer is now able to send and receive \link pcs::Message messages \endlink
- * to and from the host. But the peer is not yet able to receive \link
- * pcs::GameDataEvent game data events \endlink from the host. The way to make this possible
+ * to and from the host. But the peer is not yet able to receiveg game data from the host. The way to make this possible
  * this is to send a message from the peer to the host, telling the host that
- * this peer wants to listen for \link pcs::GameDataEvent game data events
- * \endlink on a specified port.
+ * this peer wants to listen for game data on a specified port.
  *
  * A pcs::Message is created with a user defined type that represents a join request. The type is simply an
  * integer. In our case it is set to MSG_GAME_EVENT_JOIN. We wish to send the peer's port
@@ -422,7 +420,7 @@ enum MessageProperty
  *     message.set<pcs::port_t>(pcs::PR_PORT, listenPort);
  *     sendMessage(message);
  *
- *     // Start to listen for game data events.
+ *     // Start to listen for game data.
  *     receiver()->listen(listenPort);
  * }
  * \endcode
@@ -430,7 +428,7 @@ enum MessageProperty
  * When this join request message is received by the host it is your responsibility to handle it. The virtual function pcs::Host::handle(pcs::MessageReceivedEvent* event) has to be implemented
  * in the ExampleHost to handle all types of messages. This function is called by Pieces each time a message is received.
  *
- * The next thing to do is to set up the host so it adds the peer to its list of receivers, and thus enable the peer to retrieve game data events. The host needs to know the address and port of the peer to do this.
+ * The next thing to do is to set up the host so it adds the peer to its list of receivers, and thus enable the peer to retrieve game data. The host needs to know the address and port of the peer to do this.
  * The peer address is stored in the incoming message event and the port is stored in the message itself.
  *
  * The original message sent from the peer is obtained by calling event->getMessage().
@@ -458,12 +456,14 @@ enum MessageProperty
  * 	    ...
  * \endcode
  *
- * We have now achieved two things, namely the possibility to send messages between the host and peer and the possibility for the peer to receive game data events that are sent from the host. The next section will describe how you
+ * We have now achieved two things, namely the possibility to send messages between the host and peer and the possibility for the peer to receive game data that are sent from the host. The next section will describe how you
  * create a game object that will be used for generating game data.
  *
  * \subsection tutorial_gde Game Object
  *
- * A pcs::GameObject enables us to send and receive game data events. You have to create a class that is derived from pcs::GameObject.
+ * A pcs::GameObject enables us to encode and decode game data for game-specific objects, so that we can send and receive game data.
+ * The peers that receives game data will be notified in the form of a \link pcs::GameDataEvent game data event. \endlink
+ * You have to create a class that is derived from pcs::GameObject.
  * In this example we call it ExampleGameObject. The same ExampleGameObject class is used both by the host
  * and the peer. Its purpose is to contain game object specific data, and to specify what of these data should be sent over the network.
  * For example, a bicycle game object could contain position, orientation, velocity, and gear.
@@ -704,7 +704,7 @@ enum MessageProperty
  * }
  * \endcode
  *
- * The virtual pcs::Host::handle(pcs::GameDataEvent*) function has to be implemented in the ExamplePeer, so it can handle game data events. Each time a game data event is received this function will be called.
+ * The virtual pcs::Host::handle(pcs::GameDataEvent*) function has to be implemented in the ExamplePeer, so it can handle game data events. Each time game data is received, this function will be called.
  * To update all game objects in the peer with the frame data sent from the host, the pcs::GameObjectDB::applyFrameData() function has to called. This function will iterate all game objects and set their member variables to the
  * values that are stored in the received frame data.
  *
