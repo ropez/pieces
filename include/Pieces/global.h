@@ -23,9 +23,9 @@ typedef unsigned long flags_t;
 
 
 /**
- * Obeject identifier.
+ * Object identifier.
  *
- * Used when creating and removing objects (see GameObject), and to identily
+ * Used when creating and removing objects (see GameObject), and to identify
  * game data (see FrameData).
  *
  * \note We could also use Universally unique identifiers (e.g. 550e8400-e29b-41d4-a716-446655440000). They take 16 bytes, I have the code we need. (Robin)
@@ -116,7 +116,7 @@ enum MessageProperty
  *
  * Cplusplus.com is a very good place to start learning about C++ programming,
  *  as well as an excellent reference to the standard library, including the
- * standart C library and the standard template library.
+ * standard C library and the standard template library.
  *
  * \section getting_started Getting started
  * Pieces is an application framework designed to assist programmers creating games
@@ -268,7 +268,7 @@ enum MessageProperty
  * demonstrating how to create a peer application.
  *
  * The peer, as the host, is essentially event driven. It can receive external messages and game world updates from the host.
- * It is up to the programmer to handle a message received event. For example, an incomming message might contain the information that a new
+ * It is up to the programmer to handle a message received event. For example, an incoming message might contain the information that a new
  * game object should be created. See the \ref tutorial_gde section for details.
  *
  * \subsection int_game_world Game world
@@ -307,7 +307,7 @@ enum MessageProperty
  * that the programmer has compiled Pieces and have set up necessary project settings that will enable an application to link
  * the Pieces library files.
  *
- * The examples describe how two different applications communicate wich eachother, where one acts as host and the other as peer.
+ * The examples describe how two different applications communicate which each other, where one acts as host and the other as peer.
  * An alternative approach is to integrate
  * the host and peer into one single application. This approach is not described here, but the idea is the same.
  *
@@ -349,7 +349,7 @@ enum MessageProperty
  * }
  * \endcode
  *
- * In the host's constructor we start to listen on a port, in our case 2222. Incomming connections from peers are now possible on port 2222.
+ * In the host's constructor we start to listen on a port, in our case 2222. Incoming connections from peers are now possible on port 2222.
  *
  * \code
  * // example_host.cpp
@@ -421,13 +421,13 @@ enum MessageProperty
  * \endcode
  *
  * The peer is now able to send and receive \link pcs::Message messages \endlink
- * to and from the host. But the peer is not yet able to receiveg game data from the host. The way to make this possible
+ * to and from the host. But the peer is not yet able to receive game data from the host. The way to make this possible
  * this is to send a message from the peer to the host, telling the host that
  * this peer wants to listen for game data on a specified port.
  *
  * A pcs::Message is created with a user defined type that represents a join request. The type is simply an
  * integer. In our case it is set to MSG_GAME_EVENT_JOIN. We wish to send the peer's port
- * number in this message, so we add a paramemeter to the message, with the
+ * number in this message, so we add a parameter to the message, with the
  * built-in property pcs::PR_PORT and the value 3333.
  *
  * \code
@@ -505,7 +505,7 @@ enum MessageProperty
  * \endcode
  *
  * The encode function is used by the host only. It adds the member variables m_x and m_y to a pcs::DataStream. The decode function is used by the peer only. It extracts the x and y value from the data
- * stream and stores them in the members m_x and m_y. For more infomation on this topic, see \ref data_encoding.
+ * stream and stores them in the members m_x and m_y. For more information on this topic, see \ref data_encoding.
  *
  * \code
  * // example_game_object.cpp
@@ -593,9 +593,9 @@ enum MessageProperty
  *
  * \subsection example_timer_events Timer Events
  *
- * We want, on a regurlar basis, to update the data of our ExampleGameObject. The Pieces approach, is to create a pcs::TimerEvent. In our example, the pcs::TimerEvent is created in the constructor
- * of the host. It is set up to repeat, meaning that a timer event will occour each frame. The interval is also specified for the timer, in our case we set it to 20 milliseconds. The virtual function
- * void pcs::Host::handle(pcs::TimerEvent*) has to be implement in the ExampleHost. It is this function that will be called each time a timer event occours.
+ * We want, on a regular basis, to update the data of our ExampleGameObject. The Pieces approach, is to create a pcs::TimerEvent. In our example, the pcs::TimerEvent is created in the constructor
+ * of the host. It is set up to repeat, meaning that a timer event will occur each frame. The interval is also specified for the timer, in our case we set it to 20 milliseconds. The virtual function
+ * void pcs::Host::handle(pcs::TimerEvent*) has to be implement in the ExampleHost. It is this function that will be called each time a timer event occurs.
  *
  * The pcs::Timer is added as a member to the host as a pcs::AutoPointer, since we want it to be deleted when our host is deleted.
  *
@@ -624,7 +624,7 @@ enum MessageProperty
  *
  * \subsection example_callbacks Host Callbacks
  *
- * A callback is used to add "inteligence" to the game objects. Generally spoken, a game object itself only contains a set of data. But the logic, how a game object interacts with the rest of the world, is described in a callback.
+ * A callback is used to add "intelligence" to the game objects. Generally spoken, a game object itself only contains a set of data. But the logic, how a game object interacts with the rest of the world, is described in a callback.
  *
  * So what we do now is to create a new callback. We must derive from pcs::GameObjectAction to get this working. We call the subclass ExampleHostCallback.
  *
@@ -695,7 +695,7 @@ enum MessageProperty
  *
  * \subsection example_srgde Send and Receive Game Data Events
  *
- * Network relevat data from all your game objects must be stored in a single pcs::FrameData object. Pieces offers a convenient way to collect all this data for all of your game objects,
+ * Network relevant data from all your game objects must be stored in a single pcs::FrameData object. Pieces offers a convenient way to collect all this data for all of your game objects,
  * the pcs::GameObjectDB::updateFrameData(FrameData&) const function. This function should be called \em after the callbacks are executed.
  *
  * \code
@@ -738,7 +738,7 @@ enum MessageProperty
  * \subsection example_callbacks_peer Peer Callbacks
  *
  * The way a callback is set up in the peer is identical to how it is done in the host. That is, when the game object is created, assign it (with setAction) a subclass of pcs::GameObjectAction. We will first
- * create this subclasscall.
+ * create this subclass.
  *
  * \code
  * // example_peer_callback.h
@@ -784,7 +784,7 @@ enum MessageProperty
  *                     ...
  * \endcode
  *
- * Now the ExampleGameObject is assigned with a callback. We choose to execute this callback each time a game data event occours. Where do we do that? In ExamplePeer's handle(pcs::GameDataEvent*) function, of course!
+ * Now the ExampleGameObject is assigned with a callback. We choose to execute this callback each time a game data event occurs. Where do we do that? In ExamplePeer's handle(pcs::GameDataEvent*) function, of course!
  *
  * \code
  * // example_peer.cpp
@@ -849,7 +849,7 @@ enum MessageProperty
  *
  * pcs::ReferencePointer provides \em reference \em counting pointer. This is
  * more advanced than auto-pointer, because it makes it possible to have
- * multiple pointers to the same object. A reference counter stored with the * object is increased for every pointer that is assigned to it, and descreased
+ * multiple pointers to the same object. A reference counter stored with the * object is increased for every pointer that is assigned to it, and decreased
  * when a pointer is not pointing to it anymore. The object is automatically
  * deleted when the reference count reaches zero. A reference pointer can be used
  * in all cases when an auto-pointer can be used, but the object type must be
@@ -977,7 +977,7 @@ enum MessageProperty
  * Pieces uses a binary format for all network traffic. Internally, all user
  * data is represented as generic \link pcs::ByteArray byte-arrays \endlink.
  *
- * There are two ways to encode data; as a continous stream, or as a single
+ * There are two ways to encode data; as a continuos stream, or as a single
  * object at a time. Pieces has built in support for all basic integer and
  * real number types, as well as strings using std::string and Pieces classes
  * like pcs::PropertyList, pcs::Message and pcs::SocketAddress. All these types
@@ -985,7 +985,7 @@ enum MessageProperty
  * for custom types as described below.
  *
  * \subsection stream Stream encoding and decoding
- * Encoding into and decoding from a continous stream is handled by
+ * Encoding into and decoding from a continuos stream is handled by
  * pcs::DataStream. Writing to a data stream is done using the C++ output stream
  * operator '<<'. Reading is done using the input operator '>>'. Example:
  *
