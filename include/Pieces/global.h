@@ -213,24 +213,24 @@ enum MessageProperty
  * \endcode
  *
  * That's it. If you have other problems, please consult your compiler documentation.
- * 
+ *
  * \subsection install_windows Using Windows
- * 
+ *
  * To compile the Pieces libraries on Windows, you need Visual Studio 2005. Simply open the 'VisualStudio/Pieces.sln' file in Visual Studio. Choose your configuration, debug or release, and build the solution.
- * 
+ *
  * When the build is finished, you should have the 'Pieces.lib' and 'OpenThreadsWin32_s.lib' files in your 'lib/win32' folder. If you compiled with the debug configuration their names are 'Piecesd.lib' and 'OpenThreadsWin32d_s.lib'.
- * 
+ *
  * To use Pieces in your own project, you have to make sure you have the correct project settings. Right click your project and choose 'Properties' to open the Project Settings dialog.
- * 
+ *
  * Under 'Configuration Properties/C/C++/General/Additional Include Directories' you have to add the path to the Pieces' include directory.
- * 
- * 'Configuration Properties/C/C++/Code Generation/Runtime Library' should be set to 'Multi-threaded Debug (/MTd)'
- * 
+ *
+ * 'Configuration Properties/C/C++/Code Generation/Runtime Library' should be set to 'Multi-threaded (/MT)'.For debug configuration use 'Multi-threaded Debug (/MTd)'.
+ *
  * Under 'Configuration Properties/Linker/General/Additional Library Directories' you have to to add the path to the Pieces' 'lib/win32' directory.
- * 
+ *
  * Under 'Configuration Properties/Linker/Input/Additional Dependencies' add 'Pieces.lib', 'OpenThreadsWin32_s.lib', and 'ws2_32.lib' for your release configuration.
  * For you debug configuration add 'Piecesd.lib', 'OpenThreadsWin32d_s.lib', and 'ws2_32.lib'
- * 
+ *
  * \section introduction Introduction to Pieces
  *
  * You are now ready to begin using the Pieces framework.
