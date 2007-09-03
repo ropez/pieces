@@ -115,7 +115,7 @@ enum MessageProperty
  * run programs on the platform he is using.
  *
  * Cplusplus.com is a very good place to start learning about C++ programming,
- * as well as an excellent reference to the standard library, including the
+ *  as well as an excellent reference to the standard library, including the
  * standart C library and the standard template library.
  *
  * \section getting_started Getting started
@@ -132,7 +132,7 @@ enum MessageProperty
  * These are generic installation instructions under linux.
  *
  * After obtaining the latest version of the Pieces source code, extract the package
- * and `cd' to the directory containing the package's source code, like this:
+ * and 'cd' to the directory containing the package's source code, like this:
  * \code
  * $ tar xvzf pieces-<version>.tar.gz
  * $ cd pieces-<version>
@@ -143,11 +143,11 @@ enum MessageProperty
  * \code
  * $ ./configure [options]
  * \endcode
- * Running `configure' takes awhile.  While running, it prints some messages
+ * Running 'configure' takes awhile.  While running, it prints some messages
  * telling which features it is checking for.
  *
  * Some systems require unusual options for compilation or linking that
- * the `configure' script does not know about.  You can give `configure'
+ * the 'configure' script does not know about.  You can give 'configure'
  * initial values for variables by setting them in the environment.  Using
  * a Bourne-compatible shell, you can do that on the command line like
  * this:
@@ -155,7 +155,7 @@ enum MessageProperty
  * CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
  * \endcode
  *
- * Or on systems that have the `env' program, you can do it like this:
+ * Or on systems that have the 'env' program, you can do it like this:
  * \code
  * env CPPFLAGS=-I/usr/local/include LDFLAGS=-s ./configure
  * \endcode
@@ -170,25 +170,25 @@ enum MessageProperty
  * have been configured incorrectly. If the problem does not go away, please
  * contact the Pieces authors.
  *
- * If 'make' succeeded, run `make install' to install Pieces on your system,
+ * If 'make' succeeded, run 'make install' to install Pieces on your system,
  * you might need root privileges to do this:
  * \code
  * $ make install
  * \endcode
  *
  * You can remove the program binaries and object files from the source code
- * directory by typing `make clean'.  To also remove the files that `configure'
+ * directory by typing 'make clean'.  To also remove the files that 'configure'
  * created (so you can compile the package for a different kind of computer),
- * type `make distclean'. If you want to uninstall Pieces from your system,
+ * type 'make distclean'. If you want to uninstall Pieces from your system,
  * type 'make uninstall'.
  *
- * By default, `make install' will install Pieces files in '/usr/local/lib',
- * `/usr/local/include', etc. You can specify an installation prefix other than
- * `/usr/local' by giving `configure' the option `--prefix=PATH'.
+ * By default, 'make install' will install Pieces files in '/usr/local/lib',
+ * '/usr/local/include', etc. You can specify an installation prefix other than
+ * '/usr/local' by giving 'configure' the option '--prefix=PATH'.
  *
  * In addition, if you use an unusual directory layout you can give options like
- * `--libdir=PATH' to specify different values for particular kinds of files. Run
- * `configure --help' for a list of the directories you can set and what kinds of
+ * '--libdir=PATH' to specify different values for particular kinds of files. Run
+ * 'configure --help' for a list of the directories you can set and what kinds of
  * files go in them.
  *
  * Once installed, you can compile and link programs that uses Pieces. These
@@ -213,7 +213,24 @@ enum MessageProperty
  * \endcode
  *
  * That's it. If you have other problems, please consult your compiler documentation.
- *
+ * 
+ * \subsection install_windows Using Windows
+ * 
+ * To compile the Pieces libraries on Windows, you need Visual Studio 2005. Simply open the 'VisualStudio/Pieces.sln' file in Visual Studio. Choose your configuration, debug or release, and build the solution.
+ * 
+ * When the build is finished, you should have the 'Pieces.lib' and 'OpenThreadsWin32_s.lib' files in your 'lib/win32' folder. If you compiled with the debug configuration their names are 'Piecesd.lib' and 'OpenThreadsWin32d_s.lib'.
+ * 
+ * To use Pieces in your own project, you have to make sure you have the correct project settings. Right click your project and choose 'Properties' to open the Project Settings dialog.
+ * 
+ * Under 'Configuration Properties/C/C++/General/Additional Include Directories' you have to add the path to the Pieces' include directory.
+ * 
+ * 'Configuration Properties/C/C++/Code Generation/Runtime Library' should be set to 'Multi-threaded Debug (/MTd)'
+ * 
+ * Under 'Configuration Properties/Linker/General/Additional Library Directories' you have to to add the path to the Pieces' 'lib/win32' directory.
+ * 
+ * Under 'Configuration Properties/Linker/Input/Additional Dependencies' add 'Pieces.lib', 'OpenThreadsWin32_s.lib', and 'ws2_32.lib' for your release configuration.
+ * For you debug configuration add 'Piecesd.lib', 'OpenThreadsWin32d_s.lib', and 'ws2_32.lib'
+ * 
  * \section introduction Introduction to Pieces
  *
  * You are now ready to begin using the Pieces framework.
@@ -313,7 +330,7 @@ enum MessageProperty
  * // example_host.h
  * class ExampleHost : public pcs::Host
  * {
- * public:
+  * public:
  *     ExampleHost();
  *     ...
  * };
