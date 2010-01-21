@@ -24,6 +24,7 @@
 #include "Pieces/SharedDataPointer"
 
 #include <iostream>
+#include <climits>
 
 
 namespace pcs
