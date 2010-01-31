@@ -8,8 +8,6 @@ int main(int argc, char** argv)
 
     osg::ref_ptr<osg::Group> root = new osg::Group();
 
-
-    osgViewer::Viewer* viewer = new osgViewer::Viewer();
     pcs::AutoPointer<PongPeer> pongPeer(new PongPeer(root.get()));
 
     OSGThread osgThread(root, pongPeer.get());

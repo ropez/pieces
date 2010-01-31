@@ -25,7 +25,7 @@ OSGThread::OSGThread(osg::ref_ptr<osg::Group> root, PongPeer* peer)
 //     m_viewer.getCameraConfig()->getRenderSurface(0)->setWindowName("Pong");
 
 //     m_viewer.setClearColor(osg::Vec4(0.0, 0.0, 0.0, 1.0));
-    
+ 
     m_root->addChild(setUpWorld().get());
     m_root->addChild(new ScoreBoard(peer->getPlayerList()));
 
@@ -34,6 +34,7 @@ OSGThread::OSGThread(osg::ref_ptr<osg::Group> root, PongPeer* peer)
     m_viewer.addEventHandler(peh);
 
     osg::Camera* camera = m_viewer.getCamera();
+    camera->setClearColor(osg::Vec4(0.0, 0.0, 0.0, 1.0));
     
     // Set up view frustum
     camera->setProjectionMatrixAsFrustum(-640, 640, -512, 512, 2048, 10000);
