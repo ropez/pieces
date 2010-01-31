@@ -17,7 +17,6 @@
 #include "Pieces/Message"
 #include "Pieces/GameDataReceiver"
 #include "Pieces/FrameData"
-#include "Pieces/Global"
 #include "Pieces/ReferencePointer"
 #include "Pieces/Exception"
 

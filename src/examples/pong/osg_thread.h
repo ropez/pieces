@@ -7,7 +7,7 @@
 #include "pong_peer.h"
 
 
-#include <osgProducer/Viewer>
+#include <osgViewer/Viewer>
 
 /**
  * \class OSGThread
@@ -40,7 +40,7 @@ private:
 
     osg::ref_ptr<osg::Group> setUpWorld();
 
-    osgProducer::Viewer m_viewer;
+    osgViewer::Viewer m_viewer;
     osg::ref_ptr<osg::Group> m_root;
 };
 
