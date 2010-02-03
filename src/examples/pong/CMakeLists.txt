@@ -1,7 +1,6 @@
-find_package(OpenThreads REQUIRED)
 find_package(OpenSceneGraph 2.0.0 REQUIRED osgViewer)
 
-include_directories(${OPENTHREADS_INCLUDE_DIRS} ${OPENSCENEGRAPH_INCLUDE_DIRS})
+include_directories(${OPENSCENEGRAPH_INCLUDE_DIRS})
 
 set(ponghost_SOURCES
     main_host.cpp

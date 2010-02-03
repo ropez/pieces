@@ -1,9 +1,5 @@
-find_package(OpenThreads REQUIRED)
-
 find_package(Qt4 COMPONENTS QtCore QtGui REQUIRED)
 include(${QT_USE_FILE})
-
-include_directories(${OPENTHREADS_INCLUDE_DIR})
 
 set(qchat_SOURCES
     qchat.cpp
