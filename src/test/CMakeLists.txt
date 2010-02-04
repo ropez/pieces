@@ -10,5 +10,13 @@ set(test_SOURCES
 add_executable(testrunner ${test_SOURCES})
 target_link_libraries(testrunner cppunit dl pieces ${OPENTHREADS_LIBRARIES})
 
-add_test(NAME PiecesUnitTests COMMAND testrunner)
+set(tests
+    TestMessageType
+    TestMessageFlags
+)
+
+foreach(test ${tests})
+    add_test(NAME ${test} COMMAND testrunner ${test})
+endforeach(test)
+
 endif(BUILD_TESTS)
