@@ -1,6 +1,6 @@
-OPTION(BUILD_TESTS "build the tests" OFF)
-
 if(BUILD_TESTS)
+
+include_directories(${CPPUNIT_INCLUDE_DIR})
 
 set(test_SOURCES
     testrunner.cpp
@@ -8,11 +8,12 @@ set(test_SOURCES
 )
 
 add_executable(testrunner ${test_SOURCES})
-target_link_libraries(testrunner cppunit dl pieces ${OPENTHREADS_LIBRARIES})
+target_link_libraries(testrunner pieces ${CPPUNIT_LIBRARIES} ${OPENTHREADS_LIBRARIES})
 
 set(tests
     TestMessageType
     TestMessageFlags
+    TestMessageProperties
 )
 
 foreach(test ${tests})
