@@ -171,3 +171,54 @@ public:
     }
 };
 CPPUNIT_TEST_SUITE_REGISTRATION(TestMessageFlags);
+
+class TestMessageProperties : public CppUnit::TestFixture
+{
+    CPPUNIT_TEST_SUITE(TestMessageProperties);
+    CPPUNIT_TEST(testDefaultMessageProperties);
+    CPPUNIT_TEST(testAddMessageProperties);
+    CPPUNIT_TEST(testCopyMessageProperties);
+    CPPUNIT_TEST_SUITE_END();
+
+    enum {
+        PROP_FOO,
+        PROP_BAR,
+    };
+
+public:
+    void testDefaultMessageProperties() {
+        Message msg;
+        CPPUNIT_ASSERT(msg.getProperties().size() == 0);
+
+        CPPUNIT_ASSERT(msg.get<int>(PROP_FOO, 999) == 999);
+        CPPUNIT_ASSERT(msg.get<double>(PROP_BAR, 9.99) == 9.99);
+    }
+
+    void testAddMessageProperties() {
+        Message msg;
+
+        msg.set(PROP_FOO, 42);
+        msg.set(PROP_BAR, 3.14);
+        CPPUNIT_ASSERT(msg.getProperties().size() == 2);
+        CPPUNIT_ASSERT(msg.get<int>(PROP_FOO) == 42);
+        CPPUNIT_ASSERT(msg.get<double>(PROP_BAR) == 3.14);
+
+        msg.set(PROP_FOO, 'x');
+        CPPUNIT_ASSERT(msg.getProperties().size() == 2);
+        CPPUNIT_ASSERT(msg.get<char>(PROP_FOO) == 'x');
+    }
+
+    void testCopyMessageProperties() {
+        Message msg;
+
+        msg.set(PROP_FOO, 42);
+        msg.set(PROP_BAR, 3.14);
+
+        Message msgX(msg);
+
+        CPPUNIT_ASSERT(msg.getProperties().size() == 2);
+        CPPUNIT_ASSERT(msg.get<int>(PROP_FOO) == 42);
+        CPPUNIT_ASSERT(msg.get<double>(PROP_BAR) == 3.14);
+    }
+};
+CPPUNIT_TEST_SUITE_REGISTRATION(TestMessageProperties);
