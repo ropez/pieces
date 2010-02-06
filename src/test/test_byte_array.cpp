@@ -326,3 +326,46 @@ public:
     }
 };
 CPPUNIT_TEST_SUITE_REGISTRATION(TestByteArrayExtending);
+
+class TestByteArrayResize : public CppUnit::TestFixture
+{
+    CPPUNIT_TEST_SUITE(TestByteArrayResize);
+    CPPUNIT_TEST(testIncreaseSize);
+    CPPUNIT_TEST(testDecreaseSize);
+    CPPUNIT_TEST(testIncreaseSizeAndKeepContent);
+    CPPUNIT_TEST(testDecreaseSizeAndKeepContent);
+    CPPUNIT_TEST_SUITE_END();
+
+public:
+    void testIncreaseSize() {
+        ByteArray ba;
+        ba.resize(10);
+        CPPUNIT_ASSERT_EQUAL(10ul, ba.size());
+        CPPUNIT_ASSERT(ba.allocated() >= 10ul);
+        CPPUNIT_ASSERT(ba[0] == '\0');
+    }
+
+    void testDecreaseSize() {
+        ByteArray ba(10);
+        CPPUNIT_ASSERT_EQUAL(10ul, ba.size());
+        ba.resize(5);
+        CPPUNIT_ASSERT_EQUAL(5ul, ba.size());
+        ba.resize(0);
+        CPPUNIT_ASSERT(ba.isEmpty());
+    }
+
+    void testIncreaseSizeAndKeepContent() {
+        ByteArray ba("foo", 3);
+        ba.resize(6ul);
+        CPPUNIT_ASSERT_EQUAL(6ul, ba.size());
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foo", 3), ba.left(3ul));
+    }
+
+    void testDecreaseSizeAndKeepContent() {
+        ByteArray ba("foobar", 6);
+        ba.resize(3ul);
+        CPPUNIT_ASSERT_EQUAL(3ul, ba.size());
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foo", 3), ba);
+    }
+};
+CPPUNIT_TEST_SUITE_REGISTRATION(TestByteArrayResize);
