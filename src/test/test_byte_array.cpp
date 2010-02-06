@@ -145,3 +145,70 @@ public:
     }
 };
 CPPUNIT_TEST_SUITE_REGISTRATION(TestByteArray);
+
+class TestByteArraySlicing : public CppUnit::TestFixture
+{
+    CPPUNIT_TEST_SUITE(TestByteArraySlicing);
+    CPPUNIT_TEST(testLeft);
+    CPPUNIT_TEST(testRight);
+    CPPUNIT_TEST(testMiddle);
+    CPPUNIT_TEST_SUITE_END();
+
+public:
+    void testLeft() {
+        ByteArray ba("foobar", 6);
+
+        CPPUNIT_ASSERT_EQUAL(ByteArray(), ba.left(0));
+        CPPUNIT_ASSERT_EQUAL(ba, ba.left(6));
+        CPPUNIT_ASSERT_EQUAL(ba, ba.left(99));
+
+        CPPUNIT_ASSERT_EQUAL(ByteArray("f", 1), ba.left(1));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("fo", 2), ba.left(2));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foo", 3), ba.left(3));
+    }
+
+    void testRight() {
+        ByteArray ba("foobar", 6);
+
+        CPPUNIT_ASSERT_EQUAL(ByteArray(), ba.right(0));
+        CPPUNIT_ASSERT_EQUAL(ba, ba.right(6));
+        // CPPUNIT_ASSERT_EQUAL(ba, ba.right(99));
+
+        CPPUNIT_ASSERT_EQUAL(ByteArray(  "r", 1), ba.right(1));
+        CPPUNIT_ASSERT_EQUAL(ByteArray( "ar", 2), ba.right(2));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("bar", 3), ba.right(3));
+    }
+
+    void testMiddle() {
+        ByteArray ba("foobar", 6);
+
+        CPPUNIT_ASSERT_EQUAL(ByteArray(), ba.middle(0, 0));
+        CPPUNIT_ASSERT_EQUAL(ByteArray(), ba.middle(3, 0));
+        CPPUNIT_ASSERT_EQUAL(ByteArray(), ba.middle(6, 0));
+        CPPUNIT_ASSERT_EQUAL(ByteArray(), ba.middle(6, 99));
+        CPPUNIT_ASSERT_EQUAL(ByteArray(), ba.middle(6));
+        CPPUNIT_ASSERT_EQUAL(ba, ba.middle(0, 6));
+        CPPUNIT_ASSERT_EQUAL(ba, ba.middle(0, 99));
+        CPPUNIT_ASSERT_EQUAL(ba, ba.middle(0));
+
+        CPPUNIT_ASSERT_EQUAL(ByteArray("f", 1), ba.middle(0, 1));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("o", 1), ba.middle(1, 1));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("o", 1), ba.middle(2, 1));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("b", 1), ba.middle(3, 1));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("a", 1), ba.middle(4, 1));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("r", 1), ba.middle(5, 1));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("fo", 2), ba.middle(0, 2));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("oo", 2), ba.middle(1, 2));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("ob", 2), ba.middle(2, 2));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("ba", 2), ba.middle(3, 2));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("ar", 2), ba.middle(4, 2));
+        CPPUNIT_ASSERT_EQUAL(ByteArray( "r", 1), ba.middle(5, 2));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foob", 4), ba.middle(0, 4));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("ooba", 4), ba.middle(1, 4));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("obar", 4), ba.middle(2, 4));
+        CPPUNIT_ASSERT_EQUAL(ByteArray( "bar", 3), ba.middle(3, 4));
+        CPPUNIT_ASSERT_EQUAL(ByteArray(  "ar", 2), ba.middle(4, 4));
+        CPPUNIT_ASSERT_EQUAL(ByteArray(   "r", 1), ba.middle(5, 4));
+    }
+};
+CPPUNIT_TEST_SUITE_REGISTRATION(TestByteArraySlicing);
