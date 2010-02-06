@@ -58,6 +58,14 @@ public:
 
         CPPUNIT_ASSERT_NO_THROW(ba.clear());
         CPPUNIT_ASSERT(ba.isEmpty());
+
+        ByteArray b2(0);
+        CPPUNIT_ASSERT(b2.isEmpty());
+        CPPUNIT_ASSERT_EQUAL(ba, b2);
+
+        ByteArray b3("", 0);
+        CPPUNIT_ASSERT(b3.isEmpty());
+        CPPUNIT_ASSERT_EQUAL(ba, b3);
     }
 
     void testByteArray() {
