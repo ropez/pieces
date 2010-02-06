@@ -180,13 +180,18 @@ ByteArray& ByteArray::append(const void* data, size_t size)
 {
     if (size > 0)
     {
-        size_t old_size = this->size();
+        // Temporary
+        ByteArray tmp;
+        tmp.d = d;
 
         // Make room for the append
-        resize(this->size() + size);
+        tmp.resize(this->size() + size);
 
         // Copy new data
-        std::memcpy(this->data() + old_size, data, size);
+        std::memcpy(tmp.data() + this->size(), data, size);
+
+        // Let assignment operator handle the rest
+        d = tmp.d;
     }
     return *this;
 }
