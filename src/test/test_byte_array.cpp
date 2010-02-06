@@ -42,6 +42,7 @@ struct assertion_traits<ByteArray>
 class TestByteArray : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(TestByteArray);
+    CPPUNIT_TEST(testEmpty);
     CPPUNIT_TEST(testByteArray);
     CPPUNIT_TEST(testNullBytes);
     CPPUNIT_TEST(testRandomAccess);
@@ -49,10 +50,25 @@ class TestByteArray : public CppUnit::TestFixture
     CPPUNIT_TEST_SUITE_END();
 
 public:
+    void testEmpty() {
+        ByteArray ba;
+        CPPUNIT_ASSERT(ba.isEmpty());
+        CPPUNIT_ASSERT_EQUAL(0ul, ba.size());
+        CPPUNIT_ASSERT_EQUAL(0ul, ba.allocated());
+
+        CPPUNIT_ASSERT_NO_THROW(ba.clear());
+        CPPUNIT_ASSERT(ba.isEmpty());
+    }
+
     void testByteArray() {
         ByteArray ba("hello", 5ul);
+        CPPUNIT_ASSERT(!ba.isEmpty());
         CPPUNIT_ASSERT_EQUAL(5ul, ba.size());
-        CPPUNIT_ASSERT(std::memcmp("hello", ba.constData(), 5ul) == 0);
+        CPPUNIT_ASSERT(std::memcmp("hello", ba.constData(), ba.size()) == 0);
+
+        ba.clear();
+        CPPUNIT_ASSERT(ba.isEmpty());
+        CPPUNIT_ASSERT_EQUAL(0ul, ba.size());
     }
 
     void testRandomAccess() {
@@ -72,6 +88,9 @@ public:
         b2[2] = 'l';
         CPPUNIT_ASSERT_EQUAL(ByteArray("lol", 3), b2);
         CPPUNIT_ASSERT_EQUAL(ba, b3);
+
+        b3.clear();
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foo", 3), ba);
     }
 
     void testNullBytes() {
@@ -79,6 +98,7 @@ public:
         CPPUNIT_ASSERT_EQUAL(6ul, ba.size());
 
         ba[0] = ba[3] = '\0';
+        CPPUNIT_ASSERT(!ba.isEmpty());
         CPPUNIT_ASSERT_EQUAL(6ul, ba.size());
         CPPUNIT_ASSERT(ba[0] == '\0');
         CPPUNIT_ASSERT(ba[4] == 'a');
