@@ -15,6 +15,7 @@ set(tests
     TestByteArray
     TestByteArraySlicing
     TestByteArrayChopping
+    TestByteArrayExtending
     TestMessageType
     TestMessageFlags
     TestMessageProperties

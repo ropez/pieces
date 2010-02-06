@@ -264,3 +264,65 @@ public:
     }
 };
 CPPUNIT_TEST_SUITE_REGISTRATION(TestByteArrayChopping);
+
+class TestByteArrayExtending : public CppUnit::TestFixture
+{
+    CPPUNIT_TEST_SUITE(TestByteArrayExtending);
+    CPPUNIT_TEST(testAppendEmpty);
+    CPPUNIT_TEST(testPrependEmpty);
+    CPPUNIT_TEST(testAppend);
+    CPPUNIT_TEST(testPrepend);
+    CPPUNIT_TEST(testAppendSelf);
+    CPPUNIT_TEST(testPrependSelf);
+    CPPUNIT_TEST_SUITE_END();
+
+public:
+    void testAppendEmpty() {
+        const ByteArray ba("foo", 3);
+        ByteArray b2;
+        b2.append(ByteArray());
+        CPPUNIT_ASSERT(b2.isEmpty());
+        b2.append(ba);
+        CPPUNIT_ASSERT_EQUAL(ba, b2);
+    }
+
+    void testPrependEmpty() {
+        const ByteArray ba("foo", 3);
+        ByteArray b2;
+        b2.prepend(ByteArray());
+        CPPUNIT_ASSERT(b2.isEmpty());
+        b2.prepend(ba);
+        CPPUNIT_ASSERT_EQUAL(ba, b2);
+    }
+
+    void testAppend() {
+        ByteArray ba("foo", 3);
+        ba.append("b", 1);
+        ba.append("ar", 2);
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foobar", 6), ba);
+        ba.append('!');
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foobar!", 7), ba);
+    }
+
+    void testPrepend() {
+        ByteArray ba("foo", 3);
+        ba.prepend("ar", 2);
+        ba.prepend("b", 1);
+        CPPUNIT_ASSERT_EQUAL(ByteArray("barfoo", 6), ba);
+        ba.prepend('!');
+        CPPUNIT_ASSERT_EQUAL(ByteArray("!barfoo", 7), ba);
+    }
+
+    void testAppendSelf() {
+        ByteArray ba("foo", 3);
+        ba.append(ba);
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foofoo", 6), ba);
+    }
+
+    void testPrependSelf() {
+        ByteArray ba("foo", 3);
+        ba.prepend(ba);
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foofoo", 6), ba);
+    }
+};
+CPPUNIT_TEST_SUITE_REGISTRATION(TestByteArrayExtending);
