@@ -221,7 +221,7 @@ ByteArray& ByteArray::prepend(const void* data, size_t size)
 
         // Copy contents
         std::memcpy(tmp.data(), data, size);
-        std::memcpy(tmp.data() + this->size(), this->constData(), this->size());
+        std::memcpy(tmp.data() + size, this->constData(), this->size());
 
         // Let assignment operator handle the rest
         d = tmp.d;
