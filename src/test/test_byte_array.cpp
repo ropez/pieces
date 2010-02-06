@@ -212,3 +212,55 @@ public:
     }
 };
 CPPUNIT_TEST_SUITE_REGISTRATION(TestByteArraySlicing);
+
+class TestByteArrayChopping : public CppUnit::TestFixture
+{
+    CPPUNIT_TEST_SUITE(TestByteArrayChopping);
+    CPPUNIT_TEST(testChopEmpty);
+    CPPUNIT_TEST(testChopBack);
+    CPPUNIT_TEST(testChopFront);
+    CPPUNIT_TEST_SUITE_END();
+
+public:
+    void testChopEmpty() {
+        ByteArray ba;
+        CPPUNIT_ASSERT_NO_THROW(ba.chopBack(3));
+        CPPUNIT_ASSERT_NO_THROW(ba.chopFront(3));
+        CPPUNIT_ASSERT(ba.isEmpty());
+
+        ba = ByteArray("foo", 3);
+        CPPUNIT_ASSERT_NO_THROW(ba.chopBack(6));
+        CPPUNIT_ASSERT(ba.isEmpty());
+
+        ba = ByteArray("foo", 3);
+        CPPUNIT_ASSERT_NO_THROW(ba.chopFront(6));
+        CPPUNIT_ASSERT(ba.isEmpty());
+    }
+
+    void testChopBack() {
+        ByteArray ba("foobar", 6);
+
+        ba.chopBack(0);
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foobar", 6), ba);
+        ba.chopBack(1);
+        CPPUNIT_ASSERT_EQUAL(ByteArray("fooba", 5), ba);
+        ba.chopBack(2);
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foo", 3), ba);
+        ba.chopBack(3);
+        CPPUNIT_ASSERT(ba.isEmpty());
+    }
+
+    void testChopFront() {
+        ByteArray ba("foobar", 6);
+
+        ba.chopFront(0);
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foobar", 6), ba);
+        ba.chopFront(1);
+        CPPUNIT_ASSERT_EQUAL(ByteArray("oobar", 5), ba);
+        ba.chopFront(2);
+        CPPUNIT_ASSERT_EQUAL(ByteArray("bar", 3), ba);
+        ba.chopFront(3);
+        CPPUNIT_ASSERT(ba.isEmpty());
+    }
+};
+CPPUNIT_TEST_SUITE_REGISTRATION(TestByteArrayChopping);

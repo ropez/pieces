@@ -14,6 +14,7 @@ target_link_libraries(testrunner pieces ${CPPUNIT_LIBRARIES} ${OPENTHREADS_LIBRA
 set(tests
     TestByteArray
     TestByteArraySlicing
+    TestByteArrayChopping
     TestMessageType
     TestMessageFlags
     TestMessageProperties
