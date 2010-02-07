@@ -37,7 +37,7 @@ class TestAutoPointer : public CppUnit::TestFixture
 
 public:
     void setUp() {
-        CPPUNIT_ASSERT_EQUAL(0, MockObject::count);
+        MockObject::count = 0;
     }
 
     void tearDown() {
