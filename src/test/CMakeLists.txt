@@ -4,7 +4,7 @@ include_directories(${CPPUNIT_INCLUDE_DIR})
 
 set(test_SOURCES
     testrunner.cpp
-    test_auto_pointer.cpp
+    test_smart_pointers.cpp
     test_byte_array.cpp
     test_message.cpp
 )
