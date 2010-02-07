@@ -1,12 +1,13 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include <Pieces/SharedData>
 #include <Pieces/AutoPointer>
 #include <Pieces/global>
 
 using pcs::AutoPointer;
 
 namespace {
-class MockObject
+class MockObject : public pcs::SharedData
 {
 public:
     static int count;
@@ -24,6 +25,36 @@ private:
 };
 int MockObject::count = 0;
 }
+
+class TestSharedData : public CppUnit::TestFixture
+{
+    CPPUNIT_TEST_SUITE(TestSharedData);
+    CPPUNIT_TEST(testReferenceCount);
+    CPPUNIT_TEST_SUITE_END();
+
+public:
+    void testReferenceCount() {
+        MockObject o;
+        o.ref();
+        CPPUNIT_ASSERT(!o.shared());
+        o.ref();
+        CPPUNIT_ASSERT(o.shared());
+        o.ref();
+        CPPUNIT_ASSERT(o.shared());
+
+        bool v;
+        v = o.deref();
+        CPPUNIT_ASSERT(o.shared());
+        CPPUNIT_ASSERT(v);
+        v = o.deref();
+        CPPUNIT_ASSERT(!o.shared());
+        CPPUNIT_ASSERT(v);
+        v = o.deref();
+        CPPUNIT_ASSERT(!o.shared());
+        CPPUNIT_ASSERT(!v);
+    }
+};
+CPPUNIT_TEST_SUITE_REGISTRATION(TestSharedData);
 
 class TestAutoPointer : public CppUnit::TestFixture
 {

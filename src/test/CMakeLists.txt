@@ -13,6 +13,7 @@ add_executable(testrunner ${test_SOURCES})
 target_link_libraries(testrunner pieces ${CPPUNIT_LIBRARIES} ${OPENTHREADS_LIBRARIES})
 
 set(tests
+    TestSharedData
     TestAutoPointer
     TestByteArray
     TestByteArraySlicing
