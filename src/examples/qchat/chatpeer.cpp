@@ -7,6 +7,9 @@
 
 using namespace pcs;
 
+namespace qchat
+{
+
 ChatWidget* widget;
 
 
@@ -44,4 +47,6 @@ void ChatPeer::handle(MessageReceivedEvent* event)
 
         emit message(QString::fromStdString(nick), QString::fromStdString(msg));
     }
+}
+
 }

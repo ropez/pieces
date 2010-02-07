@@ -3,6 +3,8 @@
 
 #include <QtGui/QWidget>
 
+namespace qchat
+{
 class StartWidgetPrivate;
 
 class StartWidget : public QWidget
@@ -24,5 +26,7 @@ private:
     Q_DISABLE_COPY(StartWidget);
     StartWidgetPrivate* d;
 };
+
+}
 
 #endif

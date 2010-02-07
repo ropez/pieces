@@ -1,6 +1,7 @@
 #include "Pieces/Application"
 #include "pong_host.h"
 
+using pong::PongHost;
 
 int main(int argc, char** argv)
 {

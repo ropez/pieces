@@ -1,4 +1,5 @@
-// host.cpp
+#if !defined PONG_HOST_H
+#define PONG_HOST_H
 
 #include "Pieces/Host"
 #include "Pieces/MessageReceivedEvent"
@@ -8,6 +9,9 @@
 
 #include "player.h"
 #include "pong_defines.h"
+
+namespace pong
+{
 
 /**
  * This host only acts as a message server forwarding events (messages)
@@ -37,3 +41,7 @@ private:
     PlayerList_t m_players;
     GameState m_gameState;
 };
+
+}
+
+#endif // PONG_HOST_H

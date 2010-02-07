@@ -5,6 +5,9 @@
 #include "player.h"
 #include <list>
 
+namespace pong
+{
+
 // Host specific
 
 typedef std::list<pcs::ReferencePointer<Player> > PlayerList_t;
@@ -52,5 +55,7 @@ public:
     bool ballIsLostForPlayerRight;
 
 };
+
+}
 
 #endif //PONG_DEFINES_H

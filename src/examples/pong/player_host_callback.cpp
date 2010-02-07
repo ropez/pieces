@@ -4,6 +4,9 @@
 
 #include "Pieces/DebugStream"
 
+namespace pong
+{
+
 PlayerHostCallback::PlayerHostCallback(pcs::ReferencePointer<Player> player, GameState* gameState)
 : pcs::GameObjectAction()
 , m_gameState(gameState)
@@ -33,7 +36,7 @@ void PlayerHostCallback::operator()(pcs::framenum_t)
     m_lastTick = currentTick;
 
 
-    // 
+    //
     // Move player
     switch(m_player->getMovingState())
     {
@@ -58,4 +61,6 @@ void PlayerHostCallback::operator()(pcs::framenum_t)
     default:
         break;
     }
+}
+
 }

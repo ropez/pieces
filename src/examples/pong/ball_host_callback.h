@@ -11,6 +11,9 @@
 
 #include "timer.h"
 
+namespace pong
+{
+
 class BallUpdateCallback : public pcs::GameObjectAction
 {
 public:
@@ -29,5 +32,7 @@ private:
     bool m_wallHitRight;
     bool m_wallHitLeft;
 };
+
+}
 
 #endif //BALLUPDATECALLBACK_H

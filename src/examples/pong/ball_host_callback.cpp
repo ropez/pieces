@@ -9,6 +9,9 @@
 #include "Pieces/Host"
 #include "Pieces/Message"
 
+namespace pong
+{
+
 BallUpdateCallback::BallUpdateCallback(pcs::Host* host, Ball* ball, GameState* gameState, PlayerList_t* playerList)
 : pcs::GameObjectAction()
 , m_lastTick(0)
@@ -31,19 +34,19 @@ void BallUpdateCallback::operator()(pcs::framenum_t /*frameNum*/)
 
     double angle = m_ball->getAngle();
     double velocity = m_ball->getVelocity();
-    
+
     // Update balls position w.r.t velocity and angle.
     m_ball->addRelativeX(deltaTime * velocity * sin(angle));
     m_ball->addRelativeZ(deltaTime * velocity * cos(angle));
 
     // Check if ball hits walls
-    
+
     // Check right wall
     if(m_ball->getPositionX() >= cfg::frameInsideRight - cfg::ballSizeHalf)
     {
         m_ball->setAngle(cfg::pi * 2 - m_ball->getAngle());
         m_gameState->ballIsLostForPlayerRight = true;
-        
+
         pcs::Message msg(MSG_SCORE_UPDATED);
         m_host->sendMessage(msg);
     }
@@ -74,17 +77,17 @@ void BallUpdateCallback::operator()(pcs::framenum_t /*frameNum*/)
     // Make angle in the interval [0, 2*PI)  (If someone knows a better way to do this,
     // please let me know, Joakim)
     m_ball->setAngle(fmod(cfg::pi2 + fmod(m_ball->getAngle(), cfg::pi2), cfg::pi2));
-    
+
 
     // Check if ball hit a player
     for(PlayerList_t::iterator it = m_playerList->begin(); it != m_playerList->end(); ++it)
     {
         pcs::ReferencePointer<Player> player = (*it);
-        
+
         double ballPotentialHitSide = 0.0;
 
         const bool ballIsMovingTowardLeft = m_ball->getAngle() > cfg::pi ? true : false;
-        
+
         if(ballIsMovingTowardLeft)
         {
             // Ball is moving towards left
@@ -123,7 +126,7 @@ void BallUpdateCallback::operator()(pcs::framenum_t /*frameNum*/)
                 }
 
                 // This "break" is a tiny optimization, since we assume the ball cannot hit both players in the same frame.
-                break; 
+                break;
             }
         }
     }
@@ -131,5 +134,7 @@ void BallUpdateCallback::operator()(pcs::framenum_t /*frameNum*/)
     // Make angle in the interval [0, 2*PI)  (If someone knows a better way to do this,
     // please let me know, Joakim)
     m_ball->setAngle(fmod(cfg::pi2 + fmod(m_ball->getAngle(), cfg::pi2), cfg::pi2));
+
+}
 
 }

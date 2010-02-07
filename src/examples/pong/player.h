@@ -4,6 +4,9 @@
 #include "Pieces/GameObject"
 #include "Pieces/SocketAddress"
 
+namespace pong
+{
+
 class Player : public pcs::GameObject
 {
 public:
@@ -63,7 +66,9 @@ private:
 
     bool m_downIsPressed;
     bool m_upIsPressed;
-    
+
 };
+
+}
 
 #endif //PLAYER_H

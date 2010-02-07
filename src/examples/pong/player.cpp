@@ -3,6 +3,9 @@
 
 #include "Pieces/Debug"
 
+namespace pong
+{
+
 Player::Player(pcs::objectid_t objectId)
 : GameObject(objectId)
 , m_peerAddress()
@@ -107,3 +110,4 @@ int Player::getScore() const
     return m_score;
 }
 
+}

@@ -2,6 +2,8 @@
 
 #include "startwidget.h"
 
+namespace qchat
+{
 
 class StartWidgetPrivate
 {
@@ -102,4 +104,6 @@ void StartWidget::onStartClicked()
 
     emit startChat(nick, host, port);
     close();
+}
+
 }

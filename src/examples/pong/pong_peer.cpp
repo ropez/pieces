@@ -20,6 +20,9 @@
 #include "Pieces/ReferencePointer"
 #include "Pieces/Exception"
 
+namespace pong
+{
+
 PongPeer::PongPeer(osg::ref_ptr<osg::Group> rootOSG)
 : pcs::Peer()
 , m_db(new pcs::GameObjectDB())
@@ -102,7 +105,7 @@ void PongPeer::handle(pcs::MessageReceivedEvent* event)
 
                     m_db->insert(objectId, player.get());
                     m_playerList.push_back(player);
-                    
+
                 }
                 break;
             default:
@@ -137,3 +140,5 @@ PlayerList_t* PongPeer::getPlayerList()
 //    return 0;
 //}
 //
+
+}

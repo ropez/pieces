@@ -21,6 +21,8 @@
 //
 // all the rest of the timer methods are implemented within the header.
 
+namespace pong
+{
 
 const Timer* Timer::instance()
 {
@@ -77,3 +79,5 @@ const Timer* Timer::instance()
     }
 
 #endif
+
+}

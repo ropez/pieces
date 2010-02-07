@@ -10,6 +10,8 @@
 #include "chathost.h"
 #include "chatpeer.h"
 
+namespace qchat
+{
 
 class ChatWidgetPrivate
 {
@@ -113,3 +115,4 @@ void ChatWidget::send()
     d->line->clear();
 }
 
+}

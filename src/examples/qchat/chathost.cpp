@@ -6,6 +6,8 @@
 
 using namespace pcs;
 
+namespace qchat
+{
 
 ChatHost::ChatHost()
 : Host()
@@ -24,4 +26,6 @@ void ChatHost::handle(MessageReceivedEvent* event)
         // Send to all peers
         sendMessage(message);
     }
+}
+
 }

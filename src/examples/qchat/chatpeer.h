@@ -5,6 +5,8 @@
 #include <Pieces/Peer>
 #include <QtCore/QString>
 
+namespace qchat
+{
 
 class ChatPeer : public QObject, public pcs::Peer
 {
@@ -26,5 +28,7 @@ protected:
 private:
     std::string m_nick;
 };
+
+}
 
 #endif

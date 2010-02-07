@@ -3,6 +3,9 @@
 #include <osg/Geode>
 #include <osg/Geometry>
 
+namespace pong
+{
+
 Frame::Frame()
 : osg::MatrixTransform()
 , _xPos(0.0)
@@ -21,8 +24,8 @@ osg::ref_ptr<osg::Geode> Frame::createGeode()
 
     // create Geometry object to store all the vetices and lines primtive.
     osg::ref_ptr<osg::Geometry> polyGeom = new osg::Geometry();
-    
-    
+
+
     osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array();
 
     // note, anticlockwsie ordering.
@@ -65,7 +68,7 @@ osg::ref_ptr<osg::Geode> Frame::createGeode()
     polyGeom->setNormalBinding(osg::Geometry::BIND_OVERALL);
 
 
-    // This time we simply use primitive, and hardwire the number of coords to use 
+    // This time we simply use primitive, and hardwire the number of coords to use
     // since we know up front,
     polyGeom->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::QUADS, 0, vertices->size()));
 
@@ -96,4 +99,6 @@ void Frame::addRelativeZ(double zOffset)
 {
     _zPos += zOffset;
     setPositionZ(_zPos);
+}
+
 }

@@ -7,12 +7,15 @@
 #include "playerosg.h"
 #include "ballosg.h"
 
+namespace pong
+{
+
 class PongEventHandler : public osgGA::GUIEventHandler
 {
 public:
     PongEventHandler(pcs::Peer* peer);
     ~PongEventHandler();
-    
+
     virtual void operator()(osg::Node* node, osg::NodeVisitor* nv);
     bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter&);
 private:
@@ -31,7 +34,9 @@ private:
 
     int m_scorePlayer1;
     int m_scorePlayer2;
-    
+
 };
+
+}
 
 #endif // EVENT_HANDLER_H

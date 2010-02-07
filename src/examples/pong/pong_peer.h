@@ -12,6 +12,9 @@
 
 #include <osg/Group>
 
+namespace pong
+{
+
 class PongPeer : public pcs::Peer
 {
 public:
@@ -28,5 +31,7 @@ private:
     osg::ref_ptr<osg::Group> m_rootOSG;
     PlayerList_t m_playerList;
 };
+
+}
 
 #endif // PONG_PEER_H

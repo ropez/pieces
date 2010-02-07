@@ -5,6 +5,9 @@
 #include "ball.h"
 #include "Pieces/ReferencePointer"
 
+namespace pong
+{
+
 class BallOSG : public osg::MatrixTransform
 {
 public:
@@ -15,9 +18,11 @@ public:
 
 private:
     osg::ref_ptr<osg::Geode> createGeode();
-    
+
     pcs::ReferencePointer<Ball> m_ball;
-    
+
 };
+
+}
 
 #endif // BALLOSG_H

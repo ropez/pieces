@@ -9,6 +9,9 @@
 
 #include <osgViewer/Viewer>
 
+namespace pong
+{
+
 /**
  * \class OSGThread
  * \brief The thread that updates the graphics.
@@ -22,12 +25,12 @@ class OSGThread : public OpenThreads::Thread
 public:
 
     /**
-     * 
+     *
      */
     OSGThread(osg::ref_ptr<osg::Group> root, PongPeer* peer);
 
     /**
-     * 
+     *
      */
     ~OSGThread();
 
@@ -43,5 +46,7 @@ private:
     osgViewer::Viewer m_viewer;
     osg::ref_ptr<osg::Group> m_root;
 };
+
+}
 
 #endif // OSG_THREAD_H

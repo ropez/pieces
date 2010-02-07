@@ -3,6 +3,9 @@
 
 #include <osg/MatrixTransform>
 
+namespace pong
+{
+
 class Frame : public osg::MatrixTransform
 {
 public:
@@ -16,10 +19,12 @@ public:
 
 private:
     osg::ref_ptr<osg::Geode> createGeode();
-    
+
     double _xPos;
     double _zPos;
 
 };
+
+}
 
 #endif // FRAME_H

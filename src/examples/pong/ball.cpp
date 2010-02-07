@@ -6,6 +6,9 @@
 
 #include "Pieces/Debug"
 
+namespace pong
+{
+
 Ball::Ball(pcs::objectid_t objectId)
 : GameObject(objectId)
 , m_posX(0.0)
@@ -53,4 +56,6 @@ double Ball::getPositionX() const
 double Ball::getPositionZ() const
 {
     return m_posZ;
+}
+
 }

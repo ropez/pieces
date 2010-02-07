@@ -5,6 +5,9 @@
 
 #include <iostream>
 
+namespace pong
+{
+
 class BallOSGUpdateCallback : public osg::NodeCallback
 {
 public:
@@ -17,7 +20,7 @@ public:
     void operator() (osg::Node* node, osg::NodeVisitor* nv)
     {
         BallOSG* ballOSG = dynamic_cast<BallOSG*>(node);
-        
+
         if(ballOSG)
         {
             ballOSG->setMatrix(osg::Matrix::translate(osg::Vec3(m_ball->getPositionX(), 0.0, m_ball->getPositionZ())));
@@ -48,7 +51,7 @@ osg::ref_ptr<osg::Geode> BallOSG::createGeode()
 
     // create Geometry object to store all the vetices and lines primtive.
     osg::ref_ptr<osg::Geometry> polyGeom = new osg::Geometry();
-        
+
     // note, anticlockwsie ordering.
     const double halfBallSize = cfg::ballSize / 2;
     osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array();
@@ -56,7 +59,7 @@ osg::ref_ptr<osg::Geode> BallOSG::createGeode()
     vertices->push_back(osg::Vec3( halfBallSize, 0.0, -halfBallSize));
     vertices->push_back(osg::Vec3( halfBallSize, 0.0,  halfBallSize));
     vertices->push_back(osg::Vec3(-halfBallSize, 0.0,  halfBallSize));
-    
+
     // pass the created vertex array to the points geometry object.
     polyGeom->setVertexArray(vertices.get());
 
@@ -76,7 +79,7 @@ osg::ref_ptr<osg::Geode> BallOSG::createGeode()
     polyGeom->setNormalArray(normals.get());
     polyGeom->setNormalBinding(osg::Geometry::BIND_OVERALL);
 
-    // This time we simply use primitive, and hardwire the number of coords to use 
+    // This time we simply use primitive, and hardwire the number of coords to use
     // since we know up front,
     polyGeom->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::QUADS, 0, vertices->size()));
 
@@ -87,3 +90,4 @@ osg::ref_ptr<osg::Geode> BallOSG::createGeode()
 
 }
 
+}

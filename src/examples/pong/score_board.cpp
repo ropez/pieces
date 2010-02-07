@@ -8,6 +8,9 @@
 
 #include <sstream>
 
+namespace pong
+{
+
 class ScoreCallback : public osg::NodeCallback
 {
 public:
@@ -39,7 +42,7 @@ public:
                 text = m_score2;
                 break;
             }
-            
+
             if(text.valid())
             {
                 text->setText(scoreAsString.str());
@@ -63,7 +66,7 @@ ScoreBoard::ScoreBoard(PlayerList_t* playerList)
 {
     createGeode();
 
-    
+
 }
 
 void ScoreBoard::createGeode()
@@ -95,5 +98,7 @@ void ScoreBoard::createGeode()
     osg::Geode* score2 = new osg::Geode();
     score2->addDrawable(scorePlayer2.get());
     addChild(score2);
+
+}
 
 }

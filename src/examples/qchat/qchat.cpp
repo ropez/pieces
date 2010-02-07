@@ -13,7 +13,7 @@
 #include "chatpeer.h"
 
 using namespace pcs;
-
+using namespace qchat;
 
 int main(int argc, char** argv)
 {

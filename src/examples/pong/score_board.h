@@ -6,6 +6,9 @@
 
 #include "pong_defines.h"
 
+namespace pong
+{
+
 class ScoreBoard : public osg::MatrixTransform
 {
 public:
@@ -14,7 +17,9 @@ public:
 private:
     void createGeode();
     PlayerList_t* m_playerList;
-    
+
 };
+
+}
 
 #endif // SCORE_BOARD_H

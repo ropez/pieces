@@ -13,6 +13,9 @@
 
 #include "config.h"
 
+namespace pong
+{
+
 const pcs::objectid_t idBall = 10000;
 const pcs::objectid_t idPlayers = 10100;
 
@@ -210,3 +213,4 @@ pcs::ReferencePointer<Player> PongHost::getPlayer(pcs::SocketAddress sockAddr)
     return 0;
 }
 
+}

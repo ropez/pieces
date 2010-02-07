@@ -7,6 +7,9 @@
 
 #include "Pieces/ReferencePointer"
 
+namespace pong
+{
+
 class PlayerOSG : public osg::MatrixTransform
 {
 public:
@@ -19,5 +22,7 @@ private:
     pcs::ReferencePointer<Player> m_player;
 
 };
+
+}
 
 #endif // PLAYEROSG_H

@@ -3,6 +3,8 @@
 
 #include <Pieces/Host>
 
+namespace qchat
+{
 
 class ChatHost : public pcs::Host
 {
@@ -12,5 +14,7 @@ public:
 protected:
     virtual void handle(pcs::MessageReceivedEvent* event);
 };
+
+}
 
 #endif

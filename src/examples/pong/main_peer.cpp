@@ -2,6 +2,9 @@
 #include "Pieces/Application"
 #include "osg_thread.h"
 
+using pong::PongPeer;
+using pong::OSGThread;
+
 int main(int argc, char** argv)
 {
     pcs::Application application(argc, argv);

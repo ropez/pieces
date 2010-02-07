@@ -4,6 +4,9 @@
 #include "Pieces/GameObject"
 #include "Pieces/GameObjectAction"
 
+namespace pong
+{
+
 class Ball : public pcs::GameObject
 {
 public:
@@ -17,7 +20,7 @@ public:
 
     void addRelativeX(double xOffset);
     void addRelativeZ(double zOffset);
-    
+
     double getPositionZ() const;
     double getPositionX() const;
 
@@ -31,5 +34,7 @@ private:
     double m_angle;
     double m_speed;
 };
+
+}
 
 #endif //BALL_H

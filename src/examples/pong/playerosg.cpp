@@ -7,6 +7,9 @@
 
 #include "Pieces/Debug"
 
+namespace pong
+{
+
 class PlayerOSGUpdateCallback : public osg::NodeCallback
 {
 public:
@@ -19,7 +22,7 @@ public:
     void operator() (osg::Node* node, osg::NodeVisitor* nv)
     {
         PlayerOSG* playerOSG = dynamic_cast<PlayerOSG*>(node);
-        
+
         if(playerOSG)
         {
             // TODO: m_player->getPosition() must be thread safe.
@@ -83,7 +86,7 @@ osg::ref_ptr<osg::Geode> PlayerOSG::createGeode()
     polyGeom->setNormalBinding(osg::Geometry::BIND_OVERALL);
 
 
-    // This time we simply use primitive, and hardwire the number of coords to use 
+    // This time we simply use primitive, and hardwire the number of coords to use
     // since we know up front,
     polyGeom->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::QUADS, 0, vertices->size()));
 
@@ -91,5 +94,7 @@ osg::ref_ptr<osg::Geode> PlayerOSG::createGeode()
     geode->addDrawable(polyGeom.get());
 
     return geode;
+
+}
 
 }

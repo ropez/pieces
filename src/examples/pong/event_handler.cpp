@@ -10,6 +10,9 @@
 
 #include <iostream>
 
+namespace pong
+{
+
 PongEventHandler::PongEventHandler(pcs::Peer* peer)
 : osgGA::GUIEventHandler()
 , m_peer(peer)
@@ -109,5 +112,7 @@ bool PongEventHandler::handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionA
 void PongEventHandler::operator()(osg::Node* node, osg::NodeVisitor* nv)
 {
 
+
+}
 
 }
