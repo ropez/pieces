@@ -16,6 +16,7 @@ set(tests
     TestSharedData
     TestAutoPointer
     TestReferencePointer
+    TestSharedDataPointer
     TestByteArray
     TestByteArraySlicing
     TestByteArrayChopping
