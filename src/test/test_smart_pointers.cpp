@@ -2,9 +2,11 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <Pieces/SharedData>
 #include <Pieces/AutoPointer>
+#include <Pieces/ReferencePointer>
 #include <Pieces/global>
 
 using pcs::AutoPointer;
+using pcs::ReferencePointer;
 
 namespace {
 class MockObject : public pcs::SharedData
@@ -93,6 +95,8 @@ public:
         CPPUNIT_ASSERT_EQUAL(0, MockObject::count);
         p = new MockObject;
         CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
+        p = new MockObject;
+        CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
         p = 0;
         CPPUNIT_ASSERT_EQUAL(0, MockObject::count);
     }
@@ -100,7 +104,9 @@ public:
     void testOwnerChange() {
         AutoPointer<MockObject> p(new MockObject);
         CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
-        AutoPointer<MockObject> q = p;
+        AutoPointer<MockObject> q(new MockObject);
+        CPPUNIT_ASSERT_EQUAL(2, MockObject::count);
+        q = p;
         CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
         CPPUNIT_ASSERT(q.isValid());
         CPPUNIT_ASSERT(p.isNull());
@@ -118,3 +124,75 @@ public:
     }
 };
 CPPUNIT_TEST_SUITE_REGISTRATION(TestAutoPointer);
+
+class TestReferencePointer : public CppUnit::TestFixture
+{
+    CPPUNIT_TEST_SUITE(TestReferencePointer);
+    CPPUNIT_TEST(testNullPointer);
+    CPPUNIT_TEST(testScopeCleanUp);
+    CPPUNIT_TEST(testManualCleanUp);
+    CPPUNIT_TEST(testMultipleReferences);
+    CPPUNIT_TEST(testSelfAssignment);
+    CPPUNIT_TEST_SUITE_END();
+
+public:
+    void setUp() {
+        MockObject::count = 0;
+    }
+
+    void tearDown() {
+        CPPUNIT_ASSERT_EQUAL(0, MockObject::count);
+    }
+
+    void testNullPointer() {
+        ReferencePointer<MockObject> p;
+        CPPUNIT_ASSERT(p.isNull());
+        CPPUNIT_ASSERT(!p.isValid());
+        CPPUNIT_ASSERT(!p);
+        CPPUNIT_ASSERT(p.get() == 0);
+    }
+
+    void testScopeCleanUp() {
+        ReferencePointer<MockObject> p(new MockObject);
+        CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
+    }
+
+    void testManualCleanUp() {
+        ReferencePointer<MockObject> p;
+        CPPUNIT_ASSERT_EQUAL(0, MockObject::count);
+        p = new MockObject;
+        CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
+        p = new MockObject;
+        CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
+        p = 0;
+        CPPUNIT_ASSERT_EQUAL(0, MockObject::count);
+    }
+
+    void testMultipleReferences() {
+        ReferencePointer<MockObject> p(new MockObject);
+        CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
+        ReferencePointer<MockObject> q(new MockObject);
+        CPPUNIT_ASSERT_EQUAL(2, MockObject::count);
+        q = p;
+        CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
+        CPPUNIT_ASSERT(q.isValid());
+        CPPUNIT_ASSERT(p.isValid());
+        CPPUNIT_ASSERT(p->shared());
+        p = q;
+        CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
+        CPPUNIT_ASSERT(p.isValid());
+        CPPUNIT_ASSERT(q.isValid());
+        CPPUNIT_ASSERT(p->shared());
+    }
+
+    void testSelfAssignment() {
+        ReferencePointer<MockObject> p(new MockObject);
+        p = p;
+        CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
+        CPPUNIT_ASSERT(p.isValid());
+        CPPUNIT_ASSERT(!p->shared());
+    }
+};
+CPPUNIT_TEST_SUITE_REGISTRATION(TestReferencePointer);
+
+
