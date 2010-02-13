@@ -6,6 +6,7 @@ set(test_SOURCES
     testrunner.cpp
     test_smart_pointers.cpp
     test_byte_array.cpp
+    test_data_buffer.cpp
     test_message.cpp
 )
 
@@ -22,6 +23,7 @@ set(tests
     TestByteArrayChopping
     TestByteArrayExtending
     TestByteArrayResize
+    TestDataBuffer
     TestMessageType
     TestMessageFlags
     TestMessageProperties
