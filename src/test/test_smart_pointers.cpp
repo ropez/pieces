@@ -117,21 +117,23 @@ public:
         CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
         AutoPointer<MockObject> q(new MockObject);
         CPPUNIT_ASSERT_EQUAL(2, MockObject::count);
+        MockObject* pp = p.get();
         q = p;
         CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
-        CPPUNIT_ASSERT(q.isValid());
+        CPPUNIT_ASSERT_EQUAL(pp, q.get());
         CPPUNIT_ASSERT(p.isNull());
         p = q;
         CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
-        CPPUNIT_ASSERT(p.isValid());
+        CPPUNIT_ASSERT_EQUAL(pp, p.get());
         CPPUNIT_ASSERT(q.isNull());
     }
 
     void testSelfAssignment() {
         AutoPointer<MockObject> p(new MockObject);
+        MockObject* pp = p.get();
         p = p;
         CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
-        CPPUNIT_ASSERT(p.isValid());
+        CPPUNIT_ASSERT_EQUAL(pp, p.get());
     }
 };
 CPPUNIT_TEST_SUITE_REGISTRATION(TestAutoPointer);
@@ -184,23 +186,25 @@ public:
         CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
         ReferencePointer<MockObject> q(new MockObject);
         CPPUNIT_ASSERT_EQUAL(2, MockObject::count);
+        MockObject* pp = p.get();
         q = p;
         CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
-        CPPUNIT_ASSERT(q.isValid());
-        CPPUNIT_ASSERT(p.isValid());
+        CPPUNIT_ASSERT_EQUAL(pp, q.get());
+        CPPUNIT_ASSERT_EQUAL(pp, p.get());
         CPPUNIT_ASSERT(p->shared());
         p = q;
         CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
-        CPPUNIT_ASSERT(p.isValid());
-        CPPUNIT_ASSERT(q.isValid());
+        CPPUNIT_ASSERT_EQUAL(pp, q.get());
+        CPPUNIT_ASSERT_EQUAL(pp, p.get());
         CPPUNIT_ASSERT(p->shared());
     }
 
     void testSelfAssignment() {
         ReferencePointer<MockObject> p(new MockObject);
+        MockObject* pp = p.get();
         p = p;
         CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
-        CPPUNIT_ASSERT(p.isValid());
+        CPPUNIT_ASSERT_EQUAL(pp, p.get());
         CPPUNIT_ASSERT(!p->shared());
     }
 };
@@ -252,16 +256,17 @@ public:
         CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
         SharedDataPointer<MockData> q(new MockData);
         CPPUNIT_ASSERT_EQUAL(2, MockObject::count);
+        const MockData* pp = p.const_data();
         q = p;
         CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
-        CPPUNIT_ASSERT(q.const_data() != 0);
-        CPPUNIT_ASSERT(p.const_data() != 0);
+        CPPUNIT_ASSERT_EQUAL(pp, q.const_data());
+        CPPUNIT_ASSERT_EQUAL(pp, p.const_data());
         CPPUNIT_ASSERT_EQUAL(q.const_data(), p.const_data());
         CPPUNIT_ASSERT(p.const_data()->shared());
         p = q;
         CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
-        CPPUNIT_ASSERT(q.const_data() != 0);
-        CPPUNIT_ASSERT(p.const_data() != 0);
+        CPPUNIT_ASSERT_EQUAL(pp, q.const_data());
+        CPPUNIT_ASSERT_EQUAL(pp, p.const_data());
         CPPUNIT_ASSERT_EQUAL(q.const_data(), p.const_data());
     }
 
