@@ -7,6 +7,7 @@ set(test_SOURCES
     test_smart_pointers.cpp
     test_byte_array.cpp
     test_data_buffer.cpp
+    test_data_stream.cpp
     test_message.cpp
 )
 
@@ -24,6 +25,9 @@ set(tests
     TestByteArrayExtending
     TestByteArrayResize
     TestDataBuffer
+    TestDataStreamTarget
+    TestDataStreamWriteBytes
+    TestDataStreamReadBytes
     TestMessageType
     TestMessageFlags
     TestMessageProperties
