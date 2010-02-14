@@ -19,6 +19,7 @@ class TestDataBuffer : public CppUnit::TestFixture
 public:
     void testEmpty() {
         DataBuffer db;
+        CPPUNIT_ASSERT_EQUAL(ByteArray(), db.data());
         CPPUNIT_ASSERT_THROW(db.read(3), pcs::Exception);
     }
 
@@ -27,6 +28,7 @@ public:
         CPPUNIT_ASSERT_NO_THROW(db.write(ByteArray("foobar", 6)));
         CPPUNIT_ASSERT_EQUAL(ByteArray("foo", 3), db.read(3));
         CPPUNIT_ASSERT_EQUAL(ByteArray("bar", 3), db.read(3));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foobar", 6), db.data());
         CPPUNIT_ASSERT_THROW(db.read(3), pcs::Exception);
     }
 
@@ -35,6 +37,7 @@ public:
         CPPUNIT_ASSERT_NO_THROW(db.write(ByteArray("foo", 3)));
         CPPUNIT_ASSERT_NO_THROW(db.write(ByteArray("bar", 3)));
         CPPUNIT_ASSERT_EQUAL(ByteArray("foobar", 6), db.read(6));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foobar", 6), db.data());
         CPPUNIT_ASSERT_THROW(db.read(3), pcs::Exception);
     }
 
