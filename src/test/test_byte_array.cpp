@@ -274,6 +274,7 @@ class TestByteArrayExtending : public CppUnit::TestFixture
     CPPUNIT_TEST(testPrepend);
     CPPUNIT_TEST(testAppendSelf);
     CPPUNIT_TEST(testPrependSelf);
+    CPPUNIT_TEST(testConcatOperator);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -323,6 +324,13 @@ public:
         ByteArray ba("foo", 3);
         ba.prepend(ba);
         CPPUNIT_ASSERT_EQUAL(ByteArray("foofoo", 6), ba);
+    }
+
+    void testConcatOperator() {
+        ByteArray ba("foo", 3);
+        ba += ByteArray("b", 1);
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foob", 4), ba);
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foobar", 6), ba + ByteArray("ar", 2));
     }
 };
 CPPUNIT_TEST_SUITE_REGISTRATION(TestByteArrayExtending);
