@@ -1,43 +1,7 @@
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include "support.h"
 #include <Pieces/ByteArray>
-#include <cstring>
-#include <iomanip>
 
 using pcs::ByteArray;
-
-namespace CppUnit {
-template<>
-struct assertion_traits<ByteArray>
-{
-    static bool equal(const ByteArray& x, const ByteArray& y)
-    {
-        if (x.size() != y.size())
-            return false;
-        if (std::memcmp(x.constData(), y.constData(), x.size()))
-            return false;
-        else
-            return true;
-    }
-
-    static std::string toString(const ByteArray& x)
-    {
-        std::stringstream hex, asc;
-        hex << std::setfill('0');
-        for (int i = 0; i < x.size(); i++) {
-            hex << std::setw(2) << std::hex << int(x[i]) << ' ';
-            if (std::isalnum(x[i]))
-                asc << x[i];
-            else
-                asc << '.';
-        }
-        std::stringstream ss;
-        ss << hex.str() << "|" << asc.str() << "|";
-        return ss.str();
-    }
-};
-}
-
 
 class TestByteArray : public CppUnit::TestFixture
 {

@@ -101,6 +101,14 @@ public:
     ByteArray getProperty(int property, const ByteArray& defval = ByteArray()) const;
 
     /**
+     * Check if the list has the given property.
+     *
+     * This function returns true if the property with the given \a key exists
+     * in the list. Otherwise the return value is false.
+     */
+    bool hasProperty(int property) const;
+
+    /**
      * Add or update a property, converted from T.
      *
      * Updates the property-list by inserting a property with key \a property,

@@ -1,5 +1,4 @@
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include "support.h"
 #include <Pieces/SharedData>
 #include <Pieces/AutoPointer>
 #include <Pieces/ReferencePointer>

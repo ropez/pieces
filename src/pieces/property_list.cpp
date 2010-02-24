@@ -96,6 +96,13 @@ ByteArray PropertyList::getProperty(int property, const ByteArray& defval) const
 }
 
 
+bool PropertyList::hasProperty(int property) const
+{
+    map_t::const_iterator it = d->properties.find(property);
+    return it != d->properties.end();
+}
+
+
 PropertyList::map_t::const_iterator PropertyList::begin() const
 {
     return d->properties.begin();
