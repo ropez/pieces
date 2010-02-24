@@ -28,6 +28,7 @@ set(tests
     TestDataStreamTarget
     TestDataStreamWriteBytes
     TestDataStreamReadBytes
+    TestDataStreamOnBuffer
     TestMessageType
     TestMessageFlags
     TestMessageProperties

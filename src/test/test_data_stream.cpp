@@ -4,6 +4,8 @@
 #include <Pieces/BufferStream>
 #include <Pieces/Exception>
 #include <Pieces/AutoPointer>
+#include <Pieces/ValueList>
+#include <Pieces/PropertyList>
 
 using pcs::ByteArray;
 using pcs::DataBuffer;
@@ -169,3 +171,123 @@ public:
     }
 };
 CPPUNIT_TEST_SUITE_REGISTRATION(TestDataStreamReadBytes);
+
+class TestDataStreamOnBuffer : public CppUnit::TestFixture
+{
+    CPPUNIT_TEST_SUITE(TestDataStreamOnBuffer);
+    CPPUNIT_TEST(testInt);
+    CPPUNIT_TEST(testReal);
+    CPPUNIT_TEST(testChar);
+    CPPUNIT_TEST(testByteArray);
+    CPPUNIT_TEST(testValueList);
+    CPPUNIT_TEST(testPropertyList);
+    CPPUNIT_TEST(testStdString);
+    CPPUNIT_TEST(testRandomTypes);
+    CPPUNIT_TEST_SUITE_END();
+
+    pcs::AutoPointer<DataBuffer> t;
+
+    template<typename T>
+    void write(DataStream& ds, const T& value) {
+        ds << value;
+    }
+
+    template<typename T>
+    void read(DataStream &ds, const T& expected) {
+        T value;
+        ds >> value;
+        CPPUNIT_ASSERT_EQUAL(expected, value);
+    }
+
+    template<typename T, typename U, typename V>
+    void test1(const T& v1, const U& v2, const V& v3) {
+        DataStream ds(t.get());
+        write(ds, v1);
+        read(ds, v1);
+        write(ds, v2);
+        read(ds, v2);
+        write(ds, v3);
+        read(ds, v3);
+    }
+
+
+    template<typename T, typename U, typename V>
+    void test2(const T& v1, const U& v2, const V& v3) {
+        {
+            DataStream ds(t.get());
+            write(ds, v1);
+            write(ds, v2);
+            write(ds, v3);
+        }
+        {
+            DataStream ds(t.get());
+            read(ds, v1);
+            read(ds, v2);
+            read(ds, v3);
+        }
+    }
+
+    template<typename T, typename U, typename V>
+    void test(const T& v1, const U& v2, const V& v3) {
+        test1(v1, v2, v3);
+        test2(v1, v2, v3);
+    }
+
+public:
+    void setUp() {
+        t = new DataBuffer();
+    }
+
+    void tearDown() {
+        // All bytes must be read
+        CPPUNIT_ASSERT_THROW(t->read(1), pcs::Exception);
+        t = 0;
+    }
+
+    void testInt() {
+        test(42, 0xffffffff, 0);
+    }
+
+    void testReal() {
+        test(3.14, 3.14, 1e-8);
+    }
+
+    void testChar() {
+        test('a', '\n', '\0');
+    }
+
+    void testByteArray() {
+        ByteArray v1;
+        ByteArray v2("foo", 3);
+        ByteArray v3("foo\0bar\0", 8);
+        test(v1, v2, v3);
+    }
+
+    void testValueList() {
+        pcs::ValueList v1, v2, v3;
+        v2.add(42).add(3.14).add(ByteArray("foo", 3));
+        v3.add(v2);
+        test(v1, v2, v3);
+    }
+
+    void testPropertyList() {
+        pcs::PropertyList v1, v2, v3;
+        v2.set(100, 42).set(200, 3.14).set(300, ByteArray("foo", 3));
+        v3.set(1000, v2);
+        test(v1, v2, v3);
+    }
+
+    void testStdString() {
+        std::string v1 = "foo";
+        std::string v2 = "";
+        std::string v3 = "\tfoo\n\tbar\n";
+        test(v1, v2, v3);
+    }
+
+    void testRandomTypes() {
+        test(42, ByteArray(), '\0');
+        test(3.14, std::string("foo"), 0xffffffff);
+        test(ByteArray("\n\0\n\0\n\0", 6), -1l, 'a');
+    }
+};
+CPPUNIT_TEST_SUITE_REGISTRATION(TestDataStreamOnBuffer);
