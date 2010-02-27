@@ -15,6 +15,7 @@ class TestInetAddress : public CppUnit::TestFixture
     CPPUNIT_TEST(testCopy);
     CPPUNIT_TEST(testCompare);
     CPPUNIT_TEST(testDataStream);
+    CPPUNIT_TEST(testGetHostByName);
     CPPUNIT_TEST_SUITE_END();
 
     unsigned int ip4(unsigned int b1, unsigned int b2, unsigned int b3, unsigned int b4) {
@@ -98,6 +99,11 @@ public:
         CPPUNIT_ASSERT_EQUAL(std::string("1.2.3.4"), addr.toString());
         ds >> addr;
         CPPUNIT_ASSERT_EQUAL(std::string("255.255.255.255"), addr.toString());
+    }
+
+    void testGetHostByName() {
+        InetAddress addr = InetAddress::getHostByName("localhost");
+        CPPUNIT_ASSERT_EQUAL(std::string("127.0.0.1"), addr.toString());
     }
 };
 CPPUNIT_TEST_SUITE_REGISTRATION(TestInetAddress);
