@@ -8,6 +8,7 @@ set(test_SOURCES
     test_byte_array.cpp
     test_data_buffer.cpp
     test_data_stream.cpp
+    test_inet_address.cpp
     test_message.cpp
 )
 
@@ -29,6 +30,7 @@ set(tests
     TestDataStreamWriteBytes
     TestDataStreamReadBytes
     TestDataStreamOnBuffer
+    TestInetAddress
     TestMessageType
     TestMessageFlags
     TestMessageProperties

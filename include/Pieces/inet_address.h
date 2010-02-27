@@ -54,7 +54,7 @@ public:
     /**
      * Convert from a 32-bit address.
      */
-    InetAddress(unsigned long addr);
+    InetAddress(unsigned int addr);
 
     /**
      * Create an InetAddress from a string in the format "XXX.XXX.XXX.XXX".
@@ -82,11 +82,10 @@ public:
     /**
      * Return the address as a 32-bit number.
      */
-    unsigned long toInt32() const;
+    unsigned int toInt32() const;
 
 private:
-    unsigned long stringToInAddr(const std::string& name);
-    unsigned long m_inet_addr;
+    unsigned int m_inet_addr;
 
 };
 

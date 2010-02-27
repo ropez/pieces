@@ -19,6 +19,7 @@
 
 #include "Pieces/InetAddress"
 #include "Pieces/DataStream"
+#include "Pieces/Exception"
 #include <cstring>
 
 #if defined(WIN32)
@@ -38,27 +39,23 @@ InetAddress::InetAddress()
 }
 
 
-InetAddress::InetAddress(unsigned long addr)
+InetAddress::InetAddress(unsigned int addr)
 : m_inet_addr(addr)
 {
 }
 
 
 InetAddress::InetAddress(const std::string& addr)
-: m_inet_addr(stringToInAddr(addr))
+: m_inet_addr(INADDR_ANY)
 {
+    if (::inet_aton(addr.c_str(), reinterpret_cast<in_addr*>(&m_inet_addr)) == 0)
+        throw pcs::Exception("InetAddress", "Invalid address format");
 }
 
 
 bool InetAddress::isNull() const
 {
     return m_inet_addr == 0;
-}
-
-
-unsigned long InetAddress::stringToInAddr(const std::string &name)
-{
-    return inet_addr(name.c_str());
 }
 
 
@@ -92,7 +89,7 @@ std::string InetAddress::toString() const
 }
 
 
-unsigned long InetAddress::toInt32() const
+unsigned int InetAddress::toInt32() const
 {
     return m_inet_addr;
 }
