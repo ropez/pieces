@@ -1,6 +1,7 @@
 #include "support.h"
 #include <Pieces/InetAddress>
 #include <Pieces/Exception>
+#include <Pieces/BufferStream>
 
 using pcs::InetAddress;
 
@@ -13,6 +14,7 @@ class TestInetAddress : public CppUnit::TestFixture
     CPPUNIT_TEST(testFromBinary);
     CPPUNIT_TEST(testCopy);
     CPPUNIT_TEST(testCompare);
+    CPPUNIT_TEST(testDataStream);
     CPPUNIT_TEST_SUITE_END();
 
     unsigned int ip4(unsigned int b1, unsigned int b2, unsigned int b3, unsigned int b4) {
@@ -81,6 +83,21 @@ public:
         CPPUNIT_ASSERT(addr1a != addr2a);
         CPPUNIT_ASSERT(addr1a == addr1b);
         CPPUNIT_ASSERT(addr2a == addr2b);
+    }
+
+    void testDataStream() {
+        pcs::BufferStream ds;
+        ds << InetAddress();
+        ds << InetAddress("1.2.3.4");
+        ds << InetAddress("255.255.255.255");
+
+        InetAddress addr;
+        ds >> addr;
+        CPPUNIT_ASSERT(addr.isNull());
+        ds >> addr;
+        CPPUNIT_ASSERT_EQUAL(std::string("1.2.3.4"), addr.toString());
+        ds >> addr;
+        CPPUNIT_ASSERT_EQUAL(std::string("255.255.255.255"), addr.toString());
     }
 };
 CPPUNIT_TEST_SUITE_REGISTRATION(TestInetAddress);

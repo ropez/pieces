@@ -154,7 +154,7 @@ DataStream& operator<<(DataStream& ds, const InetAddress& ia)
 
 DataStream& operator>>(DataStream& ds, InetAddress& ia)
 {
-    unsigned long addr;
+    unsigned int addr;
     ds >> addr;
 
     ia = InetAddress(addr);
