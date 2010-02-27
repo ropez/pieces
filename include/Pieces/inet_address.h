@@ -54,7 +54,7 @@ public:
     /**
      * Convert from a 32-bit address.
      */
-    InetAddress(unsigned int addr);
+    explicit InetAddress(unsigned int addr);
 
     /**
      * Create an InetAddress from a string in the format "XXX.XXX.XXX.XXX".
