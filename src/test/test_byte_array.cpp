@@ -12,6 +12,7 @@ class TestByteArray : public CppUnit::TestFixture
     CPPUNIT_TEST(testNullBytes);
     CPPUNIT_TEST(testRandomAccess);
     CPPUNIT_TEST(testImplicitSharing);
+    CPPUNIT_TEST(testCompare);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -107,6 +108,20 @@ public:
         // b2 and b3 is already detached
         CPPUNIT_ASSERT(b2.data() != b4.data());
         CPPUNIT_ASSERT(b3.data() != b4.data());
+    }
+
+    void testCompare() {
+        const ByteArray ba("foobar", 6);
+
+        CPPUNIT_ASSERT(ba == ba);
+        CPPUNIT_ASSERT(ba == ByteArray("foobar", 6));
+        CPPUNIT_ASSERT(ba != ByteArray("foo", 3));
+        CPPUNIT_ASSERT(ba != ByteArray("foobarbar", 9));
+        CPPUNIT_ASSERT(ba != ByteArray("foobaz", 6));
+
+        CPPUNIT_ASSERT(ba != ByteArray());
+        CPPUNIT_ASSERT(ByteArray() != ba);
+        CPPUNIT_ASSERT(ByteArray() == ByteArray());
     }
 };
 CPPUNIT_TEST_SUITE_REGISTRATION(TestByteArray);
