@@ -317,22 +317,6 @@ ByteArray::Data::Data(const Data& other)
 }
 
 
-ByteArray::Data& ByteArray::Data::operator=(const Data& other)
-{
-    if (this != &other)
-    {
-        delete[] data;
-
-        allocated = other.allocated;
-        size = other.size;
-        data = new byte_t[allocated];
-
-        std::memcpy(this->data, other.data, other.size);
-    }
-    return *this;
-}
-
-
 ByteArray::Data::~Data()
 {
     delete[] data;

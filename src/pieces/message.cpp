@@ -116,16 +116,6 @@ Message::Data::Data(const Data& other)
 }
 
 
-Message::Data& Message::Data::operator=(const Data& other)
-{
-    type = other.type;
-    flags = other.flags;
-    properties = other.properties;
-
-    return *this;
-}
-
-
 DataStream& operator<<(DataStream& ds, const Message& msg)
 {
     return ds << msg.getMessageType() << msg.getFlags() << msg.getProperties();

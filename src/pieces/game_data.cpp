@@ -112,12 +112,4 @@ GameData::Data::Data(const Data& other)
 {
 }
 
-
-GameData::Data& GameData::Data::operator=(const Data& other)
-{
-    maxFrames = other.maxFrames;
-    frameData = other.frameData;
-    return *this;
-}
-
 } // namespace pcs

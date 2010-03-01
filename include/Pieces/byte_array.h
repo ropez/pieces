@@ -266,12 +266,6 @@ private:
         // Creates a deep copy of the 'size' first bytes at location 'data'.
         Data(const void* data, size_t size);
 
-        // Creates a deep copy (called automatically by SharedDataPointer if needed).
-        Data(const Data& other);
-
-        // Creates a deep copy (called automatically by SharedDataPointer if needed).
-        Data& operator=(const Data& other);
-
         // Calculate number of bytes to allocate and allocate uninitialized space.
         // Deletes any old data.
         void allocate(size_t size);
@@ -285,13 +279,18 @@ private:
         // Pointer to allocated data.
         byte_t* data;
 
-    protected:
+    private:
 
-        // Make data pointer able to call destructor.
+        // Make data pointer able to copy and delete
         friend class SharedDataPointer<Data>;
+
+        // Creates a deep copy (called automatically by SharedDataPointer if needed).
+        Data(const Data& other);
 
         // Protected to prevent stack allocation.
         ~Data();
+
+        DISABLE_ASSIGNMENT(Data);
     };
 
     SharedDataPointer<Data> d;

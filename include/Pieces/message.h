@@ -197,12 +197,17 @@ private:
     public:
         Data();
 
-        Data(const Data& other);
-        Data& operator=(const Data& other);
-
         int type;
         flags_t flags;
         PropertyList properties;
+
+    private:
+        friend class SharedDataPointer<Data>;
+
+        Data(const Data& other);
+        ~Data() {}
+
+        DISABLE_ASSIGNMENT(Data);
     };
 
     SharedDataPointer<Data> d;

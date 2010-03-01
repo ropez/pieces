@@ -23,6 +23,7 @@
 
 // Macro to disable copy operations
 #define DISABLE_COPY(c) c(const c&); c& operator=(const c&);
+#define DISABLE_ASSIGNMENT(c) c& operator=(const c&);
 
 
 /**

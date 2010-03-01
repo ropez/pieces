@@ -102,11 +102,16 @@ private:
         Data();
         Data(const ByteArray& data, const SocketAddress& addr);
 
-        Data(const Data& other);
-        Data& operator=(const Data& other);
-
         ByteArray data;
         SocketAddress address;
+
+    private:
+        friend class SharedDataPointer<Data>;
+
+        Data(const Data& other);
+        ~Data() {}
+
+        DISABLE_ASSIGNMENT(Data);
     };
 
     SharedDataPointer<Data> d;

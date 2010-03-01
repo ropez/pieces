@@ -109,13 +109,4 @@ Datagram::Data::Data(const Data& other)
 {
 }
 
-
-Datagram::Data& Datagram::Data::operator=(const Data& other)
-{
-    data = other.data;
-    address = other.address;
-
-    return *this;
-}
-
 } // namespace pcs

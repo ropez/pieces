@@ -97,7 +97,6 @@ private:
     {
     public:
         Data();
-        Data(const Data& other);
         Data(const stl_vector_t& other);
 
         Data(size_type n);
@@ -106,15 +105,15 @@ private:
         template <class InputIterator>
         Data(InputIterator f, InputIterator l);
 
-        Data& operator=(const Data& other);
-
         stl_vector_t data;
 
-    protected:
-
+    private:
         friend class SharedDataPointer<Data>;
 
+        Data(const Data& other);
         ~Data();
+
+        DISABLE_ASSIGNMENT(Data);
     };
 
     SharedDataPointer<Data> d;
@@ -449,14 +448,6 @@ Vector<T>::Data::Data(InputIterator f, InputIterator l)
 : SharedData()
 , data(f, l)
 {
-}
-
-
-template<typename T>
-typename Vector<T>::Data& Vector<T>::Data::operator=(const Data& other)
-{
-    data = other.data;
-    return *this;
 }
 
 

@@ -136,9 +136,16 @@ private:
     {
     public:
         Data();
-        Data(const Data& other);
 
         list_t values;
+
+    private:
+        friend class SharedDataPointer<Data>;
+
+        Data(const Data& other);
+        ~Data() {}
+
+        DISABLE_ASSIGNMENT(Data);
     };
 
     SharedDataPointer<Data> d;
