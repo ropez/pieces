@@ -1,5 +1,6 @@
 #include "support.h"
 #include <Pieces/ByteArray>
+#include <Pieces/Exception>
 
 using pcs::ByteArray;
 
@@ -302,13 +303,21 @@ CPPUNIT_TEST_SUITE_REGISTRATION(TestByteArrayExtending);
 class TestByteArrayResize : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(TestByteArrayResize);
+    CPPUNIT_TEST(testTrivialResize);
     CPPUNIT_TEST(testIncreaseSize);
     CPPUNIT_TEST(testDecreaseSize);
     CPPUNIT_TEST(testIncreaseSizeAndKeepContent);
     CPPUNIT_TEST(testDecreaseSizeAndKeepContent);
+    CPPUNIT_TEST(testSuperSize);
     CPPUNIT_TEST_SUITE_END();
 
 public:
+    void testTrivialResize() {
+        ByteArray ba("foo", 3);
+        ba.resize(3);
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foo", 3), ba);
+    }
+
     void testIncreaseSize() {
         ByteArray ba;
         ba.resize(10);
@@ -338,6 +347,13 @@ public:
         ba.resize(3ul);
         CPPUNIT_ASSERT_EQUAL(3ul, ba.size());
         CPPUNIT_ASSERT_EQUAL(ByteArray("foo", 3), ba);
+    }
+
+    void testSuperSize() {
+        ByteArray ba;
+        CPPUNIT_ASSERT_NO_THROW(ba.resize(0x80000000ul));
+        CPPUNIT_ASSERT_THROW(ba.resize(0x100000000ull), pcs::Exception);
+        CPPUNIT_ASSERT_THROW(ba.resize(0xffffffff00000000ull), pcs::Exception);
     }
 };
 CPPUNIT_TEST_SUITE_REGISTRATION(TestByteArrayResize);

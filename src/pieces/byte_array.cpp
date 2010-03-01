@@ -326,7 +326,7 @@ ByteArray::Data::~Data()
 void ByteArray::Data::allocate(size_t size)
 {
     // Test for super-large size (2 GB)
-    if (size & 0x80000000)
+    if (size > 0x80000000)
         throw IOException("ByteArray::Data::allocate", "Size too large");
 
     size_t wanted = 1;
