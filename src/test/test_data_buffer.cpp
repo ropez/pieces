@@ -10,6 +10,7 @@ class TestDataBuffer : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(TestDataBuffer);
     CPPUNIT_TEST(testEmpty);
+    CPPUNIT_TEST(testWithInitialContent);
     CPPUNIT_TEST(testSingleWriteMultiRead);
     CPPUNIT_TEST(testMultiWriteSingleRead);
     CPPUNIT_TEST(testReadMoreThanAvailable);
@@ -20,6 +21,11 @@ public:
         DataBuffer db;
         CPPUNIT_ASSERT_EQUAL(ByteArray(), db.data());
         CPPUNIT_ASSERT_THROW(db.read(3), pcs::Exception);
+    }
+
+    void testWithInitialContent() {
+        DataBuffer db(ByteArray("foobar", 6));
+        CPPUNIT_ASSERT_EQUAL(ByteArray("foobar", 6), db.read(6));
     }
 
     void testSingleWriteMultiRead() {
