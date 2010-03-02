@@ -104,6 +104,8 @@ public:
     void testGetHostByName() {
         InetAddress addr = InetAddress::getHostByName("localhost");
         CPPUNIT_ASSERT_EQUAL(std::string("127.0.0.1"), addr.toString());
+
+        CPPUNIT_ASSERT(InetAddress::getHostByName("").isNull());
     }
 };
 CPPUNIT_TEST_SUITE_REGISTRATION(TestInetAddress);
