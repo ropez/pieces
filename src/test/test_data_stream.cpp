@@ -262,13 +262,18 @@ CPPUNIT_TEST_SUITE_REGISTRATION(TestDataStreamReadBytes);
 class TestDataStreamOnBuffer : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(TestDataStreamOnBuffer);
-    CPPUNIT_TEST(testInt);
-    CPPUNIT_TEST(testReal);
+    CPPUNIT_TEST(testBool);
     CPPUNIT_TEST(testChar);
+    CPPUNIT_TEST(testShort);
+    CPPUNIT_TEST(testInt);
+    CPPUNIT_TEST(testLong);
+    CPPUNIT_TEST(testFloat);
+    CPPUNIT_TEST(testDouble);
     CPPUNIT_TEST(testByteArray);
     CPPUNIT_TEST(testValueList);
     CPPUNIT_TEST(testPropertyList);
     CPPUNIT_TEST(testStdString);
+    CPPUNIT_TEST(testCStringToStdString);
     CPPUNIT_TEST(testRandomTypes);
     CPPUNIT_TEST_SUITE_END();
 
@@ -331,16 +336,35 @@ public:
         t = 0;
     }
 
-    void testInt() {
-        test(42, 0xffffffff, 0);
-    }
-
-    void testReal() {
-        test(3.14, 3.14, 1e-8);
+    void testBool() {
+        test(true, false, true);
     }
 
     void testChar() {
-        test('a', '\n', '\0');
+        unsigned char uc = '\n';
+        test('a', uc, '\0');
+    }
+
+    void testShort() {
+        short v1 = 42, v2 = 0;
+        unsigned short v3 = 0xffffu;
+        test(v1, v2, v3);
+    }
+
+    void testInt() {
+        test(42, 0xffffffffu, 0);
+    }
+
+    void testLong() {
+        test(42l, ~0ul, 0l);
+    }
+
+    void testFloat() {
+        test(3.14f, 3.14159f, 1e-8f);
+    }
+
+    void testDouble() {
+        test(3.14, 3.14159, 1e-8);
     }
 
     void testByteArray() {
@@ -369,6 +393,16 @@ public:
         std::string v2 = "";
         std::string v3 = "\tfoo\n\tbar\n";
         test(v1, v2, v3);
+    }
+
+    void testCStringToStdString() {
+        DataStream ds(t.get());
+        write(ds, "foo");
+        write(ds, "");
+        write(ds, "\tfoo\tbar\n");
+        read(ds, std::string("foo"));
+        read(ds, std::string(""));
+        read(ds, std::string("\tfoo\tbar\n"));
     }
 
     void testRandomTypes() {
