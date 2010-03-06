@@ -92,6 +92,93 @@ public:
 };
 CPPUNIT_TEST_SUITE_REGISTRATION(TestDataStreamTarget);
 
+class TestDataStreamManipulator : public CppUnit::TestFixture
+{
+    CPPUNIT_TEST_SUITE(TestDataStreamManipulator);
+    CPPUNIT_TEST(testManipulator);
+    CPPUNIT_TEST_SUITE_END();
+
+    static int count;
+    static DataStream& foo(DataStream& ds) {
+        count++;
+    }
+
+public:
+    void setUp() {
+        count = 0;
+    }
+
+    void testManipulator() {
+        DataStream ds;
+        CPPUNIT_ASSERT_EQUAL(0, count);
+        ds << foo;
+        CPPUNIT_ASSERT_EQUAL(1, count);
+        ds << foo << foo;
+        CPPUNIT_ASSERT_EQUAL(3, count);
+        ds >> foo;
+        CPPUNIT_ASSERT_EQUAL(4, count);
+        ds << foo >> foo;
+        CPPUNIT_ASSERT_EQUAL(6, count);
+    }
+};
+int TestDataStreamManipulator::count;
+CPPUNIT_TEST_SUITE_REGISTRATION(TestDataStreamManipulator);
+
+class TestDataStreamFlush : public CppUnit::TestFixture
+{
+    CPPUNIT_TEST_SUITE(TestDataStreamFlush);
+    CPPUNIT_TEST(testNullTarget);
+    CPPUNIT_TEST(testFlushTarget);
+    CPPUNIT_TEST(testUsingManipulator);
+    CPPUNIT_TEST_SUITE_END();
+
+    class MockStreamTarget : public StreamTarget
+    {
+    public:
+        class flushed {};
+
+        ByteArray read(size_t) {
+            throw;
+        }
+
+        void write(const ByteArray& data) {
+            throw;
+        }
+
+        void flush() {
+            throw flushed();
+        }
+    };
+
+    pcs::AutoPointer<MockStreamTarget> t;
+
+public:
+    void setUp() {
+        t = new MockStreamTarget();
+    }
+
+    void tearDown() {
+        t = 0;
+    }
+
+    void testNullTarget() {
+        DataStream ds;
+        CPPUNIT_ASSERT(ds.target() == 0);
+        CPPUNIT_ASSERT_THROW(ds.flush(), pcs::Exception);
+    }
+
+    void testFlushTarget() {
+        DataStream ds(t.get());
+        CPPUNIT_ASSERT_THROW(ds.flush(), MockStreamTarget::flushed);
+    }
+
+    void testUsingManipulator() {
+        DataStream ds(t.get());
+        CPPUNIT_ASSERT_THROW(ds << pcs::flush, MockStreamTarget::flushed);
+    }
+};
+CPPUNIT_TEST_SUITE_REGISTRATION(TestDataStreamFlush);
+
 class TestDataStreamWriteBytes : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(TestDataStreamWriteBytes);

@@ -28,6 +28,8 @@ set(tests
     TestByteArrayResize
     TestDataBuffer
     TestDataStreamTarget
+    TestDataStreamManipulator
+    TestDataStreamFlush
     TestDataStreamWriteBytes
     TestDataStreamReadBytes
     TestDataStreamOnBuffer
