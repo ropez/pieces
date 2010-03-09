@@ -23,6 +23,11 @@ public:
         count--;
     }
 
+    struct called {};
+    void call() {
+        throw called();
+    }
+
 private:
     DISABLE_COPY(MockObject);
 };
@@ -72,9 +77,13 @@ class TestAutoPointer : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(TestAutoPointer);
     CPPUNIT_TEST(testNullPointer);
+    CPPUNIT_TEST(testCompare);
     CPPUNIT_TEST(testScopeCleanUp);
     CPPUNIT_TEST(testManualCleanUp);
     CPPUNIT_TEST(testOwnerChange);
+    CPPUNIT_TEST(testInitializeFromTemporary);
+    CPPUNIT_TEST(testPointerSyntax);
+    CPPUNIT_TEST(testTrivialCast);
     CPPUNIT_TEST(testSelfAssignment);
     CPPUNIT_TEST_SUITE_END();
 
@@ -93,6 +102,18 @@ public:
         CPPUNIT_ASSERT(!p.isValid());
         CPPUNIT_ASSERT(!p);
         CPPUNIT_ASSERT(p.get() == 0);
+    }
+
+    void testCompare() {
+        AutoPointer<MockObject> p(new MockObject);
+        AutoPointer<MockObject> q(new MockObject);
+
+        CPPUNIT_ASSERT(p == p);
+        CPPUNIT_ASSERT(p == p.get());
+        CPPUNIT_ASSERT(p.get() == p);
+        CPPUNIT_ASSERT(p != q);
+        CPPUNIT_ASSERT(p != q.get());
+        CPPUNIT_ASSERT(p.get() != q);
     }
 
     void testScopeCleanUp() {
@@ -125,6 +146,32 @@ public:
         CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
         CPPUNIT_ASSERT_EQUAL(pp, p.get());
         CPPUNIT_ASSERT(q.isNull());
+        AutoPointer<MockObject> r(p);
+        CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
+        CPPUNIT_ASSERT_EQUAL(pp, r.get());
+        CPPUNIT_ASSERT(p.isNull());
+    }
+
+    void testInitializeFromTemporary() {
+        AutoPointer<MockObject> p = AutoPointer<MockObject>(new MockObject);
+        CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
+        p = AutoPointer<MockObject>(new MockObject);
+        CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
+    }
+
+    void testPointerSyntax() {
+        AutoPointer<MockObject> p(new MockObject);
+        CPPUNIT_ASSERT_THROW(p->call(), MockObject::called);
+        CPPUNIT_ASSERT_THROW((*p).call(), MockObject::called);
+    }
+
+    void testTrivialCast() {
+        AutoPointer<MockData> p(new MockData);
+        MockObject* pp = p.get();
+        CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
+        AutoPointer<MockObject> q(p);
+        CPPUNIT_ASSERT_EQUAL(pp, q.get());
+        CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
     }
 
     void testSelfAssignment() {
