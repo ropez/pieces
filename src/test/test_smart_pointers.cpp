@@ -188,9 +188,12 @@ class TestReferencePointer : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(TestReferencePointer);
     CPPUNIT_TEST(testNullPointer);
+    CPPUNIT_TEST(testCompare);
     CPPUNIT_TEST(testScopeCleanUp);
     CPPUNIT_TEST(testManualCleanUp);
     CPPUNIT_TEST(testMultipleReferences);
+    CPPUNIT_TEST(testPointerSyntax);
+    CPPUNIT_TEST(testTrivialCast);
     CPPUNIT_TEST(testSelfAssignment);
     CPPUNIT_TEST_SUITE_END();
 
@@ -209,6 +212,22 @@ public:
         CPPUNIT_ASSERT(!p.isValid());
         CPPUNIT_ASSERT(!p);
         CPPUNIT_ASSERT(p.get() == 0);
+    }
+
+    void testCompare() {
+        ReferencePointer<MockObject> p(new MockObject);
+        ReferencePointer<MockObject> q(new MockObject);
+
+        CPPUNIT_ASSERT(p == p);
+        CPPUNIT_ASSERT(p == p.get());
+        CPPUNIT_ASSERT(p.get() == p);
+        CPPUNIT_ASSERT(p != q);
+        CPPUNIT_ASSERT(p != q.get());
+        CPPUNIT_ASSERT(p.get() != q);
+        p = q;
+        CPPUNIT_ASSERT(p == q);
+        CPPUNIT_ASSERT(p == q.get());
+        CPPUNIT_ASSERT(p.get() == q);
     }
 
     void testScopeCleanUp() {
@@ -243,6 +262,26 @@ public:
         CPPUNIT_ASSERT_EQUAL(pp, q.get());
         CPPUNIT_ASSERT_EQUAL(pp, p.get());
         CPPUNIT_ASSERT(p->shared());
+        ReferencePointer<MockObject> r(p);
+        CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
+        CPPUNIT_ASSERT_EQUAL(pp, r.get());
+    }
+
+    void testPointerSyntax() {
+        ReferencePointer<MockObject> p(new MockObject);
+        CPPUNIT_ASSERT_THROW(p->call(), MockObject::called);
+        CPPUNIT_ASSERT_THROW((*p).call(), MockObject::called);
+    }
+
+    void testTrivialCast() {
+        ReferencePointer<MockData> p(new MockData);
+        MockObject* pp = p.get();
+        CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
+        ReferencePointer<MockObject> q(p);
+        CPPUNIT_ASSERT(p->shared());
+        CPPUNIT_ASSERT(q->shared());
+        CPPUNIT_ASSERT_EQUAL(pp, q.get());
+        CPPUNIT_ASSERT_EQUAL(1, MockObject::count);
     }
 
     void testSelfAssignment() {
