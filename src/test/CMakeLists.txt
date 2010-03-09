@@ -11,6 +11,7 @@ set(test_SOURCES
     test_inet_address.cpp
     test_socket_address.cpp
     test_message.cpp
+    test_event_dispatch.cpp
 )
 
 add_executable(testrunner ${test_SOURCES})
@@ -38,6 +39,9 @@ set(tests
     TestMessageType
     TestMessageFlags
     TestMessageProperties
+    TestEventHandlerDispatchDefault
+    TestEventHandlerDispatchCommon
+    TestEventHandlerDispatchNetwork
 )
 
 foreach(test ${tests})
