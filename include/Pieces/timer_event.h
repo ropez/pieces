@@ -48,7 +48,7 @@ public:
     /**
      * Create a timer event with the given timer id.
      */
-    TimerEvent(int timerId = 0);
+    explicit TimerEvent(int timerId = 0);
 
     /**
      * Returns a deep copy of this event.
