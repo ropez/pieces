@@ -11,8 +11,8 @@ Pieces has not been actively developed since the university project was finished
 Authors 
 =======
 
-- Robin Pedersen robinpeder@gmail.com (current maintainer)
-- Joakim Simonsson joakim@joakims.com
-- Tord Heimdal theimdal@gmail.com
-- Børge Jakobsen borge.jakobsen@gmail.com
-- Thomas Bakken unxplaind@gmail.com
+- Robin Pedersen <robinpeder@gmail.com> (current maintainer)
+- Joakim Simonsson <joakim@joakims.com>
+- Tord Heimdal <theimdal@gmail.com>
+- Børge Jakobsen <borge.jakobsen@gmail.com>
+- Thomas Bakken <unxplaind@gmail.com>
